@@ -28,6 +28,7 @@ import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
 import { CategoryTracker } from './components/CategoryTracker';
 import { Roast } from './components/Roast';
+import { InstallPrompt } from './components/InstallPrompt';
 import { motion, AnimatePresence } from 'motion/react';
 import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -576,7 +577,7 @@ export default function App() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
           onClick={handleSignIn}
-          className="px-12 py-5 bg-white text-black rounded-full text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+          className="px-8 py-4 bg-white hover:bg-gray-100 text-zinc-900 rounded-xl text-lg font-black uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-[0_8px_30px_rgba(255,255,255,0.15)] flex items-center gap-3"
         >
           Login with Google
         </motion.button>
@@ -599,6 +600,8 @@ export default function App() {
       <audio ref={wrongAudioRef} src="/wrong.mp3" />
       <audio ref={wonAudioRef} src="/won.mp3" />
       <audio ref={lostAudioRef} src="/lost.mp3" />
+
+      <InstallPrompt />
 
       <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-pink-500/30">
         {/* Header */}
@@ -640,10 +643,11 @@ export default function App() {
           {error && (
             <motion.div
               key="error-banner"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex items-center justify-between shadow-lg shadow-rose-500/5"
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="mb-6 p-4 bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
             >
               <span className="text-rose-400 text-sm font-medium">{error}</span>
               <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400">
@@ -664,14 +668,15 @@ export default function App() {
               className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
             >
                 <motion.div 
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.95, opacity: 0 }}
-                  className="bg-zinc-900 border border-white/10 rounded-3xl p-6 w-full max-w-lg shadow-2xl max-h-[80vh] flex flex-col"
+                  initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                  className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-h-[80vh] flex flex-col"
                 >
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-black uppercase tracking-tight text-white">Match History</h2>
-                    <button onClick={() => setShowHistory(false)} className="p-2 text-zinc-400 hover:text-white rounded-full hover:bg-white/5 transition-colors">
+                    <button onClick={() => setShowHistory(false)} className="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-300">
                       <X className="w-6 h-6" />
                     </button>
                   </div>
@@ -735,8 +740,8 @@ export default function App() {
               className="space-y-8"
             >
               {/* Game Info */}
-              <div className="flex justify-between items-end bg-zinc-900/50 p-4 rounded-2xl border border-white/5">
-                <button onClick={resetGame} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors px-3 py-2 rounded-xl hover:bg-white/5">
+              <div className="flex justify-between items-end bg-zinc-900/40 backdrop-blur-sm p-5 rounded-2xl border border-white/5 shadow-sm">
+                <button onClick={resetGame} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-white/10">
                   <ArrowLeft className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-widest">Quit</span>
                 </button>
@@ -764,13 +769,13 @@ export default function App() {
 
               {/* Chat in Waiting Room */}
               {game.status === 'waiting' && (
-                <div className="bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
+                <div className="bg-zinc-900/60 backdrop-blur-xl border border-white/5 rounded-2xl p-6 space-y-4 shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Lobby Chat</h3>
                     {game.hostId === user.uid && players.length >= 2 && (
                       <button 
                         onClick={startGame}
-                        className="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:scale-105 transition-transform shadow-lg shadow-pink-500/20"
+                        className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-pink-500/25 ease-in-out"
                       >
                         Start Game
                       </button>
@@ -807,12 +812,12 @@ export default function App() {
                       onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type a message..."
                       disabled={isSendingMessage}
-                      className="flex-1 bg-zinc-950 border border-white/10 rounded-2xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50"
+                      className="flex-1 bg-zinc-950/80 border border-white/10 rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 shadow-inner"
                     />
                     <button 
                       onClick={sendMessage}
                       disabled={isSendingMessage || !chatInput.trim()}
-                      className="p-3 bg-purple-600 rounded-2xl hover:bg-purple-500 transition-colors disabled:opacity-50 flex items-center justify-center shadow-lg shadow-purple-500/20"
+                      className="p-3 bg-purple-600 rounded-xl hover:bg-purple-500 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-[0_4px_14px_0_rgba(147,51,234,0.39)] hover:shadow-[0_6px_20px_rgba(147,51,234,0.23)] active:scale-[0.96]"
                     >
                       {isSendingMessage ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                     </button>
@@ -824,11 +829,12 @@ export default function App() {
               <div className="relative py-12">
                 {game.status === 'completed' ? (
                   <motion.div 
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="text-center space-y-8 bg-zinc-900/80 backdrop-blur-md border border-white/10 p-10 rounded-3xl shadow-2xl"
+                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                    className="text-center space-y-8 bg-zinc-900/60 backdrop-blur-xl border border-white/10 p-12 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                   >
-                    <Trophy className="w-24 h-24 mx-auto text-yellow-400 drop-shadow-[0_0_30px_rgba(250,204,21,0.3)] animate-bounce" />
+                    <Trophy className="w-24 h-24 mx-auto text-yellow-400 drop-shadow-[0_0_30px_rgba(250,204,21,0.4)] animate-bounce" />
                     <div>
                       <h2 className="text-4xl font-black text-white uppercase tracking-tight mb-2">Game Over</h2>
                       <p className="text-xl text-zinc-400">
@@ -839,7 +845,7 @@ export default function App() {
                       <button
                         onClick={playAgain}
                         disabled={isStartingGame}
-                        className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-xl disabled:opacity-50"
+                        className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_30px_rgba(255,255,255,0.15)] disabled:opacity-50 ease-in-out"
                       >
                         {isStartingGame ? <Loader2 className="w-6 h-6 animate-spin" /> : <RefreshCcw className="w-6 h-6" />}
                         Play Again

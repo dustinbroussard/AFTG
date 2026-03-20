@@ -11,13 +11,13 @@ interface CategoryTrackerProps {
 
 export const CategoryTracker: React.FC<CategoryTrackerProps> = ({ completed, playerName, avatarUrl, isCurrentTurn, score }) => {
   return (
-    <div className={`p-6 rounded-3xl border transition-all ${isCurrentTurn ? 'border-purple-500/50 bg-purple-500/10 shadow-lg shadow-purple-500/5' : 'border-white/5 bg-zinc-900/50'}`}>
+    <div className={`p-6 rounded-2xl border transition-all duration-500 ease-in-out ${isCurrentTurn ? 'border-purple-500/40 bg-purple-500/10 shadow-[0_8px_20px_rgba(168,85,247,0.15)] scale-[1.02]' : 'border-white/5 bg-zinc-900/40 shadow-sm'}`}>
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover shadow-inner border border-white/10" />
+            <img src={avatarUrl} alt="Avatar" className="w-10 h-10 rounded-xl object-cover shadow-inner border border-white/10" />
           ) : (
-            <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center text-xl shadow-inner border border-white/10">
+            <div className="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-xl shadow-inner border border-white/10">
               👤
             </div>
           )}

@@ -80,7 +80,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
         
         <button 
           onClick={() => fileInputRef.current?.click()} 
-          className="relative w-24 h-24 rounded-full bg-zinc-900 border-4 border-zinc-800 overflow-hidden flex items-center justify-center hover:border-pink-500 transition-all group shadow-xl"
+          className="relative w-24 h-24 rounded-2xl bg-zinc-900 border-2 border-zinc-800 overflow-hidden flex items-center justify-center hover:border-pink-500 transition-all group shadow-xl hover:shadow-pink-500/20 duration-300 ease-in-out"
         >
           {selectedAvatar ? (
             <img src={selectedAvatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -105,7 +105,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
       </div>
 
       {/* Main Action Card */}
-      <div className="w-full p-8 bg-black border-2 border-purple-500/30 rounded-[2.5rem] space-y-8 shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+      <div className="w-full p-8 bg-black/40 backdrop-blur-md border border-purple-500/20 rounded-2xl space-y-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(168,85,247,0.15)] transition-all duration-500 ease-in-out">
         <h4 className="text-3xl font-black text-pink-500 text-center leading-tight">
           Ready to Get Schooled? 🤓
         </h4>
@@ -116,7 +116,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onStartSolo(selectedAvatar)}
-            className="w-full h-16 bg-gradient-to-r from-cyan-400 to-green-400 rounded-2xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg"
+            className="w-full h-16 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 ease-in-out"
           >
             <Trophy className="w-6 h-6" />
             Solo Mode
@@ -127,7 +127,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onStartMulti(selectedAvatar)}
-            className="w-full h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg"
+            className="w-full h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 ease-in-out"
           >
             <Gamepad2 className="w-6 h-6" />
             Start New Game
@@ -140,7 +140,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowJoinInput(true)}
-                className="w-full h-16 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-2xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg"
+                className="w-full h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
               >
                 <Users className="w-6 h-6" />
                 Join Game
@@ -153,18 +153,18 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
                   placeholder="CODE"
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  className="flex-1 bg-zinc-900 border-2 border-zinc-800 rounded-2xl px-4 text-xl font-black text-white text-center focus:outline-none focus:border-pink-500 transition-colors"
+                  className="flex-1 bg-zinc-900 border border-zinc-700/50 rounded-xl px-4 text-xl font-black text-white text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
                 />
                 <button
                   onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
                   disabled={joinCode.length !== 4}
-                  className="px-6 bg-pink-500 rounded-2xl font-black text-black uppercase disabled:opacity-50"
+                  className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
                 >
                   GO
                 </button>
                 <button
                   onClick={() => setShowJoinInput(false)}
-                  className="px-4 bg-zinc-800 rounded-2xl font-black text-white"
+                  className="px-4 bg-zinc-800 hover:bg-zinc-700 rounded-xl font-black text-white transition-all duration-300 ease-in-out shadow-md"
                 >
                   ✕
                 </button>

@@ -58,8 +58,45 @@ export async function generateQuestions(categories: string[], countPerCategory: 
       used: false
     }));
   } catch (error) {
-    console.error("Error generating questions:", error);
-    return [];
+    console.warn("Primary AI failed, attempting OpenRouter fallback...", error);
+    
+    try {
+      if (!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is missing");
+      
+      const fallbackPrompt = prompt + `\n\nCRITICAL: You MUST return ONLY valid JSON matching this structure without any markdown fencing or extra text: {"questions": [{"category": "string", "question": "string", "choices": ["string", "string", "string", "string"], "answerIndex": 0, "correctQuip": "string", "wrongAnswerQuips": {"0": "string", "1": "string", "2": "string", "3": "string"}}]}`;
+      
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": window.location.href,
+          "X-Title": "AFTG Trivia"
+        },
+        body: JSON.stringify({
+          model: "openrouter/free",
+          messages: [{ role: "user", content: fallbackPrompt }]
+        })
+      });
+
+      if (!response.ok) throw new Error(`OpenRouter returned ${response.status}`);
+      
+      const data = await response.json();
+      let content = data.choices?.[0]?.message?.content || '{"questions": []}';
+      
+      // Strip markdown codeblocks if openrouter models ignore instructions
+      content = content.replace(/```json/g, '').replace(/```/g, '').trim();
+
+      const parsedData = JSON.parse(content);
+      return (parsedData.questions || []).map((q: any, index: number) => ({
+        ...q,
+        id: `or-${Date.now()}-${index}`,
+        used: false
+      }));
+    } catch (fallbackError) {
+      console.error("Fallback OpenRouter failed:", fallbackError);
+      return [];
+    }
   }
 }
 
@@ -95,7 +132,32 @@ export async function generateRoast(
 
     return response.text || (isCorrect ? "Fine, you got it. Don't let it go to your head." : "Wow, that was impressively stupid.");
   } catch (error) {
-    console.error("Error generating roast:", error);
-    return isCorrect ? "Correct!" : "Wrong!";
+    console.warn("Primary AI failed for roasting, attempting OpenRouter fallback...", error);
+    
+    try {
+      if (!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is missing");
+      
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": window.location.href,
+          "X-Title": "AFTG Trivia"
+        },
+        body: JSON.stringify({
+          model: "openrouter/free",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      if (!response.ok) throw new Error(`OpenRouter returned ${response.status}`);
+      
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || (isCorrect ? "Correct." : "Dead wrong.");
+    } catch (fallbackError) {
+      console.error("Error generating fallback roast:", fallbackError);
+      return isCorrect ? "Correct!" : "Wrong!";
+    }
   }
 }

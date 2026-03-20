@@ -21,11 +21,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-2xl mx-auto p-8 bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl"
+      className="w-full max-w-2xl mx-auto p-8 bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 ease-in-out"
     >
       <div className="flex items-center justify-between mb-8">
         <div 
-          className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
+          className="inline-block px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-widest shadow-sm"
           style={{ backgroundColor: CATEGORY_COLORS[question.category] || '#fff', color: '#000' }}
         >
           {question.category}
@@ -67,10 +67,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => !disabled && onSelect(i)}
               disabled={disabled}
-              className={`w-full p-5 text-left rounded-2xl border transition-all ${borderColor} ${bgColor} group`}
+              className={`w-full p-5 text-left rounded-xl border transition-all duration-300 ease-in-out hover:shadow-md ${borderColor} ${bgColor} group`}
             >
               <div className="flex items-center gap-4">
-                <span className={`w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-950/50 text-xs font-bold transition-colors ${isSelected ? 'text-white' : 'text-zinc-500'}`}>
+                <span className={`w-8 h-8 flex items-center justify-center rounded-lg shadow-inner bg-zinc-950/50 text-xs font-bold transition-colors duration-300 ${isSelected ? 'text-white' : 'text-zinc-500'}`}>
                   {String.fromCharCode(65 + i)}
                 </span>
                 <span className={`font-medium text-lg ${textColor}`}>
