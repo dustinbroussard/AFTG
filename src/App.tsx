@@ -324,6 +324,39 @@ export default function App() {
     setError(null);
   };
 
+  const playAgain = async () => {
+    if (!game || !user || game.hostId !== user.uid) return;
+    setLoading(true);
+    try {
+      // Reset players
+      for (const p of players) {
+        await updateDoc(doc(db, 'games', game.id, 'players', p.uid), {
+          score: 0,
+          streak: 0,
+          completedCategories: []
+        });
+      }
+
+      // Generate new questions
+      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'));
+      for (const q of initialQuestions) {
+        await setDoc(doc(db, 'games', game.id, 'questions', q.id), q);
+      }
+
+      // Reset game state
+      await updateDoc(doc(db, 'games', game.id), {
+        status: 'active',
+        currentTurn: game.hostId,
+        winnerId: null,
+        lastUpdated: serverTimestamp()
+      });
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `games/${game.id}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 space-y-12">
@@ -332,23 +365,13 @@ export default function App() {
           animate={{ scale: 1, opacity: 1 }}
           className="text-center relative"
         >
-          <div className="relative inline-block">
-            <h1 className="text-9xl font-black tracking-tighter leading-none select-none relative z-10">
-              <span className="text-cyan-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">A</span>
-              <span className="text-pink-500 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">F</span>
-              <span className="text-yellow-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">T</span>
-              <span className="text-green-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">G</span>
-            </h1>
-            <div className="absolute -top-4 -left-4 w-full h-full pointer-events-none opacity-50">
-               <div className="absolute top-0 left-1/4 w-1 h-8 bg-pink-500 rotate-12" />
-               <div className="absolute top-2 right-1/4 w-1 h-6 bg-cyan-400 -rotate-12" />
-               <div className="absolute bottom-0 left-1/3 w-8 h-1 bg-yellow-400 rotate-45" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <h2 className="font-marker text-3xl text-yellow-400 tracking-tight underline underline-offset-8 decoration-2">
-              A F-ING TRIVIA GAME
-            </h2>
+          <div className="relative inline-block w-64 h-64 md:w-80 md:h-80">
+            <img 
+              src="/logo.png" 
+              alt="AFTG: A F-ing Trivia Game" 
+              className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+              referrerPolicy="no-referrer"
+            />
           </div>
         </motion.div>
 
@@ -436,6 +459,7 @@ export default function App() {
                     playerName={p.name} 
                     completed={p.completedCategories} 
                     isCurrentTurn={game.currentTurn === p.uid}
+                    score={p.score}
                   />
                 ))}
               </div>
@@ -449,11 +473,22 @@ export default function App() {
                       {players.find(p => p.uid === game.winnerId)?.name} WINS!
                     </h2>
                     <p className="text-zinc-500 font-bold uppercase tracking-widest">Total Domination.</p>
+                    {game.hostId === user.uid ? (
+                      <button 
+                        onClick={playAgain}
+                        disabled={loading}
+                        className="px-8 py-4 bg-white text-black rounded-full font-black uppercase tracking-widest"
+                      >
+                        {loading ? 'Loading...' : 'Play Again'}
+                      </button>
+                    ) : (
+                      <p className="text-zinc-500 font-bold uppercase tracking-widest">Waiting for host to play again...</p>
+                    )}
                     <button 
                       onClick={resetGame}
-                      className="px-8 py-4 bg-white text-black rounded-full font-black uppercase tracking-widest"
+                      className="px-8 py-4 bg-transparent border-2 border-zinc-800 text-white rounded-full font-black uppercase tracking-widest mt-4 block mx-auto"
                     >
-                      Play Again
+                      Leave Game
                     </button>
                   </div>
                 ) : game.currentTurn === user.uid ? (

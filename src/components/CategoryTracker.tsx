@@ -5,14 +5,15 @@ interface CategoryTrackerProps {
   completed: string[];
   playerName: string;
   isCurrentTurn?: boolean;
+  score?: number;
 }
 
-export const CategoryTracker: React.FC<CategoryTrackerProps> = ({ completed, playerName, isCurrentTurn }) => {
+export const CategoryTracker: React.FC<CategoryTrackerProps> = ({ completed, playerName, isCurrentTurn, score }) => {
   return (
     <div className={`p-6 rounded-[2rem] border-2 transition-all ${isCurrentTurn ? 'border-purple-500/50 bg-purple-500/5 shadow-[0_0_30px_rgba(168,85,247,0.1)]' : 'border-zinc-800 bg-zinc-900/30'}`}>
       <div className="flex justify-between items-center mb-4">
         <span className="text-sm font-black uppercase tracking-widest text-zinc-400">
-          {playerName}
+          {playerName} {score !== undefined && `- ${score}`}
         </span>
         {isCurrentTurn && (
           <span className="text-[10px] font-black uppercase tracking-widest text-cyan-400 animate-pulse">

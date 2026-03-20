@@ -16,25 +16,13 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
     <div className="w-full max-w-md mx-auto space-y-12 p-6 flex flex-col items-center">
       {/* Logo Area */}
       <div className="text-center relative">
-        <div className="relative inline-block">
-          {/* Recreating the logo look with layered text */}
-          <h1 className="text-9xl font-black tracking-tighter leading-none select-none relative z-10">
-            <span className="text-cyan-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">A</span>
-            <span className="text-pink-500 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">F</span>
-            <span className="text-yellow-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">T</span>
-            <span className="text-green-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">G</span>
-          </h1>
-          {/* Scribbles/Accents (simplified) */}
-          <div className="absolute -top-4 -left-4 w-full h-full pointer-events-none opacity-50">
-             <div className="absolute top-0 left-1/4 w-1 h-8 bg-pink-500 rotate-12" />
-             <div className="absolute top-2 right-1/4 w-1 h-6 bg-cyan-400 -rotate-12" />
-             <div className="absolute bottom-0 left-1/3 w-8 h-1 bg-yellow-400 rotate-45" />
-          </div>
-        </div>
-        <div className="mt-4">
-          <h2 className="font-marker text-3xl text-yellow-400 tracking-tight underline underline-offset-8 decoration-2">
-            A F-ING TRIVIA GAME
-          </h2>
+        <div className="relative inline-block w-64 h-64 md:w-80 md:h-80">
+          <img 
+            src="/logo.png" 
+            alt="AFTG: A F-ing Trivia Game" 
+            className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+            referrerPolicy="no-referrer"
+          />
         </div>
       </div>
 
