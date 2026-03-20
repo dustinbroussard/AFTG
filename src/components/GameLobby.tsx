@@ -106,73 +106,64 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
         </p>
       </div>
 
-      {/* Main Action Card */}
-      <div className="w-full p-8 bg-black/40 backdrop-blur-md border border-purple-500/20 rounded-2xl space-y-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(168,85,247,0.15)] transition-all duration-500 ease-in-out">
-        <h4 className="text-3xl font-black text-pink-500 text-center leading-tight">
-          Ready to Get Schooled? 🤓
-        </h4>
+      {/* Main Actions */}
+      <div className="w-full space-y-4">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => onStartSolo(selectedAvatar)}
+          className="w-full h-16 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 ease-in-out"
+        >
+          <Trophy className="w-6 h-6" />
+          Solo Mode
+        </motion.button>
 
-        <div className="space-y-4">
-          {/* Solo Mode Button */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onStartSolo(selectedAvatar)}
-            className="w-full h-16 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 ease-in-out"
-          >
-            <Trophy className="w-6 h-6" />
-            Solo Mode
-          </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => onStartMulti(selectedAvatar)}
+          className="w-full h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 ease-in-out"
+        >
+          <Gamepad2 className="w-6 h-6" />
+          Start New Game
+        </motion.button>
 
-          {/* Start New Game Button */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onStartMulti(selectedAvatar)}
-            className="w-full h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 ease-in-out"
-          >
-            <Gamepad2 className="w-6 h-6" />
-            Start New Game
-          </motion.button>
-
-          {/* Join Game Button */}
-          <div className="space-y-2">
-            {!showJoinInput ? (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowJoinInput(true)}
-                className="w-full h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
+        <div className="space-y-2">
+          {!showJoinInput ? (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowJoinInput(true)}
+              className="w-full h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
+            >
+              <Users className="w-6 h-6" />
+              Join Game
+            </motion.button>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                maxLength={4}
+                placeholder="CODE"
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                className="flex-1 bg-zinc-900 border border-zinc-700/50 rounded-xl px-4 text-xl font-black text-white text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
+              />
+              <button
+                onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
+                disabled={joinCode.length !== 4}
+                className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
               >
-                <Users className="w-6 h-6" />
-                Join Game
-              </motion.button>
-            ) : (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  maxLength={4}
-                  placeholder="CODE"
-                  value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  className="flex-1 bg-zinc-900 border border-zinc-700/50 rounded-xl px-4 text-xl font-black text-white text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
-                />
-                <button
-                  onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
-                  disabled={joinCode.length !== 4}
-                  className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
-                >
-                  GO
-                </button>
-                <button
-                  onClick={() => setShowJoinInput(false)}
-                  className="px-4 bg-zinc-800 hover:bg-zinc-700 rounded-xl font-black text-white transition-all duration-300 ease-in-out shadow-md"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
+                GO
+              </button>
+              <button
+                onClick={() => setShowJoinInput(false)}
+                className="px-4 bg-zinc-800 hover:bg-zinc-700 rounded-xl font-black text-white transition-all duration-300 ease-in-out shadow-md"
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

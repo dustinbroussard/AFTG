@@ -79,6 +79,8 @@ export default function App() {
   const lostAudioRef = useRef<HTMLAudioElement>(null);
   const prevGameStatus = useRef<string | null>(null);
 
+  const existingQuestionHistory = questions.map(({ category, question }) => ({ category, question }));
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -235,7 +237,7 @@ export default function App() {
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
       
       setIsFetchingQuestions(true);
-      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'));
+      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'), 3, existingQuestionHistory);
       for (const q of initialQuestions) {
         await setDoc(doc(db, 'games', gameId, 'questions', q.id), q);
       }
@@ -288,7 +290,7 @@ export default function App() {
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
       
       setIsFetchingQuestions(true);
-      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'));
+      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'), 3, existingQuestionHistory);
       for (const q of initialQuestions) {
         await setDoc(doc(db, 'games', gameId, 'questions', q.id), q);
       }
@@ -365,7 +367,7 @@ export default function App() {
     } else {
       // Fetch more questions if needed
       setIsFetchingQuestions(true);
-      generateQuestions([category === 'Random' ? 'General' : category]).then(newQs => {
+      generateQuestions([category === 'Random' ? 'General' : category], 3, existingQuestionHistory).then(newQs => {
         if (newQs.length > 0) {
           const q = newQs[0];
           setCurrentQuestion(q);
@@ -490,7 +492,7 @@ export default function App() {
 
       // Generate new questions
       setIsFetchingQuestions(true);
-      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'));
+      const initialQuestions = await generateQuestions(CATEGORIES.filter(c => c !== 'Random'), 3, existingQuestionHistory);
       for (const q of initialQuestions) {
         await setDoc(doc(db, 'games', game.id, 'questions', q.id), q);
       }
