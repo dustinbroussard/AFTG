@@ -17,10 +17,12 @@ import {
   serverTimestamp,
   increment,
   arrayUnion,
+  getDoc,
 } from 'firebase/firestore';
 import { auth, db, signIn, handleFirestoreError, OperationType } from './firebase';
-import { GameState, Player, TriviaQuestion, ChatMessage, UserSettings, getPlayableCategories } from './types';
+import { GameInvite, GameState, Player, RecentPlayer, TriviaQuestion, ChatMessage, UserSettings, getPlayableCategories } from './types';
 import { ensureQuestionInventory, getQuestionsForSession } from './services/questionRepository';
+import { acceptInvite, declineInvite, expireInvite, loadRecentPlayers, sendInvite, subscribeToIncomingInvites } from './services/invites';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
@@ -44,8 +46,17 @@ type ResultPhase = 'idle' | 'revealing' | 'explaining' | 'specialEvent';
 type QueuedSpecialEvent =
   | { kind: 'MANUAL_CATEGORY_UNLOCK' }
   | { kind: 'TRASH_TALK'; event: TrashTalkEvent; message: string };
+type LoadingStep =
+  | 'idle'
+  | 'creating_match'
+  | 'joining_match'
+  | 'loading_questions'
+  | 'finalizing_lobby'
+  | 'finalizing_match'
+  | 'finalizing_round';
 
 export default function App() {
+  const QUESTION_TIME_LIMIT_SECONDS = 15;
   const themeAudioSrc = publicAsset('theme.mp3');
   const welcomeAudioSrc = publicAsset('welcome.mp3');
   const correctAudioSrc = publicAsset('correct.mp3');
@@ -70,6 +81,7 @@ export default function App() {
   const [isStartingGame, setIsStartingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [isFetchingQuestions, setIsFetchingQuestions] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<LoadingStep>('idle');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   
   const [error, setError] = useState<string | null>(null);
@@ -80,12 +92,16 @@ export default function App() {
   const [remoteSettingsResolved, setRemoteSettingsResolved] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
+  const [recentPlayers, setRecentPlayers] = useState<RecentPlayer[]>([]);
+  const [incomingInvites, setIncomingInvites] = useState<GameInvite[]>([]);
+  const [inviteFeedback, setInviteFeedback] = useState<string | null>(null);
   
   const [pastGames, setPastGames] = useState<GameState[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
   const [revealedCategory, setRevealedCategory] = useState<string | null>(null);
+  const [questionTimeRemaining, setQuestionTimeRemaining] = useState(QUESTION_TIME_LIMIT_SECONDS);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [manualPickReady, setManualPickReady] = useState(false);
   const [showManualPickPrompt, setShowManualPickPrompt] = useState(false);
@@ -102,10 +118,12 @@ export default function App() {
   const prevGameStatus = useRef<string | null>(null);
   const revealTimeoutRef = useRef<number | null>(null);
   const categoryRevealTimeoutRef = useRef<number | null>(null);
+  const questionTimerRef = useRef<number | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
   const hasWarnedBehindRef = useRef(false);
   const hasTriggeredMatchLossRef = useRef(false);
   const lastSavedRemoteSettingsRef = useRef<string>('');
+  const recordedRecentPairKeysRef = useRef<Set<string>>(new Set());
 
   const existingQuestionIds = questions.map((question) => question.questionId || question.id);
   const playableCategories = getPlayableCategories();
@@ -119,6 +137,101 @@ export default function App() {
       ...patch,
       updatedAt: Date.now(),
     }));
+  };
+
+  const getLoadingCopy = (step: LoadingStep) => {
+    switch (step) {
+      case 'creating_match':
+        return {
+          title: 'Creating match',
+          flow: 'Creating match -> Loading questions -> Finalizing lobby',
+        };
+      case 'joining_match':
+        return {
+          title: 'Joining lobby',
+          flow: 'Joining lobby -> Finalizing lobby',
+        };
+      case 'loading_questions':
+        return {
+          title: 'Loading questions',
+          flow: 'Creating match -> Loading questions -> Finalizing lobby',
+        };
+      case 'finalizing_lobby':
+        return {
+          title: 'Finalizing lobby',
+          flow: 'Creating match -> Loading questions -> Finalizing lobby',
+        };
+      case 'finalizing_match':
+        return {
+          title: 'Finalizing match',
+          flow: 'Resetting match -> Loading questions -> Finalizing match',
+        };
+      case 'finalizing_round':
+        return {
+          title: 'Finalizing round',
+          flow: 'Loading questions -> Finalizing round',
+        };
+      default:
+        return {
+          title: 'Working',
+          flow: 'Working',
+        };
+    }
+  };
+
+  const recordRecentPlayer = async (ownerUid: string, player: Player, gameId: string) => {
+    const recentPlayerRef = doc(db, 'users', ownerUid, 'recentPlayers', player.uid);
+    await setDoc(recentPlayerRef, {
+      uid: player.uid,
+      displayName: player.name,
+      photoURL: player.avatarUrl || '',
+      lastPlayedAt: Date.now(),
+      lastGameId: gameId,
+    }, { merge: true });
+  };
+
+  const joinWaitingGameById = async (gameId: string, avatarUrl: string) => {
+    if (!user) return false;
+
+    const gameRef = doc(db, 'games', gameId);
+    const gameSnapshot = await getDoc(gameRef);
+    if (!gameSnapshot.exists()) {
+      setError('Invite expired. That match no longer exists.');
+      return false;
+    }
+
+    const gameData = gameSnapshot.data() as GameState;
+    if (gameData.status !== 'waiting') {
+      setError('Invite expired. That match already started.');
+      return false;
+    }
+
+    if (gameData.playerIds.length >= 2 && !gameData.playerIds.includes(user.uid)) {
+      setError('Invite expired. That match is already full.');
+      return false;
+    }
+
+    if (!gameData.playerIds.includes(user.uid)) {
+      const playerRef = doc(db, 'games', gameId, 'players', user.uid);
+      await setDoc(playerRef, {
+        uid: user.uid,
+        name: user.displayName || 'Guest',
+        score: 0,
+        streak: 0,
+        completedCategories: [],
+        avatarUrl
+      });
+
+      await updateDoc(gameRef, {
+        playerIds: arrayUnion(user.uid),
+        lastUpdated: serverTimestamp()
+      });
+    }
+
+    setLoadingStep('finalizing_lobby');
+    setIsSolo(false);
+    setGame({ id: gameId, ...gameData } as GameState);
+    return true;
   };
 
   const resolveWheelCategory = (category: string) => {
@@ -225,12 +338,18 @@ export default function App() {
       categoryRevealTimeoutRef.current = null;
     }
 
+    if (questionTimerRef.current) {
+      window.clearInterval(questionTimerRef.current);
+      questionTimerRef.current = null;
+    }
+
     setRoast(null);
     setRevealedCategory(null);
     setCurrentQuestion(null);
     setSelectedCategory(null);
     setSelectedAnswer(null);
     setCorrectAnswer(null);
+    setQuestionTimeRemaining(QUESTION_TIME_LIMIT_SECONDS);
   };
 
   const showCategoryReveal = (category: string, question: TriviaQuestion) => {
@@ -245,9 +364,48 @@ export default function App() {
     categoryRevealTimeoutRef.current = window.setTimeout(() => {
       setRevealedCategory(null);
       setCurrentQuestion(question);
+      setQuestionTimeRemaining(QUESTION_TIME_LIMIT_SECONDS);
       categoryRevealTimeoutRef.current = null;
     }, 1100);
   };
+
+  useEffect(() => {
+    if (!currentQuestion || selectedAnswer !== null || resultPhase !== 'idle') {
+      if (questionTimerRef.current) {
+        window.clearInterval(questionTimerRef.current);
+        questionTimerRef.current = null;
+      }
+      return;
+    }
+
+    setQuestionTimeRemaining(QUESTION_TIME_LIMIT_SECONDS);
+
+    questionTimerRef.current = window.setInterval(() => {
+      setQuestionTimeRemaining((current) => {
+        if (current <= 1) {
+          if (questionTimerRef.current) {
+            window.clearInterval(questionTimerRef.current);
+            questionTimerRef.current = null;
+          }
+          window.setTimeout(() => {
+            if (currentQuestion && selectedAnswer === null && resultPhase === 'idle') {
+              handleAnswer(-1);
+            }
+          }, 0);
+          return 0;
+        }
+
+        return current - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (questionTimerRef.current) {
+        window.clearInterval(questionTimerRef.current);
+        questionTimerRef.current = null;
+      }
+    };
+  }, [currentQuestion, selectedAnswer, resultPhase]);
 
   const continueAfterExplanation = () => {
     if (game?.status === 'completed' && game.winnerId === user?.uid) {
@@ -332,6 +490,36 @@ export default function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user?.uid) {
+      setRecentPlayers([]);
+      return;
+    }
+
+    loadRecentPlayers(user.uid)
+      .then(setRecentPlayers)
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.warn('[recentPlayers] Failed to load:', err);
+        }
+      });
+  }, [user?.uid, game?.id]);
+
+  useEffect(() => {
+    if (!user?.uid) {
+      setIncomingInvites([]);
+      return;
+    }
+
+    return subscribeToIncomingInvites(user.uid, setIncomingInvites);
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!inviteFeedback) return;
+    const timeout = window.setTimeout(() => setInviteFeedback(null), 3000);
+    return () => window.clearTimeout(timeout);
+  }, [inviteFeedback]);
 
   // Fetch past games history
   useEffect(() => {
@@ -489,6 +677,41 @@ export default function App() {
     prevPlayersRef.current = players;
   }, [players, game?.id, user?.uid, lastTrashTalkEvent]);
 
+  useEffect(() => {
+    if (!game?.id || !user?.uid || isSolo || players.length < 2) return;
+
+    const opponent = players.find((player) => player.uid !== user.uid);
+    if (!opponent) return;
+
+    const pairKey = `${game.id}:${user.uid}:${opponent.uid}`;
+    if (recordedRecentPairKeysRef.current.has(pairKey)) return;
+    recordedRecentPairKeysRef.current.add(pairKey);
+
+    recordRecentPlayer(user.uid, opponent, game.id)
+      .then(() => {
+        setRecentPlayers((current) => {
+          const next = [
+            {
+              uid: opponent.uid,
+              displayName: opponent.name,
+              photoURL: opponent.avatarUrl,
+              lastPlayedAt: Date.now(),
+              lastGameId: game.id,
+            },
+            ...current.filter((player) => player.uid !== opponent.uid),
+          ];
+
+          return next.slice(0, 8);
+        });
+      })
+      .catch((err) => {
+        recordedRecentPairKeysRef.current.delete(pairKey);
+        if (import.meta.env.DEV) {
+          console.warn('[recentPlayers] Failed to record:', err);
+        }
+      });
+  }, [game?.id, isSolo, players, user?.uid]);
+
   const handleSignIn = async () => {
     try {
       await signIn();
@@ -506,6 +729,7 @@ export default function App() {
       return;
     }
     setIsStartingGame(true);
+    setLoadingStep('creating_match');
     setIsSolo(true);
     
     const gameId = `solo-${user.uid}-${Date.now()}`;
@@ -535,6 +759,7 @@ export default function App() {
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
       
       setIsFetchingQuestions(true);
+      setLoadingStep('loading_questions');
       const initialQuestions = await getQuestionsForSession({
         categories: playableCategories,
         count: 3,
@@ -543,6 +768,7 @@ export default function App() {
       await persistQuestionsToGame(gameId, initialQuestions);
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
+      setLoadingStep('finalizing_lobby');
       
       setGame(newGame);
     } catch (err) {
@@ -551,6 +777,7 @@ export default function App() {
     } finally {
       setIsStartingGame(false);
       setIsFetchingQuestions(false);
+      setLoadingStep('idle');
     }
   };
 
@@ -560,6 +787,7 @@ export default function App() {
       return;
     }
     setIsStartingGame(true);
+    setLoadingStep('creating_match');
     setIsSolo(false);
     
     const code = Math.floor(1000 + Math.random() * 9000).toString();
@@ -591,6 +819,7 @@ export default function App() {
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
       
       setIsFetchingQuestions(true);
+      setLoadingStep('loading_questions');
       const initialQuestions = await getQuestionsForSession({
         categories: playableCategories,
         count: 3,
@@ -599,6 +828,7 @@ export default function App() {
       await persistQuestionsToGame(gameId, initialQuestions);
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
+      setLoadingStep('finalizing_lobby');
       
       setGame(newGame);
     } catch (err) {
@@ -607,6 +837,7 @@ export default function App() {
     } finally {
       setIsStartingGame(false);
       setIsFetchingQuestions(false);
+      setLoadingStep('idle');
     }
   };
 
@@ -616,6 +847,7 @@ export default function App() {
       return;
     }
     setIsJoiningGame(true);
+    setLoadingStep('joining_match');
     
     try {
       const q = query(collection(db, 'games'), where('code', '==', code), where('status', '==', 'waiting'));
@@ -627,35 +859,120 @@ export default function App() {
       }
 
       const gameDoc = snapshot.docs[0];
-      const gameData = gameDoc.data() as GameState;
-      
-      if (gameData.playerIds.length >= 2) {
-        setError("Game is full.");
-        return;
-      }
-
-      const playerRef = doc(db, 'games', gameDoc.id, 'players', user.uid);
-      await setDoc(playerRef, {
-        uid: user.uid,
-        name: user.displayName || 'Guest',
-        score: 0,
-        streak: 0,
-        completedCategories: [],
-        avatarUrl
-      });
-
-      await updateDoc(doc(db, 'games', gameDoc.id), {
-        playerIds: arrayUnion(user.uid),
-        status: 'active',
-        lastUpdated: serverTimestamp()
-      });
-
-      setGame({ id: gameDoc.id, ...gameData } as GameState);
+      await joinWaitingGameById(gameDoc.id, avatarUrl);
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, `games/join`);
       setError("Failed to join game.");
     } finally {
       setIsJoiningGame(false);
+      setLoadingStep('idle');
+    }
+  };
+
+  const inviteRecentPlayer = async (player: RecentPlayer, avatarUrl: string) => {
+    if (!user) {
+      await handleSignIn();
+      return;
+    }
+
+    setIsStartingGame(true);
+    setLoadingStep('creating_match');
+    setIsSolo(false);
+
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    const gameId = `multi-${code}-${Date.now()}`;
+
+    const newGame: GameState = {
+      id: gameId,
+      code,
+      status: 'waiting',
+      hostId: user.uid,
+      playerIds: [user.uid],
+      currentTurn: user.uid,
+      winnerId: null,
+      createdAt: serverTimestamp(),
+      lastUpdated: serverTimestamp()
+    };
+
+    const initialPlayer: Player = {
+      uid: user.uid,
+      name: user.displayName || 'Host',
+      score: 0,
+      streak: 0,
+      completedCategories: [],
+      avatarUrl
+    };
+
+    try {
+      await setDoc(doc(db, 'games', gameId), newGame);
+      await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
+
+      setIsFetchingQuestions(true);
+      setLoadingStep('loading_questions');
+      const initialQuestions = await getQuestionsForSession({
+        categories: playableCategories,
+        count: 3,
+        excludeQuestionIds: existingQuestionIds
+      });
+      await persistQuestionsToGame(gameId, initialQuestions);
+      kickOffInventoryReplenishment(playableCategories);
+      setIsFetchingQuestions(false);
+      setLoadingStep('finalizing_lobby');
+
+      await sendInvite({
+        uid: user.uid,
+        displayName: user.displayName || 'Host',
+        photoURL: avatarUrl || user.photoURL || undefined,
+      }, player, gameId);
+
+      setInviteFeedback(`Invite sent to ${player.displayName}`);
+      setGame(newGame);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, `users/${player.uid}/invites`);
+      setError('Failed to send invite.');
+    } finally {
+      setIsStartingGame(false);
+      setIsFetchingQuestions(false);
+      setLoadingStep('idle');
+    }
+  };
+
+  const handleAcceptInvite = async (invite: GameInvite, avatarUrl: string) => {
+    if (!user) {
+      await handleSignIn();
+      return;
+    }
+
+    setIsJoiningGame(true);
+    setLoadingStep('joining_match');
+
+    try {
+      const joined = await joinWaitingGameById(invite.gameId, avatarUrl);
+      if (!joined) {
+        await expireInvite(invite.id, user.uid);
+        return;
+      }
+
+      await acceptInvite(invite.id, user.uid);
+      setInviteFeedback(`Joined ${invite.fromDisplayName}'s match`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, `users/${user.uid}/invites/${invite.id}`);
+      setError('Failed to accept invite.');
+    } finally {
+      setIsJoiningGame(false);
+      setLoadingStep('idle');
+    }
+  };
+
+  const handleDeclineInvite = async (invite: GameInvite) => {
+    if (!user) return;
+
+    try {
+      await declineInvite(invite.id, user.uid);
+      setInviteFeedback(`Declined invite from ${invite.fromDisplayName}`);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, `users/${user.uid}/invites/${invite.id}`);
+      setError('Failed to decline invite.');
     }
   };
 
@@ -682,12 +999,14 @@ export default function App() {
     } else {
       // Fetch more questions if needed
       setIsFetchingQuestions(true);
+      setLoadingStep('loading_questions');
       getQuestionsForSession({
         categories: [resolvedCategory],
         count: 3,
         excludeQuestionIds: existingQuestionIds
       }).then(newQs => {
         if (newQs.length > 0) {
+          setLoadingStep('finalizing_round');
           const q = newQs[0];
           showCategoryReveal(resolvedCategory, q);
           // Save new questions to DB
@@ -708,6 +1027,7 @@ export default function App() {
           setError("Failed to load questions. Please try again.");
         }
         setIsFetchingQuestions(false);
+        setLoadingStep('idle');
       });
     }
   };
@@ -730,7 +1050,12 @@ export default function App() {
   };
 
   const handleAnswer = async (index: number) => {
-    if (!currentQuestion || !game || !user) return;
+    if (!currentQuestion || !game || !user || selectedAnswer !== null || resultPhase !== 'idle') return;
+
+    if (questionTimerRef.current) {
+      window.clearInterval(questionTimerRef.current);
+      questionTimerRef.current = null;
+    }
 
     setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.answerIndex);
@@ -826,6 +1151,16 @@ export default function App() {
     continueAfterExplanation();
   };
 
+  const shouldShowMatchChat = !!game && (
+    game.status === 'waiting' ||
+    (game.status === 'active' && (
+      (game.currentTurn === user?.uid && !currentQuestion) ||
+      game.currentTurn !== user?.uid
+    ))
+  );
+  const setupLoadingCopy = getLoadingCopy(loadingStep);
+  const questionLoadingCopy = getLoadingCopy(loadingStep === 'idle' ? 'loading_questions' : loadingStep);
+
   const resetGame = () => {
     if (categoryRevealTimeoutRef.current) {
       window.clearTimeout(categoryRevealTimeoutRef.current);
@@ -848,6 +1183,7 @@ export default function App() {
     setActiveTrashTalkEvent(null);
     setLastTrashTalkEvent(null);
     prevPlayersRef.current = [];
+    recordedRecentPairKeysRef.current.clear();
     hasWarnedBehindRef.current = false;
     hasTriggeredMatchLossRef.current = false;
   };
@@ -855,6 +1191,7 @@ export default function App() {
   const playAgain = async () => {
     if (!game || !user || game.hostId !== user.uid) return;
     setIsStartingGame(true);
+    setLoadingStep('creating_match');
     try {
       // Reset players
       for (const p of players) {
@@ -867,6 +1204,7 @@ export default function App() {
 
       // Generate new questions
       setIsFetchingQuestions(true);
+      setLoadingStep('loading_questions');
       const initialQuestions = await getQuestionsForSession({
         categories: playableCategories,
         count: 3,
@@ -875,6 +1213,7 @@ export default function App() {
       await persistQuestionsToGame(game.id, initialQuestions);
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
+      setLoadingStep('finalizing_match');
 
       // Reset game state
       await updateDoc(doc(db, 'games', game.id), {
@@ -892,6 +1231,7 @@ export default function App() {
       setActiveTrashTalkEvent(null);
       setLastTrashTalkEvent(null);
       prevPlayersRef.current = [];
+      recordedRecentPairKeysRef.current.clear();
       hasWarnedBehindRef.current = false;
       hasTriggeredMatchLossRef.current = false;
     } catch (err) {
@@ -900,6 +1240,7 @@ export default function App() {
     } finally {
       setIsStartingGame(false);
       setIsFetchingQuestions(false);
+      setLoadingStep('idle');
     }
   };
 
@@ -1147,21 +1488,30 @@ export default function App() {
             )}
           </AnimatePresence>
 
-          <AnimatePresence mode="wait">
-            {!game ? (
-              <div key="lobby-view" className="relative">
-              {(isStartingGame || isJoiningGame) && (
-                <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
-                  <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
-                  <p className="text-sm font-medium theme-text-secondary">
-                    {isFetchingQuestions ? "Generating sarcastic questions..." : "Setting up game..."}
-                  </p>
-                </div>
-              )}
+	          <AnimatePresence mode="wait">
+	            {!game ? (
+	              <div key="lobby-view" className="relative">
+	              {(isStartingGame || isJoiningGame) && (
+	                <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
+	                  <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
+	                  <p className="text-base font-bold theme-text-secondary">
+	                    {setupLoadingCopy.title}
+	                  </p>
+	                  <p className="text-xs font-bold uppercase tracking-widest theme-text-muted mt-2 text-center">
+	                    {setupLoadingCopy.flow}
+	                  </p>
+	                </div>
+	              )}
               <GameLobby 
                 onStartSolo={startSoloGame} 
                 onStartMulti={startMultiplayerGame} 
                 onJoinMulti={joinGame} 
+                recentPlayers={recentPlayers}
+                incomingInvites={incomingInvites}
+                onInviteRecentPlayer={inviteRecentPlayer}
+                onAcceptInvite={handleAcceptInvite}
+                onDeclineInvite={handleDeclineInvite}
+                inviteFeedback={inviteFeedback}
               />
             </div>
           ) : (
@@ -1199,66 +1549,8 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Chat in Waiting Room */}
-              {game.status === 'waiting' && (
-                <div className="theme-panel backdrop-blur-xl border rounded-2xl p-6 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold uppercase tracking-widest theme-text-muted">Lobby Chat</h3>
-                    {game.hostId === user.uid && players.length >= 2 && (
-                      <button 
-                        onClick={startGame}
-                        className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-pink-500/25 ease-in-out"
-                      >
-                        Start Game
-                      </button>
-                    )}
-                  </div>
-                  
-                  <div className="h-64 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
-                    {messages.length === 0 ? (
-                      <p className="text-center theme-text-muted italic text-sm py-12">No messages yet. Say something funny.</p>
-                    ) : (
-                      messages.map(m => (
-                        <div key={m.id} className={`flex gap-3 ${m.uid === user.uid ? 'flex-row-reverse' : ''}`}>
-                          <div className="w-10 h-10 theme-avatar-surface rounded-full flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-inner border">
-                            {m.avatarUrl ? <img src={m.avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : '👤'}
-                          </div>
-                          <div className={`max-w-[75%] p-4 rounded-2xl text-sm shadow-md ${
-                            m.uid === user.uid 
-                              ? 'bg-purple-600 text-white rounded-tr-sm' 
-                              : 'theme-soft-surface rounded-tl-sm border'
-                          }`}>
-                            <p className="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-wider">{m.name}</p>
-                            <p className="leading-relaxed">{m.text}</p>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  <div className="flex gap-3 pt-2">
-                    <input 
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                      placeholder="Type a message..."
-                      disabled={isSendingMessage}
-                      className="flex-1 theme-input border rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 theme-inset"
-                    />
-                    <button 
-                      onClick={sendMessage}
-                      disabled={isSendingMessage || !chatInput.trim()}
-                      className="p-3 bg-purple-600 rounded-xl hover:bg-purple-500 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-[0_4px_14px_0_rgba(147,51,234,0.39)] hover:shadow-[0_6px_20px_rgba(147,51,234,0.23)] active:scale-[0.96]"
-                    >
-                      {isSendingMessage ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Game Content */}
-              <div className="relative py-12">
+	              {/* Game Content */}
+	              <div className="relative py-12">
                 {game.status === 'completed' ? (
                   <motion.div 
                     initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1304,13 +1596,16 @@ export default function App() {
                             setIsSpinning={setIsSpinning}
                             soundEnabled={sfxEnabled}
                           />
-                        )}
-                        {isFetchingQuestions && (
-                          <div className="flex items-center gap-2 theme-text-muted text-sm">
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Generating questions...
-                          </div>
-                        )}
+	                        )}
+	                        {isFetchingQuestions && (
+	                          <div className="flex items-center gap-2 theme-text-muted text-sm">
+	                            <Loader2 className="w-4 h-4 animate-spin" />
+	                            <span>{questionLoadingCopy.title}</span>
+	                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
+	                              {questionLoadingCopy.flow}
+	                            </span>
+	                          </div>
+	                        )}
                       </div>
                     ) : (
                       <QuestionCard
@@ -1319,6 +1614,8 @@ export default function App() {
                         disabled={resultPhase !== 'idle' || !!roast || selectedAnswer !== null}
                         selectedId={selectedAnswer}
                         correctId={correctAnswer}
+                        timerProgress={questionTimeRemaining / QUESTION_TIME_LIMIT_SECONDS}
+                        timeRemaining={questionTimeRemaining}
                       />
                     )}
                   </div>
@@ -1326,12 +1623,71 @@ export default function App() {
                   <div className="text-center p-12 theme-panel border rounded-3xl">
                     <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
                     <p className="text-lg font-medium theme-text-muted">Waiting for {players.find(p => p.uid === game.currentTurn)?.name} to spin...</p>
+	                  </div>
+	                )}
+	              </div>
+
+                {shouldShowMatchChat && (
+                  <div className="theme-panel backdrop-blur-xl border rounded-2xl p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold uppercase tracking-widest theme-text-muted">
+                        {game.status === 'waiting' ? 'Lobby Chat' : 'Match Chat'}
+                      </h3>
+                      {game.status === 'waiting' && game.hostId === user.uid && players.length >= 2 && (
+                        <button 
+                          onClick={startGame}
+                          className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-pink-500/25 ease-in-out"
+                        >
+                          Start Game
+                        </button>
+                      )}
+                    </div>
+                    
+                    <div className="h-64 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                      {messages.length === 0 ? (
+                        <p className="text-center theme-text-muted italic text-sm py-12">No messages yet. Say something funny.</p>
+                      ) : (
+                        messages.map(m => (
+                          <div key={m.id} className={`flex gap-3 ${m.uid === user.uid ? 'flex-row-reverse' : ''}`}>
+                            <div className="w-10 h-10 theme-avatar-surface rounded-full flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-inner border">
+                              {m.avatarUrl ? <img src={m.avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : '👤'}
+                            </div>
+                            <div className={`max-w-[75%] p-4 rounded-2xl text-sm shadow-md ${
+                              m.uid === user.uid 
+                                ? 'bg-purple-600 text-white rounded-tr-sm' 
+                                : 'theme-soft-surface rounded-tl-sm border'
+                            }`}>
+                              <p className="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-wider">{m.name}</p>
+                              <p className="leading-relaxed">{m.text}</p>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <div className="flex gap-3 pt-2">
+                      <input 
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                        placeholder="Type a message..."
+                        disabled={isSendingMessage}
+                        className="flex-1 theme-input border rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 theme-inset"
+                      />
+                      <button 
+                        onClick={sendMessage}
+                        disabled={isSendingMessage || !chatInput.trim()}
+                        className="p-3 bg-purple-600 rounded-xl hover:bg-purple-500 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-[0_4px_14px_0_rgba(147,51,234,0.39)] hover:shadow-[0_6px_20px_rgba(147,51,234,0.23)] active:scale-[0.96]"
+                      >
+                        {isSendingMessage ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                      </button>
+                    </div>
                   </div>
                 )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+	            </motion.div>
+	          )}
+	        </AnimatePresence>
       </main>
 
       {/* Roast Overlay */}

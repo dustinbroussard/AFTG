@@ -239,6 +239,14 @@ function buildQuestionPrompt(
     .slice(-12)
     .map(item => `- [${item.category}] ${item.question}`)
     .join('\n');
+  const categoryToneGuidance = [
+    'History = dry, lightly ironic',
+    'Science = curious, confident, lightly amused',
+    'Pop Culture = playful, current, a little cheeky',
+    'Sports = energetic, slightly cocky',
+    'Art & Music = expressive, appreciative, not pretentious',
+    'Technology = dry, slightly smug',
+  ].join('\n');
 
   return `You are generating high-quality trivia questions.
 
@@ -284,8 +292,24 @@ Rules:
 - Do not use questions equivalent to "Who was the first U.S. president?", "Earth is the third planet from the Sun", or other one-step giveaway facts.
 - Avoid obvious one-step sports or pop-culture facts that most players would answer instantly without thinking.
 - Prefer questions that feel sharp, intentional, and game-show appropriate rather than classroom-recitation obvious.
+- Keep questions crystal clear and direct, but write them in a slightly conversational, lightly witty tone.
+- Add only subtle humor or mild sarcasm where it helps; humor level should stay around 2 or 3 out of 10.
+- Do not make the wording silly, vague, overly cute, or forced.
+- Do not sacrifice clarity for personality.
+- Avoid sounding like a textbook, exam, teacher, or encyclopedia entry.
+- Answer choices must stay plain, clean, and straightforward. No jokes or gimmicks in the choices.
+- Explanations should be informative first, then lightly flavored like a smart game host talking to another adult.
+- Explanations may have a touch more personality than the question, but should still sound concise and natural.
+- Good style example:
+  Question: "Which company gave us the iPhone (and the annual urge to upgrade)?"
+  Explanation: "Apple launched the iPhone in 2007 and has been testing your self-control ever since."
+- Bad style example:
+  Question: "Which smug fruit empire birthed the magical rectangle that colonized your pocket???"
+  Explanation: "Lol obviously Apple, come on."
 - Prefer ${style}.
 - Favor ${lens}.
+- Apply these category tone nudges lightly:
+${categoryToneGuidance}
 - Use the following category focus guidance:
 ${subdomainInstructions}
 - Do not repeat or closely paraphrase any avoided question.

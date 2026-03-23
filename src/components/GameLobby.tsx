@@ -1,15 +1,32 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Trophy, Users, Gamepad2, User, Plus, Upload } from 'lucide-react';
+import { Trophy, Users, Gamepad2, User, Upload, Bell, SendHorizontal, Check, X } from 'lucide-react';
 import { publicAsset } from '../assets';
+import { GameInvite, RecentPlayer } from '../types';
 
 interface GameLobbyProps {
   onStartSolo: (avatarUrl: string) => void;
   onStartMulti: (avatarUrl: string) => void;
   onJoinMulti: (code: string, avatarUrl: string) => void;
+  recentPlayers: RecentPlayer[];
+  incomingInvites: GameInvite[];
+  onInviteRecentPlayer: (player: RecentPlayer, avatarUrl: string) => void;
+  onAcceptInvite: (invite: GameInvite, avatarUrl: string) => void;
+  onDeclineInvite: (invite: GameInvite) => void;
+  inviteFeedback?: string | null;
 }
 
-export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti, onJoinMulti }) => {
+export const GameLobby: React.FC<GameLobbyProps> = ({
+  onStartSolo,
+  onStartMulti,
+  onJoinMulti,
+  recentPlayers,
+  incomingInvites,
+  onInviteRecentPlayer,
+  onAcceptInvite,
+  onDeclineInvite,
+  inviteFeedback,
+}) => {
   const logoSrc = publicAsset('logo.jpg');
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -107,7 +124,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
       </div>
 
       {/* Main Actions */}
-      <div className="w-full space-y-4">
+	      <div className="w-full space-y-4">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -164,11 +181,100 @@ export const GameLobby: React.FC<GameLobbyProps> = ({ onStartSolo, onStartMulti,
               </button>
             </div>
           )}
-        </div>
-      </div>
+	        </div>
+	      </div>
 
-      {/* Footer */}
-      <div className="text-center space-y-4 max-w-xs">
+        {incomingInvites.length > 0 && (
+          <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-5 space-y-4">
+            <div className="flex items-center gap-2">
+              <Bell className="w-4 h-4 text-pink-500" />
+              <h4 className="text-sm font-black uppercase tracking-widest">Incoming Invites</h4>
+            </div>
+
+            <div className="space-y-3">
+              {incomingInvites.map((invite) => (
+                <div key={invite.id} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
+                      {invite.fromPhotoURL ? (
+                        <img src={invite.fromPhotoURL} alt={invite.fromDisplayName} className="w-full h-full object-cover" />
+                      ) : (
+                        <User className="w-5 h-5 theme-text-muted" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold truncate">{invite.fromDisplayName}</p>
+                      <p className="text-[10px] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => onAcceptInvite(invite, selectedAvatar)}
+                      className="px-3 py-2 rounded-xl bg-emerald-500 text-emerald-950 font-black text-xs uppercase tracking-widest"
+                    >
+                      <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5" /> Accept</span>
+                    </button>
+                    <button
+                      onClick={() => onDeclineInvite(invite)}
+                      className="px-3 py-2 rounded-xl theme-button font-black text-xs uppercase tracking-widest"
+                    >
+                      <span className="inline-flex items-center gap-1"><X className="w-3.5 h-3.5" /> Decline</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-5 space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-cyan-400" />
+              <h4 className="text-sm font-black uppercase tracking-widest">Recent Players</h4>
+            </div>
+            {inviteFeedback && (
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">
+                {inviteFeedback}
+              </span>
+            )}
+          </div>
+
+          {recentPlayers.length === 0 ? (
+            <p className="text-sm theme-text-muted">Play a multiplayer match and recent opponents will show up here.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentPlayers.map((player) => (
+                <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
+                      {player.photoURL ? (
+                        <img src={player.photoURL} alt={player.displayName} className="w-full h-full object-cover" />
+                      ) : (
+                        <User className="w-5 h-5 theme-text-muted" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold truncate">{player.displayName}</p>
+                      <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                        Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg shrink-0"
+                  >
+                    <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+	      {/* Footer */}
+	      <div className="text-center space-y-4 max-w-xs">
         <p className="theme-text-muted font-bold text-lg">
           No ads. No coins. No bullsh*t. 🚫
         </p>

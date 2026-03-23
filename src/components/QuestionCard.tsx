@@ -8,6 +8,8 @@ interface QuestionCardProps {
   disabled?: boolean;
   selectedId?: number | null;
   correctId?: number | null;
+  timerProgress?: number;
+  timeRemaining?: number;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({ 
@@ -15,14 +17,40 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   onSelect, 
   disabled,
   selectedId,
-  correctId
+  correctId,
+  timerProgress = 1,
+  timeRemaining = 15,
 }) => {
+  const clampedProgress = Math.max(0, Math.min(1, timerProgress));
+  const timerColor = clampedProgress <= 0.33 ? '#F43F5E' : '#06B6D4';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-2xl mx-auto p-8 theme-panel-strong backdrop-blur-md border rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 ease-in-out"
+      className="w-full max-w-2xl mx-auto p-8 theme-panel-strong backdrop-blur-md border rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 ease-in-out overflow-hidden"
     >
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.25em] theme-text-muted">
+            Time Remaining
+          </span>
+          <span
+            className="text-sm font-black tabular-nums transition-colors duration-300"
+            style={{ color: timerColor }}
+          >
+            {timeRemaining}s
+          </span>
+        </div>
+        <div className="h-2 rounded-full theme-soft-surface overflow-hidden">
+          <motion.div
+            animate={{ width: `${clampedProgress * 100}%`, backgroundColor: timerColor }}
+            transition={{ duration: 0.25, ease: 'linear' }}
+            className="h-full rounded-full"
+          />
+        </div>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
         <div 
           className="inline-block px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-widest shadow-sm"

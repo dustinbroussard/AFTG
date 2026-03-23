@@ -57,6 +57,25 @@ export interface UserSettings {
   updatedAt: number;
 }
 
+export interface RecentPlayer {
+  uid: string;
+  displayName: string;
+  photoURL?: string;
+  lastPlayedAt: number;
+  lastGameId?: string;
+}
+
+export interface GameInvite {
+  id: string;
+  fromUid: string;
+  fromDisplayName: string;
+  fromPhotoURL?: string;
+  toUid: string;
+  gameId: string;
+  status: 'pending' | 'accepted' | 'declined' | 'expired';
+  createdAt: number;
+}
+
 export const CATEGORIES: Category[] = ['History', 'Science', 'Pop Culture', 'Art & Music', 'Sports', 'Technology', 'Random'];
 
 export function getPlayableCategories(): Exclude<Category, 'Random'>[] {
