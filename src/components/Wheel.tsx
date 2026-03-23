@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'motion/react';
 import { CATEGORIES, CATEGORY_COLORS } from '../types';
 import { getCategoryIcon } from '../content/categoryIcons';
+import { publicAsset } from '../assets';
 
 interface WheelProps {
   onSpinComplete: (category: string) => void;
@@ -14,6 +15,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
   const controls = useAnimation();
   const [rotation, setRotation] = useState(0);
   const spinAudioRef = useRef<HTMLAudioElement>(null);
+  const spinAudioSrc = publicAsset('spin.mp3');
 
   const N = CATEGORIES.length;
   const segmentAngle = 360 / N;
@@ -30,7 +32,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
       const spinCount = 5 + Math.floor(Math.random() * 5);
       const randomExtra = Math.random() * 360;
       const targetRotation = rotation + (spinCount * 360) + randomExtra;
-      
+
       controls.start({
         rotate: targetRotation,
         transition: { duration: 4, ease: [0.2, 0.8, 0.1, 1] } // Decelerating curve
@@ -43,12 +45,12 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
         onSpinComplete(CATEGORIES[index]);
       });
     }
-  }, [isSpinning]);
+  }, [controls, isSpinning, onSpinComplete, rotation, segmentAngle, setIsSpinning, soundEnabled]);
 
   return (
     <div className="relative w-80 h-80 mx-auto drop-shadow-2xl">
-      <audio ref={spinAudioRef} src="/spin.mp3" />
-      
+      <audio ref={spinAudioRef} src={spinAudioSrc} />
+
       <motion.div
         animate={controls}
         initial={{ rotate: rotation }}
@@ -79,7 +81,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
 
             const textAngle = startAngle + segmentAngle / 2;
             const textRad = (textAngle * Math.PI) / 180;
-            
+
             // Push icon outward, closer to rim
             const iconRadius = 65;
             const iconX = cx + iconRadius * Math.cos(textRad);
@@ -87,25 +89,25 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
 
             return (
               <g key={cat} className="transition-opacity hover:opacity-90">
-                <path 
-                  d={pathData} 
-                  fill={CATEGORY_COLORS[cat]} 
-                  stroke="rgba(0,0,0,0.2)" 
-                  strokeWidth="0.5" 
+                <path
+                  d={pathData}
+                  fill={CATEGORY_COLORS[cat]}
+                  stroke="rgba(0,0,0,0.2)"
+                  strokeWidth="0.5"
                 />
                 {(() => {
                   const Icon = getCategoryIcon(cat);
                   const iconSize = 26;
                   const iconColor = cat === 'Random' ? '#18181B' : '#FFFFFF';
-                  
+
                   return (
                     <g transform={`rotate(${textAngle + 90}, ${iconX}, ${iconY})`} style={{ pointerEvents: 'none' }}>
                       {Icon && (
-                        <Icon 
-                          x={iconX - iconSize/2} 
-                          y={iconY - iconSize/2} 
-                          width={iconSize} 
-                          height={iconSize} 
+                        <Icon
+                          x={iconX - iconSize / 2}
+                          y={iconY - iconSize / 2}
+                          width={iconSize}
+                          height={iconSize}
                           color={iconColor}
                           strokeWidth={2.5}
                         />
@@ -116,18 +118,19 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
               </g>
             );
           })}
-          
+
           {/* Inner center peg for design */}
           <circle cx="100" cy="100" r="28" fill="#18181b" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
         </svg>
       </motion.div>
-      
+
       <div className="absolute inset-0 flex items-center justify-center">
-        <button 
+        <button
           onClick={() => !isSpinning && setIsSpinning(true)}
           disabled={isSpinning}
           className="w-20 h-20 theme-button border-[6px] rounded-full flex items-center justify-center z-30 hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
           style={{ borderColor: 'var(--app-text)' }}
+          aria-label="Spin the category wheel"
         >
           <span className="text-sm font-black uppercase tracking-[0.2em] ml-1">Spin</span>
         </button>

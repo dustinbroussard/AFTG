@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   doc,
@@ -28,13 +28,10 @@ import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
 import { CategoryTracker } from './components/CategoryTracker';
 import { ManualCategoryPrompt } from './components/ManualCategoryPrompt';
-import { QuestionBankAdmin } from './components/QuestionBankAdmin';
 import { Roast } from './components/Roast';
-import { SettingsModal } from './components/SettingsModal';
 import { TrashTalkOverlay } from './components/TrashTalkOverlay';
 import { HeckleOverlay } from './components/HeckleOverlay';
 import { ConfirmModal } from './components/ConfirmModal';
-import { InstallPrompt } from './components/InstallPrompt';
 import { CategoryReveal } from './components/CategoryReveal';
 import { HECKLE_ROTATION_MS, shouldEnableHeckles } from './content/heckles';
 import { getTrashTalkLine, TrashTalkEvent } from './content/trashTalk';
@@ -59,6 +56,10 @@ type LoadingStep =
   | 'finalizing_lobby'
   | 'finalizing_match'
   | 'finalizing_round';
+
+const InstallPrompt = lazy(() => import('./components/InstallPrompt').then((module) => ({ default: module.InstallPrompt })));
+const SettingsModal = lazy(() => import('./components/SettingsModal').then((module) => ({ default: module.SettingsModal })));
+const QuestionBankAdmin = lazy(() => import('./components/QuestionBankAdmin').then((module) => ({ default: module.QuestionBankAdmin })));
 
 const QUESTION_LOADING_LINES = [
   'Stealing questions from smarter people...',
@@ -1677,7 +1678,9 @@ export default function App() {
       <audio ref={wonAudioRef} src={wonAudioSrc} />
       <audio ref={lostAudioRef} src={lostAudioSrc} />
 
-      <InstallPrompt />
+      <Suspense fallback={null}>
+        <InstallPrompt />
+      </Suspense>
 
       <div data-theme={themeMode} className="app-theme min-h-screen font-sans">
         {!isQuestionActive && (
@@ -1686,6 +1689,7 @@ export default function App() {
               <button
                 onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
                 className="p-2 theme-icon-button transition-colors rounded-full"
+                aria-label={settings.soundEnabled ? 'Mute all sound' : 'Enable sound'}
               >
                 {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
               </button>
@@ -1693,6 +1697,7 @@ export default function App() {
                 onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
               </button>
@@ -1700,6 +1705,7 @@ export default function App() {
                 onClick={() => setShowSettings(true)}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 title="Settings"
+                aria-label="Open settings"
               >
                 <SlidersHorizontal className="w-5 h-5" />
               </button>
@@ -1708,6 +1714,7 @@ export default function App() {
                   onClick={() => setShowQuestionBankAdmin(true)}
                   className="px-3 py-2 rounded-xl theme-button text-xs font-black uppercase tracking-widest"
                   title="Question Bank Admin"
+                  aria-label="Open question bank admin"
                 >
                   Dev
                 </button>
@@ -1719,6 +1726,7 @@ export default function App() {
                   onClick={openQuitConfirm}
                   className="p-2 theme-icon-button transition-colors rounded-full"
                   title="Quit Match"
+                  aria-label="Quit current match"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
@@ -1728,6 +1736,7 @@ export default function App() {
                   onClick={() => setShowHistory(true)}
                   className="p-2 theme-icon-button transition-colors rounded-full"
                   title="Match History"
+                  aria-label="Open match history"
                 >
                   <History className="w-5 h-5" />
                 </button>
@@ -1736,7 +1745,7 @@ export default function App() {
                 <span className="text-xs font-bold uppercase tracking-widest theme-text-muted hidden sm:block">
                   {user.displayName}
                 </span>
-                <button onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full">
+                <button onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full" aria-label="Sign out">
                   <LogOut className="w-5 h-5" />
                 </button>
               </div>
@@ -1754,9 +1763,10 @@ export default function App() {
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
                 className="mb-6 p-4 bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
+                role="alert"
               >
                 <span className="text-rose-400 text-sm font-medium">{error}</span>
-                <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400">
+                <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400" aria-label="Dismiss error message">
                   <X className="w-4 h-4" />
                 </button>
               </motion.div>
@@ -1772,6 +1782,9 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-50 flex items-center justify-center p-4 theme-overlay backdrop-blur-sm"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="history-modal-title"
               >
                 <motion.div
                   initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1781,8 +1794,8 @@ export default function App() {
                   className="theme-panel-strong backdrop-blur-xl border rounded-2xl p-6 w-full max-w-lg max-h-[80vh] flex flex-col"
                 >
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-black uppercase tracking-tight">Match History</h2>
-                    <button onClick={() => setShowHistory(false)} className="p-2 theme-icon-button rounded-lg transition-all duration-300">
+                    <h2 id="history-modal-title" className="text-2xl font-black uppercase tracking-tight">Match History</h2>
+                    <button onClick={() => setShowHistory(false)} className="p-2 theme-icon-button rounded-lg transition-all duration-300" aria-label="Close match history">
                       <X className="w-6 h-6" />
                     </button>
                   </div>
@@ -2047,12 +2060,14 @@ export default function App() {
           message={activeTrashTalk}
         />
 
-        <SettingsModal
-          isOpen={showSettings}
-          settings={settings}
-          onClose={() => setShowSettings(false)}
-          onUpdate={updateSettings}
-        />
+        <Suspense fallback={null}>
+          <SettingsModal
+            isOpen={showSettings}
+            settings={settings}
+            onClose={() => setShowSettings(false)}
+            onUpdate={updateSettings}
+          />
+        </Suspense>
 
         <ConfirmModal
           isOpen={confirmAction !== null}
@@ -2068,10 +2083,12 @@ export default function App() {
         />
 
         {import.meta.env.DEV && (
-          <QuestionBankAdmin
-            isOpen={showQuestionBankAdmin}
-            onClose={() => setShowQuestionBankAdmin(false)}
-          />
+          <Suspense fallback={null}>
+            <QuestionBankAdmin
+              isOpen={showQuestionBankAdmin}
+              onClose={() => setShowQuestionBankAdmin(false)}
+            />
+          </Suspense>
         )}
       </div>
     </>

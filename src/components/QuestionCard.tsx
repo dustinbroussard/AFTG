@@ -95,6 +95,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => !disabled && onSelect(i)}
               disabled={disabled}
+              aria-pressed={isSelected}
+              aria-label={`Answer ${String.fromCharCode(65 + i)}: ${choice}`}
               className={`w-full p-5 text-left rounded-xl border transition-all duration-300 ease-in-out hover:shadow-md ${borderColor} ${bgColor} group`}
             >
               <div className="flex items-center gap-4">

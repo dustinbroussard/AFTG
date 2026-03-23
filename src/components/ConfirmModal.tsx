@@ -28,6 +28,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center p-4 theme-overlay backdrop-blur-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-modal-title"
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -37,7 +40,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           className="theme-panel-strong backdrop-blur-xl border rounded-2xl p-6 w-full max-w-md"
         >
           <div className="space-y-3">
-            <h2 className="text-2xl font-black uppercase tracking-tight">{title}</h2>
+            <h2 id="confirm-modal-title" className="text-2xl font-black uppercase tracking-tight">{title}</h2>
             <p className="theme-text-muted leading-relaxed">{message}</p>
           </div>
 

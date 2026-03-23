@@ -30,6 +30,10 @@ function ToggleRow({
       <button
         onClick={() => onChange(!checked)}
         className={`w-14 h-8 rounded-full transition-all duration-300 ${checked ? 'bg-cyan-500' : 'bg-zinc-500/40'}`}
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-label={`${label} ${checked ? 'enabled' : 'disabled'}`}
       >
         <span
           className={`block w-6 h-6 rounded-full bg-white transition-transform duration-300 ${checked ? 'translate-x-7' : 'translate-x-1'}`}
@@ -53,6 +57,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[120] flex items-center justify-center p-4 theme-overlay backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="settings-modal-title"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.97, y: 16 }}
@@ -63,9 +70,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="flex items-center justify-between mb-6">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Settings</p>
-                <h2 className="text-2xl font-black">Game Preferences</h2>
+                <h2 id="settings-modal-title" className="text-2xl font-black">Game Preferences</h2>
               </div>
-              <button onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors">
+              <button onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close settings">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -77,12 +84,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <button
                     onClick={() => onUpdate({ themeMode: 'dark' })}
                     className={`rounded-xl px-4 py-3 font-bold border transition-all ${settings.themeMode === 'dark' ? 'border-cyan-400 bg-cyan-400/10 text-cyan-400' : 'theme-border'}`}
+                    aria-pressed={settings.themeMode === 'dark'}
                   >
                     Dark
                   </button>
                   <button
                     onClick={() => onUpdate({ themeMode: 'light' })}
                     className={`rounded-xl px-4 py-3 font-bold border transition-all ${settings.themeMode === 'light' ? 'border-cyan-400 bg-cyan-400/10 text-cyan-400' : 'theme-border'}`}
+                    aria-pressed={settings.themeMode === 'light'}
                   >
                     Light
                   </button>

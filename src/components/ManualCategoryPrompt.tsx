@@ -35,6 +35,7 @@ export const ManualCategoryPrompt: React.FC<ManualCategoryPromptProps> = ({
             <button
               key={category}
               onClick={() => onPickCategory(category)}
+              aria-label={`Choose ${category} category`}
               className="rounded-xl border border-white/10 px-4 py-4 text-left text-black font-black shadow-md hover:scale-[1.02] transition-all duration-300"
               style={{ backgroundColor: CATEGORY_COLORS[category] || '#fff' }}
             >
@@ -45,6 +46,7 @@ export const ManualCategoryPrompt: React.FC<ManualCategoryPromptProps> = ({
 
         <button
           onClick={onSpinWheel}
+          aria-label="Spin the wheel instead of choosing a category"
           className="w-full py-4 rounded-xl theme-button text-sm font-bold uppercase tracking-widest transition-all duration-300 border theme-border"
         >
           Spin Wheel Instead

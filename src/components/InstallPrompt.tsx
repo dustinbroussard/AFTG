@@ -3,14 +3,21 @@ import { Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { publicAsset } from '../assets';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
 export function InstallPrompt() {
   const logoSrc = publicAsset('logo.png');
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || // @ts-ignore
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      // @ts-expect-error iOS standalone mode is non-standard.
       window.navigator.standalone === true;
 
     if (isStandalone) {
@@ -23,12 +30,10 @@ export function InstallPrompt() {
       return;
     }
 
-    const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      setDeferredPrompt(e);
-      // Show the install UI
+    const handleBeforeInstallPrompt = (event: Event) => {
+      const installEvent = event as BeforeInstallPromptEvent;
+      installEvent.preventDefault();
+      setDeferredPrompt(installEvent);
       setIsVisible(true);
     };
 
@@ -42,23 +47,18 @@ export function InstallPrompt() {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    // Show the install prompt
-    deferredPrompt.prompt();
-
-    // Wait for the user to respond to the prompt
+    await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === 'accepted') {
       setIsVisible(false);
     }
 
-    // We've used the prompt, and can't use it again, throw it away
     setDeferredPrompt(null);
   };
 
   const handleDismiss = () => {
     setIsVisible(false);
-    // Suppress for this session only
     sessionStorage.setItem('installPromptDismissed', 'true');
   };
 
@@ -71,6 +71,9 @@ export function InstallPrompt() {
           exit={{ opacity: 0, y: 50, scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           className="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-96 theme-panel-strong rounded-xl p-4 z-[100] flex flex-col gap-3"
+          role="dialog"
+          aria-modal="false"
+          aria-label="Install app"
         >
           <div className="flex items-start justify-between">
             <div className="flex gap-3 items-center">
@@ -85,6 +88,7 @@ export function InstallPrompt() {
             <button
               onClick={handleDismiss}
               className="p-1 theme-icon-button rounded-md transition-colors"
+              aria-label="Dismiss install prompt"
             >
               <X className="w-4 h-4" />
             </button>
