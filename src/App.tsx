@@ -124,6 +124,7 @@ export default function App() {
   const hasTriggeredMatchLossRef = useRef(false);
   const lastSavedRemoteSettingsRef = useRef<string>('');
   const recordedRecentPairKeysRef = useRef<Set<string>>(new Set());
+  const lastTurnNotificationKeyRef = useRef<string>('');
 
   const existingQuestionIds = questions.map((question) => question.questionId || question.id);
   const playableCategories = getPlayableCategories();
@@ -176,6 +177,19 @@ export default function App() {
           title: 'Working',
           flow: 'Working',
         };
+    }
+  };
+
+  const requestTurnNotificationPermission = async () => {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    if (Notification.permission !== 'default') return;
+
+    try {
+      await Notification.requestPermission();
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.warn('[notifications] Permission request failed:', err);
+      }
     }
   };
 
@@ -512,7 +526,16 @@ export default function App() {
       return;
     }
 
-    return subscribeToIncomingInvites(user.uid, setIncomingInvites);
+    return subscribeToIncomingInvites(
+      user.uid,
+      setIncomingInvites,
+      (err) => {
+        setIncomingInvites([]);
+        if (import.meta.env.DEV) {
+          console.warn('[invites] Snapshot listener failed:', err);
+        }
+      }
+    );
   }, [user?.uid]);
 
   useEffect(() => {
@@ -712,6 +735,26 @@ export default function App() {
       });
   }, [game?.id, isSolo, players, user?.uid]);
 
+  useEffect(() => {
+    if (!game?.id || !user?.uid || game.status !== 'active' || isSolo || players.length < 2) return;
+    if (game.currentTurn !== user.uid) return;
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+
+    const notificationKey = `${game.id}:${game.currentTurn}:${game.status}`;
+    if (lastTurnNotificationKeyRef.current === notificationKey) return;
+    lastTurnNotificationKeyRef.current = notificationKey;
+
+    const opponent = players.find((player) => player.uid !== user.uid);
+    const notification = new Notification('Your turn', {
+      body: opponent ? `${opponent.name} is done. Time to spin.` : 'Time to spin.',
+      icon: logoSrc,
+      tag: `turn-${game.id}`,
+    });
+
+    notification.onclick = () => window.focus();
+  }, [game?.id, game?.currentTurn, game?.status, isSolo, logoSrc, players, user?.uid]);
+
   const handleSignIn = async () => {
     try {
       await signIn();
@@ -786,6 +829,7 @@ export default function App() {
       await handleSignIn();
       return;
     }
+    void requestTurnNotificationPermission();
     setIsStartingGame(true);
     setLoadingStep('creating_match');
     setIsSolo(false);
@@ -846,6 +890,7 @@ export default function App() {
       await handleSignIn();
       return;
     }
+    void requestTurnNotificationPermission();
     setIsJoiningGame(true);
     setLoadingStep('joining_match');
     
@@ -874,6 +919,7 @@ export default function App() {
       await handleSignIn();
       return;
     }
+    void requestTurnNotificationPermission();
 
     setIsStartingGame(true);
     setLoadingStep('creating_match');
@@ -942,6 +988,7 @@ export default function App() {
       await handleSignIn();
       return;
     }
+    void requestTurnNotificationPermission();
 
     setIsJoiningGame(true);
     setLoadingStep('joining_match');
@@ -1189,6 +1236,7 @@ export default function App() {
     setLastTrashTalkEvent(null);
     prevPlayersRef.current = [];
     recordedRecentPairKeysRef.current.clear();
+    lastTurnNotificationKeyRef.current = '';
     hasWarnedBehindRef.current = false;
     hasTriggeredMatchLossRef.current = false;
   };
@@ -1221,9 +1269,10 @@ export default function App() {
       setLoadingStep('finalizing_match');
 
       // Reset game state
+      const firstTurnPlayerId = players.find((player) => player.uid !== game.hostId)?.uid || game.hostId;
       await updateDoc(doc(db, 'games', game.id), {
         status: 'active',
-        currentTurn: game.hostId,
+        currentTurn: firstTurnPlayerId,
         winnerId: null,
         lastUpdated: serverTimestamp()
       });
@@ -1237,6 +1286,7 @@ export default function App() {
       setLastTrashTalkEvent(null);
       prevPlayersRef.current = [];
       recordedRecentPairKeysRef.current.clear();
+      lastTurnNotificationKeyRef.current = '';
       hasWarnedBehindRef.current = false;
       hasTriggeredMatchLossRef.current = false;
     } catch (err) {
@@ -1274,9 +1324,13 @@ export default function App() {
 
   const startGame = async () => {
     if (!game || game.hostId !== user?.uid) return;
+    const firstTurnPlayerId = players.find((player) => player.uid !== game.hostId)?.uid;
+    if (!firstTurnPlayerId) return;
+
     try {
       await updateDoc(doc(db, 'games', game.id), {
         status: 'active',
+        currentTurn: firstTurnPlayerId,
         lastUpdated: serverTimestamp()
       });
     } catch (err) {

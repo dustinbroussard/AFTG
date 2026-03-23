@@ -50,7 +50,11 @@ export async function expireInvite(inviteId: string, uid: string) {
   });
 }
 
-export function subscribeToIncomingInvites(uid: string, callback: (invites: GameInvite[]) => void) {
+export function subscribeToIncomingInvites(
+  uid: string,
+  callback: (invites: GameInvite[]) => void,
+  onError?: (error: unknown) => void
+) {
   const invitesRef = collection(db, 'users', uid, 'invites');
   const invitesQuery = query(
     invitesRef,
@@ -58,13 +62,19 @@ export function subscribeToIncomingInvites(uid: string, callback: (invites: Game
     limit(10)
   );
 
-  return onSnapshot(invitesQuery, (snapshot) => {
-    callback(
-      snapshot.docs
-        .map((entry) => ({ id: entry.id, ...entry.data() } as GameInvite))
-        .filter((invite) => invite.status === 'pending')
-    );
-  });
+  return onSnapshot(
+    invitesQuery,
+    (snapshot) => {
+      callback(
+        snapshot.docs
+          .map((entry) => ({ id: entry.id, ...entry.data() } as GameInvite))
+          .filter((invite) => invite.status === 'pending')
+      );
+    },
+    (error) => {
+      onError?.(error);
+    }
+  );
 }
 
 export async function loadRecentPlayers(uid: string) {
