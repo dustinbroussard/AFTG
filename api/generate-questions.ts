@@ -55,7 +55,7 @@ async function requestGeminiJson(prompt: string, schema: any, errorLabel: string
 
   const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-2.5-flash',
     contents: prompt,
     config: {
       responseMimeType: 'application/json',
@@ -82,7 +82,6 @@ async function requestOpenRouterJson(prompt: string, requestUrl: string, errorLa
     body: JSON.stringify({
       model: 'openrouter/free',
       messages: [{ role: 'user', content: prompt }],
-      response_format: { type: 'json_object' },
     }),
   });
 

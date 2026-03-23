@@ -44,7 +44,7 @@ export default async function handler(req: any, res: any) {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       contents: buildHecklePrompt(body as HeckleGenerationContext),
       config: {
         responseMimeType: 'application/json',
