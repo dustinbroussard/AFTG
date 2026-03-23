@@ -163,7 +163,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Dev Only</p>
               <h2 className="text-2xl font-black">Question Bank Admin</h2>
             </div>
-            <button onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors">
+            <button type="button" onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close question bank admin">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -223,14 +223,14 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
                     </select>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <button
+                    <button type="button"
                       onClick={() => runReplenishment(10)}
                       disabled={isReplenishing}
                       className="theme-button rounded-xl px-4 py-3 font-bold border theme-border disabled:opacity-50"
                     >
                       {isReplenishing ? 'Working...' : 'Replenish 10'}
                     </button>
-                    <button
+                    <button type="button"
                       onClick={() => runReplenishment(25)}
                       disabled={isReplenishing}
                       className="theme-button rounded-xl px-4 py-3 font-bold border theme-border disabled:opacity-50"

@@ -97,7 +97,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           onChange={handleImageUpload}
         />
 
-        <button
+        <button type="button"
           onClick={() => fileInputRef.current?.click()}
           aria-label="Upload avatar"
           className="relative w-24 h-24 rounded-2xl theme-panel-strong border-2 overflow-hidden flex items-center justify-center hover:border-pink-500 transition-all group shadow-xl hover:shadow-pink-500/20 duration-300 ease-in-out"
@@ -116,7 +116,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
 
       {/* Main Actions */}
       <div className="w-full space-y-4">
-        <motion.button
+        <motion.button type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onStartSolo(selectedAvatar)}
@@ -127,7 +127,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           Solo Mode
         </motion.button>
 
-        <motion.button
+        <motion.button type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onStartMulti(selectedAvatar)}
@@ -140,7 +140,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
 
         <div className="space-y-2">
           {!showJoinInput ? (
-            <motion.button
+            <motion.button type="button"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowJoinInput(true)}
@@ -161,7 +161,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                 className="flex-1 theme-input border rounded-xl px-4 text-xl font-black text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
               />
-              <button
+              <button type="button"
                 onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
                 aria-label="Join multiplayer game"
                 disabled={joinCode.length !== 4}
@@ -169,7 +169,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
               >
                 GO
               </button>
-              <button
+              <button type="button"
                 onClick={() => setShowJoinInput(false)}
                 aria-label="Close join game code entry"
                 className="px-4 theme-button rounded-xl font-black transition-all duration-300 ease-in-out shadow-md"
@@ -205,13 +205,13 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button
+                  <button type="button"
                     onClick={() => onAcceptInvite(invite, selectedAvatar)}
                     className="px-3 py-2 rounded-xl bg-emerald-500 text-emerald-950 font-black text-xs uppercase tracking-widest"
                   >
                     <span className="inline-flex items-center gap-1"><Check className="w-3.5 h-3.5" /> Accept</span>
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => onDeclineInvite(invite)}
                     className="px-3 py-2 rounded-xl theme-button font-black text-xs uppercase tracking-widest"
                   >
@@ -258,7 +258,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                     </p>
                   </div>
                 </div>
-                <button
+                <button type="button"
                   onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
                   className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg shrink-0"
                 >

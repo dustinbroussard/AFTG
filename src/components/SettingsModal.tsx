@@ -72,7 +72,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Settings</p>
                 <h2 id="settings-modal-title" className="text-2xl font-black">Game Preferences</h2>
               </div>
-              <button onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close settings">
+              <button type="button" onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close settings">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -81,14 +81,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="theme-soft-surface border rounded-2xl px-4 py-4">
                 <p className="font-bold mb-3">Theme</p>
                 <div className="grid grid-cols-2 gap-3">
-                  <button
+                  <button type="button"
                     onClick={() => onUpdate({ themeMode: 'dark' })}
                     className={`rounded-xl px-4 py-3 font-bold border transition-all ${settings.themeMode === 'dark' ? 'border-cyan-400 bg-cyan-400/10 text-cyan-400' : 'theme-border'}`}
                     aria-pressed={settings.themeMode === 'dark'}
                   >
                     Dark
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => onUpdate({ themeMode: 'light' })}
                     className={`rounded-xl px-4 py-3 font-bold border transition-all ${settings.themeMode === 'light' ? 'border-cyan-400 bg-cyan-400/10 text-cyan-400' : 'theme-border'}`}
                     aria-pressed={settings.themeMode === 'light'}

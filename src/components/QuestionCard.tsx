@@ -89,7 +89,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           }
 
           return (
-            <motion.button
+            <motion.button type="button"
               key={i}
               whileHover={!disabled ? { scale: 1.01, backgroundColor: 'var(--app-hover)' } : {}}
               whileTap={!disabled ? { scale: 0.99 } : {}}

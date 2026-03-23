@@ -28,7 +28,7 @@ export const Roast: React.FC<RoastProps> = ({ explanation, isCorrect, onClose })
           <p className="text-lg font-semibold leading-relaxed mb-3">
             {explanation}
           </p>
-          <button
+          <button type="button"
             onClick={onClose}
             className={`w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-lg ${
               isCorrect ? 'bg-emerald-500 hover:bg-emerald-400 text-emerald-950 shadow-emerald-500/25' : 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/25'

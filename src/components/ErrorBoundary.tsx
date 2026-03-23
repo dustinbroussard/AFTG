@@ -32,7 +32,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <p className="theme-text-muted font-medium">
               {this.state.error?.message || 'An unexpected error occurred. Even the AI is confused.'}
             </p>
-            <button
+            <button type="button"
               onClick={() => window.location.reload()}
               className="px-8 py-3 theme-button rounded-full font-black uppercase tracking-widest"
             >

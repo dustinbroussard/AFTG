@@ -125,7 +125,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
       </motion.div>
 
       <div className="absolute inset-0 flex items-center justify-center">
-        <button
+        <button type="button"
           onClick={() => !isSpinning && setIsSpinning(true)}
           disabled={isSpinning}
           className="w-20 h-20 theme-button border-[6px] rounded-full flex items-center justify-center z-30 hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"

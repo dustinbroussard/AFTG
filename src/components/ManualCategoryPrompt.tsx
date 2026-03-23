@@ -32,7 +32,7 @@ export const ManualCategoryPrompt: React.FC<ManualCategoryPromptProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
           {categories.map((category) => (
-            <button
+            <button type="button"
               key={category}
               onClick={() => onPickCategory(category)}
               aria-label={`Choose ${category} category`}
@@ -44,7 +44,7 @@ export const ManualCategoryPrompt: React.FC<ManualCategoryPromptProps> = ({
           ))}
         </div>
 
-        <button
+        <button type="button"
           onClick={onSpinWheel}
           aria-label="Spin the wheel instead of choosing a category"
           className="w-full py-4 rounded-xl theme-button text-sm font-bold uppercase tracking-widest transition-all duration-300 border theme-border"

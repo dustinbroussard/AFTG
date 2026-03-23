@@ -85,7 +85,7 @@ export function InstallPrompt() {
                 <p className="theme-text-muted text-xs mt-0.5">Play faster, offline, and full-screen.</p>
               </div>
             </div>
-            <button
+            <button type="button"
               onClick={handleDismiss}
               className="p-1 theme-icon-button rounded-md transition-colors"
               aria-label="Dismiss install prompt"
@@ -93,7 +93,7 @@ export function InstallPrompt() {
               <X className="w-4 h-4" />
             </button>
           </div>
-          <button
+          <button type="button"
             onClick={handleInstallClick}
             className="w-full py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-pink-500/25 active:scale-[0.98]"
           >

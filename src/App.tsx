@@ -1622,14 +1622,14 @@ export default function App() {
 
         <div data-theme={themeMode} className="app-theme min-h-screen flex flex-col items-center justify-center p-6 space-y-12 relative">
           <div className="absolute top-6 right-6 flex gap-3 z-50">
-            <button
+            <button type="button"
               onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
               className="p-4 rounded-full theme-button transition-colors"
               title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
             </button>
-            <button
+            <button type="button"
               onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
               className="p-4 rounded-full theme-button transition-colors"
               title={settings.soundEnabled ? "Mute Audio" : "Play Audio"}
@@ -1653,7 +1653,7 @@ export default function App() {
             </div>
           </motion.div>
 
-          <motion.button
+          <motion.button type="button"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -1686,14 +1686,14 @@ export default function App() {
         {!isQuestionActive && (
           <header className="p-4 flex justify-between items-center theme-panel backdrop-blur-md border-b sticky top-0 z-40">
             <div className="flex items-center gap-4">
-              <button
+              <button type="button"
                 onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 aria-label={settings.soundEnabled ? 'Mute all sound' : 'Enable sound'}
               >
                 {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
               </button>
-              <button
+              <button type="button"
                 onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
@@ -1701,7 +1701,7 @@ export default function App() {
               >
                 {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
               </button>
-              <button
+              <button type="button"
                 onClick={() => setShowSettings(true)}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 title="Settings"
@@ -1710,7 +1710,7 @@ export default function App() {
                 <SlidersHorizontal className="w-5 h-5" />
               </button>
               {import.meta.env.DEV && (
-                <button
+                <button type="button"
                   onClick={() => setShowQuestionBankAdmin(true)}
                   className="px-3 py-2 rounded-xl theme-button text-xs font-black uppercase tracking-widest"
                   title="Question Bank Admin"
@@ -1722,7 +1722,7 @@ export default function App() {
             </div>
             <div className="flex items-center gap-4">
               {game && (
-                <button
+                <button type="button"
                   onClick={openQuitConfirm}
                   className="p-2 theme-icon-button transition-colors rounded-full"
                   title="Quit Match"
@@ -1732,7 +1732,7 @@ export default function App() {
                 </button>
               )}
               {!game && (
-                <button
+                <button type="button"
                   onClick={() => setShowHistory(true)}
                   className="p-2 theme-icon-button transition-colors rounded-full"
                   title="Match History"
@@ -1745,7 +1745,7 @@ export default function App() {
                 <span className="text-xs font-bold uppercase tracking-widest theme-text-muted hidden sm:block">
                   {user.displayName}
                 </span>
-                <button onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full" aria-label="Sign out">
+                <button type="button" onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full" aria-label="Sign out">
                   <LogOut className="w-5 h-5" />
                 </button>
               </div>
@@ -1766,7 +1766,7 @@ export default function App() {
                 role="alert"
               >
                 <span className="text-rose-400 text-sm font-medium">{error}</span>
-                <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400" aria-label="Dismiss error message">
+                <button type="button" onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400" aria-label="Dismiss error message">
                   <X className="w-4 h-4" />
                 </button>
               </motion.div>
@@ -1795,7 +1795,7 @@ export default function App() {
                 >
                   <div className="flex justify-between items-center mb-6">
                     <h2 id="history-modal-title" className="text-2xl font-black uppercase tracking-tight">Match History</h2>
-                    <button onClick={() => setShowHistory(false)} className="p-2 theme-icon-button rounded-lg transition-all duration-300" aria-label="Close match history">
+                    <button type="button" onClick={() => setShowHistory(false)} className="p-2 theme-icon-button rounded-lg transition-all duration-300" aria-label="Close match history">
                       <X className="w-6 h-6" />
                     </button>
                   </div>
@@ -1908,7 +1908,7 @@ export default function App() {
                         </p>
                       </div>
                       {game.hostId === user.uid ? (
-                        <button
+                        <button type="button"
                           onClick={playAgain}
                           disabled={isStartingGame}
                           className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_30px_rgba(255,255,255,0.15)] disabled:opacity-50 ease-in-out"
@@ -1989,7 +1989,7 @@ export default function App() {
                         {game.status === 'waiting' ? 'Lobby Chat' : 'Match Chat'}
                       </h3>
                       {game.status === 'waiting' && game.hostId === user.uid && players.length >= 2 && (
-                        <button
+                        <button type="button"
                           onClick={startGame}
                           className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-pink-500/25 ease-in-out"
                         >
@@ -2029,7 +2029,7 @@ export default function App() {
                         disabled={isSendingMessage}
                         className="flex-1 theme-input border rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 theme-inset"
                       />
-                      <button
+                      <button type="button"
                         onClick={sendMessage}
                         disabled={isSendingMessage || !chatInput.trim()}
                         className="p-3 bg-purple-600 rounded-xl hover:bg-purple-500 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-[0_4px_14px_0_rgba(147,51,234,0.39)] hover:shadow-[0_6px_20px_rgba(147,51,234,0.23)] active:scale-[0.96]"
