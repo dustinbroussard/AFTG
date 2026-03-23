@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { publicAsset } from '../assets';
 
 export function InstallPrompt() {
-  const logoSrc = publicAsset('logo.jpg');
+  const logoSrc = publicAsset('logo.png');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isVisible, setIsVisible] = useState(false);
 

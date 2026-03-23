@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { TriviaQuestion } from "../types";
+import { buildHecklePrompt, HeckleGenerationContext, MAX_HECKLES } from "../content/heckles";
 import { getGenerationCategoryProfile } from "./categorySubdomains";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
@@ -26,6 +27,17 @@ const questionSchema = {
       }
     }
   }
+};
+
+const heckleSchema = {
+  type: Type.OBJECT,
+  properties: {
+    heckles: {
+      type: Type.ARRAY,
+      items: { type: Type.STRING }
+    }
+  },
+  required: ["heckles"]
 };
 
 type ExistingQuestion = Pick<TriviaQuestion, 'category' | 'question'>;
@@ -121,7 +133,7 @@ export function getQuestionGenerationStatus() {
   };
 }
 
-function shuffle<T>(items: T[]) {
+function shuffle<T>(items: readonly T[]) {
   const copy = [...items];
   for (let index = copy.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
@@ -385,6 +397,24 @@ async function requestQuestions(prompt: string) {
   return JSON.parse(text);
 }
 
+async function requestHeckles(prompt: string) {
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: heckleSchema as any
+    }
+  });
+
+  const text = response.text || '';
+  if (!text.trim().startsWith('{') || !text.trim().endsWith('}')) {
+    throw new Error('Heckle generator returned non-JSON content');
+  }
+
+  return JSON.parse(text);
+}
+
 async function requestOpenRouterQuestions(prompt: string) {
   if (!process.env.OPENROUTER_API_KEY) {
     throw new Error("OPENROUTER_API_KEY is missing");
@@ -486,6 +516,28 @@ export async function generateQuestions(
 
     logGeneration(`OpenRouter failed${isRateLimitError(fallbackError) ? ' with rate limit' : ''}`);
     logGeneration('generation failed: both providers unavailable');
+    return [];
+  }
+}
+
+export async function generateHeckles(context: HeckleGenerationContext): Promise<string[]> {
+  if (!process.env.GEMINI_API_KEY || context.isSolo) {
+    return [];
+  }
+
+  try {
+    const data = await requestHeckles(buildHecklePrompt(context));
+    const rawHeckles = Array.isArray(data.heckles) ? data.heckles : [];
+
+    return rawHeckles
+      .filter((heckle: unknown): heckle is string => typeof heckle === 'string')
+      .map((heckle) => heckle.trim())
+      .filter((heckle) => heckle.length > 0)
+      .slice(0, MAX_HECKLES);
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn('[heckles] Generation failed:', error);
+    }
     return [];
   }
 }

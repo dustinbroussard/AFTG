@@ -5,13 +5,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { 
-  doc, 
-  setDoc, 
-  onSnapshot, 
-  collection, 
-  query, 
-  where, 
+import {
+  doc,
+  setDoc,
+  onSnapshot,
+  collection,
+  query,
+  where,
   getDocs,
   updateDoc,
   serverTimestamp,
@@ -32,8 +32,10 @@ import { QuestionBankAdmin } from './components/QuestionBankAdmin';
 import { Roast } from './components/Roast';
 import { SettingsModal } from './components/SettingsModal';
 import { TrashTalkOverlay } from './components/TrashTalkOverlay';
+import { HeckleOverlay } from './components/HeckleOverlay';
 import { InstallPrompt } from './components/InstallPrompt';
 import { CategoryReveal } from './components/CategoryReveal';
+import { HECKLE_ROTATION_MS, shouldEnableHeckles } from './content/heckles';
 import { getTrashTalkLine, TrashTalkEvent } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
@@ -41,6 +43,7 @@ import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2,
 import confetti from 'canvas-confetti';
 import { orderBy, limit } from 'firebase/firestore';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
+import { generateHeckles } from './services/gemini';
 
 type ResultPhase = 'idle' | 'revealing' | 'explaining' | 'specialEvent';
 type QueuedSpecialEvent =
@@ -55,15 +58,38 @@ type LoadingStep =
   | 'finalizing_match'
   | 'finalizing_round';
 
+const QUESTION_LOADING_LINES = [
+  'Stealing questions from smarter people...',
+  'Calibrating your inevitable disappointment...',
+  'Googling things you should already know...',
+  'Dusting off facts nobody asked for...',
+  'Assembling trivia with suspicious confidence...',
+  'Curating questions to expose your weak spots...',
+  'Searching for knowledge and bad decisions...',
+  'Preheating the humiliation engine...',
+  'Loading facts you will absolutely overthink...',
+  'Finding questions with just enough cruelty...',
+  'Rummaging through humanity’s collective homework...',
+  'Preparing multiple-choice regret...',
+  'Harvesting obscure confidence destroyers...',
+  'Compiling reasons to doubt your education...',
+  'Tuning the difficulty to “fairly rude”...',
+  'Locating facts that should ring a bell...',
+  'Polishing questions for your public struggle...',
+  'Stacking the deck with educational menace...',
+  'Retrieving trivia from the smug part of the internet...',
+  'Warming up the next opportunity to be wrong...',
+];
+
 export default function App() {
   const QUESTION_TIME_LIMIT_SECONDS = 20;
   const themeAudioSrc = publicAsset('theme.mp3');
-  const welcomeAudioSrc = publicAsset('welcome.mp3');
   const correctAudioSrc = publicAsset('correct.mp3');
   const wrongAudioSrc = publicAsset('wrong.mp3');
+  const timesUpAudioSrc = publicAsset('times-up.mp3');
   const wonAudioSrc = publicAsset('won.mp3');
   const lostAudioSrc = publicAsset('lost.mp3');
-  const logoSrc = publicAsset('logo.jpg');
+  const logoSrc = publicAsset('logo.png');
 
   const [user, setUser] = useState<User | null>(null);
   const [game, setGame] = useState<GameState | null>(null);
@@ -75,7 +101,7 @@ export default function App() {
   const [roast, setRoast] = useState<{ explanation: string; isCorrect: boolean } | null>(null);
   const [resultPhase, setResultPhase] = useState<ResultPhase>('idle');
   const [queuedSpecialEvent, setQueuedSpecialEvent] = useState<QueuedSpecialEvent | null>(null);
-  
+
   // Granular loading states
   const [isInitializing, setIsInitializing] = useState(true);
   const [isStartingGame, setIsStartingGame] = useState(false);
@@ -83,7 +109,10 @@ export default function App() {
   const [isFetchingQuestions, setIsFetchingQuestions] = useState(false);
   const [loadingStep, setLoadingStep] = useState<LoadingStep>('idle');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
-  
+  const [activeQuestionLoadingLine, setActiveQuestionLoadingLine] = useState(
+    () => QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
+  );
+
   const [error, setError] = useState<string | null>(null);
   const [isSolo, setIsSolo] = useState(false);
   const [settings, setSettings] = useState<UserSettings>(() => getLocalSettings());
@@ -95,7 +124,7 @@ export default function App() {
   const [recentPlayers, setRecentPlayers] = useState<RecentPlayer[]>([]);
   const [incomingInvites, setIncomingInvites] = useState<GameInvite[]>([]);
   const [inviteFeedback, setInviteFeedback] = useState<string | null>(null);
-  
+
   const [pastGames, setPastGames] = useState<GameState[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -108,23 +137,34 @@ export default function App() {
   const [activeTrashTalk, setActiveTrashTalk] = useState<string | null>(null);
   const [activeTrashTalkEvent, setActiveTrashTalkEvent] = useState<TrashTalkEvent | null>(null);
   const [lastTrashTalkEvent, setLastTrashTalkEvent] = useState<TrashTalkEvent | null>(null);
+  const [activeHeckle, setActiveHeckle] = useState<string | null>(null);
+  const [showHeckle, setShowHeckle] = useState(false);
+  const [heckleQueue, setHeckleQueue] = useState<string[]>([]);
 
   const themeAudioRef = useRef<HTMLAudioElement>(null);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
   const correctAudioRef = useRef<HTMLAudioElement>(null);
   const wrongAudioRef = useRef<HTMLAudioElement>(null);
+  const timesUpAudioRef = useRef<HTMLAudioElement>(null);
   const wonAudioRef = useRef<HTMLAudioElement>(null);
   const lostAudioRef = useRef<HTMLAudioElement>(null);
   const prevGameStatus = useRef<string | null>(null);
   const revealTimeoutRef = useRef<number | null>(null);
   const categoryRevealTimeoutRef = useRef<number | null>(null);
   const questionTimerRef = useRef<number | null>(null);
+  const heckleTimer = useRef<number | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
   const hasWarnedBehindRef = useRef(false);
   const hasTriggeredMatchLossRef = useRef(false);
   const lastSavedRemoteSettingsRef = useRef<string>('');
   const recordedRecentPairKeysRef = useRef<Set<string>>(new Set());
   const lastTurnNotificationKeyRef = useRef<string>('');
+  const lastFailureRef = useRef<string>('No recent embarrassment recorded.');
+  const lastHeckleTurnKeyRef = useRef<string>('');
+  const heckleRequestIdRef = useRef(0);
+  const welcomeAudioSrcRef = useRef(
+    Math.random() < 0.5 ? publicAsset('message1.mp3') : publicAsset('message2.mp3')
+  );
 
   const existingQuestionIds = questions.map((question) => question.questionId || question.id);
   const playableCategories = getPlayableCategories();
@@ -325,6 +365,17 @@ export default function App() {
     showSpecialEvent(event);
   };
 
+  const clearHeckles = () => {
+    if (heckleTimer.current) {
+      window.clearTimeout(heckleTimer.current);
+      heckleTimer.current = null;
+    }
+
+    setActiveHeckle(null);
+    setShowHeckle(false);
+    setHeckleQueue([]);
+  };
+
   const triggerTrashTalk = (event: TrashTalkEvent) => {
     if (!settings.commentaryEnabled) {
       if (event === 'MATCH_LOSS' && sfxEnabled && lostAudioRef.current) {
@@ -365,6 +416,26 @@ export default function App() {
     setCorrectAnswer(null);
     setQuestionTimeRemaining(QUESTION_TIME_LIMIT_SECONDS);
   };
+
+  const isHighPriorityOverlayActive =
+    resultPhase !== 'idle' ||
+    !!roast ||
+    !!activeTrashTalk ||
+    !!activeTrashTalkEvent ||
+    showManualPickPrompt ||
+    game?.status === 'completed';
+
+  const shouldShowOpponentHeckles =
+    shouldEnableHeckles(isSolo) &&
+    settings.commentaryEnabled &&
+    !!game &&
+    !!user &&
+    game.status === 'active' &&
+    players.length > 1 &&
+    game.currentTurn !== user.uid &&
+    !currentQuestion &&
+    !revealedCategory &&
+    !isHighPriorityOverlayActive;
 
   const showCategoryReveal = (category: string, question: TriviaQuestion) => {
     if (categoryRevealTimeoutRef.current) {
@@ -420,6 +491,73 @@ export default function App() {
       }
     };
   }, [currentQuestion, selectedAnswer, resultPhase]);
+
+  useEffect(() => {
+    if (shouldShowOpponentHeckles) return;
+    heckleRequestIdRef.current += 1;
+    clearHeckles();
+  }, [shouldShowOpponentHeckles]);
+
+  useEffect(() => {
+    if (!shouldShowOpponentHeckles || activeHeckle || heckleQueue.length === 0) {
+      if (!shouldShowOpponentHeckles && heckleTimer.current) {
+        window.clearTimeout(heckleTimer.current);
+        heckleTimer.current = null;
+      }
+      return;
+    }
+
+    const [nextHeckle, ...remainingHeckles] = heckleQueue;
+    setActiveHeckle(nextHeckle);
+    setShowHeckle(true);
+    setHeckleQueue(remainingHeckles);
+
+    if (heckleTimer.current) {
+      window.clearTimeout(heckleTimer.current);
+    }
+
+    heckleTimer.current = window.setTimeout(() => {
+      setShowHeckle(false);
+      setActiveHeckle(null);
+      heckleTimer.current = null;
+    }, HECKLE_ROTATION_MS);
+  }, [shouldShowOpponentHeckles, activeHeckle, heckleQueue]);
+
+  useEffect(() => {
+    if (!shouldShowOpponentHeckles || activeHeckle || heckleQueue.length > 0) return;
+
+    const opponent = players.find((player) => player.uid !== user?.uid);
+    const currentPlayer = players.find((player) => player.uid === user?.uid);
+    if (!opponent || !user || !game) return;
+
+    const turnKey = `${game.id}:${game.currentTurn}:${currentPlayer?.score ?? 0}:${opponent.score ?? 0}:${opponent.streak ?? 0}`;
+    if (lastHeckleTurnKeyRef.current === turnKey) return;
+    lastHeckleTurnKeyRef.current = turnKey;
+
+    const requestId = ++heckleRequestIdRef.current;
+
+    generateHeckles({
+      playerName: currentPlayer?.name || user.displayName || 'Player',
+      opponentName: opponent.name,
+      gameState: `${currentPlayer?.name || 'You'} score ${currentPlayer?.score || 0}, streak ${currentPlayer?.streak || 0}; ${opponent.name} score ${opponent.score || 0}, streak ${opponent.streak || 0}.`,
+      recentFailure: lastFailureRef.current,
+      isSolo,
+    }).then((generatedHeckles) => {
+      if (requestId !== heckleRequestIdRef.current) return;
+      if (!generatedHeckles.length || !shouldShowOpponentHeckles) return;
+      setHeckleQueue(generatedHeckles);
+    });
+  }, [shouldShowOpponentHeckles, activeHeckle, heckleQueue.length, players, user, game, isSolo]);
+
+  useEffect(() => {
+    return () => {
+      if (heckleTimer.current) {
+        window.clearTimeout(heckleTimer.current);
+        heckleTimer.current = null;
+      }
+      heckleRequestIdRef.current += 1;
+    };
+  }, []);
 
   const continueAfterExplanation = () => {
     if (game?.status === 'completed' && game.winnerId === user?.uid) {
@@ -544,11 +682,27 @@ export default function App() {
     return () => window.clearTimeout(timeout);
   }, [inviteFeedback]);
 
+  useEffect(() => {
+    if (!isFetchingQuestions) return;
+
+    setActiveQuestionLoadingLine(
+      QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
+    );
+
+    const interval = window.setInterval(() => {
+      setActiveQuestionLoadingLine(
+        QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
+      );
+    }, 1800);
+
+    return () => window.clearInterval(interval);
+  }, [isFetchingQuestions]);
+
   // Fetch past games history
   useEffect(() => {
     if (!user) return;
     const q = query(
-      collection(db, 'games'), 
+      collection(db, 'games'),
       where('playerIds', 'array-contains', user.uid)
     );
     const unsub = onSnapshot(q, (snapshot) => {
@@ -774,7 +928,7 @@ export default function App() {
     setIsStartingGame(true);
     setLoadingStep('creating_match');
     setIsSolo(true);
-    
+
     const gameId = `solo-${user.uid}-${Date.now()}`;
     const newGame: GameState = {
       id: gameId,
@@ -800,7 +954,7 @@ export default function App() {
     try {
       await setDoc(doc(db, 'games', gameId), newGame);
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
-      
+
       setIsFetchingQuestions(true);
       setLoadingStep('loading_questions');
       const initialQuestions = await getQuestionsForSession({
@@ -812,7 +966,7 @@ export default function App() {
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_lobby');
-      
+
       setGame(newGame);
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, `games/${gameId}`);
@@ -833,10 +987,10 @@ export default function App() {
     setIsStartingGame(true);
     setLoadingStep('creating_match');
     setIsSolo(false);
-    
+
     const code = Math.floor(1000 + Math.random() * 9000).toString();
     const gameId = `multi-${code}-${Date.now()}`;
-    
+
     const newGame: GameState = {
       id: gameId,
       code,
@@ -861,7 +1015,7 @@ export default function App() {
     try {
       await setDoc(doc(db, 'games', gameId), newGame);
       await setDoc(doc(db, 'games', gameId, 'players', user.uid), initialPlayer);
-      
+
       setIsFetchingQuestions(true);
       setLoadingStep('loading_questions');
       const initialQuestions = await getQuestionsForSession({
@@ -873,7 +1027,7 @@ export default function App() {
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_lobby');
-      
+
       setGame(newGame);
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, `games/${gameId}`);
@@ -893,11 +1047,11 @@ export default function App() {
     void requestTurnNotificationPermission();
     setIsJoiningGame(true);
     setLoadingStep('joining_match');
-    
+
     try {
       const q = query(collection(db, 'games'), where('code', '==', code), where('status', '==', 'waiting'));
       const snapshot = await getDocs(q);
-      
+
       if (snapshot.empty) {
         setError("Game not found or already started.");
         return;
@@ -1032,7 +1186,7 @@ export default function App() {
     setIsSpinning(false);
     setResultPhase('idle');
     const resolvedCategory = resolveWheelCategory(category);
-    
+
     // Find an unused question in this category
     const available = questions.filter(q => !q.used && q.category === resolvedCategory);
     if (available.length > 0) {
@@ -1112,7 +1266,9 @@ export default function App() {
     setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.answerIndex);
     const isCorrect = index === currentQuestion.answerIndex;
-    
+    const selectedChoice = index >= 0 ? currentQuestion.choices[index] : 'No answer before the timer expired';
+    const correctChoice = currentQuestion.choices[currentQuestion.answerIndex];
+
     if (sfxEnabled) {
       if (isCorrect) {
         if (correctAudioRef.current) {
@@ -1120,9 +1276,10 @@ export default function App() {
           correctAudioRef.current.play().catch(console.error);
         }
       } else {
-        if (wrongAudioRef.current) {
-          wrongAudioRef.current.currentTime = 0;
-          wrongAudioRef.current.play().catch(console.error);
+        const incorrectAudioRef = index < 0 ? timesUpAudioRef : wrongAudioRef;
+        if (incorrectAudioRef.current) {
+          incorrectAudioRef.current.currentTime = 0;
+          incorrectAudioRef.current.play().catch(console.error);
         }
       }
     }
@@ -1136,7 +1293,7 @@ export default function App() {
         const newStreak = (currentPlayer?.streak || 0) + 1;
         const alreadyCompleted = currentPlayer?.completedCategories.includes(currentQuestion.category);
         const earnedNewTrophy = !alreadyCompleted;
-        
+
         await updateDoc(playerRef, {
           score: increment(1),
           streak: newStreak,
@@ -1163,8 +1320,11 @@ export default function App() {
         }
       } else {
         setLastAnswerCorrect(false);
+        lastFailureRef.current = index >= 0
+          ? `Missed "${currentQuestion.question}" in ${currentQuestion.category}. Picked "${selectedChoice}" when the correct answer was "${correctChoice}". ${currentQuestion.explanation}`
+          : `Ran out of time on "${currentQuestion.question}" in ${currentQuestion.category}. The correct answer was "${correctChoice}". ${currentQuestion.explanation}`;
         await updateDoc(playerRef, { streak: 0 });
-        
+
         // End turn in multiplayer
         if (!isSolo && game.playerIds.length > 1) {
           const nextPlayerId = game.playerIds.find(id => id !== user.uid);
@@ -1234,9 +1394,13 @@ export default function App() {
     setActiveTrashTalk(null);
     setActiveTrashTalkEvent(null);
     setLastTrashTalkEvent(null);
+    clearHeckles();
     prevPlayersRef.current = [];
     recordedRecentPairKeysRef.current.clear();
     lastTurnNotificationKeyRef.current = '';
+    lastHeckleTurnKeyRef.current = '';
+    heckleRequestIdRef.current += 1;
+    lastFailureRef.current = 'No recent embarrassment recorded.';
     hasWarnedBehindRef.current = false;
     hasTriggeredMatchLossRef.current = false;
   };
@@ -1284,9 +1448,13 @@ export default function App() {
       setActiveTrashTalk(null);
       setActiveTrashTalkEvent(null);
       setLastTrashTalkEvent(null);
+      clearHeckles();
       prevPlayersRef.current = [];
       recordedRecentPairKeysRef.current.clear();
       lastTurnNotificationKeyRef.current = '';
+      lastHeckleTurnKeyRef.current = '';
+      heckleRequestIdRef.current += 1;
+      lastFailureRef.current = 'No recent embarrassment recorded.';
       hasWarnedBehindRef.current = false;
       hasTriggeredMatchLossRef.current = false;
     } catch (err) {
@@ -1304,7 +1472,7 @@ export default function App() {
     setIsSendingMessage(true);
     const currentPlayer = players.find(p => p.uid === user.uid);
     const messageRef = collection(db, 'games', game.id, 'messages');
-    
+
     try {
       await setDoc(doc(messageRef), {
         uid: user.uid,
@@ -1342,9 +1510,10 @@ export default function App() {
     return (
       <>
         <audio ref={themeAudioRef} src={themeAudioSrc} loop />
-        <audio ref={welcomeAudioRef} src={welcomeAudioSrc} />
+        <audio ref={welcomeAudioRef} src={welcomeAudioSrcRef.current} />
         <audio ref={correctAudioRef} src={correctAudioSrc} />
         <audio ref={wrongAudioRef} src={wrongAudioSrc} />
+        <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
         <audio ref={wonAudioRef} src={wonAudioSrc} />
         <audio ref={lostAudioRef} src={lostAudioSrc} />
 
@@ -1357,7 +1526,7 @@ export default function App() {
             >
               {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
             </button>
-            <button 
+            <button
               onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
               className="p-4 rounded-full theme-button transition-colors"
               title={settings.soundEnabled ? "Mute Audio" : "Play Audio"}
@@ -1367,35 +1536,30 @@ export default function App() {
           </div>
 
           <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="text-center relative"
-        >
-          <div className="relative inline-block w-64 h-64 md:w-80 md:h-80">
-            <img 
-              src={logoSrc} 
-              alt="A F-cking Trivia Game" 
-              className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </motion.div>
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-center relative"
+          >
+            <div className="relative inline-block w-64 h-64 md:w-80 md:h-80">
+              <img
+                src={logoSrc}
+                alt="A F-cking Trivia Game"
+                className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </motion.div>
 
-        <motion.button
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          onClick={handleSignIn}
-          className="px-8 py-4 bg-white hover:bg-gray-100 text-zinc-900 rounded-xl text-lg font-black uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-[0_8px_30px_rgba(255,255,255,0.15)] flex items-center gap-3"
-        >
-          Login with Google
-        </motion.button>
+          <motion.button
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            onClick={handleSignIn}
+            className="px-8 py-4 bg-white hover:bg-gray-100 text-zinc-900 rounded-xl text-lg font-black uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-[0_8px_30px_rgba(255,255,255,0.15)] flex items-center gap-3"
+          >
+            Login with Google
+          </motion.button>
 
-        <div className="text-center space-y-2 max-w-xs opacity-70">
-          <p className="theme-text-muted font-bold text-sm uppercase tracking-widest">
-            Fast. Funny. Fair. No BS.
-          </p>
-        </div>
         </div>
       </>
     );
@@ -1404,9 +1568,10 @@ export default function App() {
   return (
     <>
       <audio ref={themeAudioRef} src={themeAudioSrc} loop />
-      <audio ref={welcomeAudioRef} src={welcomeAudioSrc} />
+      <audio ref={welcomeAudioRef} src={welcomeAudioSrcRef.current} />
       <audio ref={correctAudioRef} src={correctAudioSrc} />
       <audio ref={wrongAudioRef} src={wrongAudioSrc} />
+      <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
       <audio ref={wonAudioRef} src={wonAudioSrc} />
       <audio ref={lostAudioRef} src={lostAudioSrc} />
 
@@ -1416,10 +1581,7 @@ export default function App() {
         {/* Header */}
         <header className="p-4 flex justify-between items-center theme-panel backdrop-blur-md border-b sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <h1 className="text-sm sm:text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-400 uppercase cursor-pointer leading-tight" onClick={resetGame}>
-              A F-cking Trivia Game
-            </h1>
-            <button 
+            <button
               onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
               className="p-2 theme-icon-button transition-colors rounded-full"
             >
@@ -1451,7 +1613,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             {!game && (
-              <button 
+              <button
                 onClick={() => setShowHistory(true)}
                 className="p-2 theme-icon-button transition-colors rounded-full"
                 title="Match History"
@@ -1470,36 +1632,36 @@ export default function App() {
           </div>
         </header>
 
-      <main className="max-w-3xl mx-auto p-4 pb-24">
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              key="error-banner"
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="mb-6 p-4 bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
-            >
-              <span className="text-rose-400 text-sm font-medium">{error}</span>
-              <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400">
-                <X className="w-4 h-4" />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <main className="max-w-3xl mx-auto p-4 pb-24">
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                key="error-banner"
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="mb-6 p-4 bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
+              >
+                <span className="text-rose-400 text-sm font-medium">{error}</span>
+                <button onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400">
+                  <X className="w-4 h-4" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* History Modal */}
-        <AnimatePresence>
-          {showHistory && (
-            <motion.div
-              key="history-modal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 theme-overlay backdrop-blur-sm"
-            >
-                <motion.div 
+          {/* History Modal */}
+          <AnimatePresence>
+            {showHistory && (
+              <motion.div
+                key="history-modal"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 theme-overlay backdrop-blur-sm"
+              >
+                <motion.div
                   initial={{ scale: 0.95, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1512,7 +1674,7 @@ export default function App() {
                       <X className="w-6 h-6" />
                     </button>
                   </div>
-                  
+
                   <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 space-y-3">
                     {pastGames.length === 0 ? (
                       <p className="theme-text-muted text-center py-8">No completed games yet.</p>
@@ -1547,151 +1709,155 @@ export default function App() {
             )}
           </AnimatePresence>
 
-	          <AnimatePresence mode="wait">
-	            {!game ? (
-	              <div key="lobby-view" className="relative">
-	              {(isStartingGame || isJoiningGame) && (
-	                <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
-	                  <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
-	                  <p className="text-base font-bold theme-text-secondary">
-	                    {setupLoadingCopy.title}
-	                  </p>
-	                  <p className="text-xs font-bold uppercase tracking-widest theme-text-muted mt-2 text-center">
-	                    {setupLoadingCopy.flow}
-	                  </p>
-	                </div>
-	              )}
-              <GameLobby 
-                onStartSolo={startSoloGame} 
-                onStartMulti={startMultiplayerGame} 
-                onJoinMulti={joinGame} 
-                recentPlayers={recentPlayers}
-                incomingInvites={incomingInvites}
-                onInviteRecentPlayer={inviteRecentPlayer}
-                onAcceptInvite={handleAcceptInvite}
-                onDeclineInvite={handleDeclineInvite}
-                inviteFeedback={inviteFeedback}
-              />
-            </div>
-          ) : (
-            <motion.div
-              key="game-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
-            >
-              {/* Game Info */}
-              <div className="flex justify-between items-end theme-panel backdrop-blur-sm p-5 rounded-2xl border">
-                <button onClick={resetGame} className="flex items-center gap-2 theme-text-muted hover:text-[var(--app-text)] transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-[var(--app-hover)]">
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">Quit</span>
-                </button>
-                {game.status === 'waiting' && (
-                  <div className="text-right px-4">
-                    <p className="text-[10px] font-black uppercase tracking-widest theme-text-muted mb-1">Join Code</p>
-                    <p className="text-4xl font-black text-pink-500 tracking-tighter leading-none">{game.code}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Player Progress */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {players.map(p => (
-                  <CategoryTracker 
-                    key={p.uid} 
-                    playerName={p.name} 
-                    avatarUrl={p.avatarUrl}
-                    completed={p.completedCategories} 
-                    isCurrentTurn={game.currentTurn === p.uid}
-                    score={p.score}
-                  />
-                ))}
-              </div>
-
-	              {/* Game Content */}
-	              <div className="relative py-12">
-                {game.status === 'completed' ? (
-                  <motion.div 
-                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                    className="text-center space-y-8 theme-panel-strong backdrop-blur-xl border p-12 rounded-2xl"
-                  >
-                    <Trophy className="w-24 h-24 mx-auto text-yellow-400 drop-shadow-[0_0_30px_rgba(250,204,21,0.4)] animate-bounce" />
-                    <div>
-                      <h2 className="text-4xl font-black uppercase tracking-tight mb-2">Game Over</h2>
-                      <p className="text-xl theme-text-muted">
-                        {game.winnerId === user.uid ? "You actually won. Incredible." : "You lost. Shocker."}
-                      </p>
-                    </div>
-                    {game.hostId === user.uid ? (
-                      <button
-                        onClick={playAgain}
-                        disabled={isStartingGame}
-                        className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_30px_rgba(255,255,255,0.15)] disabled:opacity-50 ease-in-out"
-                      >
-                        {isStartingGame ? <Loader2 className="w-6 h-6 animate-spin" /> : <RefreshCcw className="w-6 h-6" />}
-                        Play Again
-                      </button>
-                    ) : (
-                      <p className="theme-text-muted font-bold uppercase tracking-widest">Waiting for host to play again...</p>
-                    )}
-                  </motion.div>
-                ) : game.status === 'active' && game.currentTurn === user.uid ? (
-                  <div className="space-y-8">
-                    {!currentQuestion ? (
-                      <div className="flex flex-col items-center gap-8">
-                        <p className="text-base font-black uppercase tracking-widest text-cyan-400 animate-pulse">Your Turn</p>
-                        {manualPickReady && showManualPickPrompt ? (
-                          <ManualCategoryPrompt
-                            categories={playableCategories}
-                            onPickCategory={handleManualCategoryPick}
-                            onSpinWheel={handleDeclineManualPick}
-                          />
-                        ) : (
-                          <Wheel 
-                            onSpinComplete={handleSpinComplete} 
-                            isSpinning={isSpinning}
-                            setIsSpinning={setIsSpinning}
-                            soundEnabled={sfxEnabled}
-                          />
-	                        )}
-	                        {isFetchingQuestions && (
-	                          <div className="flex items-center gap-2 theme-text-muted text-sm">
-	                            <Loader2 className="w-4 h-4 animate-spin" />
-	                            <span>{questionLoadingCopy.title}</span>
-	                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
-	                              {questionLoadingCopy.flow}
-	                            </span>
-	                          </div>
-	                        )}
-                      </div>
-                    ) : (
-                      <QuestionCard
-                        question={currentQuestion}
-                        onSelect={handleAnswer}
-                        disabled={resultPhase !== 'idle' || !!roast || selectedAnswer !== null}
-                        selectedId={selectedAnswer}
-                        correctId={correctAnswer}
-                        timerProgress={questionTimeRemaining / QUESTION_TIME_LIMIT_SECONDS}
-                        timeRemaining={questionTimeRemaining}
-                      />
-                    )}
-                  </div>
-                ) : game.status === 'waiting' ? (
-                  <div className="text-center p-12 theme-panel border rounded-3xl">
-                    <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
-                    <p className="text-lg font-medium theme-text-muted">
-                      Waiting for another player to join and for the host to start the game...
+          <AnimatePresence mode="wait">
+            {!game ? (
+              <div key="lobby-view" className="relative">
+                {(isStartingGame || isJoiningGame) && (
+                  <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
+                    <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
+                    <p className="text-base font-bold theme-text-secondary">
+                      {setupLoadingCopy.title}
+                    </p>
+                    <p className="text-xs font-bold uppercase tracking-widest theme-text-muted mt-2 text-center">
+                      {setupLoadingCopy.flow}
                     </p>
                   </div>
-                ) : (
-                  <div className="text-center p-12 theme-panel border rounded-3xl">
-                    <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
-                    <p className="text-lg font-medium theme-text-muted">Waiting for {players.find(p => p.uid === game.currentTurn)?.name} to spin...</p>
-	                  </div>
-	                )}
-	              </div>
+                )}
+                <GameLobby
+                  onStartSolo={startSoloGame}
+                  onStartMulti={startMultiplayerGame}
+                  onJoinMulti={joinGame}
+                  recentPlayers={recentPlayers}
+                  incomingInvites={incomingInvites}
+                  onInviteRecentPlayer={inviteRecentPlayer}
+                  onAcceptInvite={handleAcceptInvite}
+                  onDeclineInvite={handleDeclineInvite}
+                  inviteFeedback={inviteFeedback}
+                />
+              </div>
+            ) : (
+              <motion.div
+                key="game-view"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-8"
+              >
+                {/* Game Info */}
+                <div className="flex justify-between items-end theme-panel backdrop-blur-sm p-5 rounded-2xl border">
+                  <button onClick={resetGame} className="flex items-center gap-2 theme-text-muted hover:text-[var(--app-text)] transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-[var(--app-hover)]">
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Quit</span>
+                  </button>
+                  {game.status === 'waiting' && (
+                    <div className="text-right px-4">
+                      <p className="text-[10px] font-black uppercase tracking-widest theme-text-muted mb-1">Join Code</p>
+                      <p className="text-4xl font-black text-pink-500 tracking-tighter leading-none">{game.code}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Player Progress */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {players.map(p => (
+                    <CategoryTracker
+                      key={p.uid}
+                      playerName={p.name}
+                      avatarUrl={p.avatarUrl}
+                      completed={p.completedCategories}
+                      isCurrentTurn={game.currentTurn === p.uid}
+                      score={p.score}
+                    />
+                  ))}
+                </div>
+
+                {/* Game Content */}
+                <div className="relative py-12">
+                  {game.status === 'completed' ? (
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                      animate={{ scale: 1, opacity: 1, y: 0 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                      className="text-center space-y-8 theme-panel-strong backdrop-blur-xl border p-12 rounded-2xl"
+                    >
+                      <Trophy className="w-24 h-24 mx-auto text-yellow-400 drop-shadow-[0_0_30px_rgba(250,204,21,0.4)] animate-bounce" />
+                      <div>
+                        <h2 className="text-4xl font-black uppercase tracking-tight mb-2">Game Over</h2>
+                        <p className="text-xl theme-text-muted">
+                          {game.winnerId === user.uid ? "You actually won. Incredible." : "You lost. Shocker."}
+                        </p>
+                      </div>
+                      {game.hostId === user.uid ? (
+                        <button
+                          onClick={playAgain}
+                          disabled={isStartingGame}
+                          className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_30px_rgba(255,255,255,0.15)] disabled:opacity-50 ease-in-out"
+                        >
+                          {isStartingGame ? <Loader2 className="w-6 h-6 animate-spin" /> : <RefreshCcw className="w-6 h-6" />}
+                          Play Again
+                        </button>
+                      ) : (
+                        <p className="theme-text-muted font-bold uppercase tracking-widest">Waiting for host to play again...</p>
+                      )}
+                    </motion.div>
+                  ) : game.status === 'active' && game.currentTurn === user.uid ? (
+                    <div className="space-y-8">
+                      {!currentQuestion ? (
+                        <div className="flex flex-col items-center gap-8">
+                          <p className="text-base font-black uppercase tracking-widest text-cyan-400 animate-pulse">Your Turn</p>
+                          {manualPickReady && showManualPickPrompt ? (
+                            <ManualCategoryPrompt
+                              categories={playableCategories}
+                              onPickCategory={handleManualCategoryPick}
+                              onSpinWheel={handleDeclineManualPick}
+                            />
+                          ) : (
+                            <Wheel
+                              onSpinComplete={handleSpinComplete}
+                              isSpinning={isSpinning}
+                              setIsSpinning={setIsSpinning}
+                              soundEnabled={sfxEnabled}
+                            />
+                          )}
+                          {isFetchingQuestions && (
+                            <div className="flex items-center gap-2 theme-text-muted text-sm">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>{activeQuestionLoadingLine}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
+                                {questionLoadingCopy.flow}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <QuestionCard
+                          question={currentQuestion}
+                          onSelect={handleAnswer}
+                          disabled={resultPhase !== 'idle' || !!roast || selectedAnswer !== null}
+                          selectedId={selectedAnswer}
+                          correctId={correctAnswer}
+                          timerProgress={questionTimeRemaining / QUESTION_TIME_LIMIT_SECONDS}
+                          timeRemaining={questionTimeRemaining}
+                        />
+                      )}
+                    </div>
+                  ) : game.status === 'waiting' ? (
+                    <div className="text-center p-12 theme-panel border rounded-3xl">
+                      <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
+                      <p className="text-lg font-medium theme-text-muted">
+                        Waiting for another player to join and for the host to start the game...
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-center p-12 theme-panel border rounded-3xl space-y-6">
+                      <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
+                      <p className="text-lg font-medium theme-text-muted">Waiting for {players.find(p => p.uid === game.currentTurn)?.name} to spin...</p>
+                      <HeckleOverlay
+                        message={activeHeckle}
+                        visible={showHeckle && shouldShowOpponentHeckles}
+                      />
+                    </div>
+                  )}
+                </div>
 
                 {shouldShowMatchChat && (
                   <div className="theme-panel backdrop-blur-xl border rounded-2xl p-6 space-y-4">
@@ -1700,7 +1866,7 @@ export default function App() {
                         {game.status === 'waiting' ? 'Lobby Chat' : 'Match Chat'}
                       </h3>
                       {game.status === 'waiting' && game.hostId === user.uid && players.length >= 2 && (
-                        <button 
+                        <button
                           onClick={startGame}
                           className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-pink-500/25 ease-in-out"
                         >
@@ -1708,7 +1874,7 @@ export default function App() {
                         </button>
                       )}
                     </div>
-                    
+
                     <div className="h-64 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                       {messages.length === 0 ? (
                         <p className="text-center theme-text-muted italic text-sm py-12">No messages yet. Say something funny.</p>
@@ -1718,11 +1884,10 @@ export default function App() {
                             <div className="w-10 h-10 theme-avatar-surface rounded-full flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-inner border">
                               {m.avatarUrl ? <img src={m.avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : '👤'}
                             </div>
-                            <div className={`max-w-[75%] p-4 rounded-2xl text-sm shadow-md ${
-                              m.uid === user.uid 
-                                ? 'bg-purple-600 text-white rounded-tr-sm' 
+                            <div className={`max-w-[75%] p-4 rounded-2xl text-sm shadow-md ${m.uid === user.uid
+                                ? 'bg-purple-600 text-white rounded-tr-sm'
                                 : 'theme-soft-surface rounded-tl-sm border'
-                            }`}>
+                              }`}>
                               <p className="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-wider">{m.name}</p>
                               <p className="leading-relaxed">{m.text}</p>
                             </div>
@@ -1732,7 +1897,7 @@ export default function App() {
                     </div>
 
                     <div className="flex gap-3 pt-2">
-                      <input 
+                      <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
@@ -1741,7 +1906,7 @@ export default function App() {
                         disabled={isSendingMessage}
                         className="flex-1 theme-input border rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 disabled:opacity-50 theme-inset"
                       />
-                      <button 
+                      <button
                         onClick={sendMessage}
                         disabled={isSendingMessage || !chatInput.trim()}
                         className="p-3 bg-purple-600 rounded-xl hover:bg-purple-500 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-[0_4px_14px_0_rgba(147,51,234,0.39)] hover:shadow-[0_6px_20px_rgba(147,51,234,0.23)] active:scale-[0.96]"
@@ -1751,41 +1916,41 @@ export default function App() {
                     </div>
                   </div>
                 )}
-	            </motion.div>
-	          )}
-	        </AnimatePresence>
-      </main>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
 
-      {/* Roast Overlay */}
-      {roast && (
-        <Roast 
-          explanation={roast.explanation}
-          isCorrect={roast.isCorrect} 
-          onClose={nextTurn} 
+        {/* Roast Overlay */}
+        {roast && (
+          <Roast
+            explanation={roast.explanation}
+            isCorrect={roast.isCorrect}
+            onClose={nextTurn}
+          />
+        )}
+
+        <CategoryReveal category={revealedCategory} />
+
+        <TrashTalkOverlay
+          event={activeTrashTalkEvent}
+          message={activeTrashTalk}
         />
-      )}
 
-      <CategoryReveal category={revealedCategory} />
-
-      <TrashTalkOverlay
-        event={activeTrashTalkEvent}
-        message={activeTrashTalk}
-      />
-
-      <SettingsModal
-        isOpen={showSettings}
-        settings={settings}
-        onClose={() => setShowSettings(false)}
-        onUpdate={updateSettings}
-      />
-
-      {import.meta.env.DEV && (
-        <QuestionBankAdmin
-          isOpen={showQuestionBankAdmin}
-          onClose={() => setShowQuestionBankAdmin(false)}
+        <SettingsModal
+          isOpen={showSettings}
+          settings={settings}
+          onClose={() => setShowSettings(false)}
+          onUpdate={updateSettings}
         />
-      )}
-    </div>
+
+        {import.meta.env.DEV && (
+          <QuestionBankAdmin
+            isOpen={showQuestionBankAdmin}
+            onClose={() => setShowQuestionBankAdmin(false)}
+          />
+        )}
+      </div>
     </>
   );
 }

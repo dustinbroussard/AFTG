@@ -6,7 +6,7 @@ const PRECACHE_ASSETS = [
   'manifest.webmanifest',
   'icon-192.png',
   'icon-512.png',
-  'logo.jpg',
+  'logo.png',
   'theme.mp3',
   'welcome.mp3',
   'correct.mp3',
