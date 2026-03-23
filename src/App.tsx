@@ -33,6 +33,7 @@ import { Roast } from './components/Roast';
 import { SettingsModal } from './components/SettingsModal';
 import { TrashTalkOverlay } from './components/TrashTalkOverlay';
 import { HeckleOverlay } from './components/HeckleOverlay';
+import { ConfirmModal } from './components/ConfirmModal';
 import { InstallPrompt } from './components/InstallPrompt';
 import { CategoryReveal } from './components/CategoryReveal';
 import { HECKLE_ROTATION_MS, shouldEnableHeckles } from './content/heckles';
@@ -44,6 +45,7 @@ import confetti from 'canvas-confetti';
 import { orderBy, limit } from 'firebase/firestore';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateHeckles } from './services/gemini';
+import { notifySafe, requestNotificationPermissionSafe } from './services/notify';
 
 type ResultPhase = 'idle' | 'revealing' | 'explaining' | 'specialEvent';
 type QueuedSpecialEvent =
@@ -140,6 +142,7 @@ export default function App() {
   const [activeHeckle, setActiveHeckle] = useState<string | null>(null);
   const [showHeckle, setShowHeckle] = useState(false);
   const [heckleQueue, setHeckleQueue] = useState<string[]>([]);
+  const [confirmAction, setConfirmAction] = useState<'quit' | 'signout' | null>(null);
 
   const themeAudioRef = useRef<HTMLAudioElement>(null);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
@@ -171,6 +174,7 @@ export default function App() {
   const themeMode = settings.themeMode;
   const musicEnabled = settings.soundEnabled && settings.musicEnabled;
   const sfxEnabled = settings.soundEnabled && settings.sfxEnabled;
+  const isQuestionActive = !!currentQuestion && selectedAnswer === null && resultPhase === 'idle';
 
   const updateSettings = (patch: Partial<UserSettings>) => {
     setSettings((current) => ({
@@ -221,16 +225,21 @@ export default function App() {
   };
 
   const requestTurnNotificationPermission = async () => {
-    if (typeof window === 'undefined' || !('Notification' in window)) return;
-    if (Notification.permission !== 'default') return;
+    await requestNotificationPermissionSafe();
+  };
 
-    try {
-      await Notification.requestPermission();
-    } catch (err) {
-      if (import.meta.env.DEV) {
-        console.warn('[notifications] Permission request failed:', err);
-      }
-    }
+  const openQuitConfirm = () => setConfirmAction('quit');
+  const openSignOutConfirm = () => setConfirmAction('signout');
+  const closeConfirm = () => setConfirmAction(null);
+
+  const handleConfirmedQuit = () => {
+    closeConfirm();
+    resetGame();
+  };
+
+  const handleConfirmedSignOut = async () => {
+    closeConfirm();
+    await auth.signOut();
   };
 
   const recordRecentPlayer = async (ownerUid: string, player: Player, gameId: string) => {
@@ -892,21 +901,18 @@ export default function App() {
   useEffect(() => {
     if (!game?.id || !user?.uid || game.status !== 'active' || isSolo || players.length < 2) return;
     if (game.currentTurn !== user.uid) return;
-    if (typeof window === 'undefined' || !('Notification' in window)) return;
-    if (Notification.permission !== 'granted') return;
 
     const notificationKey = `${game.id}:${game.currentTurn}:${game.status}`;
     if (lastTurnNotificationKeyRef.current === notificationKey) return;
     lastTurnNotificationKeyRef.current = notificationKey;
 
     const opponent = players.find((player) => player.uid !== user.uid);
-    const notification = new Notification('Your turn', {
+    void notifySafe('Your turn', {
       body: opponent ? `${opponent.name} is done. Time to spin.` : 'Time to spin.',
       icon: logoSrc,
       tag: `turn-${game.id}`,
+      onClickFocusWindow: true,
     });
-
-    notification.onclick = () => window.focus();
   }, [game?.id, game?.currentTurn, game?.status, isSolo, logoSrc, players, user?.uid]);
 
   const handleSignIn = async () => {
@@ -1578,61 +1584,71 @@ export default function App() {
       <InstallPrompt />
 
       <div data-theme={themeMode} className="app-theme min-h-screen font-sans">
-        {/* Header */}
-        <header className="p-4 flex justify-between items-center theme-panel backdrop-blur-md border-b sticky top-0 z-40">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
-              className="p-2 theme-icon-button transition-colors rounded-full"
-            >
-              {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-            </button>
-            <button
-              onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
-              className="p-2 theme-icon-button transition-colors rounded-full"
-              title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
-            </button>
-            <button
-              onClick={() => setShowSettings(true)}
-              className="p-2 theme-icon-button transition-colors rounded-full"
-              title="Settings"
-            >
-              <SlidersHorizontal className="w-5 h-5" />
-            </button>
-            {import.meta.env.DEV && (
+        {!isQuestionActive && (
+          <header className="p-4 flex justify-between items-center theme-panel backdrop-blur-md border-b sticky top-0 z-40">
+            <div className="flex items-center gap-4">
               <button
-                onClick={() => setShowQuestionBankAdmin(true)}
-                className="px-3 py-2 rounded-xl theme-button text-xs font-black uppercase tracking-widest"
-                title="Question Bank Admin"
-              >
-                Dev
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            {!game && (
-              <button
-                onClick={() => setShowHistory(true)}
+                onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
                 className="p-2 theme-icon-button transition-colors rounded-full"
-                title="Match History"
               >
-                <History className="w-5 h-5" />
+                {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
               </button>
-            )}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-widest theme-text-muted hidden sm:block">
-                {user.displayName}
-              </span>
-              <button onClick={() => auth.signOut()} className="p-2 theme-icon-button transition-colors rounded-full">
-                <LogOut className="w-5 h-5" />
+              <button
+                onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
+                className="p-2 theme-icon-button transition-colors rounded-full"
+                title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
               </button>
+              <button
+                onClick={() => setShowSettings(true)}
+                className="p-2 theme-icon-button transition-colors rounded-full"
+                title="Settings"
+              >
+                <SlidersHorizontal className="w-5 h-5" />
+              </button>
+              {import.meta.env.DEV && (
+                <button
+                  onClick={() => setShowQuestionBankAdmin(true)}
+                  className="px-3 py-2 rounded-xl theme-button text-xs font-black uppercase tracking-widest"
+                  title="Question Bank Admin"
+                >
+                  Dev
+                </button>
+              )}
             </div>
-          </div>
-        </header>
+            <div className="flex items-center gap-4">
+              {game && (
+                <button
+                  onClick={openQuitConfirm}
+                  className="p-2 theme-icon-button transition-colors rounded-full"
+                  title="Quit Match"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+              {!game && (
+                <button
+                  onClick={() => setShowHistory(true)}
+                  className="p-2 theme-icon-button transition-colors rounded-full"
+                  title="Match History"
+                >
+                  <History className="w-5 h-5" />
+                </button>
+              )}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-widest theme-text-muted hidden sm:block">
+                  {user.displayName}
+                </span>
+                <button onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full">
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </header>
+        )}
 
-        <main className="max-w-3xl mx-auto p-4 pb-24">
+        <main className={`max-w-3xl mx-auto p-4 pb-24 ${isQuestionActive ? 'pt-6' : ''}`}>
           <AnimatePresence>
             {error && (
               <motion.div
@@ -1742,36 +1758,32 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-8"
               >
-                {/* Game Info */}
-                <div className="flex justify-between items-end theme-panel backdrop-blur-sm p-5 rounded-2xl border">
-                  <button onClick={resetGame} className="flex items-center gap-2 theme-text-muted hover:text-[var(--app-text)] transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-[var(--app-hover)]">
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Quit</span>
-                  </button>
-                  {game.status === 'waiting' && (
+                {game.status === 'waiting' && (
+                  <div className="flex justify-end items-end theme-panel backdrop-blur-sm p-5 rounded-2xl border">
                     <div className="text-right px-4">
                       <p className="text-[10px] font-black uppercase tracking-widest theme-text-muted mb-1">Join Code</p>
                       <p className="text-4xl font-black text-pink-500 tracking-tighter leading-none">{game.code}</p>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
-                {/* Player Progress */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {players.map(p => (
-                    <CategoryTracker
-                      key={p.uid}
-                      playerName={p.name}
-                      avatarUrl={p.avatarUrl}
-                      completed={p.completedCategories}
-                      isCurrentTurn={game.currentTurn === p.uid}
-                      score={p.score}
-                    />
-                  ))}
-                </div>
+                {!isQuestionActive && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {players.map(p => (
+                      <CategoryTracker
+                        key={p.uid}
+                        playerName={p.name}
+                        avatarUrl={p.avatarUrl}
+                        completed={p.completedCategories}
+                        isCurrentTurn={game.currentTurn === p.uid}
+                        score={p.score}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 {/* Game Content */}
-                <div className="relative py-12">
+                <div className={`relative ${isQuestionActive ? 'py-4' : 'py-12'}`}>
                   {game.status === 'completed' ? (
                     <motion.div
                       initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1937,16 +1949,29 @@ export default function App() {
           message={activeTrashTalk}
         />
 
-        <SettingsModal
-          isOpen={showSettings}
-          settings={settings}
-          onClose={() => setShowSettings(false)}
-          onUpdate={updateSettings}
-        />
+      <SettingsModal
+        isOpen={showSettings}
+        settings={settings}
+        onClose={() => setShowSettings(false)}
+        onUpdate={updateSettings}
+      />
 
-        {import.meta.env.DEV && (
-          <QuestionBankAdmin
-            isOpen={showQuestionBankAdmin}
+      <ConfirmModal
+        isOpen={confirmAction !== null}
+        title={confirmAction === 'quit' ? 'Quit Match?' : 'Sign Out?'}
+        message={
+          confirmAction === 'quit'
+            ? 'Leave this match and return to the lobby? Your current game view will close.'
+            : 'Sign out and return to the login screen?'
+        }
+        confirmLabel={confirmAction === 'quit' ? 'Quit' : 'Sign Out'}
+        onCancel={closeConfirm}
+        onConfirm={confirmAction === 'quit' ? handleConfirmedQuit : handleConfirmedSignOut}
+      />
+
+      {import.meta.env.DEV && (
+        <QuestionBankAdmin
+          isOpen={showQuestionBankAdmin}
             onClose={() => setShowQuestionBankAdmin(false)}
           />
         )}
