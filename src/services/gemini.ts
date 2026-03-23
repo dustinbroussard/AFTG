@@ -248,7 +248,7 @@ function buildQuestionPrompt(
     'Technology = dry, slightly smug',
   ].join('\n');
 
-  return `You are generating high-quality trivia questions.
+  return `You are generating high-quality trivia questions injected with highbrow humor, sublte condescension and occassional sarcasm.
 
 Return ONLY valid JSON.
 Do not include commentary.
@@ -285,21 +285,20 @@ Rules:
 - No ambiguous wording.
 - No "all of the above" or "none of the above".
 - Keep explanations to 1-2 sentences.
-- Keep questions concise and clear.
 - Make wrong answers plausible but clearly incorrect.
 - Avoid extremely overused textbook trivia and worksheet-level facts.
 - Avoid elementary-school obvious questions unless absolutely necessary.
 - Do not use questions equivalent to "Who was the first U.S. president?", "Earth is the third planet from the Sun", or other one-step giveaway facts.
 - Avoid obvious one-step sports or pop-culture facts that most players would answer instantly without thinking.
 - Prefer questions that feel sharp, intentional, and game-show appropriate rather than classroom-recitation obvious.
-- Keep questions crystal clear and direct, but write them in a conversational, witty, highbrow tone.
-- Add subtle humor or mild sarcasm where it does not distract or confuse; the style of humor and/or sarcasm should be smug, condescending, and highbrow.
+- Keep questions clear and direct, but inject them with humor and personality; write them in a conversational, witty, highbrow tone.
+- Add humor or mild sarcasm in a manner that does not distract or confuse; the style of humor and/or sarcasm should be smug, condescending, and highbrow.
 - Do not make the wording silly, vague, overly cute, or forced.
 - Do not sacrifice clarity for personality.
-- Avoid sounding like a textbook, exam, teacher, or encyclopedia entry.
+- Avoid sounding like a textbook, exam, teacher, or encyclopedia entry; don't be boring.
 - Answer choices must stay plain, clean, and straightforward. No jokes or gimmicks in the choices.
-- Explanations should be informative first, then lightly flavored like a smart game host talking to another adult.
-- Explanations should have more personality, humor, and sarcasm than the question, but should still sound concise and natural.
+- Explanations should be informative while adopting a humorous or sarcastic tone, reminiscent of a witty game show host engaging with an adult audience
+- Explanations must have more personality, humor, and/or sarcasm than the question, but should still sound concise and natural.
 - Good style example:
   Question: "If the Pope decided to model his traditional zucchetto skullcap after the most famous "hungry" arcade character of 1980, what specific shape would be missing from his headgear?"
   Explanation: "While the Pope’s zucchetto is a full circle, Pac-Man is famously modeled after a pizza with one slice removed. If His Holiness went full Namco, he’d be rocking a 45-degree gap in his headgear."
