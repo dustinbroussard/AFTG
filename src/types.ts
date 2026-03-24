@@ -18,12 +18,20 @@ export interface TriviaQuestion {
   verificationConfidence?: 'high' | 'medium' | 'low';
   verificationIssues?: string[];
   verificationReason?: string;
-  pipelineVersion?: string;
+  pipelineVersion?: string | number;
   createdAt: number;
   usedCount: number;
   correctQuip: string;
   wrongAnswerQuips: Record<number, string>;
   used: boolean;
+}
+
+export interface RoastState {
+  explanation: string;
+  isCorrect: boolean;
+  questionId: string;
+  userId?: string | null;
+  gameId?: string | null;
 }
 
 export interface ChatMessage {

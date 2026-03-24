@@ -1,0 +1,2021 @@
+{
+  "questions": [
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Which ancient civilization built the city of Teotihuacan, featuring the Pyramid of the Sun?",
+      "choices": [
+        "Aztec",
+        "Maya",
+        "Olmec",
+        "Teotihuacanos"
+      ],
+      "correctIndex": 3,
+      "explanation": "Teotihuacan was built by the Teotihuacano people, a civilization distinct from the Aztecs, who later considered the site sacred but did not build it.",
+      "hostLeadIn": "Time to separate the scholars from the tourists.",
+      "correctQuip": "Oh look, someone actually paid attention in class. Impressive.",
+      "wrongAnswerQuips": {
+        "0": "Bless your heart—assuming every pyramid in Mexico is Aztec. How quaint.",
+        "1": "The Maya built impressive stuff too, but not this one. Try again, champ.",
+        "2": "Olmec? Adorable guess, but they were long gone by then.",
+        "3": ""
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The Defenestration of Prague in 1618 is widely considered the opening act of which major European conflict?",
+      "choices": [
+        "The Thirty Years' War",
+        "The Seven Years' War",
+        "The War of Spanish Succession",
+        "The Eighty Years' War"
+      ],
+      "correctIndex": 0,
+      "explanation": "When Protestant Bohemian nobles threw Catholic royal governors from a Prague castle window in 1618, it triggered the Thirty Years' War across Central Europe.",
+      "hostLeadIn": "Let's talk about windows... and throwing people through them.",
+      "correctQuip": "Finally, someone who knows their dramatic entrances. Or exits.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "The Seven Years' War came later. Patience is a virtue... you clearly lack.",
+        "2": "War of Spanish Succession? Wrong century, wrong drama.",
+        "3": "Eighty Years' War was Dutch, not this particular window incident."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "The Mohorovičić discontinuity marks the boundary between which two layers of the Earth?",
+      "choices": [
+        "Inner core and outer core",
+        "Outer core and mantle",
+        "Crust and mantle",
+        "Mantle and asthenosphere"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Moho, as it is commonly called, is the seismic boundary between Earth's crust and the upper mantle, discovered by Croatian seismologist Andrija Mohorovičić in 1909.",
+      "hostLeadIn": "Geology time—grab your hard hats.",
+      "correctQuip": "Well done. Most people can't even spell Mohorovičić, let alone know what it separates.",
+      "wrongAnswerQuips": {
+        "0": "Core boundaries? Cute, but way deeper than the Moho.",
+        "1": "Outer core and mantle? You're mixing layers like a bad cocktail.",
+        "2": "",
+        "3": "Mantle and asthenosphere? Close, but no seismic cigar."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "Which film won the Academy Award for Best Picture at the 2020 Oscars (for films released in 2019)?",
+      "choices": [
+        "1917",
+        "Once Upon a Time in Hollywood",
+        "Joker",
+        "Parasite"
+      ],
+      "correctIndex": 3,
+      "explanation": "Parasite, directed by Bong Joon-ho, became the first non-English-language film to win Best Picture at the Academy Awards.",
+      "hostLeadIn": "Lights, camera, Oscar drama.",
+      "correctQuip": "Someone actually remembers the year the Academy finally got edgy. Respect.",
+      "wrongAnswerQuips": {
+        "0": "1917 was war, not the winner. Try again, history buff.",
+        "1": "Tarantino's Once Upon a Time... came close but no golden statue.",
+        "2": "Joker got nominations, but not the big one. Shocking, I know.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "The theatrical production 'A Chorus Line,' which ran on Broadway from 1975 to 1990, was conceived and directed by whom?",
+      "choices": [
+        "Harold Prince",
+        "Stephen Sondheim",
+        "Michael Bennett",
+        "Bob Fosse"
+      ],
+      "correctIndex": 2,
+      "explanation": "Michael Bennett conceived, choreographed, and co-directed A Chorus Line, which won nine Tony Awards including Best Musical and ran for 6,137 performances.",
+      "hostLeadIn": "One singular sensation...",
+      "correctQuip": "Broadway buffs unite. You nailed the real star behind the kicks.",
+      "wrongAnswerQuips": {
+        "0": "Harold Prince produced plenty, but not this one.",
+        "1": "Sondheim wrote lyrics and music for other legends, not this.",
+        "2": "",
+        "3": "Bob Fosse had the jazz hands, but Bennett owned the line."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "The programming language Python was created by Guido van Rossum and first released in which year?",
+      "choices": [
+        "1995",
+        "1991",
+        "1988",
+        "2000"
+      ],
+      "correctIndex": 1,
+      "explanation": "Python 0.9.0 was first released in February 1991. Guido van Rossum designed it to emphasize code readability and simplicity.",
+      "hostLeadIn": "For the coders who think they're fancy.",
+      "correctQuip": "Not bad. Most 'programmers' couldn't tell you this without Googling.",
+      "wrongAnswerQuips": {
+        "0": "1995? That's when the web was exploding, not Python.",
+        "1": "",
+        "2": "1988? Too early—even for Guido.",
+        "3": "2000? Y2K panic era, but Python was already mature."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The ancient city of Carthage, a rival of Rome, was located in what is now which modern country?",
+      "choices": [
+        "Libya",
+        "Algeria",
+        "Tunisia",
+        "Morocco"
+      ],
+      "correctIndex": 2,
+      "explanation": "Carthage was located near modern-day Tunis, Tunisia, and was the center of the Carthaginian Empire before its destruction by Rome in 146 BC.",
+      "hostLeadIn": "Time to dust off your ancient geography skills.",
+      "correctQuip": "Nailed it. Someone actually paid attention in history class.",
+      "wrongAnswerQuips": {
+        "0": "Libya? Cute try, but you're off by a country.",
+        "1": "Algeria? Adorable. Wrong continent side.",
+        "3": "Morocco? Bless your heart, that's not even close."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Empress Wu Zetian, the only woman to rule China in her own name, founded which dynasty?",
+      "choices": [
+        "Tang",
+        "Zhou",
+        "Song",
+        "Han"
+      ],
+      "correctIndex": 1,
+      "explanation": "Wu Zetian founded the short-lived Zhou dynasty in 690 AD, though she had previously wielded power during the Tang dynasty. Her own dynasty name was also 'Zhou.'",
+      "hostLeadIn": "Let's see if you know your Chinese imperial power moves.",
+      "correctQuip": "Impressive. Most people blank on the only female emperor.",
+      "wrongAnswerQuips": {
+        "0": "Tang? She ruled during it, but that's not the one she founded.",
+        "2": "Song? Centuries too late, try again.",
+        "3": "Han? Even further off. Nice guess though."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "The Chandrasekhar limit defines the maximum mass of a stable white dwarf star. Approximately what is this limit in solar masses?",
+      "choices": [
+        "0.8",
+        "1.4",
+        "2.1",
+        "3.0"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Chandrasekhar limit is approximately 1.4 solar masses; white dwarfs exceeding this mass will collapse into a neutron star or trigger a Type Ia supernova.",
+      "hostLeadIn": "For the astrophysics nerds in the back.",
+      "correctQuip": "Look at you, casually dropping stellar limits.",
+      "wrongAnswerQuips": {
+        "0": "0.8? That's barely a respectable star, let alone a limit.",
+        "2": "2.1? Overestimating by a full solar mass. Rookie numbers.",
+        "3": "3.0? That's neutron star territory, not white dwarf."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "What is the name of the viral 2012 video platform phenomenon that prompted YouTube to change how view counts are displayed?",
+      "choices": [
+        "Call Me Maybe",
+        "Harlem Shake",
+        "Gangnam Style",
+        "What Does the Fox Say"
+      ],
+      "correctIndex": 2,
+      "explanation": "Psy's 'Gangnam Style' surpassed YouTube's view counter limit of 2,147,483,647 in 2014, forcing YouTube to upgrade to a 64-bit integer counter.",
+      "hostLeadIn": "Remember when the internet broke itself?",
+      "correctQuip": "Yes! The one that actually broke YouTube's math.",
+      "wrongAnswerQuips": {
+        "0": "Call Me Maybe? Fun, but it didn't force a code change.",
+        "1": "Harlem Shake? Viral, but not the view-counter killer.",
+        "3": "What Does the Fox Say? Cute meme, zero counter drama."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "At the 1968 Mexico City Olympics, which two American athletes raised their fists in a Black Power salute during the medal ceremony for the 200-meter sprint?",
+      "choices": [
+        "Carl Lewis and Edwin Moses",
+        "Tommie Smith and John Carlos",
+        "Jesse Owens and Ralph Metcalfe",
+        "Bob Beamon and Lee Evans"
+      ],
+      "correctIndex": 1,
+      "explanation": "Gold medalist Tommie Smith and bronze medalist John Carlos raised gloved fists during the national anthem at the 1968 Olympics, a protest that led to their expulsion from the Games.",
+      "hostLeadIn": "A moment that still echoes.",
+      "correctQuip": "Respect. That's the correct pair.",
+      "wrongAnswerQuips": {
+        "0": "Carl Lewis and Edwin Moses? Decades too late.",
+        "2": "Jesse Owens? Iconic, but wrong Olympics and no fist salute.",
+        "3": "Bob Beamon? Long jump legend, not the salute guys."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "Which programming language was primarily used to build the original Facebook platform in its early years?",
+      "choices": [
+        "Python",
+        "PHP",
+        "Java",
+        "Ruby"
+      ],
+      "correctIndex": 1,
+      "explanation": "Facebook's original codebase was written primarily in PHP, which Mark Zuckerberg used when building the site as a Harvard student in 2004.",
+      "hostLeadIn": "For the coders who think they know everything.",
+      "correctQuip": "PHP? Correct. The rest of you just got Zuckerberg'd.",
+      "wrongAnswerQuips": {
+        "0": "Python? Trendy now, but not what Zuck used.",
+        "2": "Java? Enterprise, not dorm-room startup.",
+        "3": "Ruby? Rails fans stay mad."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "The concept of the 'Turing Test,' used to evaluate a machine's ability to exhibit human-like intelligence, was proposed by Alan Turing in which year?",
+      "choices": [
+        "1936",
+        "1945",
+        "1950",
+        "1958"
+      ],
+      "correctIndex": 2,
+      "explanation": "Alan Turing introduced the Turing Test in his 1950 paper 'Computing Machinery and Intelligence,' framing it as the 'imitation game' to evaluate machine intelligence.",
+      "hostLeadIn": "Time to separate the AI hype from actual history.",
+      "correctQuip": "1950 — the year AI started trolling humanity.",
+      "wrongAnswerQuips": {
+        "0": "1936? That's his computability paper, not the test.",
+        "1": "1945? Post-war, but still not the imitation game.",
+        "3": "1958? Too late. Turing had already passed by then."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The 1905 Treaty of Portsmouth, which ended the Russo-Japanese War, was mediated by which U.S. president?",
+      "choices": [
+        "William McKinley",
+        "William Howard Taft",
+        "Theodore Roosevelt",
+        "Woodrow Wilson"
+      ],
+      "correctIndex": 2,
+      "explanation": "Theodore Roosevelt mediated the peace treaty in Portsmouth, New Hampshire, earning him the Nobel Peace Prize in 1906.",
+      "hostLeadIn": "Diplomacy with a side of Rough Rider energy.",
+      "correctQuip": "Spot on. Most people think TR only shot things and yelled.",
+      "wrongAnswerQuips": {
+        "0": "McKinley? He was busy getting re-elected… and then assassinated.",
+        "1": "Taft? Too busy being stuck in a bathtub to mediate wars.",
+        "2": "",
+        "3": "Wilson? Wrong war, wrong decade, and he was still a professor."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "Which element has the highest electronegativity on the Pauling scale?",
+      "choices": [
+        "Oxygen",
+        "Chlorine",
+        "Nitrogen",
+        "Fluorine"
+      ],
+      "correctIndex": 3,
+      "explanation": "Fluorine has an electronegativity of 3.98 on the Pauling scale, making it the most electronegative of all elements.",
+      "hostLeadIn": "Chemistry’s most possessive element walks into a quiz…",
+      "correctQuip": "Correct. The periodic table’s ultimate electron thief.",
+      "wrongAnswerQuips": {
+        "0": "Oxygen? Close, but it still loses to the king of clinginess.",
+        "1": "Chlorine? Aggressive, but not *that* aggressive.",
+        "2": "Nitrogen? Respectable, but nowhere near the top of the podium.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "In geology, the Younger Dryas was a period of rapid cooling that ended approximately how many years ago?",
+      "choices": [
+        "6,000",
+        "9,000",
+        "11,700",
+        "15,000"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Younger Dryas cold period ended approximately 11,700 years ago with a rapid warming event, marking the transition to the current Holocene epoch.",
+      "hostLeadIn": "When the planet decided ‘psych’ on global warming… for a bit.",
+      "correctQuip": "Well done. You actually know your Pleistocene plot twists.",
+      "wrongAnswerQuips": {
+        "0": "6,000? That’s basically yesterday in geologic time.",
+        "1": "9,000? Getting warmer… literally.",
+        "2": "",
+        "3": "15,000? Too early. The cold snap hadn’t even started yet."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which ancient civilization built the city of Çatalhöyük, one of the earliest known large human settlements?",
+      "choices": [
+        "Sumerians",
+        "Anatolian Neolithic people",
+        "Phoenicians",
+        "Hittites"
+      ],
+      "correctIndex": 1,
+      "explanation": "Çatalhöyük was a Neolithic settlement in south-central Anatolia (modern Turkey) occupied roughly 7500–5700 BCE, predating the major Mesopotamian civilizations.",
+      "hostLeadIn": "Prehistoric urban planning before cities were even cool.",
+      "correctQuip": "Nailed it. Most people still think Sumerians invented everything.",
+      "wrongAnswerQuips": {
+        "0": "Sumerians? They were busy inventing writing while these folks were already urban.",
+        "1": "",
+        "2": "Phoenicians? Seafaring traders who arrived millennia later.",
+        "3": "Hittites? Empire-builders who missed the Neolithic party entirely."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "The film 'Rashomon' (1950), which introduced a multi-perspective narrative style to world cinema, was directed by which filmmaker?",
+      "choices": [
+        "Ingmar Bergman",
+        "Federico Fellini",
+        "Akira Kurosawa",
+        "Satyajit Ray"
+      ],
+      "correctIndex": 2,
+      "explanation": "Akira Kurosawa directed 'Rashomon,' the landmark Japanese film that depicts the same event through four contradictory accounts, winning the Honorary Foreign Film Oscar in 1952.",
+      "hostLeadIn": "Truth is subjective… especially when Kurosawa’s behind the camera.",
+      "correctQuip": "Excellent. You get the unreliable narrator trophy.",
+      "wrongAnswerQuips": {
+        "0": "Bergman? Too Swedish, too brooding, wrong continent.",
+        "1": "Fellini? Dreamlike, but not this level of perspective trickery.",
+        "2": "",
+        "3": "Ray? Brilliant Indian cinema, but not the one who broke the narrative mold here."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Which novel by Ralph Ellison, published in 1952, is widely regarded as a foundational work of American literature dealing with Black identity?",
+      "choices": [
+        "Go Tell It on the Mountain",
+        "Native Son",
+        "Invisible Man",
+        "Their Eyes Were Watching God"
+      ],
+      "correctIndex": 2,
+      "explanation": "'Invisible Man' by Ralph Ellison won the National Book Award in 1953 and is considered one of the most important American novels of the 20th century.",
+      "hostLeadIn": "Sometimes the most visible truth is the one nobody wants to acknowledge.",
+      "correctQuip": "Sharp. You know your 20th-century canon.",
+      "wrongAnswerQuips": {
+        "0": "Baldwin? Powerful, but wrong author and wrong book.",
+        "1": "Wright’s *Native Son*? Brutal, but not the invisible one.",
+        "2": "",
+        "3": "Hurston? Masterpiece, but different era and voice."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which American playwright won the Pulitzer Prize for Drama for both 'The Piano Lesson' and 'Fences'?",
+      "choices": [
+        "August Wilson",
+        "David Mamet",
+        "Tony Kushner",
+        "Edward Albee"
+      ],
+      "correctIndex": 0,
+      "explanation": "August Wilson won the Pulitzer for 'Fences' in 1987 and 'The Piano Lesson' in 1990 as part of his Century Cycle.",
+      "hostLeadIn": "When one playwright decides to chronicle an entire century of Black American life.",
+      "correctQuip": "Respect. You know the Pittsburgh Cycle when you see it.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Mamet? Sharp dialogue, wrong cycle.",
+        "2": "Kushner? Angels, not fences.",
+        "3": "Albee? Virginia Woolf territory, not this one."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Which American sculptor created the large-scale earthwork 'Spiral Jetty' in the Great Salt Lake in 1970?",
+      "choices": [
+        "Richard Serra",
+        "Robert Smithson",
+        "Michael Heizer",
+        "Walter De Maria"
+      ],
+      "correctIndex": 1,
+      "explanation": "Robert Smithson built 'Spiral Jetty' from mud, salt crystals, and basalt, a landmark work of land art.",
+      "hostLeadIn": "When land art decided to get literal.",
+      "correctQuip": "Yes. You’ve graduated from gallery walls to actual landscapes.",
+      "wrongAnswerQuips": {
+        "0": "Serra? Heavy steel curves, wrong medium.",
+        "1": "",
+        "2": "Heizer? Big holes in the desert, not spirals in salt.",
+        "3": "De Maria? Lightning fields, not lake art."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "The transformer architecture, which underpins most modern large language models, was introduced in which landmark 2017 research paper?",
+      "choices": [
+        "'Deep Residual Learning for Image Recognition'",
+        "'Attention Is All You Need'",
+        "'Generative Adversarial Networks'",
+        "'BERT: Pre-training of Deep Bidirectional Transformers'"
+      ],
+      "correctIndex": 1,
+      "explanation": "'Attention Is All You Need,' published by Vaswani et al. at Google Brain in 2017, introduced the transformer architecture that became the foundation for GPT, BERT, and subsequent large language models.",
+      "hostLeadIn": "The paper that broke the internet… years before the internet noticed.",
+      "correctQuip": "Gold star for the AI nerds in the audience.",
+      "wrongAnswerQuips": {
+        "0": "ResNet? Great for images, useless for your GPT prompts.",
+        "1": "",
+        "2": "GANs? Cool for deepfakes, not the attention revolution.",
+        "3": "BERT? Important, but it built on the transformer, not invented it."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "The ARPANET, a precursor to the modern internet, sent its first message between two computers in 1969. Between which two universities did this occur?",
+      "choices": [
+        "MIT and Stanford",
+        "UCLA and Stanford Research Institute",
+        "Harvard and Caltech",
+        "UC Berkeley and Carnegie Mellon"
+      ],
+      "correctIndex": 1,
+      "explanation": "On October 29, 1969, the first ARPANET message was transmitted from UCLA to the Stanford Research Institute. The system crashed after only two letters ('LO') were sent before the intended word 'LOGIN.'",
+      "hostLeadIn": "The humble beginnings of the thing currently rotting your attention span.",
+      "correctQuip": "Perfect. You know where the ‘LO’ in ‘LOGIN’ came from.",
+      "wrongAnswerQuips": {
+        "0": "MIT and Stanford? Close, but wrong coast for the first packet.",
+        "1": "",
+        "2": "Harvard and Caltech? Prestigious, but not the ones who crashed history.",
+        "3": "Berkeley and Carnegie Mellon? Solid schools, wrong historic moment."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the primary author of the 'Declaration of the Rights of Woman and of the Female Citizen' during the French Revolution?",
+      "choices": [
+        "Mary Wollstonecraft",
+        "Olympe de Gouges",
+        "Charlotte Corday",
+        "Madame Roland"
+      ],
+      "correctIndex": 1,
+      "explanation": "Olympe de Gouges published the document in 1791, challenging the male-centric focus of the French Revolution's ideals.",
+      "hostLeadIn": "Time to shatter some revolutionary glass ceilings.",
+      "correctQuip": "Bravo—someone actually remembered the woman who tried to fix the Revolution's blind spot.",
+      "wrongAnswerQuips": {
+        "0": "Mary Wollstonecraft? Close, but she was busy across the Channel writing her own manifesto.",
+        "1": "",
+        "2": "Charlotte Corday? She preferred stabbing Marat over writing declarations.",
+        "3": "Madame Roland? Influential salon hostess, but not the one who penned this particular petition."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which 3rd-century BCE Mauryan emperor converted to Buddhism following the violent conquest of Kalinga?",
+      "choices": [
+        "Chandragupta Maurya",
+        "Ashoka the Great",
+        "Bindusara",
+        "Dasharatha Maurya"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ashoka the Great renounced expansion through warfare and promoted 'dhamma' (righteousness) across his empire after the Kalinga War.",
+      "hostLeadIn": "Let's talk about the emperor who discovered that winning can feel a lot like losing.",
+      "correctQuip": "Well done—most people only remember the rock edicts, not the guilt trip that inspired them.",
+      "wrongAnswerQuips": {
+        "0": "Chandragupta? He was too busy founding the empire to have a post-battle epiphany.",
+        "1": "",
+        "2": "Bindusara? He expanded the empire but never got the memo about non-violence.",
+        "3": "Dasharatha? Obscure grandson territory—not the guy who covered India in Buddhist pillars."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the most abundant noble gas in Earth's atmosphere?",
+      "choices": [
+        "Helium",
+        "Neon",
+        "Argon",
+        "Krypton"
+      ],
+      "correctIndex": 2,
+      "explanation": "Argon makes up approximately 0.93% of the Earth's atmosphere, far exceeding the concentrations of other noble gases.",
+      "hostLeadIn": "Time to separate the noble gases from the noble lies.",
+      "correctQuip": "Impressive. Most contestants guess helium because balloons are more fun than argon.",
+      "wrongAnswerQuips": {
+        "0": "Helium? Cute party trick, but it barely registers in the actual atmosphere.",
+        "1": "Neon? Only if you're counting Vegas signs.",
+        "2": "",
+        "3": "Krypton? Superman's weakness, not the atmosphere's heavyweight."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "In cell biology, which specific protein is the primary component of the thick filaments found in muscle myofibrils?",
+      "choices": [
+        "Actin",
+        "Myosin",
+        "Tubulin",
+        "Keratin"
+      ],
+      "correctIndex": 1,
+      "explanation": "Myosin is a motor protein that interacts with actin (thin filaments) to facilitate muscle contraction.",
+      "hostLeadIn": "Let's flex some actual cellular knowledge.",
+      "correctQuip": "Finally, someone who didn't just say 'actin' because it sounds familiar.",
+      "wrongAnswerQuips": {
+        "0": "Actin? That's the thin filament sidekick, not the thick boss.",
+        "1": "",
+        "2": "Tubulin? Microtubules have nothing to do with your biceps, sorry.",
+        "3": "Keratin? Save that for your hair and nails, not skeletal muscle."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "The 'Distracted Boyfriend' meme, which went viral in 2017, originated from a series of stock photos taken by which photographer?",
+      "choices": [
+        "Antonio Guillem",
+        "Ariane Citron",
+        "George Marks",
+        "Harold Lloyd"
+      ],
+      "correctIndex": 0,
+      "explanation": "Spanish photographer Antonio Guillem took the stock photo in 2015, which later became one of the most famous meme formats.",
+      "hostLeadIn": "Behold, the origin story of internet betrayal.",
+      "correctQuip": "Nice. Most people just know the meme, not the poor stock photographer who never saw the royalties coming.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Ariane Citron? Wrong photographer, wrong decade.",
+        "2": "George Marks? Vintage Hollywood, not modern stock betrayal.",
+        "3": "Harold Lloyd? Silent film stunts, not distracted boyfriends."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "Before starring in 'The Mandalorian,' Pedro Pascal played the character Oberyn Martell in which season of 'Game of Thrones'?",
+      "choices": [
+        "Season 2",
+        "Season 3",
+        "Season 4",
+        "Season 5"
+      ],
+      "correctIndex": 2,
+      "explanation": "Pascal's breakout performance as the 'Red Viper' occurred throughout the fourth season of the series.",
+      "hostLeadIn": "One viper, one season, many broken hearts.",
+      "correctQuip": "Respect. Most casual fans only remember the trial by combat.",
+      "wrongAnswerQuips": {
+        "0": "Season 2? Way too early—Oberyn was still in Dorne sipping wine.",
+        "1": "Season 3? He hadn't even arrived at King's Landing yet.",
+        "2": "",
+        "3": "Season 5? By then the Viper had already struck... and been struck."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Who is the only person to win a Heisman Trophy as a primarily defensive player?",
+      "choices": [
+        "Charles Woodson",
+        "Deion Sanders",
+        "Lawrence Taylor",
+        "Dick Butkus"
+      ],
+      "correctIndex": 0,
+      "explanation": "Charles Woodson won the Heisman in 1997 while playing cornerback and returner for the University of Michigan.",
+      "hostLeadIn": "Defense wins championships... and apparently one Heisman.",
+      "correctQuip": "Sharp recall. The Heisman committee clearly had a rare moment of clarity.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Deion Sanders? Prime Time was electric, but never took home the Heisman.",
+        "2": "Lawrence Taylor? LT terrorized QBs but never won the award.",
+        "3": "Dick Butkus? Legendary linebacker, zero Heisman hardware."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which filmmaker directed the 'Red' trilogy (Blue, White, and Red) and is a major figure in Polish cinema?",
+      "choices": [
+        "Andrzej Wajda",
+        "Krzysztof Kieślowski",
+        "Roman Polanski",
+        "Agnieszka Holland"
+      ],
+      "correctIndex": 1,
+      "explanation": "Kieślowski's 'Three Colors' trilogy is celebrated for its exploration of the ideals of the French Republic.",
+      "hostLeadIn": "Polish cinema that hits harder than most manifestos.",
+      "correctQuip": "Excellent. Most people stop at 'Three Colors' and forget the director's name.",
+      "wrongAnswerQuips": {
+        "0": "Andrzej Wajda? Master of Polish history, not this particular color-coded trilogy.",
+        "1": "",
+        "2": "Roman Polanski? Talented, but his palette runs more toward Chinatown than Red, White, and Blue.",
+        "3": "Agnieszka Holland? Acclaimed, yet not the auteur behind this specific triptych."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "In literature, the 'Lost Generation' refers to a group of writers who came of age during World War I, a term popularized by which author?",
+      "choices": [
+        "F. Scott Fitzgerald",
+        "Ernest Hemingway",
+        "Gertrude Stein",
+        "T.S. Eliot"
+      ],
+      "correctIndex": 2,
+      "explanation": "While Hemingway used it as an epigraph in 'The Sun Also Rises,' he credited Gertrude Stein with coining the phrase.",
+      "hostLeadIn": "Expatriates, booze, and existential dread—who coined the nickname?",
+      "correctQuip": "Sharp. You caught the nuance most people miss between user and originator.",
+      "wrongAnswerQuips": {
+        "0": "Fitzgerald? Chronicler of the Jazz Age, not the phrase's source.",
+        "1": "Hemingway? He loved quoting it, but Stein said it first.",
+        "2": "",
+        "3": "T.S. Eliot? Too busy writing *The Waste Land* to name a generation."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Which tech company acquired the mobile operating system Android in 2005, before its first commercial release?",
+      "choices": [
+        "Microsoft",
+        "Nokia",
+        "Google",
+        "Samsung"
+      ],
+      "correctIndex": 2,
+      "explanation": "Google acquired Android Inc. for at least $50 million, leading to the launch of the first Android phone in 2008.",
+      "hostLeadIn": "Before it was everywhere, someone had to buy the little green robot.",
+      "correctQuip": "Well played. Most assume it was always Google's baby from day one.",
+      "wrongAnswerQuips": {
+        "0": "Microsoft? They were still pushing Windows Mobile, bless them.",
+        "1": "Nokia? Too busy dominating feature phones to see the future.",
+        "2": "",
+        "3": "Samsung? They make the phones, not the OS acquisition."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which battle in 1683 halted the Ottoman Empire's westward expansion into Europe?",
+      "choices": [
+        "Battle of Lepanto",
+        "Battle of Mohács",
+        "Battle of Vienna",
+        "Battle of Nicopolis"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Battle of Vienna in 1683, in which a coalition of European forces defeated the Ottoman army, marked the turning point after which the Ottoman Empire began its long decline in Europe.",
+      "hostLeadIn": "One siege, one coffee-fueled defense, and the beginning of the end.",
+      "correctQuip": "Solid. Most people forget how close the Ottomans came to sipping coffee in Vienna permanently.",
+      "wrongAnswerQuips": {
+        "0": "Lepanto? Naval win, wrong century, wrong direction.",
+        "1": "Mohács? That was 1526—Ottomans winning, not losing.",
+        "2": "",
+        "3": "Nicopolis? 1396 called; it wants its failed crusade back."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "Before becoming a major celebrity, Kim Kardashian worked as a closet organizer and personal stylist for which fellow celebrity?",
+      "choices": [
+        "Paris Hilton",
+        "Lindsay Lohan",
+        "Britney Spears",
+        "Nicole Richie"
+      ],
+      "correctIndex": 0,
+      "explanation": "Kim Kardashian worked as a personal stylist and closet organizer for Paris Hilton in the early 2000s, which gave her early exposure to Hollywood celebrity circles.",
+      "hostLeadIn": "From folding couture to building an empire.",
+      "correctQuip": "Delightfully petty knowledge. The early 2000s were a wild time.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Lindsay Lohan? Chaos, but not Kim's closet client.",
+        "2": "Britney Spears? Different circle of early-2000s drama.",
+        "3": "Nicole Richie? Best friend of Paris, but not the boss."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Robert Johnson, the Delta blues musician, is often credited with influencing rock music. In what decade did he make his landmark recordings?",
+      "choices": [
+        "1920s",
+        "1930s",
+        "1940s",
+        "1950s"
+      ],
+      "correctIndex": 1,
+      "explanation": "Robert Johnson recorded his complete body of work in 1936 and 1937, producing 29 songs that profoundly influenced later blues and rock musicians including Eric Clapton and Keith Richards.",
+      "hostLeadIn": "The devil, the crossroads, and a short recording career.",
+      "correctQuip": "Respect. Most people just repeat the myth and forget the actual timeline.",
+      "wrongAnswerQuips": {
+        "0": "1920s? Too early—even for a man who supposedly met the devil young.",
+        "1": "",
+        "2": "1940s? Johnson was already gone by then.",
+        "3": "1950s? That's when his influence was exploding, not when he recorded."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Which technology company launched the world's first commercially available 1-terabyte hard disk drive in 2007?",
+      "choices": [
+        "Seagate",
+        "Western Digital",
+        "Hitachi",
+        "Samsung"
+      ],
+      "correctIndex": 0,
+      "explanation": "Seagate Technology released the Barracuda 7200.11, the first commercially available 1-terabyte hard disk drive, in April 2007.",
+      "hostLeadIn": "Back when a terabyte felt like science fiction.",
+      "correctQuip": "Niche hardware knowledge—respect. Most people still think their phone has more storage.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Western Digital? Close competitor, but not first to the terabyte party.",
+        "2": "Hitachi? They made great drives, just not this milestone.",
+        "3": "Samsung? More known for flash memory than spinning rust in '07."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Which company developed the first commercial microprocessor?",
+      "choices": [
+        "Intel",
+        "AMD",
+        "IBM",
+        "Texas Instruments"
+      ],
+      "correctIndex": 0,
+      "explanation": "Intel developed the first commercial microprocessor, the Intel 4004, in 1971.",
+      "hostLeadIn": "Let's see if you know your microprocessor origins or if you're just riding the hype train.",
+      "correctQuip": "Intel loyalist or just historically literate? Either way, points awarded.",
+      "wrongAnswerQuips": {
+        "1": "AMD came along later to give Intel a proper rivalry. Not first.",
+        "2": "IBM built systems, but the 4004 was Intel's baby.",
+        "3": "Texas Instruments had their hands in calculators, not the first commercial MPU."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "In physics, what term describes the minimum energy required to remove an electron from the surface of a metal?",
+      "choices": [
+        "Ionization energy",
+        "Binding energy",
+        "Work function",
+        "Activation energy"
+      ],
+      "correctIndex": 2,
+      "explanation": "The work function is the minimum energy needed to eject an electron from the surface of a metal, a key concept in the photoelectric effect explained by Einstein.",
+      "hostLeadIn": "Let's see if your high-school physics is still paying rent up there.",
+      "correctQuip": "Finally, someone who didn't sleep through the photoelectric effect lecture.",
+      "wrongAnswerQuips": {
+        "0": "Ionization energy? Cute. That's for ripping electrons out of atoms, not just off the surface.",
+        "1": "Binding energy? Wrong context, sport. Try nuclear physics next time.",
+        "2": "",
+        "3": "Activation energy? That's chemistry's problem, not this one."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "Which subatomic particle was first proposed theoretically by Paul Dirac in 1928 before being confirmed experimentally in 1932?",
+      "choices": [
+        "Neutron",
+        "Neutrino",
+        "Positron",
+        "Muon"
+      ],
+      "correctIndex": 2,
+      "explanation": "Dirac's equation predicted the existence of the positron, the antimatter counterpart of the electron, which Carl Anderson confirmed experimentally in 1932.",
+      "hostLeadIn": "For those of you who think quantum mechanics is just fancy sci-fi...",
+      "correctQuip": "Well done. Most people still think antimatter is just Star Trek nonsense.",
+      "wrongAnswerQuips": {
+        "0": "Neutron? Chadwick beat you to it, and it wasn't predicted by Dirac.",
+        "1": "Neutrino? Pauli and Fermi called dibs on that one.",
+        "2": "",
+        "3": "Muon? Discovered later and nobody saw that coming."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "The television series 'Fleabag,' which won multiple Emmy Awards, was adapted from a one-woman stage show by which creator and star?",
+      "choices": [
+        "Sharon Horgan",
+        "Phoebe Waller-Bridge",
+        "Michaela Coel",
+        "Lena Dunham"
+      ],
+      "correctIndex": 1,
+      "explanation": "Phoebe Waller-Bridge wrote and starred in 'Fleabag,' originally a stage show that she adapted into a BBC/Amazon series, winning multiple Emmys in 2019.",
+      "hostLeadIn": "For the cultured degenerates in the audience...",
+      "correctQuip": "Someone's been watching prestige TV instead of doomscrolling. Impressive.",
+      "wrongAnswerQuips": {
+        "0": "Sharon Horgan? Close but no, that's more 'Catastrophe' territory.",
+        "1": "",
+        "2": "Michaela Coel is brilliant, but this one's Phoebe's hot mess.",
+        "3": "Lena Dunham? Different flavor of uncomfortable, wrong show."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "In professional tennis, which player ended Rafael Nadal's 81-match winning streak on clay in 2007?",
+      "choices": [
+        "Roger Federer",
+        "Novak Djokovic",
+        "Robin Söderling",
+        "Lleyton Hewitt"
+      ],
+      "correctIndex": 0,
+      "explanation": "Roger Federer defeated Rafael Nadal on clay at the 2007 Hamburg Open, ending Nadal's remarkable 81-match winning streak on that surface.",
+      "hostLeadIn": "Tennis nerds, this one's for you. Everyone else, try to keep up.",
+      "correctQuip": "Ah, a real tennis tragic. Respect.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Djokovic? He was still a teenager finding his feet in 2007.",
+        "2": "Robin Söderling? He did it later. This was Federer's moment.",
+        "3": "Lleyton Hewitt? Wrong era, wrong surface, wrong everything."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Samuel Beckett's play 'Waiting for Godot' premiered in which city in 1953?",
+      "choices": [
+        "London",
+        "Paris",
+        "Dublin",
+        "New York"
+      ],
+      "correctIndex": 1,
+      "explanation": "'Waiting for Godot' ('En attendant Godot') premiered at the Théâtre de Babylone in Paris on January 5, 1953, originally performed in French.",
+      "hostLeadIn": "For those who enjoy theater that makes you question your life choices...",
+      "correctQuip": "Well aren't you sophisticated. Most people just pretend they've read it.",
+      "wrongAnswerQuips": {
+        "0": "London? It took a while to cross the Channel.",
+        "1": "",
+        "2": "Dublin? Beckett was Irish, but the play debuted in French in Paris.",
+        "3": "New York? Broadway got it much later and probably regretted it."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which historical figure led the Haitian Revolution to its successful conclusion, resulting in Haitian independence in 1804?",
+      "choices": [
+        "Toussaint Louverture",
+        "Jean-Jacques Dessalines",
+        "Henri Christophe",
+        "Alexandre Pétion"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jean-Jacques Dessalines led the final phase of the revolution after Louverture's capture and declared Haitian independence on January 1, 1804, becoming the new nation's first ruler.",
+      "hostLeadIn": "Time to separate the real students from the Wikipedia tourists.",
+      "correctQuip": "Dessalines closed the show. Louverture started strong, but someone had to finish it.",
+      "wrongAnswerQuips": {
+        "0": "Louverture fought brilliantly… until the French shipped him off to die in a French prison. Close, but no cigar.",
+        "1": "",
+        "2": "Christophe built a citadel, not a nation. Nice try, history tourist.",
+        "3": "Pétion split the island later. You’re thinking of the aftermath, not the victory."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "In physics, what does the Pauli Exclusion Principle state?",
+      "choices": [
+        "No two photons can occupy the same quantum state simultaneously",
+        "No two identical fermions can occupy the same quantum state simultaneously",
+        "Electrons repel each other due to like charges",
+        "Matter and antimatter particles annihilate upon contact"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Pauli Exclusion Principle, formulated by Wolfgang Pauli in 1925, states that no two identical fermions (particles with half-integer spin) can occupy the same quantum state at the same time.",
+      "hostLeadIn": "Quantum mechanics time—grab your spin-½ particles.",
+      "correctQuip": "Fermions only. No sharing quantum states. Pauli was serious about personal space.",
+      "wrongAnswerQuips": {
+        "0": "Photons can double up. That’s why lasers exist. Try again.",
+        "1": "",
+        "2": "That’s just regular electrostatic repulsion, not the Pauli principle. Cute guess.",
+        "3": "Annihilation is dramatic, but not what Pauli said. Read the fine print next time."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The Battles of Saratoga in 1777 are considered a turning point in the American Revolution primarily because they led to what diplomatic outcome?",
+      "choices": [
+        "Spain declaring war on Britain",
+        "France formally allying with the American colonies",
+        "The Netherlands joining the Continental Congress",
+        "Prussia withdrawing support from Britain"
+      ],
+      "correctIndex": 1,
+      "explanation": "The American victory at Saratoga convinced France to enter a formal military alliance with the colonies, providing critical financial and military support.",
+      "hostLeadIn": "Time to flex some revolutionary diplomacy.",
+      "correctQuip": "Oh look, someone actually paid attention in history class. France says merci.",
+      "wrongAnswerQuips": {
+        "0": "Spain? Cute guess, but they were fashionably late to the party.",
+        "2": "The Netherlands? Adorable. They were busy trading, not treaty-signing.",
+        "3": "Prussia? They were too busy being Prussian to help Britain here."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which historical figure is credited with translating the Rosetta Stone's hieroglyphic text in 1822?",
+      "choices": [
+        "Thomas Young",
+        "Jean-François Champollion",
+        "William Jones",
+        "Heinrich Schliemann"
+      ],
+      "correctIndex": 1,
+      "explanation": "French scholar Jean-François Champollion cracked the hieroglyphic code of the Rosetta Stone in 1822, unlocking the ability to read ancient Egyptian texts.",
+      "hostLeadIn": "Let's decode some ancient shade.",
+      "correctQuip": "Champollion gets the W. Egyptology owes him a drink.",
+      "wrongAnswerQuips": {
+        "0": "Thomas Young laid groundwork, but he didn't finish the job. Close, but no obelisk.",
+        "2": "William Jones? Wrong field, wrong century, wrong everything.",
+        "3": "Heinrich Schliemann was busy digging up Troy. Hieroglyphs weren't his jam."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "Which astronomical phenomenon causes a pulsar to emit regular bursts of electromagnetic radiation?",
+      "choices": [
+        "Differential rotation of its accretion disk",
+        "Rapid rotation of a highly magnetized neutron star",
+        "Binary star gravitational lensing",
+        "Cyclical fusion bursts on the stellar surface"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pulsars are rapidly rotating neutron stars with powerful magnetic fields that beam radiation in fixed directions, creating a lighthouse-like pulse as they spin.",
+      "hostLeadIn": "Brace yourself for some stellar nerdery.",
+      "correctQuip": "Neutron star physics: because regular stars are too basic.",
+      "wrongAnswerQuips": {
+        "0": "Accretion disk? That's for feeding black holes, not pulsing.",
+        "2": "Gravitational lensing? Nice try, but that's not how pulsars roll.",
+        "3": "Fusion bursts? Sounds cute, but neutron stars don't do surface fireworks like that."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "The theatrical technique known as the 'fourth wall' breaking—where a character directly addresses the audience—is most historically associated with which playwright's theory of 'epic theatre'?",
+      "choices": [
+        "Anton Chekhov",
+        "Bertolt Brecht",
+        "Samuel Beckett",
+        "August Strindberg"
+      ],
+      "correctIndex": 1,
+      "explanation": "Bertolt Brecht developed 'epic theatre,' which deliberately breaks dramatic illusion—including fourth wall techniques—to provoke critical thinking rather than emotional immersion.",
+      "hostLeadIn": "Let's get meta with some stage theory.",
+      "correctQuip": "Brecht breaking the fourth wall before it was cool.",
+      "wrongAnswerQuips": {
+        "0": "Chekhov was all about subtle realism, not breaking anything.",
+        "2": "Beckett made things weird, but not in the Brechtian alienation way.",
+        "3": "Strindberg was too busy with expressionism to lecture the audience."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Robert Johnson, the influential Delta blues musician, is said to have recorded all of his known commercial recordings in which two cities in 1936 and 1937?",
+      "choices": [
+        "Memphis and Nashville",
+        "San Antonio and Dallas",
+        "Chicago and Detroit",
+        "New Orleans and Jackson"
+      ],
+      "correctIndex": 1,
+      "explanation": "Robert Johnson recorded his entire known catalog in San Antonio (1936) and Dallas (1937), producing the foundational Delta blues recordings that influenced rock and roll.",
+      "hostLeadIn": "Time for some devilish blues history.",
+      "correctQuip": "Crossroads deal or not, those sessions changed everything.",
+      "wrongAnswerQuips": {
+        "0": "Memphis and Nashville? That's later blues and country. Wrong highway.",
+        "2": "Chicago and Detroit? Electric blues came after Johnson.",
+        "3": "New Orleans and Jackson? Jazz and home, but not where he cut the sides."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "The foundational concept of the World Wide Web was proposed in 1989 in a paper submitted to CERN. What was the title of that proposal?",
+      "choices": [
+        "A Protocol for Distributed Information Systems",
+        "Information Management: A Proposal",
+        "The Architecture of Global Hypertext",
+        "Networked Information Exchange: A Framework"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tim Berners-Lee submitted 'Information Management: A Proposal' to CERN in March 1989, which laid out the conceptual framework for the World Wide Web.",
+      "hostLeadIn": "From one modest proposal to cat videos everywhere.",
+      "correctQuip": "One proposal to rule them all. You're welcome, Reddit.",
+      "wrongAnswerQuips": {
+        "0": "Sounds official, but that's not the one Tim wrote.",
+        "2": "Close in spirit, but not the actual title.",
+        "3": "Fancy wording, zero points."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "The Peace of Augsburg in 1555 ended religious war in the Holy Roman Empire by allowing rulers to determine the religion of their state based on which principle?",
+      "choices": [
+        "Cuius regio, eius religio",
+        "Sola scriptura",
+        "Ex opere operato",
+        "Lex orandi, lex credendi"
+      ],
+      "correctIndex": 0,
+      "explanation": "Cuius regio, eius religio, meaning 'whose realm, his religion,' allowed princes to choose either Lutheranism or Catholicism for their territories.",
+      "hostLeadIn": "Time to dust off some 16th-century realpolitik.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "The Taiping Rebellion, which lasted from 1850 to 1864, was led by a man who claimed to be the younger brother of whom?",
+      "choices": [
+        "Buddha",
+        "Confucius",
+        "Jesus Christ",
+        "Muhammad"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hong Xiuquan, a failed civil service examinee, claimed to be the younger brother of Jesus Christ, fueling the massive rebellion against the Qing dynasty.",
+      "hostLeadIn": "Buckle up for some truly unhinged 19th-century theology.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "What astronomical object was the first confirmed to host exoplanets in the 1990s, with planets orbiting a pulsar?",
+      "choices": [
+        "PSR B1257+12",
+        "51 Pegasi",
+        "HD 209458",
+        "Kepler-22"
+      ],
+      "correctIndex": 0,
+      "explanation": "In 1992, Aleksander Wolszczan and Dale Frail confirmed the first exoplanets around pulsar PSR B1257+12.",
+      "hostLeadIn": "Let's talk about planets that probably have terrible real estate value.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "The viral 2021 Netflix series 'Squid Game' was directed and written by which South Korean filmmaker?",
+      "choices": [
+        "Bong Joon-ho",
+        "Park Chan-wook",
+        "Hwang Dong-hyuk",
+        "Kim Jee-woon"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hwang Dong-hyuk created and directed Squid Game, which became Netflix's most-watched series.",
+      "hostLeadIn": "Red light... green light... answer correctly.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which American author wrote the novels 'The Sound and the Fury' and 'As I Lay Dying'?",
+      "choices": [
+        "Ernest Hemingway",
+        "F. Scott Fitzgerald",
+        "William Faulkner",
+        "John Steinbeck"
+      ],
+      "correctIndex": 2,
+      "explanation": "William Faulkner, a Nobel Prize winner, is known for his experimental style and works set in the fictional Yoknapatawpha County.",
+      "hostLeadIn": "Southern Gothic just got a little more complicated.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "What was the name of the first successful graphical web browser, released in 1993, which helped popularize the World Wide Web?",
+      "choices": [
+        "Netscape Navigator",
+        "Mosaic",
+        "Internet Explorer",
+        "Lynx"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mosaic, developed at the NCSA, was the first widely used graphical web browser and paved the way for later browsers.",
+      "hostLeadIn": "Back when the web was still figuring itself out.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": ""
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which U.S. president signed the Emancipation Proclamation in 1863?",
+      "choices": [
+        "Ulysses S. Grant",
+        "Abraham Lincoln",
+        "Andrew Johnson",
+        "James Buchanan"
+      ],
+      "correctIndex": 1,
+      "explanation": "Abraham Lincoln issued the Emancipation Proclamation on January 1, 1863, declaring enslaved people in Confederate states to be free.",
+      "hostLeadIn": "Time to dust off those history books, folks.",
+      "correctQuip": "Nailed it. Lincoln it is.",
+      "wrongAnswerQuips": {
+        "0": "Grant? He was busy winning the war, not starting the paperwork.",
+        "1": "",
+        "2": "Johnson? He inherited the mess, didn't create the Proclamation.",
+        "3": "Buchanan? The man who basically watched the country fall apart."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "What ancient wonder was located in Alexandria, Egypt?",
+      "choices": [
+        "The Colossus of Rhodes",
+        "The Hanging Gardens",
+        "The Great Lighthouse",
+        "The Temple of Artemis"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Lighthouse of Alexandria, built on the island of Pharos, was one of the Seven Wonders of the Ancient World and guided sailors into the harbor.",
+      "hostLeadIn": "Let's shed some light on this one.",
+      "correctQuip": "Spot on. That beacon still shines in trivia lore.",
+      "wrongAnswerQuips": {
+        "0": "Rhodes? Wrong island, wrong wonder.",
+        "1": "Hanging Gardens? Babylon called, they want their myth back.",
+        "2": "",
+        "3": "Artemis? Ephesus is nowhere near Egypt."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Which treaty formally ended World War I in 1919?",
+      "choices": [
+        "Treaty of Versailles",
+        "Treaty of Brest-Litovsk",
+        "Treaty of Paris",
+        "Treaty of Locarno"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Treaty of Versailles, signed in June 1919, officially ended the state of war between Germany and the Allied Powers.",
+      "hostLeadIn": "Let's wrap up the war to end all wars... or not.",
+      "correctQuip": "Correct. You didn't fall for the sequel bait.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Brest-Litovsk? That was Russia tapping out early.",
+        "2": "Paris? Too many treaties, pick one.",
+        "3": "Locarno? That's 1925, try again."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Napoleon Bonaparte was exiled to which island after his defeat at Waterloo in 1815?",
+      "choices": [
+        "Corsica",
+        "Elba",
+        "Saint Helena",
+        "Malta"
+      ],
+      "correctIndex": 2,
+      "explanation": "After his defeat at Waterloo, Napoleon was exiled to Saint Helena, a remote island in the South Atlantic, where he died in 1821.",
+      "hostLeadIn": "Short guy, long exile.",
+      "correctQuip": "Yes. The final boss island.",
+      "wrongAnswerQuips": {
+        "0": "Corsica? That's where he was born, not banished.",
+        "1": "Elba? First exile. He escaped that one.",
+        "2": "",
+        "3": "Malta? Nice try, but no."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "What is the powerhouse of the cell responsible for producing ATP?",
+      "choices": [
+        "Nucleus",
+        "Ribosome",
+        "Mitochondria",
+        "Golgi apparatus"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mitochondria generate most of the cell's ATP through cellular respiration, earning their nickname as the powerhouse of the cell.",
+      "hostLeadIn": "Biology 101, but let's see if you remember.",
+      "correctQuip": "Textbook answer. Literally.",
+      "wrongAnswerQuips": {
+        "0": "Nucleus? That's the boss, not the power plant.",
+        "1": "Ribosome? Protein factory, different department.",
+        "2": "",
+        "3": "Golgi? Shipping and packaging only."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "What is the most abundant gas in Earth's atmosphere?",
+      "choices": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Argon",
+        "Nitrogen"
+      ],
+      "correctIndex": 3,
+      "explanation": "Nitrogen makes up approximately 78% of Earth's atmosphere, far exceeding oxygen at about 21%.",
+      "hostLeadIn": "Don't hold your breath on this one.",
+      "correctQuip": "Yes. The invisible majority.",
+      "wrongAnswerQuips": {
+        "0": "Oxygen? We need it, but it's not the boss.",
+        "1": "CO2? Trace amounts, drama queen.",
+        "2": "Argon? Noble, but negligible.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the speed of light in a vacuum, approximately, in meters per second?",
+      "choices": [
+        "2.998 × 10^8",
+        "1.5 × 10^8",
+        "3.5 × 10^8",
+        "9.8 × 10^6"
+      ],
+      "correctIndex": 0,
+      "explanation": "The speed of light in a vacuum is approximately 2.998 × 10^8 meters per second, often rounded to 3 × 10^8 m/s.",
+      "hostLeadIn": "Faster than your excuses.",
+      "correctQuip": "Exact(ish). Nice.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Half? That's sound in water or something.",
+        "2": "Too fast. Light doesn't need to show off.",
+        "3": "That's gravity. Wrong units, wrong everything."
+      }
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "On the periodic table, what is the atomic number of carbon?",
+      "choices": [
+        "6",
+        "8",
+        "12",
+        "14"
+      ],
+      "correctIndex": 0,
+      "explanation": "Carbon has an atomic number of 6, meaning it has 6 protons in its nucleus. Its atomic mass is approximately 12.",
+      "hostLeadIn": "Life's favorite element.",
+      "correctQuip": "Base of the organic pyramid. Correct.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Oxygen is 8. Different letter.",
+        "2": "That's the mass, not the number.",
+        "3": "Nitrogen is 7. Close but no."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "easy",
+      "question": "Which streaming platform released the series 'Stranger Things'?",
+      "choices": [
+        "Hulu",
+        "HBO Max",
+        "Netflix",
+        "Amazon Prime Video"
+      ],
+      "correctIndex": 2,
+      "explanation": "Stranger Things is an original Netflix series that premiered in 2016 and became one of the platform's most-watched shows.",
+      "hostLeadIn": "Upside Down your expectations.",
+      "correctQuip": "Demogorgon approved.",
+      "wrongAnswerQuips": {
+        "0": "Hulu? Wrong dimension.",
+        "1": "HBO? They do prestige, not 80s nostalgia.",
+        "2": "",
+        "3": "Prime? Jeff Bezos has enough."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "easy",
+      "question": "Which artist released the hit album '25,' which included the song 'Hello,' in 2015?",
+      "choices": [
+        "Beyoncé",
+        "Adele",
+        "Rihanna",
+        "Taylor Swift"
+      ],
+      "correctIndex": 1,
+      "explanation": "Adele released '25' in November 2015, and the lead single 'Hello' broke multiple streaming records upon release.",
+      "hostLeadIn": "We could hear it from the other side.",
+      "correctQuip": "Hello from the correct answer.",
+      "wrongAnswerQuips": {
+        "0": "Beyoncé? Lemonade was her 2016 moment.",
+        "1": "",
+        "2": "Rihanna? Anti was the same year, different vibe.",
+        "3": "Taylor? 1989 was earlier."
+      }
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "The viral 'Ice Bucket Challenge' of 2014 was primarily intended to raise awareness for which disease?",
+      "choices": [
+        "Multiple sclerosis",
+        "Parkinson's disease",
+        "Amyotrophic lateral sclerosis (ALS)",
+        "Muscular dystrophy"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Ice Bucket Challenge went viral in 2014 to raise awareness and funds for ALS research, raising over $115 million for the ALS Association.",
+      "hostLeadIn": "Pour one out... on your head.",
+      "correctQuip": "You got soaked in the right facts.",
+      "wrongAnswerQuips": {
+        "0": "MS? Different bucket list.",
+        "1": "Parkinson's? Not the one that went viral.",
+        "2": "",
+        "3": "Muscular dystrophy? Noble, wrong campaign."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "In which sport would you perform a 'slam dunk'?",
+      "choices": [
+        "Volleyball",
+        "Water polo",
+        "Basketball",
+        "Handball"
+      ],
+      "correctIndex": 2,
+      "explanation": "A slam dunk is a move in basketball where a player jumps and forcefully drives the ball directly through the hoop.",
+      "hostLeadIn": "Throw it down.",
+      "correctQuip": "Swish. Or rather, boom.",
+      "wrongAnswerQuips": {
+        "0": "Volleyball? That's a spike, not a dunk.",
+        "1": "Water polo? Wet, but no.",
+        "2": "",
+        "3": "Handball? Different kind of throw."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "How many players are on the field for one team in a standard NFL football game?",
+      "choices": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correctIndex": 2,
+      "explanation": "Each NFL team fields 11 players at a time during play, on both offense and defense.",
+      "hostLeadIn": "Gridiron math.",
+      "correctQuip": "Eleven it is. No substitutions in the count.",
+      "wrongAnswerQuips": {
+        "0": "9? Baseball called.",
+        "1": "10? Soccer tried that.",
+        "2": "",
+        "3": "12? Only if you're counting the Canadian league."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "Which country has won the most FIFA World Cup titles as of 2022?",
+      "choices": [
+        "Germany",
+        "Argentina",
+        "Italy",
+        "Brazil"
+      ],
+      "correctIndex": 3,
+      "explanation": "Brazil has won the FIFA World Cup five times (1958, 1962, 1970, 1994, 2002), more than any other nation.",
+      "hostLeadIn": "The beautiful game's undisputed kings.",
+      "correctQuip": "Pentacampeões. Respect.",
+      "wrongAnswerQuips": {
+        "0": "Germany? Four is respectable, not record.",
+        "1": "Argentina? They finally got one more in 2022, still behind.",
+        "2": "Italy? Four, same as Germany.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "Who holds the Olympic record for the most gold medals won by a single athlete in history?",
+      "choices": [
+        "Carl Lewis",
+        "Larisa Latynina",
+        "Michael Phelps",
+        "Usain Bolt"
+      ],
+      "correctIndex": 2,
+      "explanation": "Michael Phelps won 23 Olympic gold medals across his career (2000–2016), the most of any athlete in Olympic history.",
+      "hostLeadIn": "Swim through this one.",
+      "correctQuip": "Most decorated human in Olympic history.",
+      "wrongAnswerQuips": {
+        "0": "Lewis? Nine is great, not 23.",
+        "1": "Latynina? Gymnastics legend with nine.",
+        "2": "",
+        "3": "Bolt? Lightning, but only eight."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "In the NBA, which player holds the record for the most points scored in a single game, with 100 points in 1962?",
+      "choices": [
+        "Elgin Baylor",
+        "Jerry West",
+        "Wilt Chamberlain",
+        "Oscar Robertson"
+      ],
+      "correctIndex": 2,
+      "explanation": "Wilt Chamberlain scored 100 points for the Philadelphia Warriors against the New York Knicks on March 2, 1962—a record that still stands.",
+      "hostLeadIn": "A century in one night.",
+      "correctQuip": "The Big Dipper strikes again.",
+      "wrongAnswerQuips": {
+        "0": "Baylor? 71 was his big night.",
+        "1": "West? Logo legend, not 100.",
+        "2": "",
+        "3": "Robertson? Triple-double king, not this."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "easy",
+      "question": "Which American city is most closely associated with the origins of jazz music in the early 20th century?",
+      "choices": [
+        "Chicago",
+        "New York City",
+        "New Orleans",
+        "Memphis"
+      ],
+      "correctIndex": 2,
+      "explanation": "New Orleans is widely considered the birthplace of jazz, where African American musicians blended blues, ragtime, and brass band traditions in the late 1800s and early 1900s.",
+      "hostLeadIn": "Second line this answer.",
+      "correctQuip": "Crescent City classic.",
+      "wrongAnswerQuips": {
+        "0": "Chicago? They got the next wave.",
+        "1": "NYC? Harlem Renaissance later.",
+        "2": "",
+        "3": "Memphis? Blues, not the full jazz birth."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "easy",
+      "question": "Who wrote the novel '1984,' published in 1949?",
+      "choices": [
+        "Aldous Huxley",
+        "George Orwell",
+        "Ray Bradbury",
+        "Kurt Vonnegut"
+      ],
+      "correctIndex": 1,
+      "explanation": "George Orwell wrote '1984,' a dystopian novel published in 1949 depicting a totalitarian society under constant government surveillance.",
+      "hostLeadIn": "Doubleplusgood question.",
+      "correctQuip": "Orwellian perfection.",
+      "wrongAnswerQuips": {
+        "0": "Huxley? Brave New World.",
+        "1": "",
+        "2": "Bradbury? Fahrenheit 451.",
+        "3": "Vonnegut? Slaughterhouse-Five."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which director is known for the films 'Vertigo,' 'Rear Window,' and 'Psycho'?",
+      "choices": [
+        "Orson Welles",
+        "Billy Wilder",
+        "Alfred Hitchcock",
+        "John Ford"
+      ],
+      "correctIndex": 2,
+      "explanation": "Alfred Hitchcock directed all three films, cementing his reputation as the master of suspense in classic Hollywood cinema.",
+      "hostLeadIn": "Don't look behind you.",
+      "correctQuip": "Hitchcockian brilliance.",
+      "wrongAnswerQuips": {
+        "0": "Welles? Citizen Kane.",
+        "1": "Wilder? Sunset Boulevard.",
+        "2": "",
+        "3": "Ford? Westerns, not thrillers."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which artist painted 'The Persistence of Memory,' featuring melting clocks, in 1931?",
+      "choices": [
+        "Pablo Picasso",
+        "René Magritte",
+        "Salvador Dalí",
+        "Giorgio de Chirico"
+      ],
+      "correctIndex": 2,
+      "explanation": "Salvador Dalí painted 'The Persistence of Memory' in 1931, and it remains one of the most recognized works of Surrealist art.",
+      "hostLeadIn": "Time is dripping away.",
+      "correctQuip": "Soft watches, hard facts.",
+      "wrongAnswerQuips": {
+        "0": "Picasso? Cubes, not clocks.",
+        "1": "Magritte? Pipes and apples.",
+        "2": "",
+        "3": "de Chirico? Metaphysical, not melting."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "What does 'HTTP' stand for in a web address?",
+      "choices": [
+        "HyperText Transfer Protocol",
+        "High Traffic Transmission Process",
+        "Hyperlink Text Transmission Port",
+        "HyperText Tracking Program"
+      ],
+      "correctIndex": 0,
+      "explanation": "HTTP stands for HyperText Transfer Protocol, the foundation of data communication on the World Wide Web.",
+      "hostLeadIn": "Web basics, no browser history required.",
+      "correctQuip": "Protocol followed.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "High Traffic? Sounds made up.",
+        "2": "Hyperlink Port? Cute, wrong.",
+        "3": "Tracking Program? Too paranoid."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "Which company currently develops and maintains the Android mobile operating system?",
+      "choices": [
+        "Apple",
+        "Microsoft",
+        "Google",
+        "Samsung"
+      ],
+      "correctIndex": 2,
+      "explanation": "Android was originally created by Android Inc., which Google acquired in 2005. Google now develops and maintains the operating system.",
+      "hostLeadIn": "Not fruit, not windows.",
+      "correctQuip": "Droid correct.",
+      "wrongAnswerQuips": {
+        "0": "Apple? That's iOS, closed garden.",
+        "1": "Microsoft? Windows Phone, RIP.",
+        "2": "",
+        "3": "Samsung? Hardware, not the OS core."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "In what year was the first iPhone released by Apple?",
+      "choices": [
+        "2005",
+        "2006",
+        "2007",
+        "2008"
+      ],
+      "correctIndex": 2,
+      "explanation": "Apple released the first iPhone on June 29, 2007, following Steve Jobs's announcement at the Macworld Conference earlier that year.",
+      "hostLeadIn": "Revolutionary... or overpriced?",
+      "correctQuip": "Touchscreen history made.",
+      "wrongAnswerQuips": {
+        "0": "2005? Too early.",
+        "1": "2006? Still waiting.",
+        "2": "",
+        "3": "2008? 3G came then."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "Which programming language was created by Guido van Rossum and first released in 1991?",
+      "choices": [
+        "Ruby",
+        "Java",
+        "Perl",
+        "Python"
+      ],
+      "correctIndex": 3,
+      "explanation": "Python was created by Guido van Rossum and officially released in 1991, designed for readability and simplicity.",
+      "hostLeadIn": "No curly braces were harmed.",
+      "correctQuip": "import success",
+      "wrongAnswerQuips": {
+        "0": "Ruby? Rails guy.",
+        "1": "Java? Coffee, not snakes.",
+        "2": "Perl? Write-only language.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Which AI research lab, founded in 2015 with backing from Elon Musk and Sam Altman among others, developed the GPT series of language models?",
+      "choices": [
+        "DeepMind",
+        "Anthropic",
+        "OpenAI",
+        "Meta AI"
+      ],
+      "correctIndex": 2,
+      "explanation": "OpenAI was co-founded in 2015 and developed the GPT (Generative Pre-trained Transformer) series, including GPT-3 and GPT-4.",
+      "hostLeadIn": "The lab that made AI talk back.",
+      "correctQuip": "GPT dropped. Correct.",
+      "wrongAnswerQuips": {
+        "0": "DeepMind? Google, AlphaGo.",
+        "1": "Anthropic? Claude crew.",
+        "2": "",
+        "3": "Meta? Llama, different zoo."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "The Battle of the Teutoburg Forest in 9 CE was a decisive Roman defeat inflicted by an alliance of Germanic tribes led by which chieftain?",
+      "choices": [
+        "Arminius",
+        "Vercingetorix",
+        "Alaric I",
+        "Ariovistus"
+      ],
+      "correctIndex": 0,
+      "explanation": "Arminius, a Cherusci chieftain and former Roman auxiliary, led the coalition that destroyed three Roman legions under Publius Quinctilius Varus.",
+      "hostLeadIn": "Time to wander into the misty forests of Germania...",
+      "correctQuip": "Well played. Most people still think Rome never lost.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Vercingetorix? Wrong Gaul, wrong century. Try again, history tourist.",
+        "2": "Alaric I sacked Rome later... but not in the Teutoburg Forest.",
+        "3": "Ariovistus fought Caesar, not Varus. Close, but no cigar."
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Who is the only player in NFL history to win the Super Bowl MVP award while playing for a losing team?",
+      "choices": [
+        "Tom Brady",
+        "Jerry Rice",
+        "Chuck Howley",
+        "Larry Csonka"
+      ],
+      "correctIndex": 2,
+      "explanation": "Chuck Howley of the Dallas Cowboys won Super Bowl V MVP in 1971 despite the Cowboys' loss to the Baltimore Colts.",
+      "hostLeadIn": "Let's talk about the one time the MVP trophy went to the wrong sideline.",
+      "correctQuip": "Impressive. You actually know your obscure Super Bowl lore.",
+      "wrongAnswerQuips": {
+        "0": "Tom Brady? He wins MVPs when his team wins, darling.",
+        "1": "Jerry Rice dominated, but never on the losing side.",
+        "2": "",
+        "3": "Larry Csonka was a beast, but not in this particular piece of trivia."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "The Pre-Raphaelite Brotherhood, founded in 1848, rejected the academic art of their time. Which of these paintings is a work by Dante Gabriel Rossetti, a founding member of the group?",
+      "choices": [
+        "Ophelia",
+        "The Hireling Shepherd",
+        "Beata Beatrix",
+        "The Light of the World"
+      ],
+      "correctIndex": 2,
+      "explanation": "'Beata Beatrix' (c. 1864–1870) by Dante Gabriel Rossetti is a portrait of his wife Elizabeth Siddal as Beatrice from Dante's works.",
+      "hostLeadIn": "Let's step into the lush, overly dramatic world of the Pre-Raphaelites...",
+      "correctQuip": "Someone actually paid attention in art history. Color me shocked.",
+      "wrongAnswerQuips": {
+        "0": "Ophelia is Millais. Nice try, but wrong brother.",
+        "1": "The Hireling Shepherd? That's Holman Hunt. Bless your heart.",
+        "2": "",
+        "3": "The Light of the World is also Holman Hunt. You’re striking out."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the only U.S. president never elected to the office or the vice presidency?",
+      "choices": [
+        "Gerald Ford",
+        "John Tyler",
+        "Millard Fillmore",
+        "Chester A. Arthur"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gerald Ford became president after Nixon's resignation and vice president after Agnew's resignation, both via congressional appointment.",
+      "hostLeadIn": "Time for some presidential technicalities.",
+      "correctQuip": "Spot on—Ford's the accidental president who never faced the voters.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "John Tyler? Close, but he was elected VP first.",
+        "2": "Fillmore was actually elected VP.",
+        "3": "Arthur was elected VP too."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "In which 19th-century conflict did the Charge of the Light Brigade occur?",
+      "choices": [
+        "The Crimean War",
+        "The Napoleonic Wars",
+        "The Boer War",
+        "The American Civil War"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Charge of the Light Brigade took place during the Battle of Balaclava in 1854 as part of the Crimean War.",
+      "hostLeadIn": "Into the valley of Death rode the six hundred.",
+      "correctQuip": "Correct—the Crimean War's most famous blunder.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Napoleonic? Wrong century, darling.",
+        "2": "Boer War came later.",
+        "3": "American Civil War had its own charges, but not this one."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which Roman Emperor moved the capital of the empire from Rome to Byzantium in 330 AD?",
+      "choices": [
+        "Augustus",
+        "Nero",
+        "Constantine the Great",
+        "Trajan"
+      ],
+      "correctIndex": 2,
+      "explanation": "Constantine the Great established 'New Rome' at Byzantium, which was later renamed Constantinople in his honor.",
+      "hostLeadIn": "When Rome just wasn't enough.",
+      "correctQuip": "Constantine the Great—smart move for the empire's future.",
+      "wrongAnswerQuips": {
+        "0": "Augustus built the empire, didn't relocate it.",
+        "1": "Nero was too busy with fires.",
+        "2": "",
+        "3": "Trajan was busy conquering."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Who was the first woman to be elected as the Prime Minister of the United Kingdom?",
+      "choices": [
+        "Theresa May",
+        "Margaret Thatcher",
+        "Angela Merkel",
+        "Indira Gandhi"
+      ],
+      "correctIndex": 1,
+      "explanation": "Margaret Thatcher served as Prime Minister from 1979 to 1990 and was the first woman to hold the office.",
+      "hostLeadIn": "Iron Lady incoming.",
+      "correctQuip": "Thatcher—the original Iron Lady.",
+      "wrongAnswerQuips": {
+        "0": "May came much later.",
+        "1": "",
+        "2": "Merkel was German Chancellor.",
+        "3": "Indira Gandhi was India's PM."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the primary author of the United States Declaration of Independence?",
+      "choices": [
+        "George Washington",
+        "Benjamin Franklin",
+        "John Adams",
+        "Thomas Jefferson"
+      ],
+      "correctIndex": 3,
+      "explanation": "Thomas Jefferson was the principal author of the Declaration, which was adopted by the Continental Congress in 1776.",
+      "hostLeadIn": "Time to channel your inner Founding Father.",
+      "correctQuip": "Jefferson—pen in hand, ideals in mind.",
+      "wrongAnswerQuips": {
+        "0": "Washington was busy commanding.",
+        "1": "Franklin edited, didn't draft it.",
+        "2": "Adams helped, but not the main writer.",
+        "3": ""
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The Peloponnesian War was fought primarily between which two city-states?",
+      "choices": [
+        "Athens and Corinth",
+        "Sparta and Thebes",
+        "Athens and Sparta",
+        "Corinth and Sparta"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Peloponnesian War (431–404 BCE) was a protracted conflict between Athens and its empire and the Peloponnesian League led by Sparta.",
+      "hostLeadIn": "Ancient Greece's ultimate grudge match.",
+      "correctQuip": "Athens vs. Sparta—classic rivalry.",
+      "wrongAnswerQuips": {
+        "0": "Corinth was involved, but not the main foe.",
+        "1": "Thebes switched sides.",
+        "2": "",
+        "3": "Not quite."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which emperor issued the Edict of Milan in 313 AD, legalizing Christianity in the Roman Empire?",
+      "choices": [
+        "Diocletian",
+        "Constantine I",
+        "Theodosius I",
+        "Julian the Apostate"
+      ],
+      "correctIndex": 1,
+      "explanation": "Constantine I, co-emperor with Licinius, issued the Edict of Milan, which granted religious toleration to Christians.",
+      "hostLeadIn": "A turning point for faith in Rome.",
+      "correctQuip": "Constantine I—game changer for Christianity.",
+      "wrongAnswerQuips": {
+        "0": "Diocletian persecuted Christians.",
+        "1": "",
+        "2": "Theodosius made it official later.",
+        "3": "Julian tried to revive paganism."
+      }
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which French revolutionary figure was assassinated in his bathtub by Charlotte Corday in 1793?",
+      "choices": [
+        "Maximilien Robespierre",
+        "Georges Danton",
+        "Camille Desmoulins",
+        "Jean-Paul Marat"
+      ],
+      "correctIndex": 3,
+      "explanation": "Jean-Paul Marat, a radical journalist, was killed by Girondin sympathizer Charlotte Corday during the Reign of Terror.",
+      "hostLeadIn": "Revolutionary drama at its messiest.",
+      "correctQuip": "Marat—bathtub edition.",
+      "wrongAnswerQuips": {
+        "0": "Robespierre lost his head later.",
+        "1": "Danton was guillotined.",
+        "2": "Desmoulins too.",
+        "3": ""
+      }
+    },
+    {
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "Who holds the MLB record for the most RBIs in a single season?",
+      "choices": [
+        "Hack Wilson",
+        "Babe Ruth",
+        "Lou Gehrig",
+        "Hank Aaron"
+      ],
+      "correctIndex": 0,
+      "explanation": "Hack Wilson drove in 191 runs for the Chicago Cubs in 1930.",
+      "hostLeadIn": "Baseball's ultimate run-producer.",
+      "correctQuip": "Hack Wilson—191 RBIs. Still unbeaten.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Babe Ruth was close but no cigar.",
+        "2": "Gehrig was consistent, not this peak.",
+        "3": "Aaron was a career legend."
+      }
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Who is known for mixing styles like jazz, rock, classical, and klezmer in experimental compositions?",
+      "choices": [
+        "John Zorn",
+        "Philip Glass",
+        "Steve Reich",
+        "John Cage"
+      ],
+      "correctIndex": 0,
+      "explanation": "John Zorn is recognized for his eclectic and avant-garde approach across multiple genres.",
+      "hostLeadIn": "Avant-garde music just got weirder.",
+      "correctQuip": "John Zorn—genre blender extraordinaire.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Glass does minimalism.",
+        "2": "Reich too.",
+        "3": "Cage was chance music."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "What was the first smartphone, introduced by IBM in 1994?",
+      "choices": [
+        "Simon Personal Communicator",
+        "Nokia 9000 Communicator",
+        "BlackBerry 6210",
+        "iPhone"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Simon featured a touchscreen, email, and apps like a calendar.",
+      "hostLeadIn": "Before iPhones were cool.",
+      "correctQuip": "IBM Simon—the OG smartphone.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Nokia came later.",
+        "2": "BlackBerry even later.",
+        "3": "iPhone? Decades later."
+      }
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Who coined the term 'machine learning' in 1959?",
+      "choices": [
+        "Arthur Samuel",
+        "Alan Turing",
+        "John McCarthy",
+        "Marvin Minsky"
+      ],
+      "correctIndex": 0,
+      "explanation": "Arthur Samuel, an IBM researcher, used the term while developing checkers-playing programs.",
+      "hostLeadIn": "AI history starts here.",
+      "correctQuip": "Arthur Samuel—father of the term.",
+      "wrongAnswerQuips": {
+        "0": "",
+        "1": "Turing was earlier.",
+        "2": "McCarthy did AI broadly.",
+        "3": "Minsky was influential but not this."
+      }
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { TriviaQuestion, getPlayableCategories } from '../types';
+import { QUESTION_COLLECTION } from '../services/questionCollections';
 import { ensureQuestionInventory } from '../services/questionRepository';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
@@ -40,7 +41,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
   const loadSummary = async () => {
     setIsLoadingSummary(true);
     try {
-      const bankRef = collection(db, 'questionBank');
+      const bankRef = collection(db, QUESTION_COLLECTION);
       const totalSnapshot = await getCountFromServer(query(bankRef, where('validationStatus', '==', 'approved')));
       setTotalCount(totalSnapshot.data().count);
 
@@ -85,7 +86,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
   const loadSamples = async () => {
     setIsLoadingSamples(true);
     try {
-      const bankRef = collection(db, 'questionBank');
+      const bankRef = collection(db, QUESTION_COLLECTION);
       const sampleQuery = query(
         bankRef,
         where('validationStatus', '==', 'approved'),

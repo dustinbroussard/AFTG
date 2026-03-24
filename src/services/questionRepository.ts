@@ -11,6 +11,7 @@ import {
 import { db } from '../firebase';
 import { TriviaQuestion, getPlayableCategories, isPlayableCategory } from '../types';
 import { generateQuestions, getQuestionGenerationStatus } from './gemini';
+import { QUESTION_COLLECTION } from './questionCollections';
 import { validateGeneratedQuestions } from './questionValidation';
 import { isQuestionApprovedForStorage } from './questionVerification';
 
@@ -71,7 +72,7 @@ function toExistingQuestionHistory(questions: TriviaQuestion[]) {
 }
 
 async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Set<string>, count: number) {
-  const bankRef = collection(db, 'questionBank');
+  const bankRef = collection(db, QUESTION_COLLECTION);
   const bankQuery = query(
     bankRef,
     where('category', '==', category),
@@ -93,7 +94,7 @@ async function storeQuestionsInBank(questions: TriviaQuestion[]) {
   for (const question of questions) {
     if (!isQuestionApprovedForStorage(question)) continue;
     const canonical = toBankQuestion(question);
-    await setDoc(doc(db, 'questionBank', canonical.id), canonical, { merge: true });
+    await setDoc(doc(db, QUESTION_COLLECTION, canonical.id), canonical, { merge: true });
   }
 }
 
@@ -193,7 +194,7 @@ async function fetchApprovedQuestionsByCategoryAndDifficulty(
   category: string,
   difficulty: 'easy' | 'medium' | 'hard'
 ) {
-  const bankRef = collection(db, 'questionBank');
+  const bankRef = collection(db, QUESTION_COLLECTION);
   const bankQuery = query(
     bankRef,
     where('category', '==', category),

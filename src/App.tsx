@@ -20,7 +20,8 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { auth, db, signIn, finishSignInRedirect, handleFirestoreError, OperationType } from './firebase';
-import { GameInvite, GameState, Player, RecentPlayer, TriviaQuestion, ChatMessage, UserSettings, getPlayableCategories } from './types';
+import { ChatMessage, GameInvite, GameState, Player, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getPlayableCategories } from './types';
+import { QUESTION_COLLECTION } from './services/questionCollections';
 import { ensureQuestionInventory, getQuestionsForSession } from './services/questionRepository';
 import { acceptInvite, declineInvite, expireInvite, loadRecentPlayers, sendInvite, subscribeToIncomingInvites } from './services/invites';
 import { GameLobby } from './components/GameLobby';
@@ -101,7 +102,7 @@ export default function App() {
   const [currentQuestion, setCurrentQuestion] = useState<TriviaQuestion | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [roast, setRoast] = useState<{ explanation: string; isCorrect: boolean } | null>(null);
+  const [roast, setRoast] = useState<RoastState | null>(null);
   const [resultPhase, setResultPhase] = useState<ResultPhase>('idle');
   const [queuedSpecialEvent, setQueuedSpecialEvent] = useState<QueuedSpecialEvent | null>(null);
 
@@ -1460,7 +1461,7 @@ export default function App() {
       // Mark question as used
       await updateDoc(doc(db, 'games', game.id, 'questions', currentQuestion.id), { used: true });
       if (currentQuestion.questionId) {
-        await updateDoc(doc(db, 'questionBank', currentQuestion.questionId), {
+        await updateDoc(doc(db, QUESTION_COLLECTION, currentQuestion.questionId), {
           usedCount: increment(1)
         });
       }
@@ -1479,6 +1480,9 @@ export default function App() {
         setRoast({
           explanation: currentQuestion.explanation,
           isCorrect,
+          questionId: currentQuestion.questionId || currentQuestion.id,
+          userId: user.uid,
+          gameId: game.id,
         });
         setResultPhase('explaining');
       }, 650);
@@ -2108,6 +2112,9 @@ export default function App() {
           <Roast
             explanation={roast.explanation}
             isCorrect={roast.isCorrect}
+            questionId={roast.questionId}
+            userId={roast.userId}
+            gameId={roast.gameId}
             onClose={nextTurn}
           />
         )}
