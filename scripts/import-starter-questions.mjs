@@ -6,6 +6,8 @@ import { pathToFileURL } from 'node:url';
 const ROOT = process.cwd();
 const QUESTION_COLLECTION = 'questions';
 const DEFAULT_FILES = ['starter-questions.json', 'starterquestions.json', 'strarterquestions.json'];
+const FIRESTORE_DATABASE_ID = 'ai-studio-5d62c22c-0318-44b3-a976-ecfe921b8e12';
+const FIREBASE_PROJECT_ID = 'ai-studio-applet-webapp-a549d';
 
 async function resolveStarterFile(inputPath) {
   if (inputPath) return path.resolve(ROOT, inputPath);
@@ -61,15 +63,15 @@ async function createFirestore() {
 
     if (typeof credentials === 'string') {
       const serviceAccountJson = JSON.parse(await fs.readFile(new URL(credentials), 'utf8'));
-      initializeApp({ credential: cert(serviceAccountJson) });
+      initializeApp({ credential: cert(serviceAccountJson), projectId: FIREBASE_PROJECT_ID });
     } else if (credentials) {
-      initializeApp({ credential: cert(credentials) });
+      initializeApp({ credential: cert(credentials), projectId: FIREBASE_PROJECT_ID });
     } else {
-      initializeApp({ credential: applicationDefault() });
+      initializeApp({ credential: applicationDefault(), projectId: FIREBASE_PROJECT_ID });
     }
   }
 
-  return getFirestore();
+  return getFirestore(undefined, FIRESTORE_DATABASE_ID);
 }
 
 function parseStarterFile(rawText, filePath) {
