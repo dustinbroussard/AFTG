@@ -85,13 +85,29 @@ const REDIRECT_FALLBACK_ERRORS = new Set([
   'auth/popup-closed-by-user',
   'auth/cancelled-popup-request',
   'auth/operation-not-supported-in-this-environment',
+  'auth/internal-error',
 ]);
+
+const shouldPreferRedirectSignIn = () => {
+  if (typeof window === 'undefined') return false;
+
+  const userAgent = window.navigator.userAgent || '';
+  const isMobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(userAgent);
+  const isSmallTouchScreen = window.matchMedia?.('(max-width: 1024px)').matches && 'ontouchstart' in window;
+
+  return isMobileUserAgent || !!isSmallTouchScreen;
+};
 
 export const signIn = async () => {
   if (signingIn) return null;
   signingIn = true;
 
   try {
+    if (shouldPreferRedirectSignIn()) {
+      await signInWithRedirect(auth, googleProvider);
+      return null;
+    }
+
     return await signInWithPopup(auth, googleProvider);
   } catch (err: any) {
     if (REDIRECT_FALLBACK_ERRORS.has(err?.code)) {
