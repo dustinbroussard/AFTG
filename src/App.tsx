@@ -1017,6 +1017,10 @@ export default function App() {
       if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-closed-by-user') {
         return;
       }
+      if (err.code === 'auth/internal-error') {
+        setError('Google sign-in failed on this browser. Please try again or open in a standard browser tab.');
+        return;
+      }
       setError(err.message);
     }
   };
