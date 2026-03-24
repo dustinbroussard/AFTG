@@ -1679,6 +1679,22 @@ export default function App() {
             Login with Google
           </motion.button>
 
+          {error && (
+            <div
+              className="max-w-lg rounded-xl border border-rose-500/40 bg-rose-950/40 px-5 py-4 text-center text-sm font-medium text-rose-300 shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
+              role="alert"
+            >
+              <p>{error}</p>
+              <button
+                type="button"
+                onClick={() => setError(null)}
+                className="mt-3 rounded-lg border border-rose-400/40 px-3 py-1 text-xs font-black uppercase tracking-wider text-rose-200 hover:bg-rose-500/20"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
         </div>
       </>
     );

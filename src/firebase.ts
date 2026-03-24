@@ -3,6 +3,7 @@ import {
   getAuth,
   getRedirectResult,
   GoogleAuthProvider,
+  signInWithPopup,
   signInWithRedirect,
   UserCredential,
 } from 'firebase/auth';
@@ -79,11 +80,26 @@ export function finishSignInRedirect() {
   return redirectResultPromise;
 }
 
+const REDIRECT_FALLBACK_ERRORS = new Set([
+  'auth/popup-blocked',
+  'auth/popup-closed-by-user',
+  'auth/cancelled-popup-request',
+  'auth/operation-not-supported-in-this-environment',
+]);
+
 export const signIn = async () => {
-  if (signingIn) return;
+  if (signingIn) return null;
   signingIn = true;
+
   try {
-    await signInWithRedirect(auth, googleProvider);
+    return await signInWithPopup(auth, googleProvider);
+  } catch (err: any) {
+    if (REDIRECT_FALLBACK_ERRORS.has(err?.code)) {
+      await signInWithRedirect(auth, googleProvider);
+      return null;
+    }
+
+    throw err;
   } finally {
     signingIn = false;
   }
