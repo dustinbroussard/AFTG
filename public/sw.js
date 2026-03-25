@@ -19,6 +19,20 @@ const PRECACHE_ASSETS = [
   'spin.mp3',
 ];
 
+async function precacheAssets() {
+  const cache = await caches.open(CACHE_NAME);
+
+  await Promise.allSettled(
+    PRECACHE_ASSETS.map(async (assetPath) => {
+      try {
+        await cache.add(assetPath);
+      } catch (error) {
+        console.warn('[sw] precache failed:', assetPath, error);
+      }
+    })
+  );
+}
+
 async function cacheFirst(request) {
   const cachedResponse = await caches.match(request);
   if (cachedResponse) {
@@ -50,9 +64,7 @@ async function staleWhileRevalidate(request) {
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_ASSETS))
-  );
+  event.waitUntil(precacheAssets());
 });
 
 self.addEventListener('activate', (event) => {
