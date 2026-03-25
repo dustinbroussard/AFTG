@@ -9,7 +9,7 @@ import {
   TRIVIA_PIPELINE_VERSION,
 } from '../src/services/gemini.js';
 import type { ExistingQuestion } from '../src/services/gemini.js';
-import { buildStylingPrompt, normalizeStylingResults, questionStylingSchema } from '../src/services/questionStyling.js';
+import { buildStylingPrompt, getStrictStylingResults, questionStylingSchema } from '../src/services/questionStyling.js';
 import {
   buildVerificationPrompt,
   isQuestionApprovedForStorage,
@@ -319,6 +319,13 @@ function logRejectedQuestions(
   });
 }
 
+function logStylingRejectedQuestions(rejected: Array<{ question: TriviaQuestion; reason: string }>) {
+  if (process.env.NODE_ENV === 'production') return;
+  rejected.forEach(({ question, reason }) => {
+    logPipelineWarning(`styling rejected "${question.question || question.id}": ${reason}`);
+  });
+}
+
 export async function runQuestionPipeline({
   categories,
   countPerCategory,
@@ -462,20 +469,117 @@ export async function runQuestionPipeline({
       stage: 'styling',
       context,
     });
-    const stylingResults = normalizeStylingResults(approvedQuestions, stylingPayload);
+    const strictStylingResults = getStrictStylingResults(approvedQuestions, stylingPayload);
+    const missingIndexes = strictStylingResults
+      .map((result, questionIndex) => result ? null : questionIndex)
+      .filter((questionIndex): questionIndex is number => questionIndex !== null);
 
-    const styledQuestions = approvedQuestions.map((question, questionIndex): TriviaQuestion => ({
-      ...question,
-      questionStyled: stylingResults[questionIndex].questionStyled,
-      explanationStyled: stylingResults[questionIndex].explanationStyled,
-      ...(stylingResults[questionIndex].hostLeadIn ? { hostLeadIn: stylingResults[questionIndex].hostLeadIn } : {}),
-      validationStatus: 'approved' as const,
-    }));
-    logStage(context, 'styling', 'completed', { questions: styledQuestions.length });
+    let recoveredStylingResults = new Map<number, NonNullable<(typeof strictStylingResults)[number]>>();
+
+    if (missingIndexes.length > 0) {
+      logStage(context, 'styling', 'partial_results_retrying_single', { missing: missingIndexes.length });
+
+      const singleRetries = await Promise.all(missingIndexes.map(async (questionIndex) => {
+        const question = approvedQuestions[questionIndex];
+
+        try {
+          const singlePayload = await requestStageJson({
+            prompt: buildStylingPrompt([question]),
+            schema: questionStylingSchema,
+            requestUrl,
+            errorLabel: 'Styler',
+            stage: 'styling',
+            context,
+          });
+          const singleResult = getStrictStylingResults([question], singlePayload)[0];
+          return singleResult ? { questionIndex, result: singleResult } : null;
+        } catch (singleError) {
+          logStageFailure(context, 'styling', singleError, { event: 'single_question_retry_failed', question: question.question });
+          return null;
+        }
+      }));
+
+      recoveredStylingResults = new Map(
+        singleRetries
+          .filter((entry): entry is { questionIndex: number; result: NonNullable<(typeof strictStylingResults)[number]> } => Boolean(entry?.result))
+          .map((entry) => [entry.questionIndex, entry.result])
+      );
+    }
+
+    const styledQuestions: TriviaQuestion[] = [];
+    const stylingRejected: Array<{ question: TriviaQuestion; reason: string }> = [];
+
+    approvedQuestions.forEach((question, questionIndex) => {
+      const styling = strictStylingResults[questionIndex] || recoveredStylingResults.get(questionIndex);
+
+      if (!styling) {
+        stylingRejected.push({
+          question,
+          reason: 'styling did not return a usable result',
+        });
+        return;
+      }
+
+      styledQuestions.push({
+        ...question,
+        questionStyled: styling.questionStyled,
+        explanationStyled: styling.explanationStyled,
+        ...(styling.hostLeadIn ? { hostLeadIn: styling.hostLeadIn } : {}),
+        validationStatus: 'approved' as const,
+      });
+    });
+
+    logStylingRejectedQuestions(stylingRejected);
+    logStage(context, 'styling', 'completed', {
+      questions: styledQuestions.length,
+      rejected: stylingRejected.length,
+    });
     return styledQuestions;
   } catch (error) {
-    logStageFailure(context, 'styling', error, { event: 'returning_verified_plain_questions' });
-    return approvedQuestions;
+    logStageFailure(context, 'styling', error, { event: 'batch_failed_retrying_single' });
+
+    const singleStyledQuestions = await Promise.all(approvedQuestions.map(async (question) => {
+      try {
+        const singlePayload = await requestStageJson({
+          prompt: buildStylingPrompt([question]),
+          schema: questionStylingSchema,
+          requestUrl,
+          errorLabel: 'Styler',
+          stage: 'styling',
+          context,
+        });
+        const singleResult = getStrictStylingResults([question], singlePayload)[0];
+        if (!singleResult) {
+          return null;
+        }
+
+        return {
+          ...question,
+          questionStyled: singleResult.questionStyled,
+          explanationStyled: singleResult.explanationStyled,
+          ...(singleResult.hostLeadIn ? { hostLeadIn: singleResult.hostLeadIn } : {}),
+          validationStatus: 'approved' as const,
+        } satisfies TriviaQuestion;
+      } catch (singleError) {
+        logStageFailure(context, 'styling', singleError, { event: 'single_question_retry_failed', question: question.question });
+        return null;
+      }
+    }));
+
+    const styledQuestions = singleStyledQuestions.filter((question): question is NonNullable<typeof question> => Boolean(question));
+    const stylingRejected = approvedQuestions
+      .filter((_, index) => !singleStyledQuestions[index])
+      .map((question) => ({
+        question,
+        reason: 'styling failed after single-question retry',
+      }));
+
+    logStylingRejectedQuestions(stylingRejected);
+    logStage(context, 'styling', 'completed_after_retry', {
+      questions: styledQuestions.length,
+      rejected: stylingRejected.length,
+    });
+    return styledQuestions;
   }
 }
 

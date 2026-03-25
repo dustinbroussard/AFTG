@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { getAdminDb } from '../_lib/firebase-admin.js';
+import { getAdminAuth, getAdminDb } from '../_lib/firebase-admin.js';
 import { runQuestionPipeline } from '../generate-questions.js';
 import { getPlayableCategories } from '../../src/types.js';
 import {
@@ -9,6 +9,45 @@ import {
 import { QUESTION_COLLECTION } from '../../src/services/questionCollections.js';
 
 const db = getAdminDb();
+const adminAuth = getAdminAuth();
+
+function normalizeEmailList(value: string | undefined) {
+  return new Set(
+    (value || '')
+      .split(',')
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean)
+  );
+}
+
+const allowedEmails = normalizeEmailList(process.env.MAINTENANCE_ALLOWED_EMAILS);
+
+async function isAuthorizedRequest(req: any) {
+  const authHeader = req.headers['x-maintenance-token'];
+  const secretToken = process.env.MAINTENANCE_TOKEN;
+
+  if (secretToken && authHeader === secretToken) {
+    return true;
+  }
+
+  const bearer = req.headers.authorization;
+  if (!bearer?.startsWith('Bearer ')) {
+    return false;
+  }
+
+  if (allowedEmails.size === 0) {
+    return false;
+  }
+
+  try {
+    const decoded = await adminAuth.verifyIdToken(bearer.slice('Bearer '.length));
+    const email = decoded.email?.toLowerCase();
+    return Boolean(email && allowedEmails.has(email));
+  } catch (error) {
+    console.warn('[top-up] Failed to verify Firebase ID token:', error);
+    return false;
+  }
+}
 
 async function getExistingQuestions(category: string): Promise<{ category: string; question: string }[]> {
   const snapshot = await db.collection(QUESTION_COLLECTION)
@@ -28,12 +67,7 @@ async function sleep(ms: number) {
 }
 
 export default async function handler(req: any, res: any) {
-  // Basic security: Check for an auth header or just allow for now if it's internal
-  // In a real app, you'd use a secret token
-  const authHeader = req.headers['x-maintenance-token'];
-  const secretToken = process.env.MAINTENANCE_TOKEN;
-  
-  if (secretToken && authHeader !== secretToken) {
+  if (!(await isAuthorizedRequest(req))) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

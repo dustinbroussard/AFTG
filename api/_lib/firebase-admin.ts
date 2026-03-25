@@ -1,4 +1,5 @@
 import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
+import { getAuth, type Auth } from 'firebase-admin/auth';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 
 const FIREBASE_PROJECT_ID = 'ai-studio-applet-webapp-a549d';
@@ -36,6 +37,10 @@ export function initAdmin(): App {
 export function getAdminDb(): Firestore {
   initAdmin();
   return getFirestore(FIRESTORE_DATABASE_ID);
+}
+
+export function getAdminAuth(): Auth {
+  return getAuth(initAdmin());
 }
 
 function getServiceAccount() {

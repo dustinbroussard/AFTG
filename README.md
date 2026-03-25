@@ -93,6 +93,28 @@ npm run dev
 
 Vite serves the app on port `3000` by default.
 
+### Dedicated generator app
+
+This repo now supports a separate generator-only frontend at `/generator`.
+
+- It signs in with the same Firebase Google Auth setup as the main game.
+- It exposes a single button that triggers `/api/maintenance/top-up`.
+- The API accepts either:
+  - `Authorization: Bearer <firebase-id-token>` from a signed-in user whose email is listed in `MAINTENANCE_ALLOWED_EMAILS`
+  - `x-maintenance-token: <MAINTENANCE_TOKEN>` for server-to-server or cron use
+
+Add this to your env when using the generator app:
+
+```bash
+MAINTENANCE_ALLOWED_EMAILS="your-google-email@example.com"
+```
+
+Then open:
+
+```text
+http://localhost:3000/generator
+```
+
 ## Build and validation
 
 ### Type-check

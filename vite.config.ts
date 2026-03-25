@@ -55,6 +55,10 @@ function createSecurityHeaders(isDev: boolean) {
 export default defineConfig(({ command }) => {
   const isDevServer = command === 'serve';
   const securityHeaders = createSecurityHeaders(isDevServer);
+  const htmlInputs = {
+    main: path.resolve(__dirname, 'index.html'),
+    generator: path.resolve(__dirname, 'generator.html'),
+  };
 
   return {
     envDir: '.',
@@ -76,6 +80,7 @@ export default defineConfig(({ command }) => {
     build: {
       chunkSizeWarningLimit: 650,
       rollupOptions: {
+        input: htmlInputs,
         output: {
           manualChunks(id) {
             if (!id.includes('node_modules')) return;

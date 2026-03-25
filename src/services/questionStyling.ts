@@ -93,10 +93,10 @@ function normalizeText(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
-export function normalizeStylingResults(
+function collectStylingResults(
   questions: TriviaQuestion[],
   payload: any
-): QuestionStylingResult[] {
+) {
   const indexed = new Map<number, QuestionStylingResult>();
   const rawResults = Array.isArray(payload?.results) ? payload.results : [];
 
@@ -116,6 +116,24 @@ export function normalizeStylingResults(
       ...(hostLeadIn ? { hostLeadIn } : {}),
     });
   });
+
+  return indexed;
+}
+
+export function getStrictStylingResults(
+  questions: TriviaQuestion[],
+  payload: any
+): Array<QuestionStylingResult | null> {
+  const indexed = collectStylingResults(questions, payload);
+
+  return questions.map((_, questionIndex) => indexed.get(questionIndex) || null);
+}
+
+export function normalizeStylingResults(
+  questions: TriviaQuestion[],
+  payload: any
+): QuestionStylingResult[] {
+  const indexed = collectStylingResults(questions, payload);
 
   return questions.map((question, questionIndex) => {
     return indexed.get(questionIndex) || {
