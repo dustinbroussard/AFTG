@@ -87,6 +87,29 @@ const QUESTION_LOADING_LINES = [
   'Warming up the next opportunity to be wrong...',
 ];
 
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
+      <path
+        fill="#EA4335"
+        d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.9-5.4 3.9-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.8 0 3.1.8 3.8 1.4l2.6-2.5C16.7 3.3 14.6 2.4 12 2.4 6.8 2.4 2.6 6.7 2.6 12s4.2 9.6 9.4 9.6c5.4 0 9-3.8 9-9.1 0-.6-.1-1.1-.2-1.6H12Z"
+      />
+      <path
+        fill="#4285F4"
+        d="M21 12.5c0-.6-.1-1.1-.2-1.6H12v3.9h5.4c-.3 1.5-1.2 2.7-2.4 3.5l3.7 2.8c2.1-2 3.3-4.9 3.3-8.6Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M6.1 14.3c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L2.3 6.8C1.5 8.4 1 10.1 1 12s.5 3.6 1.3 5.2l3.8-2.9Z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 21.6c2.6 0 4.8-.9 6.4-2.5l-3.7-2.8c-1 .7-2.2 1.2-3.7 1.2-3.2 0-5.9-2.7-5.9-6 0-.8.2-1.6.4-2.3L2.3 6.8C1.5 8.4 1 10.1 1 12c0 5.3 4.2 9.6 9.4 9.6Z"
+      />
+    </svg>
+  );
+}
+
 const ACTIVE_GAME_STORAGE_KEY = 'activeGameId';
 
 interface ResumePromptState {
@@ -2216,9 +2239,13 @@ export default function App() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             onClick={handleSignIn}
-            className="px-8 py-4 bg-white hover:bg-gray-100 text-zinc-900 rounded-xl text-lg font-black uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-[0_8px_30px_rgba(255,255,255,0.15)] flex items-center gap-3"
+            className="inline-flex h-12 items-center gap-3 rounded-xl border border-black/10 bg-white px-4 text-sm font-semibold text-[#1f1f1f] shadow-[0_8px_24px_rgba(255,255,255,0.12)] transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-[#f8f9fa] hover:shadow-[0_10px_28px_rgba(255,255,255,0.16)] active:scale-[0.99]"
+            aria-label="Sign in with Google"
           >
-            Login with Google
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white">
+              <GoogleMark />
+            </span>
+            <span className="tracking-[0.01em]">Sign in with Google</span>
           </motion.button>
 
           {error && (
