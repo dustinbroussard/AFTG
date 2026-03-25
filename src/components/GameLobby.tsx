@@ -1,16 +1,23 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Trophy, Users, Gamepad2, User, Upload, Bell, SendHorizontal, Check, X } from 'lucide-react';
+import { Trophy, Users, Gamepad2, User, Upload, Bell, SendHorizontal, Check, X, BarChart3, Trash2 } from 'lucide-react';
 import { publicAsset } from '../assets';
-import { GameInvite, RecentPlayer } from '../types';
+import { GameInvite, MatchupSummary, PlayerProfile, RecentCompletedGame, RecentPlayer } from '../types';
 
 interface GameLobbyProps {
   onStartSolo: (avatarUrl: string) => void;
   onStartMulti: (avatarUrl: string) => void;
   onJoinMulti: (code: string, avatarUrl: string) => void;
   recentPlayers: RecentPlayer[];
+  playerProfile: PlayerProfile | null;
+  recentCompletedGames: RecentCompletedGame[];
+  selectedMatchup: { opponentId: string; summary: MatchupSummary | null; games: RecentCompletedGame[] } | null;
+  isLoadingMatchup: boolean;
   incomingInvites: GameInvite[];
   onInviteRecentPlayer: (player: RecentPlayer, avatarUrl: string) => void;
+  onInspectMatchup: (player: RecentPlayer) => void;
+  onCloseMatchup: () => void;
+  onRemoveRecentPlayer: (player: RecentPlayer) => void;
   onAcceptInvite: (invite: GameInvite, avatarUrl: string) => void;
   onDeclineInvite: (invite: GameInvite) => void;
   inviteFeedback?: string | null;
@@ -21,8 +28,15 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   onStartMulti,
   onJoinMulti,
   recentPlayers,
+  playerProfile,
+  recentCompletedGames,
+  selectedMatchup,
+  isLoadingMatchup,
   incomingInvites,
   onInviteRecentPlayer,
+  onInspectMatchup,
+  onCloseMatchup,
+  onRemoveRecentPlayer,
   onAcceptInvite,
   onDeclineInvite,
   inviteFeedback,
@@ -31,6 +45,8 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState('');
+  const [showStats, setShowStats] = useState(false);
+  const [showRecentPlayers, setShowRecentPlayers] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +132,95 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
 
       {/* Main Actions */}
       <div className="w-full space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => setShowStats((current) => !current)}
+            className="h-12 rounded-xl theme-panel-strong border text-sm font-black uppercase tracking-widest transition-all duration-300"
+          >
+            <span className="inline-flex items-center gap-2"><BarChart3 className="w-4 h-4" /> My Stats</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowRecentPlayers((current) => !current)}
+            className="h-12 rounded-xl theme-panel-strong border text-sm font-black uppercase tracking-widest transition-all duration-300"
+          >
+            <span className="inline-flex items-center gap-2"><Users className="w-4 h-4" /> Recent Players</span>
+          </button>
+        </div>
+
+        {showStats && (
+          <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-5 space-y-4">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-cyan-400" />
+              <h4 className="text-sm font-black uppercase tracking-widest">My Stats</h4>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="theme-soft-surface border rounded-2xl p-4">
+                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Win Rate</p>
+                <p className="text-3xl font-black">{playerProfile?.stats.winPercentage ?? 0}%</p>
+              </div>
+              <div className="theme-soft-surface border rounded-2xl p-4">
+                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Completed Games</p>
+                <p className="text-3xl font-black">{playerProfile?.stats.completedGames ?? 0}</p>
+              </div>
+              <div className="theme-soft-surface border rounded-2xl p-4">
+                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Wins</p>
+                <p className="text-2xl font-black text-emerald-400">{playerProfile?.stats.wins ?? 0}</p>
+              </div>
+              <div className="theme-soft-surface border rounded-2xl p-4">
+                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Losses</p>
+                <p className="text-2xl font-black text-rose-400">{playerProfile?.stats.losses ?? 0}</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h5 className="text-xs font-black uppercase tracking-widest theme-text-muted">Recent Completed Games</h5>
+              {recentCompletedGames.length === 0 ? (
+                <p className="text-sm theme-text-muted">Finish a game and your latest results will show up here.</p>
+              ) : (
+                recentCompletedGames.map((game) => (
+                  <div key={game.gameId} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-bold">
+                        {game.players.map((player) => player.displayName).join(' vs ')}
+                      </p>
+                      <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                        {new Date(game.completedAt).toLocaleDateString()} • {game.categoriesUsed.join(', ') || 'No categories'}
+                      </p>
+                    </div>
+                    <p className="text-xs font-black uppercase tracking-widest theme-text-secondary">
+                      Winner: {game.players.find((player) => player.uid === game.winnerId)?.displayName || 'None'}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <h5 className="text-xs font-black uppercase tracking-widest theme-text-muted">Category Performance</h5>
+              {Object.entries(playerProfile?.stats.categoryPerformance || {}).length === 0 ? (
+                <p className="text-sm theme-text-muted">Category accuracy shows up after you finish completed games.</p>
+              ) : (
+                <div className="space-y-2">
+                  {Object.entries(playerProfile?.stats.categoryPerformance || {}).map(([category, stats]) => (
+                    <div key={category} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-bold">{category}</p>
+                        <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                          {stats.correct}/{stats.seen} correct
+                        </p>
+                      </div>
+                      <p className="text-lg font-black">{stats.percentageCorrect}%</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <motion.button type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -230,17 +335,25 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         </div>
       )}
 
+      {(showRecentPlayers || selectedMatchup) && (
       <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-cyan-400" />
             <h4 className="text-sm font-black uppercase tracking-widest">Recent Players</h4>
           </div>
-          {inviteFeedback && (
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
-              {inviteFeedback}
-            </span>
-          )}
+          <div className="flex items-center gap-3">
+            {inviteFeedback && (
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
+                {inviteFeedback}
+              </span>
+            )}
+            {selectedMatchup && (
+              <button type="button" onClick={onCloseMatchup} className="p-2 rounded-xl theme-button" aria-label="Close matchup history">
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         {recentPlayers.length === 0 ? (
@@ -248,7 +361,8 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         ) : (
           <div className="space-y-3">
             {recentPlayers.map((player) => (
-              <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
+              <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 space-y-3">
+                <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
                     {player.photoURL ? (
@@ -264,17 +378,89 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                     </p>
                   </div>
                 </div>
-                <button type="button"
-                  onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg shrink-0"
-                >
-                  <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => onInspectMatchup(player)}
+                    className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
+                  >
+                    History
+                  </button>
+                  <button type="button"
+                    onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg"
+                  >
+                    <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onRemoveRecentPlayer(player)}
+                    className="p-2 rounded-xl theme-button"
+                    aria-label={`Remove ${player.displayName} from recent players`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                </div>
+
+                {selectedMatchup?.opponentId === player.uid && (
+                  <div className="border-t pt-3 space-y-3">
+                    {isLoadingMatchup ? (
+                      <p className="text-sm theme-text-muted">Loading matchup history...</p>
+                    ) : (
+                      <>
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="theme-panel-strong border rounded-2xl p-3">
+                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
+                            <p className="text-lg font-black">
+                              {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
+                            </p>
+                          </div>
+                          <div className="theme-panel-strong border rounded-2xl p-3">
+                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
+                            <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
+                          </div>
+                          <div className="theme-panel-strong border rounded-2xl p-3">
+                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
+                            <p className="text-sm font-black">
+                              {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
+                            </p>
+                          </div>
+                        </div>
+                        {selectedMatchup.games.length === 0 ? (
+                          <p className="text-sm theme-text-muted">No completed games against this player yet.</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {selectedMatchup.games.map((game) => (
+                              <div key={game.gameId} className="theme-panel-strong border rounded-2xl p-3 flex items-center justify-between gap-3">
+                                <div>
+                                  <p className="text-sm font-bold">
+                                    Winner: {game.players.find((entry) => entry.uid === game.winnerId)?.displayName || 'None'}
+                                  </p>
+                                  <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                    {new Date(game.completedAt).toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
+                                  {Object.entries(game.finalScores).map(([uid, score]) => {
+                                    const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
+                                    return `${entry?.displayName || 'Player'} ${score}`;
+                                  }).join(' • ')}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
+      )}
 
       {/* Footer */}
       <div className="text-center space-y-4 max-w-xs">

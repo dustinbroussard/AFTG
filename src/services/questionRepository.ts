@@ -33,7 +33,6 @@ function normalizeRequestedCategory(category: string) {
 function toBankQuestion(question: TriviaQuestion, createdAt = Date.now()): TriviaQuestion {
   const canonicalId = question.questionId || question.id;
   const explanation = question.explanation || question.correctQuip || '';
-  const approvedForStorage = isQuestionApprovedForStorage(question);
 
   return omitUndefinedFields({
     ...question,
@@ -44,7 +43,7 @@ function toBankQuestion(question: TriviaQuestion, createdAt = Date.now()): Trivi
     correctIndex: Number.isInteger(question.correctIndex) ? question.correctIndex : question.answerIndex,
     answerIndex: question.answerIndex,
     explanation,
-    validationStatus: approvedForStorage ? 'approved' : (question.validationStatus || 'pending'),
+    validationStatus: question.validationStatus || 'pending',
     verificationVerdict: question.verificationVerdict,
     verificationConfidence: question.verificationConfidence,
     verificationIssues: question.verificationIssues || [],
@@ -53,6 +52,8 @@ function toBankQuestion(question: TriviaQuestion, createdAt = Date.now()): Trivi
     questionStyled: question.questionStyled,
     explanationStyled: question.explanationStyled,
     hostLeadIn: question.hostLeadIn,
+    source: question.source,
+    batchId: question.batchId,
     createdAt: question.createdAt || createdAt,
     usedCount: question.usedCount ?? 0,
     used: question.used ?? false,
@@ -70,10 +71,6 @@ function dedupeById(questions: TriviaQuestion[]) {
   });
 }
 
-function toExistingQuestionHistory(questions: TriviaQuestion[]) {
-  return questions.map(({ category, question }) => ({ category, question }));
-}
-
 async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Set<string>, count: number) {
   const bankRef = collection(db, QUESTION_COLLECTION);
   const bankQuery = query(
@@ -82,7 +79,7 @@ async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Se
     where('validationStatus', '==', 'approved'),
     orderBy('usedCount', 'asc'),
     orderBy('createdAt', 'asc'),
-    limit(Math.max(count * 10, 30))
+    limit(Math.max(count * 5, 20))
   );
 
   const snapshot = await getDocs(bankQuery);
@@ -116,7 +113,6 @@ function preferUnseenQuestions(questions: TriviaQuestion[], seenQuestionIds: Set
 
 async function storeQuestionsInBank(questions: TriviaQuestion[]) {
   for (const question of questions) {
-    if (!isQuestionApprovedForStorage(question)) continue;
     const canonical = toBankQuestion(question);
     await setDoc(doc(db, QUESTION_COLLECTION, canonical.id), canonical, { merge: true });
   }
@@ -153,6 +149,10 @@ function formatBucket(category: string, difficulty?: 'easy' | 'medium' | 'hard')
   return `${category}/${difficulty || 'mixed'}`;
 }
 
+/**
+ * Runs the full generation pipeline for a bucket.
+ * This should ideally be called from a maintenance task or background process.
+ */
 async function generateApprovedQuestionsForBucket({
   category,
   count,
@@ -179,12 +179,28 @@ async function generateApprovedQuestionsForBucket({
   }
 
   const generationPromise = (async () => {
+    // Stage 1: Generation (handled by API handler)
     const generated = await generateQuestions([category], count, existingQuestions, difficulty);
+
+    // Initial normalization
     const normalizedGenerated = generated
-      .map((question) => toBankQuestion({ ...question, category, ...(difficulty ? { difficulty } : {}) }))
+      .map((question) => toBankQuestion({ 
+        ...question, 
+        category, 
+        ...(difficulty ? { difficulty } : {}),
+        validationStatus: 'pending',
+        source: 'gemini-2.0-flash',
+      }))
       .filter((question) => question.category === category)
       .filter((question) => !difficulty || question.difficulty === difficulty);
+
+    // Stage 2: Verification and Styling are now handled server-side in the API pipeline
+    // This frontend call currently assumes the API returns styled, verified questions.
+    // We will save them with 'approved' status if they pass verification checks.
+
     const { approved: structurallyValid, rejected } = validateGeneratedQuestions(normalizedGenerated);
+    
+    // Check verification status from the payload
     const approved = structurallyValid.filter(isQuestionApprovedForStorage);
     const verificationRejected = structurallyValid.filter((question) => !isQuestionApprovedForStorage(question));
 
@@ -192,6 +208,7 @@ async function generateApprovedQuestionsForBucket({
     logStorageRejectedQuestions(verificationRejected);
 
     if (approved.length > 0) {
+      // Save passing questions to the bank as 'approved'
       await storeQuestionsInBank(approved.map((question) => ({
         ...question,
         validationStatus: 'approved',
@@ -229,6 +246,10 @@ async function fetchApprovedQuestionsByCategoryAndDifficulty(
   return getDocs(bankQuery);
 }
 
+/**
+ * Checks inventory for a category/difficulty and replenishes if low.
+ * This is non-blocking and safe for background execution.
+ */
 export async function ensureQuestionInventory({
   category,
   difficulty,
@@ -248,24 +269,33 @@ export async function ensureQuestionInventory({
     return;
   }
 
+  const snapshot = await fetchApprovedQuestionsByCategoryAndDifficulty(category, difficulty);
+  if (snapshot.size >= minimumApproved) return;
+
+  logInventory(`Low inventory ${formatBucket(category, difficulty)}: ${snapshot.size}/${minimumApproved}`);
+  
   const status = getQuestionGenerationStatus();
   if (!status.canAttemptAny) {
     logInventory(`generation skipped: AI cooldown active ${formatBucket(category, difficulty)}`);
     return;
   }
 
-  const snapshot = await fetchApprovedQuestionsByCategoryAndDifficulty(category, difficulty);
-  if (snapshot.size >= minimumApproved) return;
-
-  logInventory(`Low inventory ${formatBucket(category, difficulty)}: ${snapshot.size}/${minimumApproved}`);
   logInventory(`Replenishing ${formatBucket(category, difficulty)} with ${replenishBatchSize} questions`);
-  await generateApprovedQuestionsForBucket({
+  // This is intentionally not awaited in a way that blocks game UI, 
+  // but we call it here. In a true background setup, this might be triggered by a worker.
+  generateApprovedQuestionsForBucket({
     category,
     count: replenishBatchSize,
     difficulty,
+  }).catch(err => {
+    console.error(`[questionInventory] Replenishment failed for ${formatBucket(category, difficulty)}:`, err);
   });
 }
 
+/**
+ * Serves questions for a game session.
+ * Strictly uses approved questions from the bank.
+ */
 export async function getQuestionsForSession({
   categories,
   count,
@@ -287,34 +317,11 @@ export async function getQuestionsForSession({
     selected.push(...approved);
   }
 
-  const missingCategories = uniqueCategories.filter((category) => {
-    return selected.filter((question) => question.category === category).length < count;
-  });
-
-  if (missingCategories.length === 0) {
-    return dedupeById(selected);
-  }
-
-  const combined = [...selected];
-
-  for (const category of missingCategories) {
-    const needed = count - combined.filter((question) => question.category === category).length;
-    if (needed <= 0) continue;
-
-    const generatedForCategory = (await generateApprovedQuestionsForBucket({
-      category,
-      count: needed,
-      existingQuestions: toExistingQuestionHistory(combined),
-    }))
-      .filter((question) => !excludeIds.has(question.id))
-      .slice(0, needed);
-
-    generatedForCategory.forEach((question) => excludeIds.add(question.id));
-    combined.push(...generatedForCategory);
-  }
-
-  return dedupeById(combined);
+  // Deduplicate and return. We NO LONGER generate JIT if questions are missing.
+  // The UI should handle cases where fewer questions are returned if the bank is critically low.
+  return dedupeById(selected);
 }
+
 
 export async function markQuestionSeen({
   userId,

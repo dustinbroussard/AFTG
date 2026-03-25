@@ -1,0 +1,927 @@
+{
+  "questions": [
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The Peace of Westphalia in 1648 ended the Thirty Years' War and is often credited with establishing which key principle of international relations?",
+      "choices": [
+        "Balance of power",
+        "Divine right of kings",
+        "State sovereignty",
+        "Collective security"
+      ],
+      "correctIndex": 2,
+      "explanation": "The treaties recognized the territorial sovereignty of over 300 German states, laying a foundation for the modern state system."
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "The Great Oxygenation Event, which dramatically changed Earth's atmosphere, occurred primarily due to the metabolic activity of which group of organisms?",
+      "choices": [
+        "Green algae",
+        "Cyanobacteria",
+        "Iron-oxidizing bacteria",
+        "Methanogens"
+      ],
+      "correctIndex": 1,
+      "explanation": "Cyanobacteria produced oxygen as a waste product of photosynthesis, gradually oxygenating the atmosphere around 2.4 billion years ago."
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "In astronomy, what phenomenon is described by the Chandrasekhar limit?",
+      "choices": [
+        "The maximum mass of a white dwarf star",
+        "The minimum mass for stellar fusion",
+        "The event horizon radius of a black hole",
+        "The boundary of the habitable zone"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Chandrasekhar limit is approximately 1.4 solar masses; a white dwarf exceeding this limit will collapse into a neutron star or black hole."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Who is the only player to have won the NFL Most Valuable Player award as a kicker?",
+      "choices": [
+        "Adam Vinatieri",
+        "Morten Andersen",
+        "Mark Moseley",
+        "Justin Tucker"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mark Moseley of the Washington Redskins won the MVP award in the strike-shortened 1982 season."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Who wrote the 1939 play \"The Man Who Came to Dinner,\" a comedy about a lecturer confined to a Midwestern home after an injury?",
+      "choices": [
+        "George S. Kaufman and Moss Hart",
+        "Tennessee Williams",
+        "Arthur Miller",
+        "Neil Simon"
+      ],
+      "correctIndex": 0,
+      "explanation": "The play was co-written by George S. Kaufman and Moss Hart, based on the experiences of their friend Alexander Woollcott."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "The Battle of Alesia in 52 BCE resulted in the decisive defeat of which Gallic chieftain?",
+      "choices": [
+        "Vercingetorix",
+        "Ariovistus",
+        "Brennus",
+        "Commius"
+      ],
+      "correctIndex": 0,
+      "explanation": "Vercingetorix surrendered to Julius Caesar after the Siege of Alesia, effectively ending Gallic resistance to Roman conquest."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "In what year did professional tennis players first compete in the Olympics?",
+      "choices": [
+        "1984",
+        "1988",
+        "1992",
+        "1996"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tennis returned to the Olympics as a full medal sport for professionals at the 1988 Seoul Games after being demonstration-only in 1984."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Which computer scientist coined the term \"artificial intelligence\" in 1956?",
+      "choices": [
+        "Alan Turing",
+        "John McCarthy",
+        "Marvin Minsky",
+        "Herbert Simon"
+      ],
+      "correctIndex": 1,
+      "explanation": "John McCarthy organized the Dartmouth Conference in 1956 and coined the term \"artificial intelligence\" for the field."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which US Secretary of State was the namesake for the post-World War II initiative to provide economic aid to rebuild Western Europe?",
+      "choices": [
+        "George C. Marshall",
+        "Dean Acheson",
+        "Cordell Hull",
+        "John Foster Dulles"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Marshall Plan, officially the European Recovery Program, was named after George C. Marshall who proposed it in 1947."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which 1905 treaty, mediated by Theodore Roosevelt at a naval shipyard in Maine, formally ended the Russo-Japanese War?",
+      "choices": [
+        "Treaty of Shimonoseki",
+        "Treaty of Portsmouth",
+        "Treaty of Brest-Litovsk",
+        "Treaty of San Stefano"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Treaty of Portsmouth earned Theodore Roosevelt the Nobel Peace Prize for his role in mediating the end of the conflict between Russia and Japan."
+    },
+    {
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "Which organ in the human body is primarily responsible for pumping blood through the circulatory system?",
+      "choices": [
+        "Lungs",
+        "Brain",
+        "Heart",
+        "Liver"
+      ],
+      "correctIndex": 2,
+      "explanation": "The heart is a muscular organ that functions as a pump to circulate blood throughout the body via the vascular system."
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "Which fundamental force of nature is responsible for the radioactive decay of subatomic particles, such as beta decay?",
+      "choices": [
+        "Gravity",
+        "Strong nuclear force",
+        "Electromagnetism",
+        "Weak nuclear force"
+      ],
+      "correctIndex": 3,
+      "explanation": "The weak nuclear force, also known as the weak interaction, is responsible for particle decay and the change of one type of quark into another."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "easy",
+      "question": "Which artist's 2023-2024 'Eras Tour' became the first concert tour in history to surpass one billion dollars in total revenue?",
+      "choices": [
+        "Taylor Swift",
+        "Beyoncé",
+        "Ed Sheeran",
+        "Elton John"
+      ],
+      "correctIndex": 0,
+      "explanation": "Taylor Swift's Eras Tour reached the billion-dollar milestone in late 2023, making it the highest-grossing tour of all time."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "In the television series 'Seinfeld,' what is the title of the recurring fictional film described as 'a young girl's strange, erotic journey from Milan to Minsk'?",
+      "choices": [
+        "Rochelle, Rochelle",
+        "Death Blow",
+        "Sack Lunch",
+        "Prognosis Negative"
+      ],
+      "correctIndex": 0,
+      "explanation": "'Rochelle, Rochelle' is a long-running gag in the series, eventually appearing as a fictional musical starring Bette Midler."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "Which city hosted the first modern Olympic Games in 1896?",
+      "choices": [
+        "Rome",
+        "Athens",
+        "Paris",
+        "London"
+      ],
+      "correctIndex": 1,
+      "explanation": "The inaugural modern Olympic Games were held in Athens, Greece, to honor the ancient origins of the competition."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Who was the first athlete to win two consecutive Olympic marathon gold medals?",
+      "choices": [
+        "Abebe Bikila",
+        "Waldemar Cierpinski",
+        "Eliud Kipchoge",
+        "Frank Shorter"
+      ],
+      "correctIndex": 0,
+      "explanation": "Abebe Bikila won the marathon at the 1960 and 1964 Games, becoming the first person to defend an Olympic marathon title."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which 17th-century Dutch artist is best known for his mastery of domestic interior scenes and the painting 'Girl with a Pearl Earring'?",
+      "choices": [
+        "Rembrandt van Rijn",
+        "Johannes Vermeer",
+        "Frans Hals",
+        "Jan Steen"
+      ],
+      "correctIndex": 1,
+      "explanation": "Johannes Vermeer was a Dutch Baroque painter who specialized in middle-class domestic life and is renowned for his expert use of light."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Which revolutionary 1913 ballet score by Igor Stravinsky famously incited a riot during its premiere at the Théâtre des Champs-Élysées in Paris?",
+      "choices": [
+        "The Firebird",
+        "Petrushka",
+        "The Rite of Spring",
+        "Pulcinella"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Rite of Spring's avant-garde nature, characterized by dissonant music and unconventional choreography, led to a legendary public disturbance at its debut."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "Which major technology company developed the cloud computing platform known as Azure?",
+      "choices": [
+        "Amazon",
+        "Google",
+        "Microsoft",
+        "IBM"
+      ],
+      "correctIndex": 2,
+      "explanation": "Microsoft Azure was launched in 2010 and has since grown into one of the world's largest cloud computing platforms."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "In computer networking, what does the acronym DHCP stand for?",
+      "choices": [
+        "Domain Host Control Protocol",
+        "Dynamic Host Configuration Protocol",
+        "Digital Hyperlink Connection Process",
+        "Data Handling Communication Protocol"
+      ],
+      "correctIndex": 1,
+      "explanation": "DHCP is a network management protocol used to automatically assign IP addresses and other communication parameters to devices on a network."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which two surveyors were hired in 1763 to resolve the border dispute between Pennsylvania and Maryland?",
+      "choices": [
+        "Charles Mason and Jeremiah Dixon",
+        "Lewis and Clark",
+        "Andrew Ellicott and Benjamin Banneker",
+        "John Wesley Powell and Clarence Dutton"
+      ],
+      "correctIndex": 0,
+      "explanation": "Charles Mason and Jeremiah Dixon were commissioned in 1763 to survey the boundary, completing the work in 1767."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "What year was the Mason–Dixon Line officially accepted as the boundary between Pennsylvania and Maryland?",
+      "choices": [
+        "1767",
+        "1752",
+        "1789",
+        "1803"
+      ],
+      "correctIndex": 0,
+      "explanation": "The survey was agreed upon and accepted on October 18, 1767."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "What was the original purpose of the Mason–Dixon Line when it was surveyed in the 1760s?",
+      "choices": [
+        "To resolve a land claim dispute between the Penn and Calvert families",
+        "To divide free states from slave states",
+        "To mark the western limit of British settlement",
+        "To define the border between the U.S. and Canada"
+      ],
+      "correctIndex": 0,
+      "explanation": "It was created to settle overlapping colonial land claims between Pennsylvania's Penn family and Maryland's Calvert family, not initially as a free-slave state divide."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Which 1730s conflict arose from the disputed 40th parallel boundary between Pennsylvania and Maryland?",
+      "choices": [
+        "Cresap's War",
+        "Pontiac's War",
+        "King Philip's War",
+        "Yamasee War"
+      ],
+      "correctIndex": 0,
+      "explanation": "Cresap's War erupted in the 1730s over competing colonial charters claiming the 40th parallel."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "At what latitude was the Mason–Dixon Line ultimately fixed in 1767?",
+      "choices": [
+        "39° 43′ north",
+        "40° 00′ north",
+        "38° 50′ north",
+        "41° 15′ north"
+      ],
+      "correctIndex": 0,
+      "explanation": "The final surveyed line was set at 39° 43′ north latitude."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "What feature on the original limestone crownstones identified Pennsylvania's side of the line?",
+      "choices": [
+        "The Penn family crest",
+        "The letter P",
+        "The year 1767",
+        "A compass rose"
+      ],
+      "correctIndex": 0,
+      "explanation": "Crownstones placed every five miles bore the Penn family crest on the northern face."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "In what year did the United States purchase Alaska from Russia?",
+      "choices": [
+        "1803",
+        "1867",
+        "1898",
+        "1917"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Alaska Purchase, also known as Seward's Folly, occurred in 1867 for $7.2 million."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which ancient civilization is credited with building the pyramids at Giza?",
+      "choices": [
+        "Mesopotamians",
+        "Romans",
+        "Egyptians",
+        "Mayans"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Egyptians constructed the Great Pyramids during the Old Kingdom period around 2580–2560 BCE."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "What 1820 agreement temporarily balanced the number of slave and free states in the U.S.?",
+      "choices": [
+        "Kansas-Nebraska Act",
+        "Missouri Compromise",
+        "Compromise of 1850",
+        "Wilmot Proviso"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Missouri Compromise admitted Missouri as a slave state and Maine as a free state while prohibiting slavery north of the 36°30′ parallel."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the Carthaginian general that led his army and elephants across the Alps during the Second Punic War?",
+      "choices": [
+        "Scipio Africanus",
+        "Hannibal Barca",
+        "Julius Caesar",
+        "Alexander the Great"
+      ],
+      "correctIndex": 1,
+      "explanation": "Hannibal's daring invasion of Italy in 218 BCE nearly defeated Rome."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which U.S. constitutional amendment, ratified in 1913, authorized a federal income tax?",
+      "choices": [
+        "16th",
+        "17th",
+        "18th",
+        "19th"
+      ],
+      "correctIndex": 0,
+      "explanation": "The 16th Amendment granted Congress the power to levy income taxes without apportionment among the states."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "What battle in 490 BCE is traditionally associated with the origin of the marathon race?",
+      "choices": [
+        "Thermopylae",
+        "Salamis",
+        "Marathon",
+        "Plataea"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Greek victory at Marathon led to the legendary run by Pheidippides to Athens."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which U.S. president enacted the New Deal programs during the Great Depression?",
+      "choices": [
+        "Herbert Hoover",
+        "Franklin D. Roosevelt",
+        "Harry Truman",
+        "Dwight D. Eisenhower"
+      ],
+      "correctIndex": 1,
+      "explanation": "Franklin D. Roosevelt introduced the New Deal in 1933 as a series of programs to provide relief, recovery, and reform during the Great Depression."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "The United States purchased Alaska from which country in 1867?",
+      "choices": [
+        "Canada",
+        "Russia",
+        "France",
+        "Britain"
+      ],
+      "correctIndex": 1,
+      "explanation": "Secretary of State William Seward negotiated the purchase of Alaska from Russia for about $7.2 million."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "What was the name of the 1215 document signed by King John of England that limited royal power?",
+      "choices": [
+        "Magna Carta",
+        "Bill of Rights",
+        "Edict of Nantes",
+        "Treaty of Versailles"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Magna Carta established principles of limited government and influenced later constitutional developments."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Which French military leader and emperor was defeated at the Battle of Waterloo in 1815?",
+      "choices": [
+        "Louis XIV",
+        "Napoleon Bonaparte",
+        "Charles de Gaulle",
+        "Charlemagne"
+      ],
+      "correctIndex": 1,
+      "explanation": "Napoleon Bonaparte's defeat at Waterloo marked the end of his reign and the Napoleonic Wars."
+    },
+    {
+      "category": "History",
+      "difficulty": "easy",
+      "question": "The 'I Have a Dream' speech was delivered by Martin Luther King Jr. during which 1963 event?",
+      "choices": [
+        "The Selma to Montgomery March",
+        "The Montgomery Bus Boycott",
+        "The March on Washington",
+        "The Freedom Rides"
+      ],
+      "correctIndex": 2,
+      "explanation": "King delivered the speech from the steps of the Lincoln Memorial during the March on Washington for Jobs and Freedom."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Which Carthaginian general famously crossed the Alps with war elephants during the Second Punic War?",
+      "choices": [
+        "Hamilcar Barca",
+        "Hasdrubal",
+        "Hannibal",
+        "Scipio Africanus"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hannibal Barca led his army and elephants across the Alps in 218 BCE to invade Italy."
+    },
+    {
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the primary author of the United States Declaration of Independence?",
+      "choices": [
+        "Benjamin Franklin",
+        "John Adams",
+        "Thomas Jefferson",
+        "Alexander Hamilton"
+      ],
+      "correctIndex": 2,
+      "explanation": "Thomas Jefferson was chosen by the Committee of Five to draft the document in 1776."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Which Chinese dynasty was founded by Kublai Khan after the conquest of the Song Dynasty?",
+      "choices": [
+        "Ming Dynasty",
+        "Yuan Dynasty",
+        "Tang Dynasty",
+        "Qing Dynasty"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Yuan Dynasty (1271–1368) was established by the Mongol leader Kublai Khan."
+    },
+    {
+      "category": "History",
+      "difficulty": "hard",
+      "question": "The 1648 Treaty of Westphalia is most famous for ending which long-standing European conflict?",
+      "choices": [
+        "The Hundred Years' War",
+        "The Napoleonic Wars",
+        "The Thirty Years' War",
+        "The War of the Roses"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Peace of Westphalia ended the Thirty Years' War and established the modern concept of state sovereignty."
+    },
+    {
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "Which planet in our solar system is known as the 'Red Planet' due to its iron oxide surface?",
+      "choices": [
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mars appears red because of iron oxide, or rust, on its surface."
+    },
+    {
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "In biology, what is the basic unit of life that all living organisms are composed of?",
+      "choices": [
+        "Atom",
+        "Molecule",
+        "Cell",
+        "Organ"
+      ],
+      "correctIndex": 2,
+      "explanation": "The cell is the smallest structural and functional unit of an organism."
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "Which chemical element has the symbol 'Au' on the Periodic Table?",
+      "choices": [
+        "Silver",
+        "Gold",
+        "Copper",
+        "Aluminum"
+      ],
+      "correctIndex": 1,
+      "explanation": "The symbol Au comes from the Latin word for gold, 'aurum'."
+    },
+    {
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What type of rock is formed from the cooling and solidification of magma or lava?",
+      "choices": [
+        "Sedimentary",
+        "Metamorphic",
+        "Igneous",
+        "Limestone"
+      ],
+      "correctIndex": 2,
+      "explanation": "Igneous rocks, such as basalt and granite, form when molten rock cools."
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "In physics, what is the name of the principle stating that it is impossible to simultaneously know both the position and momentum of a particle?",
+      "choices": [
+        "Pauli Exclusion Principle",
+        "Heisenberg Uncertainty Principle",
+        "Schrödinger's Law",
+        "Newton's Third Law"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Heisenberg Uncertainty Principle is a fundamental concept in quantum mechanics introduced by Werner Heisenberg."
+    },
+    {
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "Which organelles are known as the 'powerhouses of the cell' because they generate most of the cell's supply of ATP?",
+      "choices": [
+        "Ribosomes",
+        "Lysosomes",
+        "Mitochondria",
+        "Golgi Apparatus"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mitochondria are responsible for cellular respiration and energy production."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "easy",
+      "question": "Which 2023 film, directed by Greta Gerwig, became the highest-grossing film ever directed by a solo female director?",
+      "choices": [
+        "Oppenheimer",
+        "Barbie",
+        "Poor Things",
+        "The Marvels"
+      ],
+      "correctIndex": 1,
+      "explanation": "Barbie was a massive commercial success, surpassing $1.4 billion at the global box office."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "easy",
+      "question": "Who is the 'Queen of Pop' known for hits like 'Like a Virgin' and 'Vogue'?",
+      "choices": [
+        "Whitney Houston",
+        "Madonna",
+        "Cher",
+        "Janet Jackson"
+      ],
+      "correctIndex": 1,
+      "explanation": "Madonna has been a dominant force in pop music since the early 1980s."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "Which streaming series is set in the fictional town of Hawkins, Indiana?",
+      "choices": [
+        "Dark",
+        "Stranger Things",
+        "Outer Banks",
+        "The Umbrella Academy"
+      ],
+      "correctIndex": 1,
+      "explanation": "Stranger Things follows a group of kids dealing with supernatural events in Hawkins."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "medium",
+      "question": "What is the name of the viral 'dance' challenge that originated from the 2022 Netflix series 'Wednesday'?",
+      "choices": [
+        "The Renegade",
+        "The Floss",
+        "The Bloody Mary Dance",
+        "The Savage"
+      ],
+      "correctIndex": 2,
+      "explanation": "Jenna Ortega's dance to 'Goo Goo Muck' went viral, often paired with Lady Gaga's 'Bloody Mary' on TikTok."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "Which artist holds the record for the most Grammy Award wins of all time as of 2024?",
+      "choices": [
+        "Georg Solti",
+        "Quincy Jones",
+        "Beyoncé",
+        "Alison Krauss"
+      ],
+      "correctIndex": 2,
+      "explanation": "Beyoncé broke the record in 2023 and currently holds 32 Grammy Awards."
+    },
+    {
+      "category": "Pop Culture",
+      "difficulty": "hard",
+      "question": "In the Marvel Cinematic Universe, what is the name of the fictional African nation ruled by T'Challa?",
+      "choices": [
+        "Genosha",
+        "Latveria",
+        "Wakanda",
+        "Zamunda"
+      ],
+      "correctIndex": 2,
+      "explanation": "Wakanda is a technologically advanced nation hidden from the rest of the world."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "Which legendary basketball player is known by the nickname 'His Airness' and won six NBA championships with the Chicago Bulls?",
+      "choices": [
+        "LeBron James",
+        "Kobe Bryant",
+        "Michael Jordan",
+        "Shaquille O'Neal"
+      ],
+      "correctIndex": 2,
+      "explanation": "Michael Jordan led the Bulls to two 'three-peats' in the 1990s."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "The FIFA World Cup is an international competition held every four years for which sport?",
+      "choices": [
+        "Rugby",
+        "Cricket",
+        "Soccer",
+        "Hockey"
+      ],
+      "correctIndex": 2,
+      "explanation": "The FIFA World Cup is the most prestigious association football (soccer) tournament in the world."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "Which tennis player holds the record for the most Grand Slam men's singles titles as of 2024?",
+      "choices": [
+        "Roger Federer",
+        "Rafael Nadal",
+        "Novak Djokovic",
+        "Pete Sampras"
+      ],
+      "correctIndex": 2,
+      "explanation": "Novak Djokovic has won 24 Grand Slam titles, surpassing Nadal and Federer."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "In baseball, which player holds the all-time record for most career home runs in Major League Baseball (MLB)?",
+      "choices": [
+        "Babe Ruth",
+        "Hank Aaron",
+        "Barry Bonds",
+        "Alex Rodriguez"
+      ],
+      "correctIndex": 2,
+      "explanation": "Barry Bonds finished his career with 762 home runs, surpassing Hank Aaron's 755."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Who was the first gymnast to be awarded a perfect score of 10.0 in an Olympic Games?",
+      "choices": [
+        "Mary Lou Retton",
+        "Nadia Comăneci",
+        "Simone Biles",
+        "Olga Korbut"
+      ],
+      "correctIndex": 1,
+      "explanation": "Nadia Comăneci achieved the first perfect 10 at the 1976 Montreal Olympics."
+    },
+    {
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "Which NFL team has won the most Super Bowl titles in history as of 2024?",
+      "choices": [
+        "Dallas Cowboys",
+        "San Francisco 49ers",
+        "Pittsburgh Steelers and New England Patriots",
+        "Green Bay Packers"
+      ],
+      "correctIndex": 2,
+      "explanation": "Both the Steelers and Patriots have won six Super Bowls."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "easy",
+      "question": "Who painted the 16th-century portrait known as the Mona Lisa?",
+      "choices": [
+        "Michelangelo",
+        "Raphael",
+        "Leonardo da Vinci",
+        "Donatello"
+      ],
+      "correctIndex": 2,
+      "explanation": "Leonardo da Vinci painted the Mona Lisa between 1503 and 1506."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "easy",
+      "question": "Which American musical genre originated in the late 19th century and is characterized by its use of the 'blue notes' and call-and-response patterns?",
+      "choices": [
+        "Jazz",
+        "Blues",
+        "Country",
+        "Rock and Roll"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Blues originated in the Deep South of the United States around the end of the 19th century."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Who wrote the classic 1925 novel 'The Great Gatsby', which explores themes of wealth and the American Dream?",
+      "choices": [
+        "Ernest Hemingway",
+        "F. Scott Fitzgerald",
+        "William Faulkner",
+        "John Steinbeck"
+      ],
+      "correctIndex": 1,
+      "explanation": "F. Scott Fitzgerald wrote the novel, which is now considered a masterpiece of American literature."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "medium",
+      "question": "Which film director is known for his 'master of suspense' title and directed movies like 'Psycho' and 'The Birds'?",
+      "choices": [
+        "Steven Spielberg",
+        "Alfred Hitchcock",
+        "Martin Scorsese",
+        "Stanley Kubrick"
+      ],
+      "correctIndex": 1,
+      "explanation": "Alfred Hitchcock was a pioneer in the suspense and psychological thriller film genres."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Which 20th-century art movement, led by figures like Salvador Dalí, sought to channel the unconscious as a means to unlock the power of imagination?",
+      "choices": [
+        "Impressionism",
+        "Cubism",
+        "Surrealism",
+        "Pop Art"
+      ],
+      "correctIndex": 2,
+      "explanation": "Surrealism often featured dreamlike, bizarre imagery and unexpected juxtapositions."
+    },
+    {
+      "category": "Art & Music",
+      "difficulty": "hard",
+      "question": "Which composer's 'Ninth Symphony' was the first major example of a composer using voices in a symphony?",
+      "choices": [
+        "Wolfgang Amadeus Mozart",
+        "Ludwig van Beethoven",
+        "Johannes Brahms",
+        "Pyotr Ilyich Tchaikovsky"
+      ],
+      "correctIndex": 1,
+      "explanation": "Beethoven's Symphony No. 9, completed in 1824, includes the famous 'Ode to Joy' chorus."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "Which technology company, founded by Bill Gates and Paul Allen, is known for the Windows operating system?",
+      "choices": [
+        "Apple",
+        "Microsoft",
+        "Google",
+        "IBM"
+      ],
+      "correctIndex": 1,
+      "explanation": "Microsoft was founded in 1975 and became the dominant PC software provider."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "What does the 'URL' in a web address stand for?",
+      "choices": [
+        "Universal Resource Link",
+        "Uniform Resource Locator",
+        "Unified Research Locator",
+        "Universal Radio Link"
+      ],
+      "correctIndex": 1,
+      "explanation": "A URL is the address used to access a resource on the internet."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "In which year was the first iPhone released, changing the consumer technology landscape?",
+      "choices": [
+        "2005",
+        "2007",
+        "2009",
+        "2010"
+      ],
+      "correctIndex": 1,
+      "explanation": "Steve Jobs introduced the first iPhone on January 9, 2007, and it went on sale in June."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "Which programming language, created by Guido van Rossum and released in 1991, is known for its readability and use in AI?",
+      "choices": [
+        "Java",
+        "C++",
+        "Python",
+        "Ruby"
+      ],
+      "correctIndex": 2,
+      "explanation": "Python is widely used in data science, artificial intelligence, and web development."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Who is often considered the 'world's first computer programmer' for her work on Charles Babbage's Analytical Engine?",
+      "choices": [
+        "Grace Hopper",
+        "Ada Lovelace",
+        "Katherine Johnson",
+        "Margaret Hamilton"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ada Lovelace wrote the first algorithm intended to be carried out by a machine in the mid-19th century."
+    },
+    {
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "What was the name of the first artificial intelligence program, created in 1956?",
+      "choices": [
+        "Deep Blue",
+        "ELIZA",
+        "Logic Theorist",
+        "Watson"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Logic Theorist, developed by Allen Newell and Herbert Simon, was the first AI program designed to mimic human problem-solving."
+    }
+  ]
+}

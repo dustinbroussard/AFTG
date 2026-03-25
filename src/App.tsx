@@ -20,10 +20,10 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { auth, db, signIn, finishSignInRedirect, handleFirestoreError, OperationType } from './firebase';
-import { ChatMessage, GameInvite, GameState, Player, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getPlayableCategories } from './types';
+import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getPlayableCategories } from './types';
 import { QUESTION_COLLECTION } from './services/questionCollections';
 import { ensureQuestionInventory, getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
-import { acceptInvite, declineInvite, expireInvite, loadRecentPlayers, sendInvite, subscribeToIncomingInvites } from './services/invites';
+import { acceptInvite, declineInvite, expireInvite, sendInvite, subscribeToIncomingInvites } from './services/invites';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
@@ -45,6 +45,7 @@ import { omitUndefinedFields } from './services/firestoreData';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateHeckles } from './services/gemini';
 import { notifySafe, requestNotificationPermissionSafe } from './services/notify';
+import { ensurePlayerProfile, loadMatchupHistory, recordCompletedGame, removeRecentPlayer, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers } from './services/playerProfiles';
 
 type ResultPhase = 'idle' | 'revealing' | 'explaining' | 'specialEvent';
 type QueuedSpecialEvent =
@@ -85,6 +86,19 @@ const QUESTION_LOADING_LINES = [
   'Retrieving trivia from the smug part of the internet...',
   'Warming up the next opportunity to be wrong...',
 ];
+
+const ACTIVE_GAME_STORAGE_KEY = 'activeGameId';
+
+interface ResumePromptState {
+  game: GameState;
+  isSolo: boolean;
+}
+
+interface MatchupHistoryState {
+  opponentId: string;
+  summary: MatchupSummary | null;
+  games: RecentCompletedGame[];
+}
 
 export default function App() {
   const QUESTION_TIME_LIMIT_SECONDS = 20;
@@ -130,10 +144,14 @@ export default function App() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [recentPlayers, setRecentPlayers] = useState<RecentPlayer[]>([]);
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
   const [incomingInvites, setIncomingInvites] = useState<GameInvite[]>([]);
   const [inviteFeedback, setInviteFeedback] = useState<string | null>(null);
 
   const [pastGames, setPastGames] = useState<GameState[]>([]);
+  const [recentCompletedGames, setRecentCompletedGames] = useState<RecentCompletedGame[]>([]);
+  const [selectedMatchup, setSelectedMatchup] = useState<MatchupHistoryState | null>(null);
+  const [isLoadingMatchup, setIsLoadingMatchup] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
@@ -149,6 +167,10 @@ export default function App() {
   const [showHeckle, setShowHeckle] = useState(false);
   const [heckleQueue, setHeckleQueue] = useState<string[]>([]);
   const [confirmAction, setConfirmAction] = useState<'quit' | 'signout' | null>(null);
+  const [shouldBlurQuestionBackground, setShouldBlurQuestionBackground] = useState(false);
+  const [resumePrompt, setResumePrompt] = useState<ResumePromptState | null>(null);
+  const [isCheckingForResume, setIsCheckingForResume] = useState(false);
+  const [resumeBanner, setResumeBanner] = useState<string | null>(null);
 
   const themeAudioRef = useRef<HTMLAudioElement>(null);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
@@ -179,6 +201,8 @@ export default function App() {
   const welcomeAudioSrcRef = useRef(
     Math.random() < 0.5 ? publicAsset('welcome1.mp3') : publicAsset('welcome2.mp3')
   );
+  const restoredQuestionStartedAtRef = useRef<number | null>(null);
+  const pendingResumeRestoreRef = useRef<string | null>(null);
 
   const existingQuestionIds = questions.map((question) => question.questionId || question.id);
   const playableCategories = getPlayableCategories();
@@ -188,8 +212,6 @@ export default function App() {
   const isQuestionActive =
     !!currentQuestion &&
     (resultPhase === 'idle' || resultPhase === 'revealing' || resultPhase === 'explaining');
-  const isQuestionResolutionActive =
-    !!currentQuestion && (resultPhase === 'revealing' || resultPhase === 'explaining' || !!roast);
 
   const updateSettings = (patch: Partial<UserSettings>) => {
     setSettings((current) => ({
@@ -247,13 +269,75 @@ export default function App() {
   const openSignOutConfirm = () => setConfirmAction('signout');
   const closeConfirm = () => setConfirmAction(null);
 
-  const handleConfirmedQuit = () => {
+  const persistActiveGameId = (gameId: string | null) => {
+    if (typeof window === 'undefined') return;
+
+    if (gameId) {
+      window.localStorage.setItem(ACTIVE_GAME_STORAGE_KEY, gameId);
+      return;
+    }
+
+    window.localStorage.removeItem(ACTIVE_GAME_STORAGE_KEY);
+  };
+
+  const getStoredActiveGameId = () => {
+    if (typeof window === 'undefined') return null;
+    return window.localStorage.getItem(ACTIVE_GAME_STORAGE_KEY);
+  };
+
+  const updatePlayerActivity = async (gameId: string, playerUid: string, isResume = false) => {
+    const activity = Date.now();
+    const playerRef = doc(db, 'games', gameId, 'players', playerUid);
+    await updateDoc(playerRef, omitUndefinedFields({
+      lastActive: activity,
+      lastResumedAt: isResume ? activity : undefined,
+    }));
+  };
+
+  const abandonGame = async (gameId: string) => {
+    const gameRef = doc(db, 'games', gameId);
+    const gameSnapshot = await getDoc(gameRef);
+    if (!gameSnapshot.exists()) {
+      persistActiveGameId(null);
+      return;
+    }
+
+    const gameData = gameSnapshot.data() as GameState;
+    if (gameData.status === 'completed' || gameData.status === 'abandoned') {
+      persistActiveGameId(null);
+      return;
+    }
+
+    await updateDoc(gameRef, {
+      status: 'abandoned',
+      currentQuestionId: null,
+      currentQuestionCategory: null,
+      currentQuestionStartedAt: null,
+      lastUpdated: serverTimestamp(),
+    });
+    persistActiveGameId(null);
+  };
+
+  const clearResumePrompt = () => {
+    setResumePrompt(null);
+    setIsCheckingForResume(false);
+  };
+
+  const handleConfirmedQuit = async () => {
     closeConfirm();
+    if (game?.id) {
+      try {
+        await abandonGame(game.id);
+      } catch (err) {
+        handleFirestoreError(err, OperationType.UPDATE, `games/${game.id}`);
+      }
+    }
     resetGame();
   };
 
   const handleConfirmedSignOut = async () => {
     closeConfirm();
+    persistActiveGameId(null);
     await auth.signOut();
   };
 
@@ -265,6 +349,8 @@ export default function App() {
       photoURL: player.avatarUrl || '',
       lastPlayedAt: Date.now(),
       lastGameId: gameId,
+      hidden: false,
+      updatedAt: Date.now(),
     }, { merge: true });
   };
 
@@ -297,7 +383,8 @@ export default function App() {
         score: 0,
         streak: 0,
         completedCategories: [],
-        avatarUrl
+        avatarUrl,
+        lastActive: Date.now(),
       });
 
       await updateDoc(gameRef, {
@@ -346,6 +433,39 @@ export default function App() {
         })
       );
     }
+  };
+
+  const syncGameQuestionIds = async (gameId: string, questionIds: string[]) => {
+    await updateDoc(doc(db, 'games', gameId), {
+      questionIds,
+      lastUpdated: serverTimestamp(),
+    });
+  };
+
+  const setActiveGameQuestion = async (gameId: string, category: string, questionId: string, questionIndex: number, startedAt: number) => {
+    await updateDoc(doc(db, 'games', gameId), {
+      currentQuestionId: questionId,
+      currentQuestionCategory: category,
+      currentQuestionIndex: questionIndex,
+      currentQuestionStartedAt: startedAt,
+      lastUpdated: serverTimestamp(),
+    });
+  };
+
+  const clearActiveGameQuestion = async (gameId: string) => {
+    await updateDoc(doc(db, 'games', gameId), {
+      currentQuestionId: null,
+      currentQuestionCategory: null,
+      currentQuestionStartedAt: null,
+      lastUpdated: serverTimestamp(),
+    });
+  };
+
+  const recordGameAnswer = async (gameId: string, questionId: string, playerUid: string, answer: GameAnswer) => {
+    await updateDoc(doc(db, 'games', gameId), {
+      [`answers.${questionId}.${playerUid}`]: answer,
+      lastUpdated: serverTimestamp(),
+    });
   };
 
   const specialEventPriority = (event: QueuedSpecialEvent) => {
@@ -458,6 +578,7 @@ export default function App() {
     setSelectedCategory(null);
     setSelectedAnswer(null);
     setCorrectAnswer(null);
+    setShouldBlurQuestionBackground(false);
     setQuestionClockNow(Date.now());
   };
 
@@ -489,7 +610,9 @@ export default function App() {
     }
 
     activeQuestionIdRef.current = currentQuestion.id;
-    questionDeadlineRef.current = Date.now() + (QUESTION_TIME_LIMIT_SECONDS * 1000);
+    const questionStartedAt = restoredQuestionStartedAtRef.current ?? Date.now();
+    restoredQuestionStartedAtRef.current = null;
+    questionDeadlineRef.current = questionStartedAt + (QUESTION_TIME_LIMIT_SECONDS * 1000);
     questionResolvedRef.current = false;
     resolvedQuestionIdRef.current = null;
     setQuestionClockNow(Date.now());
@@ -528,7 +651,7 @@ export default function App() {
     !revealedCategory &&
     !isHighPriorityOverlayActive;
 
-  const showCategoryReveal = (category: string, question: TriviaQuestion) => {
+  const showCategoryReveal = (category: string, question: TriviaQuestion, questionIndex: number) => {
     if (categoryRevealTimeoutRef.current) {
       window.clearTimeout(categoryRevealTimeoutRef.current);
     }
@@ -539,9 +662,16 @@ export default function App() {
 
     categoryRevealTimeoutRef.current = window.setTimeout(() => {
       setRevealedCategory(null);
+      const questionStartedAt = Date.now();
+      restoredQuestionStartedAtRef.current = questionStartedAt;
       setCurrentQuestion(question);
-      setQuestionClockNow(Date.now());
+      setQuestionClockNow(questionStartedAt);
       categoryRevealTimeoutRef.current = null;
+      if (game?.id) {
+        void setActiveGameQuestion(game.id, category, question.id, questionIndex, questionStartedAt).catch((err) => {
+          handleFirestoreError(err, OperationType.UPDATE, `games/${game.id}`);
+        });
+      }
     }, 1100);
   };
 
@@ -666,6 +796,9 @@ export default function App() {
     if (game?.status === 'completed' && game.winnerId === user?.uid) {
       setQueuedSpecialEvent(null);
       clearCurrentTurnView();
+      if (game.id) {
+        persistActiveGameId(null);
+      }
       setResultPhase('idle');
       return;
     }
@@ -673,6 +806,11 @@ export default function App() {
     const nextEvent = queuedSpecialEvent;
     setQueuedSpecialEvent(null);
     clearCurrentTurnView();
+    if (game?.id) {
+      void clearActiveGameQuestion(game.id).catch((err) => {
+        handleFirestoreError(err, OperationType.UPDATE, `games/${game.id}`);
+      });
+    }
 
     if (nextEvent) {
       showSpecialEvent(nextEvent);
@@ -770,19 +908,129 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (!user) {
+      setPlayerProfile(null);
+      return;
+    }
+
+    ensurePlayerProfile(user).catch((err) => {
+      if (import.meta.env.DEV) {
+        console.warn('[playerProfile] Failed to ensure profile:', err);
+      }
+    });
+  }, [user]);
+
+  useEffect(() => {
+    if (!game?.id) return;
+
+    if (game.status === 'active') {
+      persistActiveGameId(game.id);
+      return;
+    }
+
+    if (game.status === 'completed' || game.status === 'abandoned') {
+      persistActiveGameId(null);
+    }
+  }, [game?.id, game?.status]);
+
+  useEffect(() => {
+    if (!user?.uid || game || resumePrompt || isCheckingForResume) return;
+
+    const storedGameId = getStoredActiveGameId();
+    if (!storedGameId) return;
+
+    let cancelled = false;
+    setIsCheckingForResume(true);
+
+    getDoc(doc(db, 'games', storedGameId))
+      .then((snapshot) => {
+        if (cancelled) return;
+
+        if (!snapshot.exists()) {
+          persistActiveGameId(null);
+          setIsCheckingForResume(false);
+          return;
+        }
+
+        const storedGame = { id: snapshot.id, ...snapshot.data() } as GameState;
+        if (storedGame.status !== 'active' || !storedGame.playerIds.includes(user.uid)) {
+          persistActiveGameId(null);
+          setIsCheckingForResume(false);
+          return;
+        }
+
+        setIsSolo(storedGame.playerIds.length === 1);
+        setResumePrompt({
+          game: storedGame,
+          isSolo: storedGame.playerIds.length === 1,
+        });
+        setIsCheckingForResume(false);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          handleFirestoreError(err, OperationType.GET, `games/${storedGameId}`);
+          setIsCheckingForResume(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [game, isCheckingForResume, resumePrompt, user?.uid]);
+
+  useEffect(() => {
     if (!user?.uid) {
       setRecentPlayers([]);
       return;
     }
 
-    loadRecentPlayers(user.uid)
-      .then(setRecentPlayers)
-      .catch((err) => {
+    return subscribeRecentPlayers(
+      user.uid,
+      setRecentPlayers,
+      (err) => {
+        setRecentPlayers([]);
         if (import.meta.env.DEV) {
-          console.warn('[recentPlayers] Failed to load:', err);
+          console.warn('[recentPlayers] Failed to subscribe:', err);
         }
-      });
-  }, [user?.uid, game?.id]);
+      }
+    );
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!user?.uid) {
+      setPlayerProfile(null);
+      return;
+    }
+
+    return subscribePlayerProfile(
+      user.uid,
+      setPlayerProfile,
+      (err) => {
+        setPlayerProfile(null);
+        if (import.meta.env.DEV) {
+          console.warn('[playerProfile] Failed to subscribe:', err);
+        }
+      }
+    );
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!user?.uid) {
+      setRecentCompletedGames([]);
+      return;
+    }
+
+    return subscribeRecentCompletedGames(
+      user.uid,
+      setRecentCompletedGames,
+      (err) => {
+        setRecentCompletedGames([]);
+        if (import.meta.env.DEV) {
+          console.warn('[gameHistory] Failed to subscribe:', err);
+        }
+      }
+    );
+  }, [user?.uid]);
 
   useEffect(() => {
     if (!user?.uid) {
@@ -807,6 +1055,12 @@ export default function App() {
     const timeout = window.setTimeout(() => setInviteFeedback(null), 3000);
     return () => window.clearTimeout(timeout);
   }, [inviteFeedback]);
+
+  useEffect(() => {
+    if (!resumeBanner) return;
+    const timeout = window.setTimeout(() => setResumeBanner(null), 3500);
+    return () => window.clearTimeout(timeout);
+  }, [resumeBanner]);
 
   useEffect(() => {
     if (!isFetchingQuestions) return;
@@ -883,6 +1137,12 @@ export default function App() {
   }, [game?.status, game?.winnerId, user?.uid, sfxEnabled, lastTrashTalkEvent]);
 
   useEffect(() => {
+    if (game?.status !== 'abandoned') return;
+    resetGame();
+    setError('This match was abandoned. Starting fresh.');
+  }, [game?.status]);
+
+  useEffect(() => {
     if (!activeTrashTalkEvent || !activeTrashTalk) return;
 
     const timeoutMs = activeTrashTalkEvent === 'MATCH_LOSS' ? 4500 : 2500;
@@ -943,6 +1203,111 @@ export default function App() {
     };
   }, [game?.id]);
 
+  const handleResumeGame = async () => {
+    if (!resumePrompt || !user?.uid) return;
+
+    const resumedGame = resumePrompt.game;
+    if (!resumePrompt.isSolo) {
+      void requestTurnNotificationPermission();
+    }
+    setIsSolo(resumePrompt.isSolo);
+    setGame(resumedGame);
+    pendingResumeRestoreRef.current = resumedGame.id;
+    persistActiveGameId(resumedGame.id);
+    clearResumePrompt();
+
+    try {
+      await updatePlayerActivity(resumedGame.id, user.uid, true);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `games/${resumedGame.id}/players/${user.uid}`);
+    }
+  };
+
+  const handleStartNewInstead = async () => {
+    const resumeGameId = resumePrompt?.game.id || getStoredActiveGameId();
+    clearResumePrompt();
+    setIsSolo(false);
+
+    if (!resumeGameId) {
+      persistActiveGameId(null);
+      return;
+    }
+
+    try {
+      await abandonGame(resumeGameId);
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `games/${resumeGameId}`);
+      persistActiveGameId(null);
+    }
+  };
+
+  useEffect(() => {
+    if (!pendingResumeRestoreRef.current || pendingResumeRestoreRef.current !== game?.id || !user?.uid) return;
+
+    const questionOrder = game.questionIds || [];
+    const currentQuestionId = game.currentQuestionId || (
+      typeof game.currentQuestionIndex === 'number' && game.currentQuestionIndex >= 0
+        ? questionOrder[game.currentQuestionIndex] || null
+        : null
+    );
+
+    const currentQuestionAnswer = currentQuestionId ? game.answers?.[currentQuestionId]?.[user.uid] : undefined;
+    const shouldRestoreQuestionCard =
+      !!currentQuestionId &&
+      (game.currentTurn === user.uid || !!currentQuestionAnswer);
+
+    if (shouldRestoreQuestionCard && questions.length === 0) {
+      return;
+    }
+
+    pendingResumeRestoreRef.current = null;
+    setRevealedCategory(null);
+    setSelectedCategory(game.currentQuestionCategory || null);
+    setShouldBlurQuestionBackground(false);
+
+    if (!shouldRestoreQuestionCard || !currentQuestionId) {
+      setRoast(null);
+      setSelectedAnswer(null);
+      setCorrectAnswer(null);
+      setCurrentQuestion(null);
+      setResultPhase('idle');
+      return;
+    }
+
+    const restoredQuestion = questions.find((question) => question.id === currentQuestionId || question.questionId === currentQuestionId);
+    if (!restoredQuestion) {
+      setRoast(null);
+      setSelectedAnswer(null);
+      setCorrectAnswer(null);
+      setCurrentQuestion(null);
+      setResultPhase('idle');
+      return;
+    }
+
+    restoredQuestionStartedAtRef.current = game.currentQuestionStartedAt || Date.now();
+    setCurrentQuestion(restoredQuestion);
+
+    if (!currentQuestionAnswer) {
+      setRoast(null);
+      setSelectedAnswer(null);
+      setCorrectAnswer(null);
+      setResultPhase('idle');
+      return;
+    }
+
+    setSelectedAnswer(currentQuestionAnswer.answerIndex);
+    setCorrectAnswer(restoredQuestion.answerIndex);
+    setShouldBlurQuestionBackground(true);
+    setRoast({
+      explanation: restoredQuestion.explanation,
+      isCorrect: currentQuestionAnswer.isCorrect,
+      questionId: restoredQuestion.questionId || restoredQuestion.id,
+      userId: user.uid,
+      gameId: game.id,
+    });
+    setResultPhase('explaining');
+  }, [game, questions, user?.uid]);
+
   useEffect(() => {
     if (!game || !user || players.length === 0) {
       prevPlayersRef.current = players;
@@ -959,6 +1324,26 @@ export default function App() {
       const gainedTrophy = (opponent.completedCategories || []).some((category) => !previousCompleted.has(category));
       if (gainedTrophy) {
         triggerTrashTalk('OPPONENT_TROPHY');
+      }
+
+      const opponentResumed = (
+        typeof opponent.lastResumedAt === 'number' &&
+        typeof previousOpponent.lastResumedAt === 'number' &&
+        opponent.lastResumedAt > previousOpponent.lastResumedAt
+      ) || (
+        typeof opponent.lastResumedAt === 'number' &&
+        typeof previousOpponent.lastResumedAt !== 'number'
+      );
+
+      if (game.status === 'active' && opponentResumed) {
+        const message = `${opponent.name} resumed the game.`;
+        setResumeBanner(message);
+        void notifySafe('Player resumed', {
+          body: message,
+          icon: logoSrc,
+          tag: `resume-${game.id}-${opponent.uid}`,
+          onClickFocusWindow: true,
+        });
       }
     }
 
@@ -986,22 +1371,7 @@ export default function App() {
     recordedRecentPairKeysRef.current.add(pairKey);
 
     recordRecentPlayer(user.uid, opponent, game.id)
-      .then(() => {
-        setRecentPlayers((current) => {
-          const next = [
-            {
-              uid: opponent.uid,
-              displayName: opponent.name,
-              photoURL: opponent.avatarUrl,
-              lastPlayedAt: Date.now(),
-              lastGameId: game.id,
-            },
-            ...current.filter((player) => player.uid !== opponent.uid),
-          ];
-
-          return next.slice(0, 8);
-        });
-      })
+      .then(() => undefined)
       .catch((err) => {
         recordedRecentPairKeysRef.current.delete(pairKey);
         if (import.meta.env.DEV) {
@@ -1060,6 +1430,12 @@ export default function App() {
       playerIds: [user.uid],
       currentTurn: user.uid,
       winnerId: null,
+      currentQuestionId: null,
+      currentQuestionCategory: null,
+      currentQuestionIndex: -1,
+      currentQuestionStartedAt: null,
+      questionIds: [],
+      answers: {},
       createdAt: serverTimestamp(),
       lastUpdated: serverTimestamp()
     };
@@ -1070,7 +1446,8 @@ export default function App() {
       score: 0,
       streak: 0,
       completedCategories: [],
-      avatarUrl
+      avatarUrl,
+      lastActive: Date.now(),
     };
 
     try {
@@ -1086,6 +1463,7 @@ export default function App() {
         userId: user.uid,
       });
       await persistQuestionsToGame(gameId, initialQuestions);
+      await syncGameQuestionIds(gameId, initialQuestions.map((question) => question.questionId || question.id));
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_lobby');
@@ -1122,6 +1500,12 @@ export default function App() {
       playerIds: [user.uid],
       currentTurn: user.uid,
       winnerId: null,
+      currentQuestionId: null,
+      currentQuestionCategory: null,
+      currentQuestionIndex: -1,
+      currentQuestionStartedAt: null,
+      questionIds: [],
+      answers: {},
       createdAt: serverTimestamp(),
       lastUpdated: serverTimestamp()
     };
@@ -1132,7 +1516,8 @@ export default function App() {
       score: 0,
       streak: 0,
       completedCategories: [],
-      avatarUrl
+      avatarUrl,
+      lastActive: Date.now(),
     };
 
     try {
@@ -1148,6 +1533,7 @@ export default function App() {
         userId: user.uid,
       });
       await persistQuestionsToGame(gameId, initialQuestions);
+      await syncGameQuestionIds(gameId, initialQuestions.map((question) => question.questionId || question.id));
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_lobby');
@@ -1214,6 +1600,12 @@ export default function App() {
       playerIds: [user.uid],
       currentTurn: user.uid,
       winnerId: null,
+      currentQuestionId: null,
+      currentQuestionCategory: null,
+      currentQuestionIndex: -1,
+      currentQuestionStartedAt: null,
+      questionIds: [],
+      answers: {},
       createdAt: serverTimestamp(),
       lastUpdated: serverTimestamp()
     };
@@ -1224,7 +1616,8 @@ export default function App() {
       score: 0,
       streak: 0,
       completedCategories: [],
-      avatarUrl
+      avatarUrl,
+      lastActive: Date.now(),
     };
 
     try {
@@ -1240,6 +1633,7 @@ export default function App() {
         userId: user.uid,
       });
       await persistQuestionsToGame(gameId, initialQuestions);
+      await syncGameQuestionIds(gameId, initialQuestions.map((question) => question.questionId || question.id));
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_lobby');
@@ -1302,6 +1696,43 @@ export default function App() {
     }
   };
 
+  const handleInspectMatchup = async (player: RecentPlayer) => {
+    if (!user?.uid) return;
+
+    setIsLoadingMatchup(true);
+    try {
+      const matchup = await loadMatchupHistory(user.uid, player.uid);
+      setSelectedMatchup({
+        opponentId: player.uid,
+        summary: matchup.summary,
+        games: matchup.games,
+      });
+    } catch (err) {
+      handleFirestoreError(err, OperationType.GET, `users/${user.uid}/matchups/${player.uid}`);
+      setError('Failed to load matchup history.');
+    } finally {
+      setIsLoadingMatchup(false);
+    }
+  };
+
+  const handleRemoveRecentPlayer = async (player: RecentPlayer) => {
+    if (!user?.uid) return;
+
+    try {
+      await removeRecentPlayer(user.uid, player.uid);
+      if (selectedMatchup?.opponentId === player.uid) {
+        setSelectedMatchup(null);
+      }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.UPDATE, `users/${user.uid}/recentPlayers/${player.uid}`);
+      setError('Failed to remove recent player.');
+    }
+  };
+
+  const handleCloseMatchup = () => {
+    setSelectedMatchup(null);
+  };
+
   const handleSpinComplete = (category: string) => {
     if (!game || game.status !== 'active') {
       setIsSpinning(false);
@@ -1316,7 +1747,9 @@ export default function App() {
     const available = questions.filter(q => !q.used && q.category === resolvedCategory);
     if (available.length > 0) {
       const q = available[Math.floor(Math.random() * available.length)];
-      showCategoryReveal(resolvedCategory, q);
+      const questionId = q.questionId || q.id;
+      const questionIndex = game.questionIds?.indexOf(questionId) ?? -1;
+      showCategoryReveal(resolvedCategory, q, questionIndex >= 0 ? questionIndex : 0);
       ensureQuestionInventory({
         category: resolvedCategory,
         difficulty: q.difficulty || 'medium',
@@ -1340,11 +1773,20 @@ export default function App() {
         if (newQs.length > 0) {
           setLoadingStep('finalizing_round');
           const q = newQs[0];
-          showCategoryReveal(resolvedCategory, q);
-          // Save new questions to DB
-          persistQuestionsToGame(game!.id, newQs).catch((err) => {
-            handleFirestoreError(err, OperationType.WRITE, `games/${game!.id}/questions`);
-          });
+          const nextQuestionIds = [
+            ...(game.questionIds || []),
+            ...newQs.map((question) => question.questionId || question.id),
+          ];
+          persistQuestionsToGame(game!.id, newQs)
+            .then(() => syncGameQuestionIds(game!.id, nextQuestionIds))
+            .then(() => {
+              const questionId = q.questionId || q.id;
+              const questionIndex = nextQuestionIds.indexOf(questionId);
+              showCategoryReveal(resolvedCategory, q, questionIndex >= 0 ? questionIndex : 0);
+            })
+            .catch((err) => {
+              handleFirestoreError(err, OperationType.WRITE, `games/${game!.id}/questions`);
+            });
           ensureQuestionInventory({
             category: resolvedCategory,
             difficulty: q.difficulty || 'medium',
@@ -1425,9 +1867,17 @@ export default function App() {
 
     const playerRef = doc(db, 'games', game.id, 'players', user.uid);
     const currentPlayer = players.find(p => p.uid === user.uid);
+    const gameAnswer: GameAnswer = {
+      answerIndex: resolvedIndex,
+      submittedAt,
+      isCorrect,
+      source,
+    };
     setResultPhase('revealing');
 
     try {
+      await recordGameAnswer(game.id, questionId, user.uid, gameAnswer);
+
       if (isCorrect) {
         const newStreak = (currentPlayer?.streak || 0) + 1;
         const alreadyCompleted = currentPlayer?.completedCategories.includes(currentQuestion.category);
@@ -1450,10 +1900,39 @@ export default function App() {
         if (new Set(updatedPlayer.completedCategories).size >= playableCategories.length) {
           setManualPickReady(false);
           setQueuedSpecialEvent(null);
+          const completedAt = Date.now();
+          const finalScores = players.reduce<Record<string, number>>((scores, player) => {
+            scores[player.uid] = player.uid === user.uid ? (player.score || 0) + 1 : (player.score || 0);
+            return scores;
+          }, {});
           await updateDoc(doc(db, 'games', game.id), {
             status: 'completed',
             winnerId: user.uid,
+            completedAt,
+            finalScores,
             lastUpdated: serverTimestamp()
+          });
+          await recordCompletedGame({
+            gameId: game.id,
+            players: players.map((player) => (
+              player.uid === user.uid
+                ? {
+                    ...player,
+                    score: (player.score || 0) + 1,
+                    streak: newStreak,
+                    completedCategories: updatedPlayer.completedCategories,
+                  }
+                : player
+            )),
+            winnerId: user.uid,
+            finalScores,
+            questions: questions.map((question) => (
+              question.id === currentQuestion.id
+                ? { ...question, used: true }
+                : question
+            )),
+            status: 'completed',
+            completedAt,
           });
           confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
@@ -1493,6 +1972,7 @@ export default function App() {
           return;
         }
 
+        setShouldBlurQuestionBackground(true);
         setRoast({
           explanation: currentQuestion.explanation,
           isCorrect,
@@ -1525,6 +2005,8 @@ export default function App() {
       categoryRevealTimeoutRef.current = null;
     }
 
+    persistActiveGameId(null);
+    pendingResumeRestoreRef.current = null;
     setGame(null);
     setPlayers([]);
     setQuestions([]);
@@ -1535,6 +2017,7 @@ export default function App() {
     setManualPickReady(false);
     setShowManualPickPrompt(false);
     setRevealedCategory(null);
+    setShouldBlurQuestionBackground(false);
     setResultPhase('idle');
     setQueuedSpecialEvent(null);
     setActiveTrashTalk(null);
@@ -1576,6 +2059,7 @@ export default function App() {
         userId: user.uid,
       });
       await persistQuestionsToGame(game.id, initialQuestions);
+      const nextQuestionIds = initialQuestions.map((question) => question.questionId || question.id);
       kickOffInventoryReplenishment(playableCategories);
       setIsFetchingQuestions(false);
       setLoadingStep('finalizing_match');
@@ -1586,11 +2070,18 @@ export default function App() {
         status: 'active',
         currentTurn: firstTurnPlayerId,
         winnerId: null,
+        currentQuestionId: null,
+        currentQuestionCategory: null,
+        currentQuestionIndex: -1,
+        currentQuestionStartedAt: null,
+        questionIds: nextQuestionIds,
+        answers: {},
         lastUpdated: serverTimestamp()
       });
       setLastAnswerCorrect(false);
       setManualPickReady(false);
       setShowManualPickPrompt(false);
+      setShouldBlurQuestionBackground(false);
       setResultPhase('idle');
       setQueuedSpecialEvent(null);
       setActiveTrashTalk(null);
@@ -1873,6 +2364,20 @@ export default function App() {
                 </button>
               </motion.div>
             )}
+            {resumeBanner && (
+              <motion.div
+                key="resume-banner"
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="mb-6 rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-4 shadow-[0_8px_20px_rgba(6,182,212,0.12)]"
+                role="status"
+                aria-live="polite"
+              >
+                <p className="text-sm font-medium text-cyan-100">{resumeBanner}</p>
+              </motion.div>
+            )}
           </AnimatePresence>
 
           {/* History Modal */}
@@ -1939,6 +2444,35 @@ export default function App() {
           <AnimatePresence mode="wait">
             {!game ? (
               <div key="lobby-view" className="relative">
+                {resumePrompt && (
+                  <div className="mb-6 rounded-2xl border theme-panel-strong backdrop-blur-xl p-5 shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
+                    <p className="text-[10px] font-black uppercase tracking-[0.22em] theme-text-muted mb-2">
+                      Resume Match
+                    </p>
+                    <h2 className="text-2xl font-black tracking-tight mb-2">
+                      {resumePrompt.isSolo ? 'Resume your solo game?' : 'Resume your multiplayer game?'}
+                    </h2>
+                    <p className="text-sm theme-text-secondary mb-4">
+                      Firestore still has an active {resumePrompt.isSolo ? 'solo' : 'multiplayer'} match for code {resumePrompt.game.code}. Resume it or abandon it and return to the lobby.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button
+                        type="button"
+                        onClick={handleResumeGame}
+                        className="flex-1 rounded-xl bg-cyan-500 px-5 py-3 text-sm font-black uppercase tracking-widest text-cyan-950 transition-all duration-300 hover:bg-cyan-400"
+                      >
+                        Resume Game
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleStartNewInstead}
+                        className="flex-1 rounded-xl theme-button px-5 py-3 text-sm font-black uppercase tracking-widest transition-all duration-300"
+                      >
+                        Start New Game
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {(isStartingGame || isJoiningGame) && (
                   <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
                     <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
@@ -1950,17 +2484,32 @@ export default function App() {
                     </p>
                   </div>
                 )}
-                <GameLobby
-                  onStartSolo={startSoloGame}
-                  onStartMulti={startMultiplayerGame}
-                  onJoinMulti={joinGame}
-                  recentPlayers={recentPlayers}
-                  incomingInvites={incomingInvites}
-                  onInviteRecentPlayer={inviteRecentPlayer}
-                  onAcceptInvite={handleAcceptInvite}
-                  onDeclineInvite={handleDeclineInvite}
-                  inviteFeedback={inviteFeedback}
-                />
+                {isCheckingForResume && (
+                  <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
+                    <Loader2 className="w-8 h-8 text-cyan-400 animate-spin mb-4" />
+                    <p className="text-base font-bold theme-text-secondary">Checking for an active game</p>
+                  </div>
+                )}
+                <div className={resumePrompt ? 'pointer-events-none opacity-40 transition-opacity duration-200' : ''}>
+                  <GameLobby
+                    onStartSolo={startSoloGame}
+                    onStartMulti={startMultiplayerGame}
+                    onJoinMulti={joinGame}
+                    recentPlayers={recentPlayers}
+                    playerProfile={playerProfile}
+                    recentCompletedGames={recentCompletedGames}
+                    selectedMatchup={selectedMatchup}
+                    isLoadingMatchup={isLoadingMatchup}
+                    incomingInvites={incomingInvites}
+                    onInviteRecentPlayer={inviteRecentPlayer}
+                    onInspectMatchup={handleInspectMatchup}
+                    onCloseMatchup={handleCloseMatchup}
+                    onRemoveRecentPlayer={handleRemoveRecentPlayer}
+                    onAcceptInvite={handleAcceptInvite}
+                    onDeclineInvite={handleDeclineInvite}
+                    inviteFeedback={inviteFeedback}
+                  />
+                </div>
               </div>
             ) : (
               <motion.div
@@ -2052,7 +2601,7 @@ export default function App() {
                           )}
                         </div>
                       ) : (
-                        <div className={`transition-all duration-300 ${isQuestionResolutionActive ? 'blur-sm scale-[0.99]' : ''}`}>
+                        <div className={`transition-all duration-300 ${shouldBlurQuestionBackground ? 'blur-sm scale-[0.99]' : ''}`}>
                           <QuestionCard
                             question={currentQuestion}
                             onSelect={handleAnswer}

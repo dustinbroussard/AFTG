@@ -19,10 +19,10 @@ import {
 import { validateGeneratedQuestions } from '../src/services/questionValidation.js';
 import type { TriviaQuestion } from '../src/types.js';
 
-type Difficulty = 'easy' | 'medium' | 'hard';
-type PipelineStage = 'request' | 'generation' | 'verification' | 'styling' | 'response';
+export type Difficulty = 'easy' | 'medium' | 'hard';
+export type PipelineStage = 'request' | 'generation' | 'verification' | 'styling' | 'response';
 
-interface StageContext {
+export interface StageContext {
   requestId: string;
   startedAt: number;
 }
@@ -296,7 +296,7 @@ async function requestStageJson({
   }
 }
 
-function finalizeQuestions(questions: TriviaQuestion[], prefix = '') {
+export function finalizeQuestions(questions: TriviaQuestion[], prefix = '') {
   return questions.map((question, index) => {
     const generatedId = `${prefix}${Date.now()}-${index}`;
     return {
@@ -319,7 +319,7 @@ function logRejectedQuestions(
   });
 }
 
-async function runQuestionPipeline({
+export async function runQuestionPipeline({
   categories,
   countPerCategory,
   existingQuestions,
@@ -423,12 +423,13 @@ async function runQuestionPipeline({
 
     return {
       ...question,
-      validationStatus: approvedForStorage ? 'approved' as const : 'rejected' as const,
+      validationStatus: approvedForStorage ? 'verified' as const : 'rejected' as const,
       verificationVerdict: verification.verdict,
       verificationConfidence: verification.confidence,
       verificationIssues: verification.issues,
       verificationReason: verification.reason,
       pipelineVersion: TRIVIA_PIPELINE_VERSION,
+      batchId: context.requestId,
     };
   });
 
@@ -468,6 +469,7 @@ async function runQuestionPipeline({
       questionStyled: stylingResults[questionIndex].questionStyled,
       explanationStyled: stylingResults[questionIndex].explanationStyled,
       ...(stylingResults[questionIndex].hostLeadIn ? { hostLeadIn: stylingResults[questionIndex].hostLeadIn } : {}),
+      validationStatus: 'approved' as const,
     }));
     logStage(context, 'styling', 'completed', { questions: styledQuestions.length });
     return styledQuestions;

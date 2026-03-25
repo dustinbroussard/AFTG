@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
 const QUESTION_COLLECTION = 'questions';
-const DEFAULT_FILES = ['starter-questions.json', 'starterquestions.json', 'strarterquestions.json'];
+const DEFAULT_FILES = ['new-questions.json', 'starter-questions.json', 'starterquestions.json', 'strarterquestions.json'];
 const FIRESTORE_DATABASE_ID = 'ai-studio-5d62c22c-0318-44b3-a976-ecfe921b8e12';
 const FIREBASE_PROJECT_ID = 'ai-studio-applet-webapp-a549d';
 

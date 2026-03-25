@@ -13,12 +13,14 @@ export interface TriviaQuestion {
   explanation: string;
   explanationStyled?: string;
   hostLeadIn?: string;
-  validationStatus: 'pending' | 'approved' | 'rejected';
+  validationStatus: 'pending' | 'verified' | 'approved' | 'rejected' | 'flagged';
   verificationVerdict?: 'pass' | 'reject';
   verificationConfidence?: 'high' | 'medium' | 'low';
   verificationIssues?: string[];
   verificationReason?: string;
   pipelineVersion?: string | number;
+  source?: string;
+  batchId?: string;
   createdAt: number;
   usedCount: number;
   correctQuip: string;
@@ -50,16 +52,80 @@ export interface Player {
   streak: number;
   completedCategories: string[];
   avatarUrl?: string;
+  lastActive?: number;
+  lastResumedAt?: number;
+}
+
+export interface GameAnswer {
+  answerIndex: number;
+  submittedAt: number;
+  isCorrect: boolean;
+  source: 'answer' | 'timeout';
+}
+
+export interface CategoryPerformance {
+  seen: number;
+  correct: number;
+  percentageCorrect: number;
+}
+
+export interface PlayerStatsSummary {
+  completedGames: number;
+  wins: number;
+  losses: number;
+  winPercentage: number;
+  categoryPerformance: Record<string, CategoryPerformance>;
+}
+
+export interface PlayerProfile {
+  userId: string;
+  displayName: string;
+  photoURL?: string;
+  createdAt: any;
+  updatedAt: any;
+  lastSeenAt: any;
+  stats: PlayerStatsSummary;
+}
+
+export interface RecentCompletedGame {
+  gameId: string;
+  players: { uid: string; displayName: string }[];
+  winnerId: string | null;
+  finalScores: Record<string, number>;
+  categoriesUsed: string[];
+  completedAt: number;
+  status: 'completed';
+  opponentIds?: string[];
+}
+
+export interface MatchupSummary {
+  opponentId: string;
+  opponentDisplayName: string;
+  opponentPhotoURL?: string;
+  wins: number;
+  losses: number;
+  totalGames: number;
+  lastPlayedAt: number;
 }
 
 export interface GameState {
   id: string;
   code: string;
-  status: 'waiting' | 'active' | 'completed';
+  status: 'waiting' | 'active' | 'completed' | 'abandoned';
   hostId: string;
   playerIds: string[];
   currentTurn: string;
   winnerId: string | null;
+  currentQuestionId?: string | null;
+  currentQuestionCategory?: string | null;
+  currentQuestionIndex?: number;
+  currentQuestionStartedAt?: number | null;
+  questionIds?: string[];
+  answers?: Record<string, Record<string, GameAnswer>>;
+  completedAt?: number | null;
+  finalScores?: Record<string, number>;
+  categoriesUsed?: string[];
+  statsRecordedAt?: number | null;
   createdAt: any;
   lastUpdated: any;
 }
@@ -79,6 +145,7 @@ export interface RecentPlayer {
   photoURL?: string;
   lastPlayedAt: number;
   lastGameId?: string;
+  hidden?: boolean;
 }
 
 export interface GameInvite {

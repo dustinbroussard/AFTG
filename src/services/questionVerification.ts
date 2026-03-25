@@ -141,7 +141,7 @@ export function normalizeVerificationResults(
 }
 
 export function isQuestionApprovedForStorage(question: TriviaQuestion) {
-  return question.validationStatus === 'approved'
+  return (question.validationStatus === 'approved' || question.validationStatus === 'verified')
     && question.verificationVerdict === 'pass'
     && question.verificationConfidence === 'high';
 }
