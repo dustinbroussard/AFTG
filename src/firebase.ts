@@ -72,22 +72,28 @@ let signingIn = false;
 
 let redirectResultPromise: Promise<UserCredential | null> | null = null;
 let persistencePromise: Promise<void> | null = null;
+let hasResolvedRedirectResult = false;
 
 const REDIRECT_SIGN_IN_KEY = 'aftg:pending-google-redirect';
 
 function rememberPendingRedirectSignIn() {
   if (typeof window === 'undefined') return;
   window.sessionStorage.setItem(REDIRECT_SIGN_IN_KEY, '1');
+  window.localStorage.setItem(REDIRECT_SIGN_IN_KEY, '1');
 }
 
 function clearPendingRedirectSignIn() {
   if (typeof window === 'undefined') return;
   window.sessionStorage.removeItem(REDIRECT_SIGN_IN_KEY);
+  window.localStorage.removeItem(REDIRECT_SIGN_IN_KEY);
 }
 
 function hasPendingRedirectSignIn() {
   if (typeof window === 'undefined') return false;
-  return window.sessionStorage.getItem(REDIRECT_SIGN_IN_KEY) === '1';
+  return (
+    window.sessionStorage.getItem(REDIRECT_SIGN_IN_KEY) === '1' ||
+    window.localStorage.getItem(REDIRECT_SIGN_IN_KEY) === '1'
+  );
 }
 
 function ensureAuthPersistence() {
@@ -102,7 +108,7 @@ function ensureAuthPersistence() {
 }
 
 export function finishSignInRedirect() {
-  if (!hasPendingRedirectSignIn()) {
+  if (hasResolvedRedirectResult && !hasPendingRedirectSignIn()) {
     return Promise.resolve(null);
   }
 
@@ -111,6 +117,7 @@ export function finishSignInRedirect() {
       .then(() => getRedirectResult(auth))
       .finally(() => {
         clearPendingRedirectSignIn();
+        hasResolvedRedirectResult = true;
         redirectResultPromise = null;
       });
   }

@@ -65,7 +65,6 @@ type LoadingStep =
   | 'finalizing_match'
   | 'finalizing_round';
 
-const InstallPrompt = lazy(() => import('./components/InstallPrompt').then((module) => ({ default: module.InstallPrompt })));
 const SettingsModal = lazy(() => import('./components/SettingsModal').then((module) => ({ default: module.SettingsModal })));
 const QuestionBankAdmin = lazy(() => import('./components/QuestionBankAdmin').then((module) => ({ default: module.QuestionBankAdmin })));
 
@@ -168,7 +167,8 @@ export default function App() {
   const [queuedSpecialEvent, setQueuedSpecialEvent] = useState<QueuedSpecialEvent | null>(null);
 
   // Granular loading states
-  const [isInitializing, setIsInitializing] = useState(true);
+  const [hasResolvedInitialAuthState, setHasResolvedInitialAuthState] = useState(false);
+  const [hasResolvedRedirectSignIn, setHasResolvedRedirectSignIn] = useState(false);
   const [isStartingGame, setIsStartingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [isFetchingQuestions, setIsFetchingQuestions] = useState(false);
@@ -258,6 +258,7 @@ export default function App() {
   const isQuestionActive =
     !!currentQuestion &&
     (resultPhase === 'idle' || resultPhase === 'revealing' || resultPhase === 'explaining');
+  const isInitializing = !hasResolvedInitialAuthState || !hasResolvedRedirectSignIn;
 
   const updateSettings = (patch: Partial<UserSettings>) => {
     setSettings((current) => ({
@@ -936,13 +937,15 @@ export default function App() {
         return;
       }
       setError(err?.message || 'Google sign-in failed.');
+    }).finally(() => {
+      setHasResolvedRedirectSignIn(true);
     });
   }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
-      setIsInitializing(false);
+      setHasResolvedInitialAuthState(true);
     });
     return () => unsubscribe();
   }, []);
@@ -2339,10 +2342,6 @@ export default function App() {
       <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
       <audio ref={wonAudioRef} src={wonAudioSrc} />
       <audio ref={lostAudioRef} src={lostAudioSrc} />
-
-      <Suspense fallback={null}>
-        <InstallPrompt />
-      </Suspense>
 
       <div data-theme={themeMode} className="app-theme min-h-screen font-sans">
         {!isQuestionActive && (

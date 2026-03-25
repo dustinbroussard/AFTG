@@ -30,20 +30,24 @@ function summarizeResults(result: TriggerResult | null) {
 
 export function GeneratorApp() {
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [hasResolvedInitialAuthState, setHasResolvedInitialAuthState] = useState(false);
+  const [hasResolvedRedirectSignIn, setHasResolvedRedirectSignIn] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<TriggerResult | null>(null);
+  const isAuthLoading = !hasResolvedInitialAuthState || !hasResolvedRedirectSignIn;
 
   useEffect(() => {
     finishSignInRedirect().catch((err) => {
       console.error('[generator] Redirect sign-in failed:', err);
       setError('Google sign-in did not finish cleanly.');
+    }).finally(() => {
+      setHasResolvedRedirectSignIn(true);
     });
 
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
       setUser(nextUser);
-      setIsAuthLoading(false);
+      setHasResolvedInitialAuthState(true);
     });
 
     return unsubscribe;
