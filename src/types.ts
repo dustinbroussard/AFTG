@@ -9,7 +9,7 @@ export interface TriviaQuestion {
   questionStyled?: string;
   choices: string[];
   correctIndex: number;
-  answerIndex: number;
+  answerIndex?: number;
   explanation: string;
   explanationStyled?: string;
   hostLeadIn?: string;

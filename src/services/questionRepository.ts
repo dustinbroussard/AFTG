@@ -38,6 +38,9 @@ function normalizeRequestedCategory(category: string) {
 function toBankQuestion(question: TriviaQuestion, createdAt = Date.now()): TriviaQuestion {
   const canonicalId = question.questionId || question.id;
   const explanation = question.explanation || question.correctQuip || '';
+  const correctIndex = Number.isInteger(question.correctIndex)
+    ? question.correctIndex
+    : question.answerIndex ?? 0;
 
   return omitUndefinedFields({
     ...question,
@@ -45,8 +48,8 @@ function toBankQuestion(question: TriviaQuestion, createdAt = Date.now()): Trivi
     questionId: canonicalId,
     category: question.category,
     difficulty: question.difficulty || 'medium',
-    correctIndex: Number.isInteger(question.correctIndex) ? question.correctIndex : question.answerIndex,
-    answerIndex: question.answerIndex,
+    correctIndex,
+    answerIndex: correctIndex,
     explanation,
     validationStatus: question.validationStatus || 'pending',
     verificationVerdict: question.verificationVerdict,

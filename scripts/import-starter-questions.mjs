@@ -143,7 +143,6 @@ function normalizeQuestion(rawQuestion, createdAt) {
     question: rawQuestion.question,
     choices: rawQuestion.choices,
     correctIndex: rawQuestion.correctIndex,
-    answerIndex: rawQuestion.correctIndex,
     explanation: rawQuestion.explanation,
     ...(rawQuestion.questionStyled ? { questionStyled: rawQuestion.questionStyled } : {}),
     ...(rawQuestion.explanationStyled ? { explanationStyled: rawQuestion.explanationStyled } : {}),

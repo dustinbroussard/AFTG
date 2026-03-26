@@ -51,10 +51,6 @@ export function validateGeneratedQuestion(question: TriviaQuestion): QuestionVal
     return { isValid: false, reason: 'invalid correctIndex' };
   }
 
-  if (!Number.isInteger(question.answerIndex) || question.answerIndex !== question.correctIndex) {
-    return { isValid: false, reason: 'answerIndex mismatch' };
-  }
-
   if (!isNonEmptyString(question.explanation) || normalizeWhitespace(question.explanation).length < MIN_EXPLANATION_LENGTH) {
     return { isValid: false, reason: 'explanation too short' };
   }

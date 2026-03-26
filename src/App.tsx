@@ -1396,7 +1396,7 @@ export default function App() {
     }
 
     setSelectedAnswer(currentQuestionAnswer.answerIndex);
-    setCorrectAnswer(restoredQuestion.answerIndex);
+    setCorrectAnswer(restoredQuestion.correctIndex);
     setShouldBlurQuestionBackground(true);
     setRoast({
       explanation: restoredQuestion.explanation,
@@ -1943,10 +1943,10 @@ export default function App() {
     clearQuestionTimer();
 
     setSelectedAnswer(resolvedIndex);
-    setCorrectAnswer(currentQuestion.answerIndex);
-    const isCorrect = resolvedIndex === currentQuestion.answerIndex;
+    setCorrectAnswer(currentQuestion.correctIndex);
+    const isCorrect = resolvedIndex === currentQuestion.correctIndex;
     const selectedChoice = resolvedIndex >= 0 ? currentQuestion.choices[resolvedIndex] : 'No answer before the timer expired';
-    const correctChoice = currentQuestion.choices[currentQuestion.answerIndex];
+    const correctChoice = currentQuestion.choices[currentQuestion.correctIndex];
 
     if (sfxEnabled) {
       if (isCorrect) {
@@ -2693,7 +2693,7 @@ export default function App() {
                   </div>
                 )}
                 {(isStartingGame || isJoiningGame) && (
-                  <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
+                  <div className="absolute inset-0 z-30 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
                     <Loader2 className="w-8 h-8 text-pink-500 animate-spin mb-4" />
                     <p className="text-base font-bold theme-text-secondary">
                       {setupLoadingCopy.title}
@@ -2704,12 +2704,20 @@ export default function App() {
                   </div>
                 )}
                 {isCheckingForResume && (
-                  <div className="absolute inset-0 z-10 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
+                  <div className="absolute inset-0 z-30 theme-overlay backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
                     <Loader2 className="w-8 h-8 text-cyan-400 animate-spin mb-4" />
                     <p className="text-base font-bold theme-text-secondary">Checking for an active game</p>
                   </div>
                 )}
-                <div className={`h-full min-h-0 ${resumePrompt ? 'pointer-events-none opacity-40 transition-opacity duration-200' : ''}`}>
+                <div
+                  className={`h-full min-h-0 transition-all duration-300 ${
+                    resumePrompt
+                      ? 'pointer-events-none opacity-40'
+                      : (isStartingGame || isJoiningGame || isCheckingForResume)
+                        ? 'pointer-events-none blur-sm scale-[0.99] opacity-60'
+                        : ''
+                  }`}
+                >
                   <GameLobby
                     onStartSolo={startSoloGame}
                     onStartMulti={startMultiplayerGame}
