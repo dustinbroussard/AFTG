@@ -27,13 +27,7 @@ import {
   subscribeToIncomingInvites,
 } from './services/inviteService';
 import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getPlayableCategories } from './types';
-import { QUESTION_COLLECTION } from './services/questionCollections';
-import {
-  ACTIVE_GAME_REPLENISH_MIN_APPROVED,
-  AUTO_REPLENISH_BATCH_SIZE,
-  STARTUP_REPLENISH_MIN_APPROVED,
-} from './services/questionInventoryConfig';
-import { ensureQuestionInventory, getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
+import { getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
@@ -165,7 +159,7 @@ export default function App() {
   } = useGameStore(user);
   const {
     questions, setQuestions, currentQuestion, setCurrentQuestion,
-    isFetchingQuestions, setIsFetchingQuestions, fetchQuestions, markSeen, refillInventory, activeQuestionIdRef
+    isFetchingQuestions, setIsFetchingQuestions, fetchQuestions, markSeen, activeQuestionIdRef
   } = useQuestions(user, game?.id);
 
   const [settings, setSettings] = useState<UserSettings>(() => getLocalSettings());
@@ -1295,7 +1289,6 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      refillInventory(playableCategories);
       
       setGame(newGame);
     } catch (err) {
@@ -1331,7 +1324,6 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      refillInventory(playableCategories);
       
       setGame(newGame);
     } catch (err) {
@@ -1395,7 +1387,6 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      refillInventory(playableCategories);
       
       await sendInvite({
         uid: user.id,
@@ -1502,14 +1493,6 @@ export default function App() {
       const questionId = q.id;
       const questionIndex = game.questionIds?.indexOf(questionId) ?? -1;
       showCategoryReveal(resolvedCategory, q, questionIndex >= 0 ? questionIndex : 0);
-      ensureQuestionInventory({
-        category: resolvedCategory,
-        difficulty: q.difficulty || 'medium',
-        minimumApproved: ACTIVE_GAME_REPLENISH_MIN_APPROVED,
-        replenishBatchSize: AUTO_REPLENISH_BATCH_SIZE,
-      }).catch((err) => {
-        console.warn(`[questionInventory] Failed for ${resolvedCategory}/${q.difficulty || 'medium'}:`, err);
-      });
     } else {
       // Fetch more questions if needed
       setIsFetchingQuestions(true);
@@ -1537,16 +1520,6 @@ export default function App() {
             .catch((err) => {
               console.error(`[onSpinComplete] Failed for game ${game!.id}:`, err);
             });
-          ensureQuestionInventory({
-            category: resolvedCategory,
-            difficulty: q.difficulty || 'medium',
-            minimumApproved: ACTIVE_GAME_REPLENISH_MIN_APPROVED,
-            replenishBatchSize: AUTO_REPLENISH_BATCH_SIZE,
-          }).catch((err) => {
-            if (import.meta.env.DEV) {
-              console.warn(`[questionInventory] Failed for ${resolvedCategory}/${q.difficulty || 'medium'}:`, err);
-            }
-          });
         } else {
           setError("Failed to load questions. Please try again.");
         }
@@ -1851,7 +1824,6 @@ export default function App() {
       });
       await persistQuestionsToGameService(game.id, initialQuestions.map(q => q.id));
       const nextQuestionIds = initialQuestions.map((question) => question.id);
-      refillInventory(playableCategories);
       
       const resetPlayers = players.map(p => ({
         ...p,

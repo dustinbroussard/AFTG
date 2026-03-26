@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { X, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { TriviaQuestion, getPlayableCategories } from '../types';
-import { ensureQuestionInventory } from '../services/questionRepository';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 
@@ -61,7 +60,6 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
   const [samples, setSamples] = useState<TriviaQuestion[]>([]);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
   const [isLoadingSamples, setIsLoadingSamples] = useState(false);
-  const [isReplenishing, setIsReplenishing] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const loadSummary = async () => {
@@ -133,28 +131,6 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
       setFeedback('Failed to load sample questions.');
     });
   }, [isOpen, selectedCategory, selectedDifficulty]);
-
-  const runReplenishment = async (batchSize: number) => {
-    setIsReplenishing(true);
-    setFeedback(null);
-    try {
-      const currentCount = countsByDifficulty[selectedCategory]?.[selectedDifficulty] ?? 0;
-      await ensureQuestionInventory({
-        category: selectedCategory,
-        difficulty: selectedDifficulty,
-        minimumApproved: currentCount + batchSize,
-        replenishBatchSize: batchSize,
-      });
-      await loadSummary();
-      await loadSamples();
-      setFeedback(`Replenishment finished for ${selectedCategory} (${selectedDifficulty}).`);
-    } catch (err) {
-      console.error('[questionBankAdmin] Replenishment failed:', err);
-      setFeedback('Replenishment failed. Check console for details.');
-    } finally {
-      setIsReplenishing(false);
-    }
-  };
 
   return (
     <AnimatePresence>
@@ -235,21 +211,11 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
                         ))}
                       </select>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button type="button"
-                        onClick={() => runReplenishment(10)}
-                        disabled={isReplenishing}
-                        className="theme-button rounded-xl px-4 py-3 font-bold border theme-border disabled:opacity-50"
-                      >
-                        {isReplenishing ? 'Working...' : 'Replenish 10'}
-                      </button>
-                      <button type="button"
-                        onClick={() => runReplenishment(25)}
-                        disabled={isReplenishing}
-                        className="theme-button rounded-xl px-4 py-3 font-bold border theme-border disabled:opacity-50"
-                      >
-                        {isReplenishing ? 'Working...' : 'Replenish 25'}
-                      </button>
+                    <div className="theme-panel-strong border rounded-2xl p-4">
+                      <p className="text-xs uppercase tracking-widest theme-text-muted mb-2">Manual Question Bank</p>
+                      <p className="text-sm theme-text-secondary">
+                        Trivia questions now load only from Supabase. Add or approve questions there, then use this panel to verify counts and inspect samples.
+                      </p>
                     </div>
                     {feedback && (
                       <p className="text-sm theme-text-secondary">{feedback}</p>

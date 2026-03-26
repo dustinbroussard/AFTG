@@ -26,7 +26,7 @@ interface GameLobbyProps {
   inviteFeedback?: string | null;
 }
 
-type LobbyMode = 'IDLE' | 'STATS' | 'RECENT_PLAYERS' | 'LOADING' | 'GAME_ACTIVE';
+type LobbyMode = 'IDLE' | 'JOIN' | 'STATS' | 'RECENT_PLAYERS' | 'LOADING';
 
 export const GameLobby: React.FC<GameLobbyProps> = ({
   onStartSolo,
@@ -51,7 +51,6 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
 }) => {
   const logoSrc = publicAsset('logo.png');
   const [joinCode, setJoinCode] = useState('');
-  const [showJoinInput, setShowJoinInput] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState('');
   const [currentMode, setCurrentMode] = useState<LobbyMode>('IDLE');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,10 +73,10 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   }, [isLoading]);
 
   useEffect(() => {
-    if (currentMode !== 'IDLE' && showJoinInput) {
-      setShowJoinInput(false);
+    if (currentMode !== 'JOIN' && joinCode) {
+      setJoinCode('');
     }
-  }, [currentMode, showJoinInput]);
+  }, [currentMode, joinCode]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -123,7 +122,9 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const isInteractionLocked = currentMode === 'LOADING';
   const isStatsOpen = currentMode === 'STATS';
   const isRecentPlayersOpen = currentMode === 'RECENT_PLAYERS';
+  // The large CTA stack only exists in the neutral lobby state.
   const showPrimaryActions = currentMode === 'IDLE';
+  const isJoinMode = currentMode === 'JOIN';
   const showLobbyModal = isStatsOpen || isRecentPlayersOpen;
 
   const closeLobbyModal = () => {
@@ -148,7 +149,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
 
   const handleStartSolo = () => {
     if (isInteractionLocked) return;
-    // Transition into a dedicated loading mode before starting async work to guard against double taps.
+    // One lobby mode owns the entire handoff so buttons disappear before async work begins.
     setCurrentMode('LOADING');
     onStartSolo(selectedAvatar);
   };
@@ -166,7 +167,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-full flex flex-col items-center gap-5 px-4 pt-8 pb-3 sm:gap-6 sm:p-6">
+    <div className="w-full max-w-md mx-auto min-h-full flex flex-col items-center gap-5 px-4 pt-6 pb-4 sm:gap-6 sm:p-6">
       <div className="text-center relative shrink-0">
         <div className="relative inline-block w-72 h-72 sm:w-80 sm:h-80 md:w-80 md:h-80">
           <img
@@ -280,56 +281,69 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
             </motion.button>
 
             <div className="space-y-2">
-              {!showJoinInput ? (
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowJoinInput(true)}
-                  aria-label="Show join game code entry"
-                  className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
-                >
-                  <Users className="w-6 h-6" />
-                  Join Game
-                </motion.button>
-              ) : (
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    aria-label="Enter 4 digit game code"
-                    maxLength={4}
-                    placeholder="CODE"
-                    value={joinCode}
-                    onChange={(e) => setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
-                    autoCapitalize="characters"
-                    autoCorrect="off"
-                    autoComplete="off"
-                    spellCheck={false}
-                    inputMode="text"
-                    pattern="[A-Z0-9]{4}"
-                    className="flex-1 theme-input border rounded-xl px-4 text-xl font-black text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleJoinSubmit}
-                    aria-label="Join multiplayer game"
-                    disabled={joinCode.length !== 4}
-                    className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
-                  >
-                    GO
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowJoinInput(false)}
-                    aria-label="Close join game code entry"
-                    className="px-4 theme-button rounded-xl font-black transition-all duration-300 ease-in-out shadow-md"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentMode('JOIN')}
+                aria-label="Show join game code entry"
+                className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
+              >
+                <Users className="w-6 h-6" />
+                Join Game
+              </motion.button>
             </div>
           </>
+        )}
+
+        {isJoinMode && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full theme-panel-strong border rounded-2xl p-4 sm:p-5 space-y-4 shadow-2xl"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] theme-text-muted mb-1">Join Match</p>
+                <p className="text-sm theme-text-secondary">Enter the 4-character game code to connect.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCurrentMode('IDLE')}
+                aria-label="Close join game code entry"
+                className="p-2 rounded-xl theme-button shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                aria-label="Enter 4 digit game code"
+                maxLength={4}
+                placeholder="CODE"
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
+                autoCapitalize="characters"
+                autoCorrect="off"
+                autoComplete="off"
+                spellCheck={false}
+                inputMode="text"
+                pattern="[A-Z0-9]{4}"
+                className="h-14 flex-1 theme-input border rounded-xl px-4 text-xl font-black text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
+              />
+              <button
+                type="button"
+                onClick={handleJoinSubmit}
+                aria-label="Join multiplayer game"
+                disabled={joinCode.length !== 4}
+                className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
+              >
+                GO
+              </button>
+            </div>
+          </motion.div>
         )}
       </div>
 
