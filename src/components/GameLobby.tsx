@@ -164,7 +164,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
       </div>
 
       {/* Main Actions */}
-      <div className="w-full space-y-3 relative z-20">
+      <div className="w-full space-y-3 relative">
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
@@ -294,7 +294,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         {(showRecentPlayers || selectedMatchup) && (
           <div
             ref={recentPlayersPanelRef}
-            className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[32dvh] overflow-y-auto custom-scrollbar relative z-30 shadow-2xl"
+            className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[32dvh] overflow-y-auto custom-scrollbar shadow-2xl"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">

@@ -20,10 +20,10 @@ function createContentSecurityPolicy(isDev: boolean) {
 
   if (isDev) {
     scriptSrc.push("'unsafe-inline'", "'unsafe-eval'");
-    connectSrc.push('ws://localhost:3000', 'http://localhost:3000');
+    connectSrc.push('ws:', 'http:');
   }
 
-  return [
+  const csp = [
     "default-src 'self'",
     `script-src ${scriptSrc.join(' ')}`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -38,19 +38,29 @@ function createContentSecurityPolicy(isDev: boolean) {
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self'",
-    'upgrade-insecure-requests',
-  ].join('; ');
+  ];
+
+  if (!isDev) {
+    csp.push('upgrade-insecure-requests');
+  }
+
+  return csp.join('; ');
 }
 
 function createSecurityHeaders(isDev: boolean) {
-  return {
+  const headers: Record<string, string> = {
     'Content-Security-Policy': createContentSecurityPolicy(isDev),
     'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
-    'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'X-Content-Type-Options': 'nosniff',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   };
+
+  if (!isDev) {
+    headers['Strict-Transport-Security'] = 'max-age=63072000; includeSubDomains; preload';
+  }
+
+  return headers;
 }
 
 export default defineConfig(({ command }) => {
