@@ -1349,7 +1349,7 @@ export default function App() {
       return;
     }
 
-    setSelectedAnswer(currentQuestionAnswer.correctIndex);
+    setSelectedAnswer(currentQuestionAnswer.answerIndex);
     setCorrectAnswer(restoredQuestion.correctIndex);
     setShouldBlurQuestionBackground(true);
     setRoast({

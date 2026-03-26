@@ -120,6 +120,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const overallAccuracy = playerProfile?.stats.totalQuestionsSeen
     ? Math.round((playerProfile.stats.totalQuestionsCorrect / playerProfile.stats.totalQuestionsSeen) * 100)
     : 0;
+  const isShowingLobbyPanel = showStats || showRecentPlayers || !!selectedMatchup;
 
   return (
     <div className="w-full max-w-md mx-auto min-h-full flex flex-col items-center gap-5 px-4 pt-8 pb-3 sm:gap-6 sm:p-6">
@@ -168,7 +169,18 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           <button
             type="button"
             ref={statsButtonRef}
-            onClick={() => setShowStats((current) => !current)}
+            onClick={() => {
+              setShowStats((current) => {
+                const nextShowStats = !current;
+                if (nextShowStats) {
+                  setShowRecentPlayers(false);
+                  if (selectedMatchup) {
+                    onCloseMatchup();
+                  }
+                }
+                return nextShowStats;
+              });
+            }}
             aria-label={showStats ? 'Hide stats' : 'Show stats'}
             title={showStats ? 'Hide stats' : 'Show stats'}
             className="h-10 sm:h-12 rounded-xl theme-panel-strong border transition-all duration-300 flex items-center justify-center"
@@ -178,7 +190,17 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           <button
             type="button"
             ref={recentPlayersButtonRef}
-            onClick={() => setShowRecentPlayers((current) => !current)}
+            onClick={() => {
+              setShowRecentPlayers((current) => {
+                const nextShowRecentPlayers = !current;
+                if (nextShowRecentPlayers) {
+                  setShowStats(false);
+                } else if (selectedMatchup) {
+                  onCloseMatchup();
+                }
+                return nextShowRecentPlayers;
+              });
+            }}
             aria-label={showRecentPlayers ? 'Hide recent players' : 'Show recent players'}
             title={showRecentPlayers ? 'Hide recent players' : 'Show recent players'}
             className="h-10 sm:h-12 rounded-xl theme-panel-strong border transition-all duration-300 flex items-center justify-center"
@@ -190,7 +212,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         {showStats && (
           <div
             ref={statsPanelRef}
-            className="absolute left-0 right-0 top-full mt-3 w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[40dvh] overflow-y-auto custom-scrollbar shadow-2xl z-30"
+            className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[40dvh] overflow-y-auto custom-scrollbar shadow-2xl"
           >
             <div className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-cyan-400" />
@@ -269,75 +291,209 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           </div>
         )}
 
-        <motion.button type="button"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => onStartSolo(selectedAvatar)}
-          aria-label="Start a solo game"
-          className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 ease-in-out"
-        >
-          <Trophy className="w-6 h-6" />
-          Solo Mode
-        </motion.button>
+        {(showRecentPlayers || selectedMatchup) && (
+          <div
+            ref={recentPlayersPanelRef}
+            className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[32dvh] overflow-y-auto custom-scrollbar relative z-30 shadow-2xl"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-black uppercase tracking-widest">Recent Players</h4>
+              </div>
+              <div className="flex items-center gap-3">
+                {inviteFeedback && (
+                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
+                    {inviteFeedback}
+                  </span>
+                )}
+                {selectedMatchup && (
+                  <button type="button" onClick={onCloseMatchup} className="p-2 rounded-xl theme-button" aria-label="Close matchup history">
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
 
-        <motion.button type="button"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => onStartMulti(selectedAvatar)}
-          aria-label="Create a multiplayer game"
-          className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 ease-in-out"
-        >
-          <Gamepad2 className="w-6 h-6" />
-          Start New Game
-        </motion.button>
+            {recentPlayers.length === 0 ? (
+              <p className="text-sm theme-text-muted">Play a multiplayer match and recent opponents will show up here.</p>
+            ) : (
+              <div className="space-y-3">
+                {recentPlayers.map((player) => (
+                  <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
+                        {player.photoURL ? (
+                          <img src={player.photoURL} alt={player.displayName} className="w-full h-full object-cover" />
+                        ) : (
+                          <User className="w-5 h-5 theme-text-muted" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold truncate">{player.displayName}</p>
+                        <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                          Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => onInspectMatchup(player)}
+                        className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
+                      >
+                        History
+                      </button>
+                      <button type="button"
+                        onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
+                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg"
+                      >
+                        <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onRemoveRecentPlayer(player)}
+                        className="p-2 rounded-xl theme-button"
+                        aria-label={`Remove ${player.displayName} from recent players`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    </div>
 
-        <div className="space-y-2">
-          {!showJoinInput ? (
+                    {selectedMatchup?.opponentId === player.uid && (
+                      <div className="border-t pt-3 space-y-3">
+                        {isLoadingMatchup ? (
+                          <p className="text-sm theme-text-muted">Loading matchup history...</p>
+                        ) : (
+                          <>
+                            <div className="grid grid-cols-3 gap-3">
+                              <div className="theme-panel-strong border rounded-2xl p-3">
+                                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
+                                <p className="text-lg font-black">
+                                  {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
+                                </p>
+                              </div>
+                              <div className="theme-panel-strong border rounded-2xl p-3">
+                                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
+                                <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
+                              </div>
+                              <div className="theme-panel-strong border rounded-2xl p-3">
+                                <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
+                                <p className="text-sm font-black">
+                                  {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
+                                </p>
+                              </div>
+                            </div>
+                            {selectedMatchup.games.length === 0 ? (
+                              <p className="text-sm theme-text-muted">No completed games against this player yet.</p>
+                            ) : (
+                              <div className="space-y-2">
+                                {selectedMatchup.games.map((game) => (
+                                  <div key={game.gameId} className="theme-panel-strong border rounded-2xl p-3 flex items-center justify-between gap-3">
+                                    <div>
+                                      <p className="text-sm font-bold">
+                                        Winner: {game.players.find((entry) => entry.uid === game.winnerId)?.displayName || 'None'}
+                                      </p>
+                                      <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                        {new Date(game.completedAt).toLocaleDateString()}
+                                      </p>
+                                    </div>
+                                    <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
+                                      {Object.entries(game.finalScores).map(([uid, score]) => {
+                                        const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
+                                        return `${entry?.displayName || 'Player'} ${score}`;
+                                      }).join(' • ')}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {!isShowingLobbyPanel && (
+          <>
             <motion.button type="button"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setShowJoinInput(true)}
-              aria-label="Show join game code entry"
-              className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
+              onClick={() => onStartSolo(selectedAvatar)}
+              aria-label="Start a solo game"
+              className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 ease-in-out"
             >
-              <Users className="w-6 h-6" />
-              Join Game
+              <Trophy className="w-6 h-6" />
+              Solo Mode
             </motion.button>
-          ) : (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                aria-label="Enter 4 digit game code"
-                maxLength={4}
-                placeholder="CODE"
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
-                autoCapitalize="characters"
-                autoCorrect="off"
-                autoComplete="off"
-                spellCheck={false}
-                inputMode="text"
-                pattern="[A-Z0-9]{4}"
-                className="flex-1 theme-input border rounded-xl px-4 text-xl font-black text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
-              />
-              <button type="button"
-                onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
-                aria-label="Join multiplayer game"
-                disabled={joinCode.length !== 4}
-                className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
-              >
-                GO
-              </button>
-              <button type="button"
-                onClick={() => setShowJoinInput(false)}
-                aria-label="Close join game code entry"
-                className="px-4 theme-button rounded-xl font-black transition-all duration-300 ease-in-out shadow-md"
-              >
-                ✕
-              </button>
+
+            <motion.button type="button"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onStartMulti(selectedAvatar)}
+              aria-label="Create a multiplayer game"
+              className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 ease-in-out"
+            >
+              <Gamepad2 className="w-6 h-6" />
+              Start New Game
+            </motion.button>
+
+            <div className="space-y-2">
+              {!showJoinInput ? (
+                <motion.button type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowJoinInput(true)}
+                  aria-label="Show join game code entry"
+                  className="w-full h-[3.25rem] sm:h-16 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center gap-3 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-amber-500/25 transition-all duration-300 ease-in-out"
+                >
+                  <Users className="w-6 h-6" />
+                  Join Game
+                </motion.button>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    aria-label="Enter 4 digit game code"
+                    maxLength={4}
+                    placeholder="CODE"
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
+                    autoCapitalize="characters"
+                    autoCorrect="off"
+                    autoComplete="off"
+                    spellCheck={false}
+                    inputMode="text"
+                    pattern="[A-Z0-9]{4}"
+                    className="flex-1 theme-input border rounded-xl px-4 text-xl font-black text-center focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300 ease-in-out shadow-inner"
+                  />
+                  <button type="button"
+                    onClick={() => joinCode.length === 4 && onJoinMulti(joinCode, selectedAvatar)}
+                    aria-label="Join multiplayer game"
+                    disabled={joinCode.length !== 4}
+                    className="px-6 bg-pink-500 hover:bg-pink-600 rounded-xl font-black text-white uppercase disabled:opacity-50 transition-all duration-300 ease-in-out shadow-md"
+                  >
+                    GO
+                  </button>
+                  <button type="button"
+                    onClick={() => setShowJoinInput(false)}
+                    aria-label="Close join game code entry"
+                    className="px-4 theme-button rounded-xl font-black transition-all duration-300 ease-in-out shadow-md"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       {incomingInvites.length > 0 && (
@@ -383,135 +539,6 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         </div>
       )}
 
-      {(showRecentPlayers || selectedMatchup) && (
-      <div
-        ref={recentPlayersPanelRef}
-        className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[32dvh] overflow-y-auto custom-scrollbar relative z-30 shadow-2xl"
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-cyan-400" />
-            <h4 className="text-sm font-black uppercase tracking-widest">Recent Players</h4>
-          </div>
-          <div className="flex items-center gap-3">
-            {inviteFeedback && (
-              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
-                {inviteFeedback}
-              </span>
-            )}
-            {selectedMatchup && (
-              <button type="button" onClick={onCloseMatchup} className="p-2 rounded-xl theme-button" aria-label="Close matchup history">
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {recentPlayers.length === 0 ? (
-          <p className="text-sm theme-text-muted">Play a multiplayer match and recent opponents will show up here.</p>
-        ) : (
-          <div className="space-y-3">
-            {recentPlayers.map((player) => (
-              <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 space-y-3">
-                <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
-                    {player.photoURL ? (
-                      <img src={player.photoURL} alt={player.displayName} className="w-full h-full object-cover" />
-                    ) : (
-                      <User className="w-5 h-5 theme-text-muted" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold truncate">{player.displayName}</p>
-                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">
-                      Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => onInspectMatchup(player)}
-                    className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
-                  >
-                    History
-                  </button>
-                  <button type="button"
-                    onClick={() => onInviteRecentPlayer(player, selectedAvatar)}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg"
-                  >
-                    <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onRemoveRecentPlayer(player)}
-                    className="p-2 rounded-xl theme-button"
-                    aria-label={`Remove ${player.displayName} from recent players`}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                </div>
-
-                {selectedMatchup?.opponentId === player.uid && (
-                  <div className="border-t pt-3 space-y-3">
-                    {isLoadingMatchup ? (
-                      <p className="text-sm theme-text-muted">Loading matchup history...</p>
-                    ) : (
-                      <>
-                        <div className="grid grid-cols-3 gap-3">
-                          <div className="theme-panel-strong border rounded-2xl p-3">
-                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
-                            <p className="text-lg font-black">
-                              {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
-                            </p>
-                          </div>
-                          <div className="theme-panel-strong border rounded-2xl p-3">
-                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
-                            <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
-                          </div>
-                          <div className="theme-panel-strong border rounded-2xl p-3">
-                            <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
-                            <p className="text-sm font-black">
-                              {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
-                            </p>
-                          </div>
-                        </div>
-                        {selectedMatchup.games.length === 0 ? (
-                          <p className="text-sm theme-text-muted">No completed games against this player yet.</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {selectedMatchup.games.map((game) => (
-                              <div key={game.gameId} className="theme-panel-strong border rounded-2xl p-3 flex items-center justify-between gap-3">
-                                <div>
-                                  <p className="text-sm font-bold">
-                                    Winner: {game.players.find((entry) => entry.uid === game.winnerId)?.displayName || 'None'}
-                                  </p>
-                                  <p className="text-[10px] uppercase tracking-widest theme-text-muted">
-                                    {new Date(game.completedAt).toLocaleDateString()}
-                                  </p>
-                                </div>
-                                <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
-                                  {Object.entries(game.finalScores).map(([uid, score]) => {
-                                    const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
-                                    return `${entry?.displayName || 'Player'} ${score}`;
-                                  }).join(' • ')}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      )}
     </div>
   );
 };

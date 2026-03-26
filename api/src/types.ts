@@ -8,6 +8,7 @@ export interface TriviaQuestion {
   question: string;
   choices: string[];
   correctIndex: number;
+  answerIndex?: number;
   explanation: string;
   tags: string[];
   used?: boolean;
@@ -188,4 +189,3 @@ export function getExplanationText(question: TriviaQuestion): string {
 export function getHostLeadIn(question: TriviaQuestion): string | undefined {
   return question.presentation?.hostLeadIn;
 }
-

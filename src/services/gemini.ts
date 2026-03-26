@@ -415,7 +415,6 @@ export function dedupeQuestions(
       questionId: '',
       difficulty: question.difficulty || 'medium',
       correctIndex: question.correctIndex,
-      answerIndex: question.correctIndex,
       explanation: question.explanation || '',
       validationStatus: 'pending',
       verificationVerdict: 'reject',
