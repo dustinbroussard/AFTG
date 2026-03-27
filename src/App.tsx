@@ -180,7 +180,8 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
-  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [authStep, setAuthStep] = useState<'choice' | 'login' | 'signup'>('choice');
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const [pastGames, setPastGames] = useState<GameState[]>([]);
   const [selectedMatchup, setSelectedMatchup] = useState<MatchupHistoryState | null>(null);
@@ -1254,13 +1255,13 @@ export default function App() {
       return;
     }
     
+    setError(null);
     setAuthLoading(true);
-    setIsSigningUp(false);
     try {
       await signInWithEmail(email, password);
     } catch (err: any) {
       console.error('[handleSignIn] Failed:', err);
-      setError(err.message || 'Failed to sign in.');
+      setError(err.message || 'Failed to sign in. Check your credentials.');
     } finally {
       setAuthLoading(false);
     }
@@ -1277,10 +1278,15 @@ export default function App() {
       return;
     }
 
+    setError(null);
     setAuthLoading(true);
-    setIsSigningUp(true);
     try {
-      await signUpWithEmail(email, password);
+      const data = await signUpWithEmail(email, password);
+      // Supabase might require email confirmation depending on project settings.
+      // If data.user exists but data.session is null, confirmation is likely required.
+      if (data?.user && !data?.session) {
+        setSignupSuccess(true);
+      }
     } catch (err: any) {
       console.error('[handleSignUp] Failed:', err);
       setError(err.message || 'Failed to create account.');
@@ -2029,7 +2035,7 @@ export default function App() {
               animate={{ scale: 1, opacity: 1 }}
               className="text-center relative"
             >
-              <div className="relative inline-block w-48 h-48 sm:w-64 sm:h-64">
+              <div className="relative inline-block w-40 h-40 sm:w-48 sm:h-48">
                 <img
                   src={logoSrc}
                   alt="A F-cking Trivia Game"
@@ -2039,68 +2045,127 @@ export default function App() {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="w-full space-y-4"
-            >
-              <div className="space-y-3">
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 theme-text-muted" />
-                  <input
-                    type="email"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full h-12 pl-12 pr-4 rounded-xl theme-panel border bg-transparent focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all text-sm sm:text-base"
-                  />
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 theme-text-muted" />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
-                    className="w-full h-12 pl-12 pr-4 rounded-xl theme-panel border bg-transparent focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all text-sm sm:text-base"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={handleSignIn}
-                  disabled={authLoading}
-                  className="h-12 flex items-center justify-center rounded-xl bg-pink-600 text-white font-bold hover:bg-pink-500 transition-all active:scale-95 disabled:opacity-50"
+            <AnimatePresence mode="wait">
+              {authStep === 'choice' ? (
+                <motion.div
+                  key="choice-step"
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 20, opacity: 0 }}
+                  className="w-full space-y-4"
                 >
-                  {authLoading && !isSigningUp ? <Loader2 className="w-5 h-5 animate-spin" /> : "Log In"}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSignUp}
-                  disabled={authLoading}
-                  className="h-12 flex items-center justify-center rounded-xl theme-panel border font-bold hover:bg-white/5 transition-all active:scale-95 disabled:opacity-50"
+                  <button
+                    type="button"
+                    onClick={() => { setAuthStep('login'); setError(null); }}
+                    className="w-full h-14 flex items-center justify-center rounded-2xl bg-pink-600 text-white font-black uppercase tracking-widest hover:bg-pink-500 transition-all active:scale-95 shadow-lg shadow-pink-900/20"
+                  >
+                    Log In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setAuthStep('signup'); setError(null); }}
+                    className="w-full h-14 flex items-center justify-center rounded-2xl theme-panel border-2 border-white/10 font-black uppercase tracking-widest hover:bg-white/5 transition-all active:scale-95 shadow-lg"
+                  >
+                    Create Account
+                  </button>
+                </motion.div>
+              ) : signupSuccess ? (
+                <motion.div
+                  key="success-step"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="w-full theme-panel border p-6 rounded-2xl text-center space-y-4"
                 >
-                  {authLoading && isSigningUp ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign Up"}
-                </button>
-              </div>
+                  <Trophy className="w-12 h-12 text-yellow-400 mx-auto" />
+                  <h3 className="text-xl font-black uppercase">Account Created!</h3>
+                  <p className="text-sm theme-text-secondary leading-relaxed">
+                    Check your email to confirm your account. Once confirmed, you can log in.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => { setSignupSuccess(false); setAuthStep('login'); }}
+                    className="w-full py-3 rounded-xl bg-white text-black font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all"
+                  >
+                    Back to Log In
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="form-step"
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="w-full space-y-4"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => setAuthStep('choice')}
+                      className="p-2 -ml-2 rounded-lg hover:bg-white/5 transition-colors"
+                      title="Go back"
+                    >
+                      <ArrowLeft className="w-5 h-5 theme-text-muted" />
+                    </button>
+                    <h3 className="text-lg font-black uppercase tracking-tight">
+                      {authStep === 'login' ? 'Welcome Back' : 'Join the F-cking Game'}
+                    </h3>
+                  </div>
 
-              {error && (
-                <div className="p-4 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-200 text-xs sm:text-sm font-medium text-center">
-                  {error}
-                </div>
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 theme-text-muted" />
+                      <input
+                        type="email"
+                        placeholder="Email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full h-12 pl-12 pr-4 rounded-xl theme-panel border bg-transparent focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all text-sm sm:text-base theme-inset"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 theme-text-muted" />
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && (authStep === 'login' ? handleSignIn() : handleSignUp())}
+                        className="w-full h-12 pl-12 pr-4 rounded-xl theme-panel border bg-transparent focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all text-sm sm:text-base theme-inset"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={authStep === 'login' ? handleSignIn : handleSignUp}
+                    disabled={authLoading}
+                    className="w-full h-12 flex items-center justify-center rounded-xl bg-pink-600 text-white font-bold hover:bg-pink-500 transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-pink-900/20"
+                  >
+                    {authLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : authStep === 'login' ? (
+                      'Log In'
+                    ) : (
+                      'Create Account'
+                    )}
+                  </button>
+
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-200 text-xs sm:text-sm font-medium text-center shadow-inner"
+                    >
+                      {error}
+                    </motion.div>
+                  )}
+                </motion.div>
               )}
-            </motion.div>
+            </AnimatePresence>
 
             <div className="w-full text-center space-y-2">
-              <p className="theme-text-muted font-bold text-sm">
-                No ads. No coins. No bullsh*t. 🚫
-              </p>
-              <p className="theme-text-secondary font-medium text-xs leading-relaxed max-w-[280px] mx-auto">
-                Answer one question from each category to win. Get one wrong and your turn ends. 💀
+              <p className="theme-text-muted font-bold text-[10px] uppercase tracking-widest opacity-60">
+                Pure Trivia. No Ads. No Bullsh*t. 🚫
               </p>
             </div>
           </div>
