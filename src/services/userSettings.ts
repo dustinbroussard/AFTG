@@ -12,6 +12,10 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   updatedAt: 0,
 };
 
+function isMissingRowError(error: any) {
+  return error?.code === 'PGRST116' || error?.status === 406;
+}
+
 function sanitizeSettings(value: any): Partial<UserSettings> {
   if (!value || typeof value !== 'object') return {};
 
@@ -106,6 +110,9 @@ export async function loadUserSettings(uid: string): Promise<Partial<UserSetting
     .maybeSingle();
 
   if (error) {
+    if (isMissingRowError(error)) {
+      return {};
+    }
     console.error('[loadUserSettings] Error:', error.message);
     return null;
   }
@@ -120,8 +127,11 @@ export async function saveUserSettings(uid: string, settings: UserSettings) {
     .from('user_settings')
     .upsert({
       user_id: uid,
-      settings: settings,
+      settings,
+      created_at: now,
       updated_at: now,
+    }, {
+      onConflict: 'user_id',
     });
   if (error) throw error;
 }

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
-import { signInWithMagicLink, signOutUser, onAuthStateChange } from './services/auth';
+import { signInWithMagicLink, signOutUser } from './services/auth';
 import {
   recordAnswer,
   subscribeToGame,

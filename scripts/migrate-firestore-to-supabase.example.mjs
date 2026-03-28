@@ -67,20 +67,12 @@ function mapQuestion(doc) {
 }
 
 function mapProfile(firebaseUid, userRecord, profileDoc) {
-  const stats = profileDoc?.stats || {};
   return {
-    firebase_uid: firebaseUid,
-    display_name: userRecord.displayName || profileDoc?.displayName || 'Player',
-    photo_url: userRecord.photoURL || profileDoc?.photoURL || null,
-    completed_games: stats.completedGames || 0,
-    wins: stats.wins || 0,
-    losses: stats.losses || 0,
-    total_questions_seen: stats.totalQuestionsSeen || 0,
-    total_questions_correct: stats.totalQuestionsCorrect || 0,
-    category_performance: stats.categoryPerformance || {},
+    user_id: firebaseUid,
+    nickname: userRecord.displayName || profileDoc?.displayName || 'Player',
+    avatar_url: userRecord.photoURL || profileDoc?.photoURL || null,
     created_at: toIso(profileDoc?.createdAt) || new Date().toISOString(),
     updated_at: toIso(profileDoc?.updatedAt) || new Date().toISOString(),
-    last_seen_at: toIso(profileDoc?.lastSeenAt) || new Date().toISOString(),
   };
 }
 
@@ -119,7 +111,7 @@ async function ensureSupabaseUser(supabase, userRecord, profileDoc) {
     email_confirm: true,
     user_metadata: {
       legacy_firebase_uid: userRecord.uid,
-      display_name: userRecord.displayName || profileDoc?.displayName || 'Player',
+      nickname: userRecord.displayName || profileDoc?.displayName || 'Player',
     },
     password: requiresPasswordReset ? crypto.randomUUID() : undefined,
   });
@@ -141,13 +133,12 @@ async function ensureSupabaseUser(supabase, userRecord, profileDoc) {
   }
 
   const profile = {
-    id: profileId,
-    ...mapProfile(userRecord.uid, userRecord, profileDoc),
+    ...mapProfile(profileId, userRecord, profileDoc),
   };
 
   const { error: profileError } = await supabase
     .from('profiles')
-    .upsert(profile, { onConflict: 'id' });
+    .upsert(profile, { onConflict: 'user_id' });
   if (profileError) throw profileError;
 
   const { error: identityError } = await supabase
@@ -166,14 +157,18 @@ async function ensureSupabaseUser(supabase, userRecord, profileDoc) {
     const { error: settingsError } = await supabase
       .from('user_settings')
       .upsert({
-        profile_id: profileId,
-        theme_mode: profileDoc.private.settings.themeMode || 'dark',
-        sound_enabled: profileDoc.private.settings.soundEnabled ?? true,
-        music_enabled: profileDoc.private.settings.musicEnabled ?? true,
-        sfx_enabled: profileDoc.private.settings.sfxEnabled ?? true,
-        commentary_enabled: profileDoc.private.settings.commentaryEnabled ?? true,
+        user_id: profileId,
+        settings: {
+          themeMode: profileDoc.private.settings.themeMode || 'dark',
+          soundEnabled: profileDoc.private.settings.soundEnabled ?? true,
+          musicEnabled: profileDoc.private.settings.musicEnabled ?? true,
+          sfxEnabled: profileDoc.private.settings.sfxEnabled ?? true,
+          commentaryEnabled: profileDoc.private.settings.commentaryEnabled ?? true,
+          updatedAt: profileDoc.private.settings.updatedAt || Date.now(),
+        },
+        created_at: toIso(profileDoc.private.settings.createdAt) || new Date().toISOString(),
         updated_at: toIso(profileDoc.private.settings.updatedAt) || new Date().toISOString(),
-      }, { onConflict: 'profile_id' });
+      }, { onConflict: 'user_id' });
     if (settingsError) throw settingsError;
   }
 

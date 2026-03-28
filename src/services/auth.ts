@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import type { Session } from '@supabase/supabase-js';
 
 function getOAuthRedirectUrl() {
   if (typeof window === 'undefined') return undefined;
@@ -28,9 +29,9 @@ export const signOutUser = async () => {
   if (error) throw error;
 };
 
-export const onAuthStateChange = (callback: (user: any) => void) => {
+export const onAuthStateChange = (callback: (session: Session | null) => void) => {
   const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-    callback(session?.user ?? null);
+    callback(session);
   });
   return subscription;
 };

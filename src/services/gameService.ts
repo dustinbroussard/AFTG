@@ -1,6 +1,10 @@
 import { supabase } from '../lib/supabase';
 import { GameState, GameAnswer, Player, TriviaQuestion } from '../types';
 
+function isMissingRowError(error: any) {
+  return error?.code === 'PGRST116' || error?.status === 406;
+}
+
 export const subscribeToGame = (gameId: string, callback: (game: GameState) => void) => {
   const channel = supabase
     .channel(`game-${gameId}`)
@@ -21,7 +25,11 @@ export const subscribeToGame = (gameId: string, callback: (game: GameState) => v
           .eq('id', gameId)
           .maybeSingle()
           .then(({ data, error }) => {
-            if (!error && data) callback(mapPostgresGameToState(data));
+            if (error) {
+              if (isMissingRowError(error)) return;
+              throw error;
+            }
+            if (data) callback(mapPostgresGameToState(data));
           });
       }
     });
@@ -287,10 +295,10 @@ export async function getGameById(gameId: string): Promise<GameState | null> {
     .maybeSingle();
   
   if (error) {
-    if (error.code === 'PGRST116') return null;
+    if (isMissingRowError(error)) return null;
     throw error;
   }
-  return mapPostgresGameToState(data);
+  return data ? mapPostgresGameToState(data) : null;
 }
 
 export async function getGameByCode(code: string): Promise<GameState | null> {
@@ -302,10 +310,10 @@ export async function getGameByCode(code: string): Promise<GameState | null> {
     .maybeSingle();
   
   if (error) {
-    if (error.code === 'PGRST116') return null;
+    if (isMissingRowError(error)) return null;
     throw error;
   }
-  return mapPostgresGameToState(data);
+  return data ? mapPostgresGameToState(data) : null;
 }
 
 
@@ -356,7 +364,7 @@ async function loadMessages(game_id: string) {
   ]);
 
   if (messagesError) throw messagesError;
-  if (gameError) throw gameError;
+  if (gameError && !isMissingRowError(gameError)) throw gameError;
 
   const state = game?.game_state || {};
   const playersById = new Map(
@@ -384,8 +392,11 @@ export async function getGameQuestions(game_id: string): Promise<TriviaQuestion[
     .eq('id', game_id)
     .maybeSingle();
   
-  if (getError) throw getError;
-  const questionIds = game.game_state?.questionIds || [];
+  if (getError) {
+    if (isMissingRowError(getError)) return [];
+    throw getError;
+  }
+  const questionIds = game?.game_state?.questionIds || [];
   if (questionIds.length === 0) return [];
 
   const { data: qData, error: qError } = await supabase

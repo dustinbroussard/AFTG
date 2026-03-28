@@ -11,6 +11,10 @@ import {
   TriviaQuestion,
 } from '../types';
 
+function isMissingRowError(error: any) {
+  return error?.code === 'PGRST116' || error?.status === 406;
+}
+
 function mapPostgresProfileToPlayerProfile(p: any): PlayerProfile {
   if (!p) return null as any;
   return {
@@ -30,6 +34,9 @@ export async function ensurePlayerProfile(user: SupabaseUser, nickname?: string)
     .maybeSingle();
 
   if (getError && getError.code !== 'PGRST116') {
+    if (isMissingRowError(getError)) {
+      return;
+    }
     throw getError;
   }
 
@@ -39,7 +46,7 @@ export async function ensurePlayerProfile(user: SupabaseUser, nickname?: string)
   if (!existingProfile) {
     const newProfile = {
       user_id: user.id,
-      nickname: nickname || identity?.full_name || identity?.display_name || 'Player',
+      nickname: nickname || identity?.nickname || identity?.full_name || identity?.name || 'Player',
       avatar_url: identity?.avatar_url || identity?.picture || undefined,
       created_at: now,
       updated_at: now,
@@ -83,7 +90,14 @@ export function subscribePlayerProfile(
           .eq('user_id', uid)
           .maybeSingle()
           .then(({ data, error }) => {
-            if (error) onError?.(error);
+            if (error) {
+              if (isMissingRowError(error)) {
+                callback(null);
+                return;
+              }
+              onError?.(error);
+              return;
+            }
             else callback(mapPostgresProfileToPlayerProfile(data));
           });
       }
