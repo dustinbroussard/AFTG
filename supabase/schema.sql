@@ -213,11 +213,12 @@ create table if not exists public.game_invites (
 
 create index if not exists game_invites_to_status_idx on public.game_invites (to_profile_id, status, created_at desc);
 
-create table if not exists public.seen_questions (
-  profile_id uuid not null references public.profiles (id) on delete cascade,
+create table if not exists public.user_seen_questions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
   question_id uuid not null references public.questions (id) on delete cascade,
-  seen_at timestamptz not null default now(),
-  primary key (profile_id, question_id)
+  created_at timestamptz not null default now(),
+  unique (user_id, question_id)
 );
 
 create table if not exists public.recent_player_edges (
@@ -272,7 +273,7 @@ alter table public.game_questions enable row level security;
 alter table public.game_answers enable row level security;
 alter table public.game_messages enable row level security;
 alter table public.game_invites enable row level security;
-alter table public.seen_questions enable row level security;
+alter table public.user_seen_questions enable row level security;
 alter table public.recent_player_edges enable row level security;
 
 create policy "profiles_select_own_or_public_name"
@@ -457,11 +458,11 @@ create policy "game_invites_recipient_update"
   using (auth.uid() = to_profile_id or auth.uid() = from_profile_id)
   with check (auth.uid() = to_profile_id or auth.uid() = from_profile_id);
 
-create policy "seen_questions_own_all"
-  on public.seen_questions
+create policy "user_seen_questions_own_all"
+  on public.user_seen_questions
   for all
-  using (auth.uid() = profile_id)
-  with check (auth.uid() = profile_id);
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 
 create policy "recent_player_edges_own_all"
   on public.recent_player_edges

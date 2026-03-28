@@ -114,21 +114,22 @@ create policy "Players can join games."
   with check ( auth.uid() = user_id );
 
 -- 5. Seen Questions (To avoid repetition)
-create table public.seen_questions (
-  user_id uuid references auth.users on delete cascade,
-  question_id uuid references public.questions on delete cascade,
-  seen_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  primary key (user_id, question_id)
+create table public.user_seen_questions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users on delete cascade,
+  question_id uuid not null references public.questions on delete cascade,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique (user_id, question_id)
 );
 
-alter table public.seen_questions enable row level security;
+alter table public.user_seen_questions enable row level security;
 
 create policy "Users can view their own seen questions."
-  on public.seen_questions for select
+  on public.user_seen_questions for select
   using ( auth.uid() = user_id );
 
 create policy "Users can mark questions as seen."
-  on public.seen_questions for insert
+  on public.user_seen_questions for insert
   with check ( auth.uid() = user_id );
 
 -- 6. Trigger: Automatic Profile Creation upon Signup

@@ -423,14 +423,14 @@ async function migrateRecentPlayersAndInvites(db, supabase, profileMap, gameIdMa
       if (questionLookupError) throw questionLookupError;
 
       const seenRows = (questions || []).map((entry) => ({
-        profile_id: profileId,
+        user_id: profileId,
         question_id: entry.id,
       }));
 
       if (seenRows.length > 0) {
         const { error } = await supabase
-          .from('seen_questions')
-          .upsert(seenRows, { onConflict: 'profile_id,question_id' });
+          .from('user_seen_questions')
+          .upsert(seenRows, { onConflict: 'user_id,question_id' });
         if (error) throw error;
       }
     }

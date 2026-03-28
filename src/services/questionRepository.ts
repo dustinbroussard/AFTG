@@ -8,6 +8,9 @@ interface GetQuestionsForSessionParams {
   userId?: string;
 }
 
+const SEEN_QUESTIONS_TABLE = 'user_seen_questions';
+const SEEN_QUESTIONS_USER_COLUMN = 'user_id';
+
 const seenQuestionIdsCache = new Map<string, Promise<Set<string>>>();
 
 function normalizeRequestedCategory(category: string) {
@@ -94,47 +97,66 @@ async function loadSeenQuestionIds(userId?: string): Promise<Set<string>> {
   if (!userId) return new Set<string>();
   const cached = seenQuestionIdsCache.get(userId);
   if (cached) {
-    return new Set(await cached);
+    const cachedIds = new Set(await cached);
+    console.info(
+      `[seenQuestions] Fetched seen question IDs from cache table=${SEEN_QUESTIONS_TABLE} user_id=${userId} count=${cachedIds.size}`
+    );
+    return cachedIds;
   }
 
   const loadPromise = (async () => {
-    try {
-      const { data, error } = await supabase
-        .from('user_seen_questions')
-        .select('question_id')
-        .eq('user_id', userId);
+    console.info(`[seenQuestions] Querying table=${SEEN_QUESTIONS_TABLE} user_id=${userId}`);
+    const { data, error } = await supabase
+      .from(SEEN_QUESTIONS_TABLE)
+      .select('question_id')
+      .eq(SEEN_QUESTIONS_USER_COLUMN, userId);
 
-      if (error) {
-        const fallback = await supabase
-          .from('seen_questions')
-          .select('question_id')
-          .eq('profile_id', userId);
-
-        if (fallback.error) throw error;
-        return new Set((fallback.data || []).map((entry: { question_id: string }) => entry.question_id));
-      }
-      return new Set((data || []).map((entry: { question_id: string }) => entry.question_id));
-    } catch (error) {
-      seenQuestionIdsCache.delete(userId);
-      throw error;
+    if (error) {
+      console.warn(
+        `[seenQuestions] Failed querying table=${SEEN_QUESTIONS_TABLE} user_id=${userId}. Treating as no seen questions.`,
+        error
+      );
+      return new Set<string>();
     }
+
+    const seenIds = new Set((data || []).map((entry: { question_id: string }) => entry.question_id));
+    console.info(
+      `[seenQuestions] Fetched seen question IDs table=${SEEN_QUESTIONS_TABLE} user_id=${userId} count=${seenIds.size}`
+    );
+    return seenIds;
   })();
 
   seenQuestionIdsCache.set(userId, loadPromise);
   return new Set(await loadPromise);
 }
 
-function preferUnseenQuestions(questions: TriviaQuestion[], seenQuestionIds: Set<string>, count: number) {
+function preferUnseenQuestions(
+  questions: TriviaQuestion[],
+  seenQuestionIds: Set<string>,
+  count: number,
+  category: string,
+  userId?: string
+) {
   if (seenQuestionIds.size === 0) {
+    console.info(
+      `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} unseen_found=${Math.min(questions.length, count)} fallback_triggered=false available_candidates=${questions.length}`
+    );
     return questions.slice(0, count);
   }
 
   const unseen = questions.filter((question) => !seenQuestionIds.has(question.id));
+  const fallbackTriggered = unseen.length < count;
+  console.info(
+    `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} unseen_found=${unseen.length} fallback_triggered=${fallbackTriggered} available_candidates=${questions.length}`
+  );
   if (unseen.length >= count) {
     return unseen.slice(0, count);
   }
 
   const seenFallback = questions.filter((question) => seenQuestionIds.has(question.id));
+  console.info(
+    `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} fallback_pool=${seenFallback.length} selected_count=${Math.min(unseen.length + seenFallback.length, count)}`
+  );
   return [...unseen, ...seenFallback].slice(0, count);
 }
 
@@ -153,7 +175,9 @@ export async function getQuestionsForSession({
     const approved = preferUnseenQuestions(
       await fetchApprovedQuestionsByCategory(category, excludeIds, count),
       seenQuestionIds,
-      count
+      count,
+      category,
+      userId
     );
     approved.forEach((question) => excludeIds.add(question.id));
     selected.push(...approved);
@@ -165,50 +189,40 @@ export async function getQuestionsForSession({
 export async function markQuestionSeen({
   userId,
   questionId,
-  gameId,
 }: {
   userId: string;
   questionId: string;
-  gameId?: string;
 }) {
+  console.info(
+    `[seenQuestions] Marking question as seen table=${SEEN_QUESTIONS_TABLE} user_id=${userId} question_id=${questionId}`
+  );
   const { error } = await supabase
-    .from('user_seen_questions')
+    .from(SEEN_QUESTIONS_TABLE)
     .upsert(
       {
-        user_id: userId,
+        [SEEN_QUESTIONS_USER_COLUMN]: userId,
         question_id: questionId,
-        game_id: gameId,
-        seen_at: new Date().toISOString(),
       },
-      { onConflict: 'user_id,question_id' }
+      { onConflict: `${SEEN_QUESTIONS_USER_COLUMN},question_id` }
     );
 
   if (error) {
-    const fallback = await supabase
-      .from('seen_questions')
-      .upsert(
-        {
-          profile_id: userId,
-          question_id: questionId,
-        },
-        { onConflict: 'profile_id,question_id' }
-      );
-
-    if (fallback.error) {
-      console.error('Error marking question seen in Supabase:', error);
-      return;
-    }
-  }
-
-  const cachedSeenQuestionIds = seenQuestionIdsCache.get(userId);
-  if (cachedSeenQuestionIds) {
-    seenQuestionIdsCache.set(
-      userId,
-      cachedSeenQuestionIds.then((ids) => {
-        const nextIds = new Set(ids);
-        nextIds.add(questionId);
-        return nextIds;
-      })
+    console.warn(
+      `[seenQuestions] Failed writing table=${SEEN_QUESTIONS_TABLE} user_id=${userId} question_id=${questionId}. Keeping local cache updated.`,
+      error
     );
   }
+
+  const cachedSeenQuestionIds = seenQuestionIdsCache.get(userId) ?? Promise.resolve(new Set<string>());
+  seenQuestionIdsCache.set(
+    userId,
+    cachedSeenQuestionIds.then((ids) => {
+      const nextIds = new Set(ids);
+      nextIds.add(questionId);
+      console.info(
+        `[seenQuestions] Updated local seen cache table=${SEEN_QUESTIONS_TABLE} user_id=${userId} count=${nextIds.size}`
+      );
+      return nextIds;
+    })
+  );
 }

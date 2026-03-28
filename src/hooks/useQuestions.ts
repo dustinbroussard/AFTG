@@ -11,7 +11,11 @@ export function useQuestions(user: any | null, gameId?: string) {
   const fetchQuestions = useCallback(async (categories: string[], countPerCategory: number) => {
     setIsFetchingQuestions(true);
     try {
-      const q = await getQuestionsForSession({ categories, count: countPerCategory });
+      const q = await getQuestionsForSession({
+        categories,
+        count: countPerCategory,
+        userId: user?.id,
+      });
       setQuestions(q);
       return q;
     } catch (err) {
@@ -20,7 +24,7 @@ export function useQuestions(user: any | null, gameId?: string) {
     } finally {
       setIsFetchingQuestions(false);
     }
-  }, []);
+  }, [user?.id]);
 
   const markSeen = useCallback(async (questionId: string) => {
     if (!user?.id) return;
@@ -28,12 +32,11 @@ export function useQuestions(user: any | null, gameId?: string) {
       await markQuestionSeen({
         userId: user.id,
         questionId,
-        gameId,
       });
     } catch (err) {
       console.error('[seenQuestions] Failed:', err);
     }
-  }, [user?.id, gameId]);
+  }, [user?.id]);
 
   return {
     questions,
