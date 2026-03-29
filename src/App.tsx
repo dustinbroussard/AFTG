@@ -396,7 +396,16 @@ export default function App() {
 
   const clearResumePrompt = () => {
     setResumePrompt(null);
-    setIsCheckingForResume(false);
+    setResumeCheckLoading(false, 'clearResumePrompt');
+  };
+
+  const setResumeCheckLoading = (nextValue: boolean, reason: string, extra: Record<string, unknown> = {}) => {
+    console.info('[resumeCheck] Loading flag update', {
+      nextValue,
+      reason,
+      ...extra,
+    });
+    setIsCheckingForResume(nextValue);
   };
 
   const handleConfirmedQuit = () => {
@@ -1022,43 +1031,112 @@ export default function App() {
     if (!user?.id || game || resumePrompt || isCheckingForResume) return;
 
     const storedGameId = getStoredActiveGameId();
-    if (!storedGameId) return;
+    console.info('[resumeCheck] Evaluating startup resume check', {
+      userId: user?.id ?? null,
+      hasGame: !!game,
+      hasResumePrompt: !!resumePrompt,
+      isCheckingForResume,
+      storedGameId,
+    });
+    if (!storedGameId) {
+      console.info('[resumeCheck] No stored active game found; skipping resume check', {
+        userId: user?.id ?? null,
+      });
+      return;
+    }
 
     let cancelled = false;
-    setIsCheckingForResume(true);
+    let finished = false;
+    let timeoutId: number | null = null;
+    const finishResumeCheck = (reason: string, extra: Record<string, unknown> = {}) => {
+      if (cancelled || finished) return;
+      finished = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      setResumeCheckLoading(false, reason, extra);
+    };
+
+    console.info('[resumeCheck] Starting resume check request', {
+      userId: user.id,
+      storedGameId,
+      request: 'getGameById',
+    });
+    setResumeCheckLoading(true, 'resumeCheckStart', { userId: user.id, storedGameId });
+    timeoutId = window.setTimeout(() => {
+      console.error('[resumeCheck] Resume check timed out', {
+        userId: user.id,
+        storedGameId,
+      });
+      finishResumeCheck('resumeCheckTimeout', { storedGameId });
+    }, 8000);
 
     getGameById(storedGameId)
       .then((storedGame) => {
-        if (cancelled) return;
+        if (cancelled || finished) return;
+
+        console.info('[resumeCheck] Resume check response received', {
+          storedGameId,
+          foundGame: !!storedGame,
+          gameStatus: storedGame?.status ?? null,
+          playerIds: storedGame?.playerIds ?? [],
+        });
 
         if (!storedGame) {
+          console.info('[resumeCheck] No resumable game found; clearing stored active game', {
+            storedGameId,
+          });
           persistActiveGameId(null);
-          setIsCheckingForResume(false);
+          finishResumeCheck('resumeCheckNoStoredGame', { storedGameId });
           return;
         }
 
         if (storedGame.status !== 'active' || !storedGame.playerIds.includes(user.id)) {
+          console.info('[resumeCheck] Stored game is not resumable for current user', {
+            storedGameId,
+            gameStatus: storedGame.status,
+            playerIds: storedGame.playerIds,
+            userId: user.id,
+          });
           persistActiveGameId(null);
-          setIsCheckingForResume(false);
+          finishResumeCheck('resumeCheckGameNotResumable', {
+            storedGameId,
+            gameStatus: storedGame.status,
+          });
           return;
         }
 
+        console.info('[resumeCheck] Resumable game found', {
+          storedGameId,
+          gameStatus: storedGame.status,
+          playerIds: storedGame.playerIds,
+        });
         setIsSolo(storedGame.playerIds.length === 1);
         setResumePrompt({
           game: storedGame as GameState,
           isSolo: storedGame.playerIds.length === 1,
         });
-        setIsCheckingForResume(false);
+        finishResumeCheck('resumeCheckResumableGameFound', { storedGameId });
       })
       .catch((err) => {
-        if (!cancelled) {
-          console.error('[resumeCheck] Failed to check for resumable game:', err);
-          setIsCheckingForResume(false);
-        }
+        if (cancelled || finished) return;
+        console.error('[resumeCheck] Failed to check for resumable game:', err);
+        finishResumeCheck('resumeCheckError', {
+          storedGameId,
+          errorMessage: err instanceof Error ? err.message : String(err),
+        });
       });
 
     return () => {
       cancelled = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      console.info('[resumeCheck] Resume check effect cleanup', {
+        storedGameId,
+        finished,
+      });
     };
   }, [game, isCheckingForResume, resumePrompt, user?.id]);
 
