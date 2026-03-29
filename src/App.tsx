@@ -249,6 +249,14 @@ export default function App() {
   const restoredQuestionStartedAtRef = useRef<number | null>(null);
   const pendingResumeRestoreRef = useRef<string | null>(null);
   const persistenceWarningShownRef = useRef(false);
+  const resumeCheckRequestIdRef = useRef(0);
+  const resumeCheckInFlightGameIdRef = useRef<string | null>(null);
+  const resumeCheckDepsRef = useRef<{
+    userId: string | null;
+    gameId: string | null;
+    resumePromptGameId: string | null;
+    isCheckingForResume: boolean;
+  } | null>(null);
 
   const existingQuestionIds = questions.map((question) => question.id);
   const playableCategories = getPlayableCategories();
@@ -1028,7 +1036,34 @@ export default function App() {
   }, [game?.id, game?.status]);
 
   useEffect(() => {
-    if (!user?.id || game || resumePrompt || isCheckingForResume) return;
+    const dependencySnapshot = {
+      userId: user?.id ?? null,
+      gameId: game?.id ?? null,
+      resumePromptGameId: resumePrompt?.game.id ?? null,
+      isCheckingForResume,
+    };
+    const previousDependencySnapshot = resumeCheckDepsRef.current;
+    resumeCheckDepsRef.current = dependencySnapshot;
+
+    console.info('[resumeCheck] Effect evaluation', {
+      previousDependencies: previousDependencySnapshot,
+      currentDependencies: dependencySnapshot,
+      rerunReasons: {
+        userChanged: previousDependencySnapshot?.userId !== dependencySnapshot.userId,
+        gameChanged: previousDependencySnapshot?.gameId !== dependencySnapshot.gameId,
+        resumePromptChanged: previousDependencySnapshot?.resumePromptGameId !== dependencySnapshot.resumePromptGameId,
+        loadingChanged: previousDependencySnapshot?.isCheckingForResume !== dependencySnapshot.isCheckingForResume,
+      },
+    });
+
+    if (!user?.id || game || resumePrompt) {
+      console.info('[resumeCheck] Skipping resume check because prerequisites are not met', {
+        userId: user?.id ?? null,
+        hasGame: !!game,
+        hasResumePrompt: !!resumePrompt,
+      });
+      return;
+    }
 
     const storedGameId = getStoredActiveGameId();
     console.info('[resumeCheck] Evaluating startup resume check', {
@@ -1037,46 +1072,88 @@ export default function App() {
       hasResumePrompt: !!resumePrompt,
       isCheckingForResume,
       storedGameId,
+      inFlightStoredGameId: resumeCheckInFlightGameIdRef.current,
     });
     if (!storedGameId) {
       console.info('[resumeCheck] No stored active game found; skipping resume check', {
         userId: user?.id ?? null,
       });
+      if (isCheckingForResume) {
+        setResumeCheckLoading(false, 'resumeCheckSkippedNoStoredGame');
+      }
       return;
     }
+
+    if (resumeCheckInFlightGameIdRef.current === storedGameId) {
+      console.info('[resumeCheck] Resume check already in flight for stored game; skipping duplicate start', {
+        storedGameId,
+      });
+      return;
+    }
+
+    const requestId = ++resumeCheckRequestIdRef.current;
+    resumeCheckInFlightGameIdRef.current = storedGameId;
 
     let cancelled = false;
     let finished = false;
     let timeoutId: number | null = null;
     const finishResumeCheck = (reason: string, extra: Record<string, unknown> = {}) => {
-      if (cancelled || finished) return;
+      if (finished) return;
       finished = true;
       if (timeoutId !== null) {
         window.clearTimeout(timeoutId);
         timeoutId = null;
       }
-      setResumeCheckLoading(false, reason, extra);
+      if (resumeCheckRequestIdRef.current === requestId) {
+        resumeCheckInFlightGameIdRef.current = null;
+        setResumeCheckLoading(false, reason, {
+          requestId,
+          storedGameId,
+          cancelled,
+          ...extra,
+        });
+      } else {
+        console.info('[resumeCheck] Ignoring finish from superseded request', {
+          requestId,
+          activeRequestId: resumeCheckRequestIdRef.current,
+          reason,
+          storedGameId,
+          cancelled,
+          ...extra,
+        });
+      }
     };
 
     console.info('[resumeCheck] Starting resume check request', {
+      requestId,
       userId: user.id,
       storedGameId,
       request: 'getGameById',
     });
-    setResumeCheckLoading(true, 'resumeCheckStart', { userId: user.id, storedGameId });
+    setResumeCheckLoading(true, 'resumeCheckStart', { requestId, userId: user.id, storedGameId });
     timeoutId = window.setTimeout(() => {
       console.error('[resumeCheck] Resume check timed out', {
+        requestId,
         userId: user.id,
         storedGameId,
       });
-      finishResumeCheck('resumeCheckTimeout', { storedGameId });
+      finishResumeCheck('resumeCheckTimeout');
     }, 8000);
 
     getGameById(storedGameId)
       .then((storedGame) => {
-        if (cancelled || finished) return;
+        if (cancelled || finished) {
+          console.info('[resumeCheck] Ignoring response from cancelled or finished request', {
+            requestId,
+            storedGameId,
+            cancelled,
+            finished,
+          });
+          return;
+        }
 
         console.info('[resumeCheck] Resume check response received', {
+          requestId,
           storedGameId,
           foundGame: !!storedGame,
           gameStatus: storedGame?.status ?? null,
@@ -1085,15 +1162,17 @@ export default function App() {
 
         if (!storedGame) {
           console.info('[resumeCheck] No resumable game found; clearing stored active game', {
+            requestId,
             storedGameId,
           });
           persistActiveGameId(null);
-          finishResumeCheck('resumeCheckNoStoredGame', { storedGameId });
+          finishResumeCheck('resumeCheckNoStoredGame');
           return;
         }
 
         if (storedGame.status !== 'active' || !storedGame.playerIds.includes(user.id)) {
           console.info('[resumeCheck] Stored game is not resumable for current user', {
+            requestId,
             storedGameId,
             gameStatus: storedGame.status,
             playerIds: storedGame.playerIds,
@@ -1101,13 +1180,13 @@ export default function App() {
           });
           persistActiveGameId(null);
           finishResumeCheck('resumeCheckGameNotResumable', {
-            storedGameId,
             gameStatus: storedGame.status,
           });
           return;
         }
 
         console.info('[resumeCheck] Resumable game found', {
+          requestId,
           storedGameId,
           gameStatus: storedGame.status,
           playerIds: storedGame.playerIds,
@@ -1117,13 +1196,21 @@ export default function App() {
           game: storedGame as GameState,
           isSolo: storedGame.playerIds.length === 1,
         });
-        finishResumeCheck('resumeCheckResumableGameFound', { storedGameId });
+        finishResumeCheck('resumeCheckResumableGameFound');
       })
       .catch((err) => {
-        if (cancelled || finished) return;
+        if (cancelled || finished) {
+          console.info('[resumeCheck] Ignoring error from cancelled or finished request', {
+            requestId,
+            storedGameId,
+            cancelled,
+            finished,
+            errorMessage: err instanceof Error ? err.message : String(err),
+          });
+          return;
+        }
         console.error('[resumeCheck] Failed to check for resumable game:', err);
         finishResumeCheck('resumeCheckError', {
-          storedGameId,
           errorMessage: err instanceof Error ? err.message : String(err),
         });
       });
@@ -1133,12 +1220,24 @@ export default function App() {
       if (timeoutId !== null) {
         window.clearTimeout(timeoutId);
       }
+      if (!finished && resumeCheckRequestIdRef.current === requestId) {
+        resumeCheckInFlightGameIdRef.current = null;
+        setResumeCheckLoading(false, 'resumeCheckCleanupBeforeCompletion', {
+          requestId,
+          storedGameId,
+          previousDependencies: previousDependencySnapshot,
+          currentDependencies: dependencySnapshot,
+        });
+        finished = true;
+      }
       console.info('[resumeCheck] Resume check effect cleanup', {
+        requestId,
         storedGameId,
         finished,
+        cancelled,
       });
     };
-  }, [game, isCheckingForResume, resumePrompt, user?.id]);
+  }, [game?.id, resumePrompt?.game.id, user?.id]);
 
 
   useEffect(() => {
