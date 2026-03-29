@@ -174,32 +174,103 @@ function logGamesUpdatePayload(triggeredBy: string, gameId: string, payload: Rec
 }
 
 export const subscribeToGame = (gameId: string, callback: (game: GameState) => void) => {
+  let lastSnapshotSignature: string | null = null;
+  const emitGameRow = (row: any, source: string) => {
+    if (!row) {
+      console.warn('[subscribeToGame] No game row available', {
+        gameId,
+        source,
+      });
+      return;
+    }
+
+    const mappedGame = mapPostgresGameToState(row);
+    const signature = JSON.stringify({
+      status: mappedGame.status,
+      currentTurn: mappedGame.currentTurn,
+      playerIds: mappedGame.playerIds,
+      players: mappedGame.players.map((player) => ({
+        uid: player.uid,
+        score: player.score,
+        streak: player.streak,
+      })),
+    });
+
+    console.info('[subscribeToGame] Game snapshot received', {
+      gameId,
+      source,
+      fullGameRecord: row,
+      fieldsUsedForUi: {
+        status: mappedGame.status,
+        currentTurn: mappedGame.currentTurn,
+        playerIds: mappedGame.playerIds,
+        playersCount: mappedGame.players.length,
+      },
+      staleComparedToLastSnapshot: lastSnapshotSignature === signature,
+    });
+
+    if (lastSnapshotSignature === signature) {
+      return;
+    }
+
+    lastSnapshotSignature = signature;
+    callback(mappedGame);
+  };
+
+  console.info('[subscribeToGame] Starting games subscription', {
+    gameId,
+    sourceOfTruthFields: ['status', 'current_turn_user_id', 'game_state.playerIds', 'game_state.players'],
+  });
+
   const channel = supabase
     .channel(`game-${gameId}`)
     .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'games', filter: `id=eq.${gameId}` },
       (payload) => {
+        console.info('[subscribeToGame] Realtime event received', {
+          gameId,
+          eventType: payload.eventType,
+          oldRecord: payload.old ?? null,
+          newRecord: payload.new ?? null,
+          hostReceivedRealtimeUpdate: true,
+        });
         if (payload.new) {
-          callback(mapPostgresGameToState(payload.new));
+          emitGameRow(payload.new, `realtime:${payload.eventType}`);
         }
       }
     )
     .subscribe((status) => {
+      console.info('[subscribeToGame] Subscription status changed', {
+        gameId,
+        status,
+      });
+
       if (status !== 'SUBSCRIBED') {
         return;
       }
 
       fetchGameRow(gameId).then((row) => {
-        if (row) {
-          callback(mapPostgresGameToState(row));
-        }
+        emitGameRow(row, 'subscribe:initFetch');
       }).catch((error) => {
         logSupabaseError('games', 'select', error, { gameId, purpose: 'subscribeToGame' });
       });
     });
 
-  return () => void supabase.removeChannel(channel);
+  const fallbackRefreshInterval = window.setInterval(() => {
+    fetchGameRow(gameId)
+      .then((row) => {
+        emitGameRow(row, 'subscribe:fallbackRefresh');
+      })
+      .catch((error) => {
+        logSupabaseError('games', 'select', error, { gameId, purpose: 'subscribeToGameFallbackRefresh' });
+      });
+  }, 3000);
+
+  return () => {
+    window.clearInterval(fallbackRefreshInterval);
+    return void supabase.removeChannel(channel);
+  };
 };
 
 export async function createGame(

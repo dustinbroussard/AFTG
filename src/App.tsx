@@ -2006,6 +2006,55 @@ export default function App() {
     : setupLoadingCopy;
 
   useEffect(() => {
+    if (!game || !user?.id) return;
+
+    const waitingMessage =
+      game.status === 'waiting'
+        ? 'Waiting for another player to join...'
+        : !shouldShowCurrentTurnStage
+          ? `Waiting for ${players.find((p) => p.uid === game.currentTurn)?.name} to spin...`
+          : 'Current player can act';
+
+    console.info('[multiplayerSync] Waiting-state evaluation', {
+      gameId: game.id,
+      userId: user.id,
+      fullGameRecordUsedByUi: {
+        id: game.id,
+        status: game.status,
+        currentTurn: game.currentTurn,
+        playerIds: game.playerIds,
+        players,
+      },
+      sourceOfTruthFields: {
+        playerTwoJoined: {
+          gameStatus: game.status,
+          playerIds: game.playerIds,
+          playersCount: players.length,
+        },
+        hostShouldSpin: {
+          gameStatus: game.status,
+          currentTurn: game.currentTurn,
+          shouldShowCurrentTurnStage,
+        },
+        joiningPlayerShouldWait: {
+          gameStatus: game.status,
+          currentTurn: game.currentTurn,
+          shouldShowCurrentTurnStage,
+        },
+      },
+      chosenWaitingMessage: waitingMessage,
+      chosenReason:
+        game.status === 'waiting'
+          ? 'statusWaitingSoHostWaitsForJoin'
+          : !shouldShowCurrentTurnStage
+            ? 'statusNotWaitingAndCurrentPlayerCannotActSoWaitForSpinner'
+            : 'gameReadyForCurrentPlayerAction',
+      staleCachedGameStateSuspected:
+        game.status === 'waiting' && (game.playerIds.length > 1 || players.length > 1),
+    });
+  }, [game, players, shouldShowCurrentTurnStage, user?.id]);
+
+  useEffect(() => {
     console.info('[joinFlow] Screen guard evaluation', {
       currentView: game ? 'game-view' : 'lobby-view',
       gameId: game?.id ?? null,
