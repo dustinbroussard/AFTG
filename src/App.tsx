@@ -291,28 +291,6 @@ export default function App() {
     setGame(joinedGame);
   };
 
-  const applyLocalTurnState = (
-    nextPlayers: Player[],
-    nextCurrentTurn: string | null,
-    source: 'correctAnswer' | 'incorrectAnswer'
-  ) => {
-    console.info('[turnSync] Applying local turn state', {
-      source,
-      nextCurrentTurn,
-      nextPlayers: nextPlayers.map((player) => ({
-        uid: player.uid,
-        score: player.score,
-        streak: player.streak,
-      })),
-    });
-    setPlayers(nextPlayers);
-    setGame((current) => current ? {
-      ...current,
-      players: nextPlayers,
-      currentTurn: nextCurrentTurn,
-    } : current);
-  };
-
   const handleEnableSound = async () => {
     updateSettings({ soundEnabled: true });
     const played = await enableAudioFromGesture();
@@ -1868,7 +1846,24 @@ export default function App() {
     setResultPhase('revealing');
 
     try {
-      await recordAnswer(game.id, questionId, user.id, gameAnswer);
+      const gameAfterRpc = await recordAnswer(game.id, questionId, user.id, gameAnswer);
+      console.info('[record_game_answer] Game state after RPC response', {
+        gameId: game.id,
+        refreshedGameState: gameAfterRpc
+          ? {
+              id: gameAfterRpc.id,
+              status: gameAfterRpc.status,
+              currentTurn: gameAfterRpc.currentTurn,
+              playerIds: gameAfterRpc.playerIds,
+              players: gameAfterRpc.players,
+            }
+          : null,
+        relyingOnSubscriptionRefresh: !gameAfterRpc,
+      });
+      if (gameAfterRpc) {
+        setGame(gameAfterRpc);
+        setPlayers(gameAfterRpc.players || []);
+      }
       
       // Incrementally update player stats even if match isn't finished
       void recordQuestionStats({
@@ -1903,10 +1898,10 @@ export default function App() {
           gameId: game.id,
           submittedBy: user.id,
           previousTurnOwner: game.currentTurn,
-          nextTurnOwner: game.currentTurn,
+          nextTurnOwner: gameAfterRpc?.currentTurn ?? game.currentTurn,
           updatedFields: ['game_state.players'],
+          localTurnHandlingDisabled: true,
         });
-        applyLocalTurnState(updatedPlayers, game.currentTurn, 'correctAnswer');
         await updateGame(game.id, { players: updatedPlayers });
 
         if (lastAnswerCorrect && !earnedNewTrophy && !manualPickReady) {
@@ -1950,32 +1945,23 @@ export default function App() {
         });
         
         const patch: any = { players: updatedPlayers };
-        const nextPlayerId = !isSolo && game.playerIds.length > 1
-          ? game.playerIds.find(id => id !== user.id) ?? null
-          : game.currentTurn;
-
-        // End turn in multiplayer
-        if (!isSolo && game.playerIds.length > 1) {
-          patch.current_turn = nextPlayerId;
-        }
 
         console.info('[turnSync] Incorrect-answer branch selected', {
           gameId: game.id,
           submittedBy: user.id,
           wasCorrect: false,
           previousTurnOwner: game.currentTurn,
-          nextTurnOwner: patch.current_turn ?? game.currentTurn,
+          nextTurnOwner: gameAfterRpc?.currentTurn ?? game.currentTurn,
           updatedFields: Object.keys(patch),
           dbPatch: {
-            current_turn: patch.current_turn ?? null,
             players: updatedPlayers.map((player) => ({
               uid: player.uid,
               score: player.score,
               streak: player.streak,
             })),
           },
+          localTurnHandlingDisabled: true,
         });
-        applyLocalTurnState(updatedPlayers, patch.current_turn ?? game.currentTurn, 'incorrectAnswer');
         await updateGame(game.id, patch);
       }
     } catch (err) {

@@ -567,17 +567,47 @@ export async function clearActiveGameQuestion(gameId: string) {
 }
 
 export async function recordAnswer(gameId: string, questionId: string, userId: string, answer: GameAnswer) {
-  const { error } = await supabase.rpc('record_game_answer', {
+  const payload = {
     p_game_id: gameId,
     p_question_id: questionId,
     p_user_id: userId,
     p_answer: answer,
+  };
+  console.info('[record_game_answer] Submitting RPC payload', {
+    gameId,
+    questionId,
+    userId,
+    payload,
   });
 
+  const { error } = await supabase.rpc('record_game_answer', payload);
+
   if (error) {
+    console.error('[record_game_answer] RPC failed', {
+      gameId,
+      questionId,
+      userId,
+      payload,
+      code: error.code,
+      message: error.message,
+    });
     logSupabaseError('rpc:record_game_answer', 'rpc', error, { gameId, questionId, userId });
     throw error;
   }
+
+  console.info('[record_game_answer] RPC succeeded', {
+    gameId,
+    questionId,
+    userId,
+  });
+
+  const updatedGameRow = await fetchGameRow(gameId);
+  console.info('[record_game_answer] Refetched game row after RPC', {
+    gameId,
+    updatedGameRow,
+  });
+
+  return updatedGameRow ? mapPostgresGameToState(updatedGameRow) : null;
 }
 
 export async function getGameById(gameId: string): Promise<GameState | null> {
