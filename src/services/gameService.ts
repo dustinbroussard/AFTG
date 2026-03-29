@@ -4,7 +4,6 @@ import {
   getGameDisplayCode,
   isMissingFunctionError,
   isMissingRowError,
-  isMissingTableError,
   isUuid,
   logSupabaseError,
   nowIsoString,
@@ -57,65 +56,6 @@ function buildInitialStoredGameState(hostId: string, initialPlayer: Player): Per
   };
 }
 
-function buildGamePlayerRows(gameId: string, players: Player[]) {
-  return players
-    .filter((player) => typeof player?.uid === 'string' && player.uid.length > 0)
-    .map((player) => ({
-      game_id: gameId,
-      user_id: player.uid,
-      score: typeof player.score === 'number' ? player.score : 0,
-      streak: typeof player.streak === 'number' ? player.streak : 0,
-      is_online: true,
-    }));
-}
-
-async function syncGamePlayersFromState(gameId: string, players: Player[]) {
-  const rows = buildGamePlayerRows(gameId, players);
-  if (rows.length === 0) {
-    return;
-  }
-
-  const { error } = await supabase
-    .from('game_players')
-    .upsert(rows, { onConflict: 'game_id,user_id' });
-
-  if (error) {
-    if (isMissingTableError(error)) {
-      console.warn('[game_players] Live table unavailable during membership sync; skipping normalized participant sync', {
-        gameId,
-        playerIds: players.map((player) => player.uid),
-      });
-      return;
-    }
-
-    logSupabaseError('game_players', 'upsert', error, {
-      gameId,
-      playerIds: players.map((player) => player.uid),
-    });
-    throw error;
-  }
-}
-
-async function fetchGamePlayerMembership(gameId: string, userId: string) {
-  const { data, error } = await supabase
-    .from('game_players')
-    .select('game_id, user_id')
-    .eq('game_id', gameId)
-    .eq('user_id', userId)
-    .maybeSingle();
-
-  if (error) {
-    if (isMissingTableError(error)) {
-      return null;
-    }
-
-    logSupabaseError('game_players', 'select', error, { gameId, userId, purpose: 'fetchGamePlayerMembership' });
-    throw error;
-  }
-
-  return data;
-}
-
 function sanitizeGameResult(value: any) {
   if (!value || typeof value !== 'object') {
     return {};
@@ -130,6 +70,9 @@ function sanitizeGameResult(value: any) {
 
 export function mapPostgresGameToState(row: any): GameState {
   const state = normalizeStoredGameState(row.game_state);
+  const playerIds = Array.isArray(row.player_ids)
+    ? row.player_ids.filter((entry: unknown): entry is string => typeof entry === 'string')
+    : state.playerIds;
   const result = sanitizeGameResult(row.result);
 
   return {
@@ -137,7 +80,7 @@ export function mapPostgresGameToState(row: any): GameState {
     code: getGameDisplayCode(row.id),
     status: row.status,
     hostId: state.hostId,
-    playerIds: state.playerIds,
+    playerIds,
     players: state.players,
     currentTurn: row.current_turn_user_id ?? null,
     winnerId: row.winner_user_id ?? null,
@@ -180,7 +123,11 @@ function normalizeGamePatch(
   const nextState: PersistedGameState = {
     ...currentState,
     players: patch.players ?? currentState.players,
-    playerIds: patch.playerIds ?? patch.players?.map((player: Player) => player.uid) ?? currentState.playerIds,
+    playerIds:
+      patch.player_ids ??
+      patch.playerIds ??
+      patch.players?.map((player: Player) => player.uid) ??
+      currentState.playerIds,
     questionIds: patch.question_ids ?? patch.questionIds ?? currentState.questionIds,
     answers: patch.answers ?? currentState.answers,
     currentQuestionId:
@@ -215,6 +162,7 @@ function normalizeGamePatch(
     game_mode: patch.game_mode ?? patch.gameMode ?? currentRow.game_mode,
     winner_user_id: patch.winner_id ?? patch.winnerId ?? currentRow.winner_user_id,
     current_turn_user_id: patch.current_turn ?? patch.currentTurn ?? currentRow.current_turn_user_id,
+    player_ids: nextState.playerIds,
     game_state: nextState,
     result: nextResult,
     updated_at: nowIsoString(),
@@ -279,7 +227,7 @@ export const subscribeToGame = (gameId: string, callback: (game: GameState) => v
 
   console.info('[subscribeToGame] Starting games subscription', {
     gameId,
-    sourceOfTruthFields: ['status', 'current_turn_user_id', 'game_state.playerIds', 'game_state.players'],
+    sourceOfTruthFields: ['status', 'current_turn_user_id', 'player_ids', 'game_state.players'],
   });
 
   const channel = supabase
@@ -358,6 +306,7 @@ export async function createGame(
     game_mode?: string | null;
     winner_user_id?: string | null;
     current_turn_user_id?: string | null;
+    player_ids?: string[];
     game_state?: Record<string, unknown>;
     result?: Record<string, unknown>;
     created_at: string;
@@ -368,6 +317,7 @@ export async function createGame(
     game_mode: isSolo ? 'solo' : 'multiplayer',
     winner_user_id: null,
     current_turn_user_id: hostId,
+    player_ids: initialState.playerIds,
     game_state: initialState as unknown as Record<string, unknown>,
     result: {},
     created_at: now,
@@ -390,8 +340,6 @@ export async function createGame(
     logSupabaseError('games', 'insert', error, { hostId, isSolo, payload: insertPayload });
     throw error;
   }
-
-  await syncGamePlayersFromState(gameId, initialState.players);
 
   return mapPostgresGameToState(data);
 }
@@ -445,6 +393,7 @@ export async function joinGameById(gameId: string, userId: string, displayName: 
     .update({
       status: playerIds.length >= 2 ? 'active' : game.status,
       current_turn_user_id: game.current_turn_user_id || state.hostId || userId,
+      player_ids: playerIds,
       game_state: {
         ...state,
         hostId: state.hostId || playerIds[0] || userId,
@@ -461,8 +410,6 @@ export async function joinGameById(gameId: string, userId: string, displayName: 
     logSupabaseError('games', 'update', error, { gameId, userId, purpose: 'joinGameById' });
     throw error;
   }
-
-  await syncGamePlayersFromState(gameId, players);
 
   console.info('[joinGameById] Join update succeeded', {
     submittedGameId: gameId,
@@ -635,32 +582,51 @@ export async function recordAnswer(gameId: string, questionId: string, userId: s
     supabase.auth.getUser(),
     fetchGameRow(gameId),
   ]);
+  if (!gameRow) {
+    return null;
+  }
+
   const authenticatedUserId = authData.user?.id ?? null;
   const effectiveUserId = authenticatedUserId || userId;
-  const gameState = normalizeStoredGameState(gameRow?.game_state);
-  const resumedGameOwnershipMatchesCurrentSession = !!authenticatedUserId && gameState.playerIds.includes(authenticatedUserId);
+  const game = mapPostgresGameToState(gameRow);
+  const resumedGameOwnershipMatchesCurrentSession = !!authenticatedUserId && game.playerIds.includes(authenticatedUserId);
+  const userIsInPlayerIds = game.playerIds.includes(effectiveUserId);
+  const userMatchesCurrentTurn = game.currentTurn === effectiveUserId;
 
   console.info('[record_game_answer] Preflight membership check', {
     gameId,
     questionId,
     authenticatedUserId,
-    gamePlayerIds: gameState.playerIds,
-    currentTurnUserId: gameRow?.current_turn_user_id ?? null,
+    gamePlayerIds: game.playerIds,
+    currentTurnUserId: game.currentTurn,
     userIdSentToRpc: effectiveUserId,
     resumedGameOwnershipMatchesCurrentSession,
+    userIsInPlayerIds,
+    userMatchesCurrentTurn,
     rpcUserMatchesAuthenticatedUser: authenticatedUserId === null ? 'unknown' : authenticatedUserId === userId,
   });
 
-  if (gameRow && resumedGameOwnershipMatchesCurrentSession) {
-    await syncGamePlayersFromState(gameId, gameState.players);
+  if (!userIsInPlayerIds) {
+    console.error('[record_game_answer] Refusing RPC call because authenticated user is not in games.player_ids', {
+      gameId,
+      questionId,
+      authenticatedUserId,
+      effectiveUserId,
+      playerIds: game.playerIds,
+    });
+    throw new Error('Authenticated user is not part of this game.');
   }
 
-  const membershipRow = await fetchGamePlayerMembership(gameId, effectiveUserId);
-  console.info('[record_game_answer] Normalized membership before RPC', {
-    gameId,
-    effectiveUserId,
-    membershipRowExists: !!membershipRow,
-  });
+  if (!userMatchesCurrentTurn) {
+    console.error('[record_game_answer] Refusing RPC call because authenticated user does not match current_turn_user_id', {
+      gameId,
+      questionId,
+      authenticatedUserId,
+      effectiveUserId,
+      currentTurnUserId: game.currentTurn,
+    });
+    throw new Error('Authenticated user is not the active turn owner.');
+  }
 
   const livePayload = {
     p_game_id: gameId,

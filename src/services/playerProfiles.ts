@@ -229,9 +229,6 @@ export function subscribeRecentCompletedGames(
     .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, () => {
       loadCompletedGamesForUser(uid).then(callback).catch(onError);
     })
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'game_players' }, () => {
-      loadCompletedGamesForUser(uid).then(callback).catch(onError);
-    })
     .subscribe();
 
   return () => {
