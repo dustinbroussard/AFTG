@@ -2286,14 +2286,14 @@ export default function App() {
   };
 
   const matchChatPanel = (
-    <div className="theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-6 space-y-4">
+    <div className="theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-6 space-y-4 lg:w-full lg:max-w-[min(860px,90vw)] lg:max-h-[clamp(16rem,35vh,20rem)] lg:overflow-hidden">
       <div className="grid items-center gap-3 grid-cols-1">
         <h3 className="text-center text-sm font-bold uppercase tracking-widest theme-text-muted">
           {matchChatTitle}
         </h3>
       </div>
 
-      <div className="h-[min(40dvh,20rem)] overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+      <div className="h-[min(40dvh,20rem)] overflow-y-auto space-y-3 pr-1 custom-scrollbar lg:h-auto lg:max-h-[clamp(10rem,22vh,14rem)]">
         {messages.length === 0 ? (
           <p className="text-center theme-text-muted italic text-sm py-10">No messages yet. Say something funny.</p>
         ) : (
@@ -2889,7 +2889,7 @@ export default function App() {
                 key="game-view"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex h-full min-h-0 flex-col gap-4 sm:gap-6"
+                className="flex h-full min-h-0 flex-col gap-4 sm:gap-6 lg:overflow-y-auto lg:items-center lg:gap-7 lg:pb-4"
               >
                 {game.status === 'waiting' && (
                   <div className="flex justify-end items-end theme-panel backdrop-blur-sm p-4 sm:p-5 rounded-2xl border shrink-0">
@@ -2901,7 +2901,7 @@ export default function App() {
                 )}
 
                 {!isQuestionActive && (
-                  <div className="shrink-0 space-y-2">
+                  <div className="shrink-0 space-y-2 lg:w-full lg:max-w-[min(860px,90vw)] lg:space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {players.map(p => (
                         <CategoryTracker
@@ -2926,7 +2926,7 @@ export default function App() {
                 )}
 
                 {/* Game Content */}
-                <div className={`relative flex-1 min-h-0 flex flex-col justify-center ${isQuestionActive ? 'py-2 sm:py-4' : 'py-4 sm:py-8'}`}>
+                <div className={`relative flex-1 min-h-0 flex flex-col justify-center ${isQuestionActive ? 'py-2 sm:py-4' : 'py-4 sm:py-8'} lg:flex-none lg:w-full lg:max-w-[min(860px,90vw)] lg:justify-start lg:py-0`}>
                   {game.status === 'completed' ? (
                     <motion.div
                       initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -2955,10 +2955,12 @@ export default function App() {
                       )}
                     </motion.div>
                   ) : shouldShowCurrentTurnStage ? (
-                    <div className="space-y-5 sm:space-y-8">
+                    <div className="space-y-5 sm:space-y-8 lg:flex lg:w-full lg:flex-col lg:items-center lg:gap-6 lg:space-y-0">
                       {!currentQuestion ? (
-                        <div className="flex flex-col items-center gap-5 sm:gap-8">
-                          <p className="text-sm sm:text-base font-black uppercase tracking-widest text-cyan-400 animate-pulse">Your Turn</p>
+                        <div className="flex flex-col items-center gap-5 sm:gap-8 lg:w-full lg:gap-0">
+                          <div className="lg:flex lg:w-full lg:justify-center lg:pb-5">
+                            <p className="text-sm sm:text-base font-black uppercase tracking-widest text-cyan-400 animate-pulse lg:text-center">Your Turn</p>
+                          </div>
                           {manualPickReady && showManualPickPrompt ? (
                             <ManualCategoryPrompt
                               categories={playableCategories}
@@ -2966,15 +2968,17 @@ export default function App() {
                               onSpinWheel={handleDeclineManualPick}
                             />
                           ) : (
-                            <Wheel
-                              onSpinComplete={handleSpinComplete}
-                              isSpinning={isSpinning}
-                              setIsSpinning={setIsSpinning}
-                              soundEnabled={sfxEnabled}
-                            />
+                            <div className="lg:relative lg:flex lg:w-full lg:justify-center lg:py-4">
+                              <Wheel
+                                onSpinComplete={handleSpinComplete}
+                                isSpinning={isSpinning}
+                                setIsSpinning={setIsSpinning}
+                                soundEnabled={sfxEnabled}
+                              />
+                            </div>
                           )}
                           {isFetchingQuestions && (
-                            <div className="flex items-center gap-2 theme-text-muted text-xs sm:text-sm text-center">
+                            <div className="flex items-center gap-2 theme-text-muted text-xs sm:text-sm text-center lg:pt-5">
                               <Loader2 className="w-4 h-4 animate-spin" />
                               <span>{activeQuestionLoadingLine}</span>
                               <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
@@ -2984,7 +2988,7 @@ export default function App() {
                           )}
                         </div>
                       ) : (
-                        <div className={`transition-all duration-300 ${shouldBlurQuestionBackground ? 'blur-sm scale-[0.99]' : ''}`}>
+                        <div className={`transition-all duration-300 lg:w-full ${shouldBlurQuestionBackground ? 'blur-sm scale-[0.99]' : ''}`}>
                           <QuestionCard
                             question={currentQuestion}
                             onSelect={handleAnswer}
@@ -2998,14 +3002,14 @@ export default function App() {
                       )}
                     </div>
                   ) : game.status === 'waiting' ? (
-                    <div className="text-center p-6 sm:p-12 theme-panel border rounded-3xl">
+                    <div className="text-center p-6 sm:p-12 theme-panel border rounded-3xl lg:w-full">
                       <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
                       <p className="text-lg font-medium theme-text-muted">
                         Waiting for another player to join...
                       </p>
                     </div>
                   ) : (
-                    <div className="text-center p-6 sm:p-12 theme-panel border rounded-3xl space-y-4 sm:space-y-6">
+                    <div className="text-center p-6 sm:p-12 theme-panel border rounded-3xl space-y-4 sm:space-y-6 lg:w-full">
                       <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
                       <p className="text-lg font-medium theme-text-muted">Waiting for {players.find(p => p.uid === game.currentTurn)?.name} to spin...</p>
                       <HeckleOverlay
@@ -3017,7 +3021,7 @@ export default function App() {
                 </div>
 
                 {shouldShowMatchChat && (
-                  <div className="hidden md:block shrink-0">
+                  <div className="hidden md:block shrink-0 lg:w-full lg:max-w-[min(860px,90vw)]">
                     {matchChatPanel}
                   </div>
                 )}
