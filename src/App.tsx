@@ -291,6 +291,28 @@ export default function App() {
     setGame(joinedGame);
   };
 
+  const applyLocalTurnState = (
+    nextPlayers: Player[],
+    nextCurrentTurn: string | null,
+    source: 'correctAnswer' | 'incorrectAnswer'
+  ) => {
+    console.info('[turnSync] Applying local turn state', {
+      source,
+      nextCurrentTurn,
+      nextPlayers: nextPlayers.map((player) => ({
+        uid: player.uid,
+        score: player.score,
+        streak: player.streak,
+      })),
+    });
+    setPlayers(nextPlayers);
+    setGame((current) => current ? {
+      ...current,
+      players: nextPlayers,
+      currentTurn: nextCurrentTurn,
+    } : current);
+  };
+
   const handleEnableSound = async () => {
     updateSettings({ soundEnabled: true });
     const played = await enableAudioFromGesture();
@@ -1833,6 +1855,16 @@ export default function App() {
       isCorrect,
       source,
     };
+    console.info('[turnSync] Answer submitted', {
+      gameId: game.id,
+      questionId,
+      submittedBy: user.id,
+      submittedByName: currentPlayer?.name ?? null,
+      wasCorrect: isCorrect,
+      source,
+      previousTurnOwner: game.currentTurn,
+      selectedAnswerIndex: resolvedIndex,
+    });
     setResultPhase('revealing');
 
     try {
@@ -1867,6 +1899,14 @@ export default function App() {
           return p;
         });
 
+        console.info('[turnSync] Correct-answer branch selected', {
+          gameId: game.id,
+          submittedBy: user.id,
+          previousTurnOwner: game.currentTurn,
+          nextTurnOwner: game.currentTurn,
+          updatedFields: ['game_state.players'],
+        });
+        applyLocalTurnState(updatedPlayers, game.currentTurn, 'correctAnswer');
         await updateGame(game.id, { players: updatedPlayers });
 
         if (lastAnswerCorrect && !earnedNewTrophy && !manualPickReady) {
@@ -1910,13 +1950,32 @@ export default function App() {
         });
         
         const patch: any = { players: updatedPlayers };
+        const nextPlayerId = !isSolo && game.playerIds.length > 1
+          ? game.playerIds.find(id => id !== user.id) ?? null
+          : game.currentTurn;
 
         // End turn in multiplayer
         if (!isSolo && game.playerIds.length > 1) {
-          const nextPlayerId = game.playerIds.find(id => id !== user.id);
           patch.current_turn = nextPlayerId;
         }
 
+        console.info('[turnSync] Incorrect-answer branch selected', {
+          gameId: game.id,
+          submittedBy: user.id,
+          wasCorrect: false,
+          previousTurnOwner: game.currentTurn,
+          nextTurnOwner: patch.current_turn ?? game.currentTurn,
+          updatedFields: Object.keys(patch),
+          dbPatch: {
+            current_turn: patch.current_turn ?? null,
+            players: updatedPlayers.map((player) => ({
+              uid: player.uid,
+              score: player.score,
+              streak: player.streak,
+            })),
+          },
+        });
+        applyLocalTurnState(updatedPlayers, patch.current_turn ?? game.currentTurn, 'incorrectAnswer');
         await updateGame(game.id, patch);
       }
     } catch (err) {
@@ -2053,6 +2112,36 @@ export default function App() {
         game.status === 'waiting' && (game.playerIds.length > 1 || players.length > 1),
     });
   }, [game, players, shouldShowCurrentTurnStage, user?.id]);
+
+  useEffect(() => {
+    if (!game || !user?.id) return;
+
+    console.info('[turnSync] UI active-player evaluation', {
+      gameId: game.id,
+      userId: user.id,
+      currentTurnField: game.currentTurn,
+      localPlayersField: players.map((player) => ({
+        uid: player.uid,
+        score: player.score,
+        streak: player.streak,
+      })),
+      currentQuestionId: currentQuestion?.id ?? null,
+      resultPhase,
+      roastVisible: !!roast,
+      revealedCategoryVisible: !!revealedCategory,
+      shouldShowCurrentTurnStage,
+      reasonSamePlayerCanKeepGoing:
+        shouldShowCurrentTurnStage
+          ? {
+              currentTurnMatchesUser: game.currentTurn === user.id,
+              currentQuestionVisible: !!currentQuestion,
+              revealedCategoryVisible: !!revealedCategory,
+              resultPhase,
+              roastVisible: !!roast,
+            }
+          : null,
+    });
+  }, [currentQuestion, game, players, revealedCategory, resultPhase, roast, shouldShowCurrentTurnStage, user?.id]);
 
   useEffect(() => {
     console.info('[joinFlow] Screen guard evaluation', {
