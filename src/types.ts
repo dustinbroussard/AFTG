@@ -34,11 +34,12 @@ export interface RoastState {
 
 export interface ChatMessage {
   id: string;
-  uid: string;
+  uid: string | null;
   name: string;
   text: string;
   timestamp: any;
   avatarUrl?: string;
+  messageType?: string;
 }
 
 export interface Player {

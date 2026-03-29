@@ -42,6 +42,12 @@ function mapPostgresProfileToPlayerProfile(profile: any): PlayerProfile {
   };
 }
 
+export const MAX_NICKNAME_LENGTH = 24;
+
+export function sanitizeNicknameInput(value: string) {
+  return value.trim().slice(0, MAX_NICKNAME_LENGTH);
+}
+
 async function loadProfilesByIds(ids: string[]) {
   const uniqueIds = [...new Set(ids.filter(Boolean))];
   if (uniqueIds.length === 0) {
@@ -82,8 +88,8 @@ export async function ensurePlayerProfile(user: SupabaseUser, nickname?: string)
 
   const identity = user.user_metadata ?? {};
   const now = nowIsoString();
-  const desiredDisplayName =
-    nickname?.trim() ||
+  const desiredNickname =
+    sanitizeNicknameInput(nickname || '') ||
     identity.nickname ||
     identity.full_name ||
     identity.name ||
@@ -97,7 +103,7 @@ export async function ensurePlayerProfile(user: SupabaseUser, nickname?: string)
 
   const payload = {
     id: user.id,
-    nickname: desiredDisplayName,
+    nickname: desiredNickname,
     avatar_url: desiredPhotoUrl,
     created_at: existingProfile?.created_at || now,
     updated_at: now,
@@ -111,6 +117,46 @@ export async function ensurePlayerProfile(user: SupabaseUser, nickname?: string)
     logSupabaseError('profiles', 'upsert', upsertError, { userId: user.id });
     throw upsertError;
   }
+
+  return mapPostgresProfileToPlayerProfile(payload);
+}
+
+export async function savePlayerNickname(user: SupabaseUser, nickname: string) {
+  const trimmedNickname = sanitizeNicknameInput(nickname);
+  if (!trimmedNickname) {
+    throw new Error('Nickname cannot be empty.');
+  }
+
+  const { data: existingProfile, error: getError } = await supabase
+    .from('profiles')
+    .select('id, nickname, avatar_url, created_at, updated_at')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (getError && !isMissingRowError(getError)) {
+    logSupabaseError('profiles', 'select', getError, { userId: user.id, purpose: 'savePlayerNickname' });
+    throw getError;
+  }
+
+  const now = nowIsoString();
+  const payload = {
+    id: user.id,
+    nickname: trimmedNickname,
+    avatar_url: existingProfile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+    created_at: existingProfile?.created_at || now,
+    updated_at: now,
+  };
+
+  const { error } = await supabase
+    .from('profiles')
+    .upsert(payload, { onConflict: 'id' });
+
+  if (error) {
+    logSupabaseError('profiles', 'upsert', error, { userId: user.id, purpose: 'savePlayerNickname' });
+    throw error;
+  }
+
+  return mapPostgresProfileToPlayerProfile(payload);
 }
 
 export function subscribePlayerProfile(

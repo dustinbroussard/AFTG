@@ -132,6 +132,7 @@ export function useGameStore(user: any | null) {
     messages,
     setMessages,
     playerProfile,
+    setPlayerProfile,
     recentPlayers,
     recentCompletedGames,
     incomingInvites,

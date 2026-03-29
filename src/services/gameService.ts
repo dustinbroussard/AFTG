@@ -19,6 +19,25 @@ function createGameId() {
 const GAME_MESSAGES_TIMESTAMP_COLUMN = 'created_at';
 const GAME_MESSAGES_REQUIRED = false;
 
+async function loadMessageProfiles(ids: Array<string | null | undefined>) {
+  const uniqueIds = [...new Set(ids.filter((id): id is string => typeof id === 'string' && id.length > 0))];
+  if (uniqueIds.length === 0) {
+    return new Map<string, { nickname: string | null; avatar_url: string | null }>();
+  }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, nickname, avatar_url')
+    .in('id', uniqueIds);
+
+  if (error) {
+    logSupabaseError('profiles', 'select', error, { ids: uniqueIds, purpose: 'loadMessageProfiles' });
+    throw error;
+  }
+
+  return new Map((data || []).map((row) => [row.id, row]));
+}
+
 function normalizeStoredGameState(value: any): PersistedGameState {
   const state = value && typeof value === 'object' ? value : {};
   const players = Array.isArray(state.players) ? state.players : [];
@@ -729,6 +748,7 @@ export async function sendMessage(gameId: string, userId: string, content: strin
     .insert({
       game_id: gameId,
       user_id: userId,
+      message_type: 'player',
       content,
       [GAME_MESSAGES_TIMESTAMP_COLUMN]: nowIsoString(),
     });
@@ -766,7 +786,7 @@ async function loadMessages(gameId: string) {
     const [{ data: messages, error: messagesError }, gameRow] = await Promise.all([
       supabase
         .from('game_messages')
-        .select('*')
+        .select('id, game_id, user_id, message_type, content, created_at')
         .eq('game_id', gameId)
         .order(GAME_MESSAGES_TIMESTAMP_COLUMN, { ascending: true })
         .limit(50),
@@ -785,22 +805,26 @@ async function loadMessages(gameId: string) {
 
     const state = normalizeStoredGameState(gameRow?.game_state);
     const playersById = new Map(state.players.map((player) => [player.uid, player]));
+    const profileMap = await loadMessageProfiles((messages || []).map((message) => message.user_id));
 
     return (messages || []).map((message) => {
+      const profile = profileMap.get(message.user_id);
       const player = playersById.get(message.user_id);
       const messageTimestamp =
         message[GAME_MESSAGES_TIMESTAMP_COLUMN] ??
         message.created_at ??
         message.timestamp ??
         nowIsoString();
+      const isSystemMessage = message.message_type === 'system';
 
       return {
         id: message.id,
-        uid: message.user_id,
-        name: player?.name || 'Player',
+        uid: message.user_id ?? null,
+        name: isSystemMessage ? 'System' : profile?.nickname || player?.name || 'Player',
         text: message.content,
         timestamp: new Date(messageTimestamp).getTime(),
-        avatarUrl: player?.avatarUrl || undefined,
+        avatarUrl: isSystemMessage ? undefined : profile?.avatar_url || player?.avatarUrl || undefined,
+        messageType: message.message_type || 'player',
       };
     });
   } catch (error) {

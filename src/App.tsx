@@ -41,12 +41,12 @@ import { HECKLE_ROTATION_MS, shouldEnableHeckles } from './content/heckles';
 import { getTrashTalkLine, TrashTalkEvent } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check } from 'lucide-react';
+import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check, Pencil } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateHeckles } from './services/gemini';
 import { notifySafe, requestNotificationPermissionSafe } from './services/notify';
-import { ensurePlayerProfile, loadMatchupHistory, recordCompletedGame, recordQuestionStats, removeRecentPlayer, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers, updateRecentPlayer } from './services/playerProfiles';
+import { ensurePlayerProfile, loadMatchupHistory, MAX_NICKNAME_LENGTH, recordCompletedGame, recordQuestionStats, removeRecentPlayer, sanitizeNicknameInput, savePlayerNickname, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers, updateRecentPlayer } from './services/playerProfiles';
 import { isSupabaseRlsInsertError } from './services/supabaseUtils';
 import { isUuid } from './services/supabaseUtils';
 
@@ -134,7 +134,7 @@ export default function App() {
   const { user, hasResolvedInitialAuthState } = useAuth();
   const { 
     game, setGame, players, setPlayers, messages, setMessages,
-    playerProfile, recentPlayers, recentCompletedGames, incomingInvites,
+    playerProfile, setPlayerProfile, recentPlayers, recentCompletedGames, incomingInvites,
     hasResolvedProfile, profileError,
     recentPlayersStatus, recentPlayersError,
     recentGamesStatus, recentGamesError,
@@ -199,6 +199,7 @@ export default function App() {
   const [isMagicLinkSent, setIsMagicLinkSent] = useState(false);
   const [nickname, setNickname] = useState('');
   const [isSavingNickname, setIsSavingNickname] = useState(false);
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
 
   const [pastGames, setPastGames] = useState<GameState[]>([]);
   const [pastGamesStatus, setPastGamesStatus] = useState<'loading' | 'empty' | 'error' | 'success'>('loading');
@@ -1606,17 +1607,41 @@ export default function App() {
   };
 
   const handleSaveNickname = async () => {
-    if (!user || !nickname.trim() || isSavingNickname) return;
+    if (!user || !sanitizeNicknameInput(nickname) || isSavingNickname) return;
     setIsSavingNickname(true);
     setError(null);
     try {
-      await ensurePlayerProfile(user, nickname.trim());
+      const updatedProfile = await savePlayerNickname(user, nickname);
+      setPlayerProfile(updatedProfile);
+      setNickname(updatedProfile.nickname || '');
+      setIsEditingNickname(false);
+      if (game && players.some((player) => player.uid === user.id)) {
+        const updatedPlayers = players.map((player) =>
+          player.uid === user.id
+            ? { ...player, name: updatedProfile.nickname || player.name }
+            : player
+        );
+        setPlayers(updatedPlayers);
+        setGame((current) => current ? { ...current, players: updatedPlayers } : current);
+        await updateGame(game.id, { players: updatedPlayers });
+      }
     } catch (err: any) {
       console.error('[handleSaveNickname] Failed:', err);
-      setError("Failed to save nickname. Try something else.");
+      setError(err?.message || "Failed to save nickname. Try something else.");
     } finally {
       setIsSavingNickname(false);
     }
+  };
+
+  const handleStartNicknameEdit = () => {
+    setNickname(playerProfile?.nickname || '');
+    setIsEditingNickname(true);
+    setError(null);
+  };
+
+  const handleCancelNicknameEdit = () => {
+    setNickname(playerProfile?.nickname || '');
+    setIsEditingNickname(false);
   };
 
   const startSoloGame = async (avatarUrl: string) => {
@@ -2471,8 +2496,7 @@ export default function App() {
       await sendMessage(game.id, user.id, chatInput.trim());
       setChatInput('');
     } catch (err) {
-      console.error(err);
-      setError("Failed to send message.");
+      console.warn('[chat] Failed to send player message. Gameplay continues.', err);
     } finally {
       setIsSendingMessage(false);
     }
@@ -2505,7 +2529,9 @@ export default function App() {
               <div className="w-9 h-9 sm:w-10 sm:h-10 theme-avatar-surface rounded-full flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-inner border">
                 {m.avatarUrl ? <img src={m.avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : '👤'}
               </div>
-              <div className={`max-w-[78%] p-3 sm:p-4 rounded-2xl text-sm shadow-md ${m.uid === user?.id
+              <div className={`max-w-[78%] p-3 sm:p-4 rounded-2xl text-sm shadow-md ${m.messageType === 'system'
+                ? 'mx-auto theme-soft-surface border text-center'
+                : m.uid === user?.id
                 ? 'bg-purple-600 text-white rounded-tr-sm'
                 : 'theme-soft-surface rounded-tl-sm border'
                 }`}>
@@ -2749,15 +2775,16 @@ export default function App() {
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSaveNickname()}
+                maxLength={MAX_NICKNAME_LENGTH}
                 className="w-full h-14 px-6 rounded-2xl theme-panel border bg-transparent focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all text-lg font-bold theme-inset text-center"
                 autoFocus
               />
             </div>
 
-            <button
+              <button
               type="button"
               onClick={handleSaveNickname}
-              disabled={isSavingNickname || !nickname.trim()}
+              disabled={isSavingNickname || !sanitizeNicknameInput(nickname)}
               className="w-full h-14 flex items-center justify-center rounded-2xl bg-pink-600 text-white font-black uppercase tracking-widest hover:bg-pink-500 transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-pink-900/20"
             >
               {isSavingNickname ? (
@@ -2866,9 +2893,53 @@ export default function App() {
                 </button>
               )}
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-widest theme-text-muted hidden sm:block">
-                  {playerProfile?.nickname || user?.email || 'Player'}
-                </span>
+                {isEditingNickname ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          void handleSaveNickname();
+                        }
+                        if (e.key === 'Escape') {
+                          handleCancelNicknameEdit();
+                        }
+                      }}
+                      maxLength={MAX_NICKNAME_LENGTH}
+                      className="h-9 w-32 rounded-xl theme-panel border bg-transparent px-3 text-xs font-bold tracking-wide focus:outline-none focus:ring-2 focus:ring-pink-500/50 theme-inset sm:w-40"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void handleSaveNickname()}
+                      disabled={isSavingNickname || !sanitizeNicknameInput(nickname)}
+                      className="rounded-xl bg-pink-600 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white transition-all disabled:opacity-50"
+                    >
+                      {isSavingNickname ? '...' : 'Save'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancelNicknameEdit}
+                      disabled={isSavingNickname}
+                      className="rounded-xl theme-button px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleStartNicknameEdit}
+                    className="inline-flex items-center gap-2 rounded-xl theme-button px-3 py-2 text-xs font-bold uppercase tracking-widest theme-text-muted transition-colors"
+                    title="Edit nickname"
+                    aria-label="Edit nickname"
+                  >
+                    <span>{playerProfile?.nickname || user?.email || 'Player'}</span>
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 <button type="button" onClick={openSignOutConfirm} className="p-2 theme-icon-button transition-colors rounded-full" aria-label="Sign out">
                   <LogOut className="w-5 h-5" />
                 </button>
