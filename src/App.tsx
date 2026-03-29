@@ -1963,6 +1963,15 @@ export default function App() {
     setResultPhase('idle');
   };
 
+  const getOpponentTurnOwner = (activeGame: GameState, activeUserId: string) => {
+    const opponentFromIds = activeGame.playerIds.find((playerId) => playerId !== activeUserId);
+    if (opponentFromIds) {
+      return opponentFromIds;
+    }
+
+    return activeGame.players.find((player) => player.uid !== activeUserId)?.uid ?? null;
+  };
+
   const handleAnswer = async (
     index: number,
     options?: { source?: 'answer' | 'timeout'; questionId?: string; submittedAt?: number }
@@ -2124,7 +2133,7 @@ export default function App() {
           if (p.uid === user.id) return { ...p, streak: 0 };
           return p;
         });
-        const opponentId = players.find((player) => player.uid !== user.id)?.uid ?? null;
+        const opponentId = getOpponentTurnOwner(gameAfterRpc ?? game, user.id);
         const rpcAdvancedTurn =
           !isSolo &&
           !!opponentId &&
