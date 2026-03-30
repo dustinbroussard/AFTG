@@ -20,23 +20,43 @@ function createGameId() {
 const GAME_MESSAGES_TIMESTAMP_COLUMN = 'created_at';
 const GAME_MESSAGES_REQUIRED = false;
 const GAME_MESSAGES_SELECT_COLUMNS =
-  'id, game_id, profile_id, display_name_snapshot, body, created_at';
+  'id, game_id, user_id, message_type, content, created_at, avatar_url_snapshot';
 
 type GameMessageRow = {
   id: string;
   game_id: string;
-  profile_id: string | null;
-  display_name_snapshot: string;
-  body: string;
+  user_id: string | null;
+  message_type: string | null;
+  content: string;
   created_at: string;
+  avatar_url_snapshot: string | null;
 };
 
 type SendMessageInput = {
   gameId: string;
-  profileId: string;
-  displayNameSnapshot: string;
-  body: string;
+  userId: string;
+  content: string;
+  avatarUrlSnapshot?: string | null;
 };
+
+async function loadMessageProfiles(ids: Array<string | null | undefined>) {
+  const uniqueIds = [...new Set(ids.filter((id): id is string => typeof id === 'string' && id.length > 0))];
+  if (uniqueIds.length === 0) {
+    return new Map<string, { nickname: string | null; avatar_url: string | null }>();
+  }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, nickname, avatar_url')
+    .in('id', uniqueIds);
+
+  if (error) {
+    logSupabaseError('profiles', 'select', error, { ids: uniqueIds, purpose: 'loadMessageProfiles' });
+    throw error;
+  }
+
+  return new Map((data || []).map((row) => [row.id, row]));
+}
 
 function normalizeStoredGameState(value: any): PersistedGameState {
   const state = value && typeof value === 'object' ? value : {};
@@ -701,16 +721,21 @@ export async function getGameByCode(code: string): Promise<GameState | null> {
   return getGameById(normalizedId);
 }
 
-export function mapGameMessageRow(row: GameMessageRow): ChatMessage {
+export function mapGameMessageRow(
+  row: GameMessageRow,
+  profileMap: Map<string, { nickname: string | null; avatar_url: string | null }> = new Map()
+): ChatMessage {
   const messageTimestamp = row[GAME_MESSAGES_TIMESTAMP_COLUMN] ?? row.created_at ?? nowIsoString();
+  const profile = row.user_id ? profileMap.get(row.user_id) : undefined;
 
   return {
     id: row.id,
-    uid: row.profile_id ?? null,
-    name: row.display_name_snapshot || 'Player',
-    text: row.body,
+    uid: row.user_id ?? null,
+    name: profile?.nickname || 'Player',
+    text: row.content,
     timestamp: new Date(messageTimestamp).getTime(),
-    messageType: 'player',
+    avatarUrl: row.avatar_url_snapshot || profile?.avatar_url || undefined,
+    messageType: row.message_type || 'player',
   };
 }
 
@@ -740,7 +765,8 @@ export async function fetchMessages(gameId: string): Promise<ChatMessage[]> {
       throw error;
     }
 
-    return (messages || []).map((message) => mapGameMessageRow(message as GameMessageRow));
+    const profileMap = await loadMessageProfiles((messages || []).map((message) => (message as GameMessageRow).user_id));
+    return (messages || []).map((message) => mapGameMessageRow(message as GameMessageRow, profileMap));
   } catch (error) {
     logSupabaseError('game_messages', 'select', error, {
       functionName: 'fetchMessages',
@@ -764,7 +790,8 @@ export const subscribeToMessages = (
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'game_messages', filter: `game_id=eq.${gameId}` },
       (payload) => {
-        try {
+        void (async () => {
+          try {
           if (!payload.new) {
             console.warn('[Supabase] game_messages insert payload missing row data', {
               table: 'game_messages',
@@ -775,7 +802,9 @@ export const subscribeToMessages = (
             return;
           }
 
-          callback(mapGameMessageRow(payload.new as GameMessageRow));
+            const row = payload.new as GameMessageRow;
+            const profileMap = await loadMessageProfiles([row.user_id]);
+            callback(mapGameMessageRow(row, profileMap));
         } catch (error) {
           logSupabaseError('game_messages', 'realtime-insert-map', error, {
             functionName: 'subscribeToMessages',
@@ -784,6 +813,7 @@ export const subscribeToMessages = (
           });
           onError?.(error);
         }
+        })();
       }
     )
     .subscribe((status, error) => {
@@ -805,14 +835,15 @@ export const subscribeToMessages = (
 };
 
 export async function sendMessage(input: SendMessageInput) {
-  const trimmedBody = input.body.trim();
+  const trimmedContent = input.content.trim();
   logGameMessagesQuery('sendMessage', input.gameId, GAME_MESSAGES_REQUIRED, false);
 
   const payload = {
     game_id: input.gameId,
-    profile_id: input.profileId,
-    display_name_snapshot: input.displayNameSnapshot.trim() || 'Player',
-    body: trimmedBody,
+    user_id: input.userId,
+    message_type: 'player',
+    content: trimmedContent,
+    avatar_url_snapshot: input.avatarUrlSnapshot ?? null,
   };
   console.info('[Supabase] game_messages insert payload', {
     table: 'game_messages',
@@ -835,7 +866,14 @@ export async function sendMessage(input: SendMessageInput) {
     throw error;
   }
 
-  return mapGameMessageRow(data as GameMessageRow);
+  console.info('[Supabase] game_messages insert succeeded', {
+    table: 'game_messages',
+    functionName: 'sendMessage',
+    returnedRow: data,
+  });
+
+  const profileMap = await loadMessageProfiles([(data as GameMessageRow).user_id]);
+  return mapGameMessageRow(data as GameMessageRow, profileMap);
 }
 
 function isGameMessagesMissingError(error: any) {

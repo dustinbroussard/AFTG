@@ -2493,18 +2493,17 @@ export default function App() {
     setIsSendingMessage(true);
 
     try {
-      const displayNameSnapshot =
-        playerProfile?.nickname?.trim() ||
-        user.user_metadata?.nickname ||
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        'Player';
+      const avatarUrlSnapshot =
+        playerProfile?.avatarUrl ||
+        user.user_metadata?.avatar_url ||
+        user.user_metadata?.picture ||
+        null;
 
       await sendMessage({
         gameId: game.id,
-        profileId: user.id,
-        displayNameSnapshot,
-        body: chatInput.trim(),
+        userId: user.id,
+        content: chatInput.trim(),
+        avatarUrlSnapshot,
       });
       setChatInput('');
       setError(null);
