@@ -1,10 +1,15 @@
 import 'dotenv/config';
 import { GoogleGenAI } from '@google/genai';
-import { buildHecklePrompt, MAX_HECKLES } from '../src/content/heckles.js';
 import type { HeckleGenerationContext } from '../src/content/heckles.js';
-import { heckleSchema } from '../src/services/gemini.js';
 
-function parseBody(body: any) {
+type ProviderName = 'gemini' | 'openrouter';
+
+interface HeckleApiResponse {
+  heckle: string | null;
+  heckles: string[];
+}
+
+function parseBody(body: unknown) {
   if (!body) return {};
   if (typeof body === 'string') {
     try {
@@ -14,11 +19,6 @@ function parseBody(body: any) {
     }
   }
   return body;
-}
-
-function isValidJsonEnvelope(text: string) {
-  const trimmed = text.trim();
-  return trimmed.startsWith('{') && trimmed.endsWith('}');
 }
 
 function summarizeContext(context: Partial<HeckleGenerationContext>) {
@@ -38,81 +38,216 @@ function summarizeContext(context: Partial<HeckleGenerationContext>) {
   };
 }
 
+function normalizeHeckle(rawText: string | null | undefined) {
+  if (!rawText) return null;
+
+  const cleaned = rawText
+    .trim()
+    .replace(/^```(?:json)?/i, '')
+    .replace(/```$/i, '')
+    .trim()
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join('\n')
+    .trim();
+
+  return cleaned.length > 0 ? cleaned : null;
+}
+
+function buildPrompt(context: Partial<HeckleGenerationContext>) {
+  return `Write one short multiplayer trivia heckle for a waiting player.
+
+Context:
+- Player: ${context.playerName || 'Player'}
+- Opponent: ${context.opponentName || 'Opponent'}
+- Trigger: ${context.trigger || 'waiting'}
+- Waiting reason: ${context.waitingReason || 'Waiting for the other player to finish'}
+- Score: ${context.playerName || 'Player'} ${context.playerScore ?? 0}, ${context.opponentName || 'Opponent'} ${context.opponentScore ?? 0}
+- Score delta: ${context.scoreDelta ?? 0}
+- Last question: ${context.lastQuestion || 'Unknown'}
+- Missed last question: ${context.playerMissedLastQuestion ? 'yes' : 'no'}
+- Category: ${context.category || 'Unknown'}
+- Difficulty: ${context.difficulty || 'Unknown'}
+- Recent performance summary: ${context.recentPerformanceSummary || 'No recent summary'}
+- Recent failure details: ${context.recentFailure || 'None'}
+
+Rules:
+- Return only the heckle text
+- 1 to 3 lines max
+- Witty, snarky, playful
+- No slurs
+- No hate content
+- No threats
+- No sexual content
+- No meta commentary
+- Use the provided context
+- Keep it punchy enough for a waiting-state UI`;
+}
+
+function getProvider() {
+  if (process.env.OPENROUTER_API_KEY) return 'openrouter' as const;
+  if (process.env.GEMINI_API_KEY) return 'gemini' as const;
+  return null;
+}
+
+async function generateWithGemini(prompt: string) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is missing');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: prompt,
+  });
+
+  return normalizeHeckle(response.text);
+}
+
+async function generateWithOpenRouter(prompt: string) {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    throw new Error('OPENROUTER_API_KEY is missing');
+  }
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
+      'X-Title': 'A F-cking Trivia Game',
+    },
+    body: JSON.stringify({
+      model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash',
+      messages: [
+        {
+          role: 'system',
+          content: 'You write brief, playful trivia heckles for waiting-state UI.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.9,
+      max_tokens: 120,
+    }),
+  });
+
+  const rawText = await response.text();
+  let data: any = null;
+
+  try {
+    data = rawText ? JSON.parse(rawText) : null;
+  } catch (error) {
+    console.error('[heckles/api] OpenRouter returned non-JSON payload', {
+      error,
+      rawText,
+    });
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `OpenRouter request failed with status ${response.status}: ${
+        data?.error?.message || rawText || 'Unknown error'
+      }`
+    );
+  }
+
+  const content = data?.choices?.[0]?.message?.content;
+  return normalizeHeckle(typeof content === 'string' ? content : null);
+}
+
+async function generateHeckle(provider: ProviderName, prompt: string) {
+  if (provider === 'openrouter') {
+    return generateWithOpenRouter(prompt);
+  }
+
+  return generateWithGemini(prompt);
+}
+
+function sendJson(res: any, status: number, heckle: string | null) {
+  const payload: HeckleApiResponse = {
+    heckle,
+    heckles: heckle ? [heckle] : [],
+  };
+
+  res.status(status).json(payload);
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
-  }
-
-  const body = parseBody(req.body) as Partial<HeckleGenerationContext>;
-  const requestSummary = summarizeContext(body);
-  console.info('[heckles/api] Incoming request', requestSummary);
-
-  if (
-    !body.playerName ||
-    !body.opponentName ||
-    !body.trigger ||
-    !body.waitingReason ||
-    typeof body.playerScore !== 'number' ||
-    typeof body.opponentScore !== 'number' ||
-    typeof body.scoreDelta !== 'number' ||
-    !body.recentPerformanceSummary ||
-    typeof body.playerMissedLastQuestion !== 'boolean'
-  ) {
-    console.warn('[heckles/api] Invalid payload', requestSummary);
-    res.status(400).json({ error: 'Invalid heckle payload' });
-    return;
-  }
-
-  if (body.isSolo) {
-    console.info('[heckles/api] Solo mode payload, returning empty response');
-    res.status(200).json({ heckles: [] });
-    return;
-  }
-
-  if (!process.env.GEMINI_API_KEY) {
-    console.error('[heckles/api] GEMINI_API_KEY missing');
-    res.status(500).json({ error: 'GEMINI_API_KEY is missing' });
+    console.warn('[heckles/api] Rejected non-POST request', {
+      method: req.method,
+    });
+    sendJson(res, 405, null);
     return;
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: buildHecklePrompt(body as HeckleGenerationContext),
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: heckleSchema as any,
-      },
+    const body = parseBody(req.body) as Partial<HeckleGenerationContext>;
+    const requestSummary = summarizeContext(body);
+    const provider = getProvider();
+
+    console.info('[heckles/api] Incoming request', {
+      provider,
+      requestSummary,
+      hasGeminiKey: !!process.env.GEMINI_API_KEY,
+      hasOpenRouterKey: !!process.env.OPENROUTER_API_KEY,
     });
 
-    const text = response.text || '';
-    if (!isValidJsonEnvelope(text)) {
-      throw new Error('Heckle generator returned non-JSON content');
+    if (body.isSolo) {
+      console.info('[heckles/api] Solo mode request, returning null heckle', requestSummary);
+      sendJson(res, 200, null);
+      return;
     }
 
-    const data = JSON.parse(text);
-    const heckles = Array.isArray(data.heckles) ? data.heckles : [];
-    const sanitizedHeckles = heckles
-      .filter((heckle: unknown): heckle is string => typeof heckle === 'string')
-      .map((heckle) => heckle.trim())
-      .filter((heckle) => heckle.length > 0)
-      .slice(0, MAX_HECKLES);
+    if (!provider) {
+      console.error('[heckles/api] No provider configured', {
+        requestSummary,
+        hasGeminiKey: !!process.env.GEMINI_API_KEY,
+        hasOpenRouterKey: !!process.env.OPENROUTER_API_KEY,
+      });
+      sendJson(res, 200, null);
+      return;
+    }
 
-    console.info('[heckles/api] Generation succeeded', {
-      ...requestSummary,
-      returnedCount: sanitizedHeckles.length,
+    if (!body.playerName || !body.waitingReason) {
+      console.error('[heckles/api] Missing required request fields', {
+        requestSummary,
+      });
+      sendJson(res, 200, null);
+      return;
+    }
+
+    const prompt = buildPrompt(body);
+    console.info('[heckles/api] Provider request starting', {
+      provider,
+      requestSummary,
+      promptPreview: prompt.slice(0, 240),
     });
 
-    res.status(200).json({
-      heckles: sanitizedHeckles,
+    const heckle = await generateHeckle(provider, prompt);
+
+    console.info('[heckles/api] Provider request completed', {
+      provider,
+      requestSummary,
+      heckleGenerated: !!heckle,
+      hecklePreview: heckle,
     });
+
+    sendJson(res, 200, heckle);
   } catch (error) {
-    console.error('[heckles/api] Generation failed', {
-      ...requestSummary,
+    console.error('[heckles/api] Unhandled provider failure', {
       error,
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : null,
     });
-    res.status(500).json({ error: 'Heckle generation failed' });
+    sendJson(res, 200, null);
   }
 }
