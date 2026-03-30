@@ -168,6 +168,11 @@ export function useGameStore(user: any | null) {
       setRecentGamesError('Failed to load recent games.');
     });
     const unsubscribeInvites = subscribeToIncomingInvites(user.id, (invites) => {
+      console.info('[useGameStore] storing incoming invites', {
+        userId: user.id,
+        count: invites.length,
+        invites,
+      });
       setIncomingInvites(invites);
       setInvitesStatus(invites.length === 0 ? 'empty' : 'success');
       setInvitesError(null);

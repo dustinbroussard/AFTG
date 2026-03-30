@@ -125,6 +125,13 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const profileStats = getProfileStats(playerProfile);
 
   useEffect(() => {
+    console.info('[GameLobby] mounted');
+    return () => {
+      console.info('[GameLobby] unmounted');
+    };
+  }, []);
+
+  useEffect(() => {
     if (selectedMatchup && currentMode !== 'RECENT_PLAYERS') {
       setCurrentMode('RECENT_PLAYERS');
     }
@@ -195,6 +202,28 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const showPrimaryActions = currentMode === 'IDLE';
   const isJoinMode = currentMode === 'JOIN';
   const showLobbyModal = isStatsOpen || isRecentPlayersOpen;
+  const shouldShowInvitePanel =
+    currentMode !== 'LOADING' &&
+    (incomingInvitesStatus === 'loading' || incomingInvitesStatus === 'error' || incomingInvites.length > 0);
+
+  useEffect(() => {
+    console.info('[GameLobby] invite render state', {
+      currentMode,
+      showPrimaryActions,
+      shouldShowInvitePanel,
+      incomingInvitesStatus,
+      incomingInvitesError,
+      inviteCount: incomingInvites.length,
+      invites: incomingInvites,
+    });
+  }, [
+    currentMode,
+    showPrimaryActions,
+    shouldShowInvitePanel,
+    incomingInvitesStatus,
+    incomingInvitesError,
+    incomingInvites,
+  ]);
 
   const closeLobbyModal = () => {
     if (selectedMatchup) {
@@ -415,7 +444,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
         )}
       </div>
 
-      {showPrimaryActions && (incomingInvitesStatus === 'loading' || incomingInvitesStatus === 'error' || incomingInvites.length > 0) && (
+      {shouldShowInvitePanel && (
         <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[28dvh] overflow-y-auto custom-scrollbar">
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4 text-pink-500" />
@@ -440,7 +469,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold truncate">{invite.fromNickname}</p>
+                    <p className="text-sm font-bold truncate">{invite.fromNickname || 'Someone'}</p>
                     <p className="text-[10px] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
                   </div>
                 </div>
