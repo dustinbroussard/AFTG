@@ -8,6 +8,7 @@ import {
   logSupabaseError,
   nowIsoString,
 } from './supabaseUtils';
+import { mapQuestionRowToTriviaQuestion } from './questionRepository';
 
 function createGameId() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -913,7 +914,7 @@ export async function getGameQuestions(gameId: string): Promise<TriviaQuestion[]
     throw error;
   }
 
-  return (data || []) as TriviaQuestion[];
+  return (data || []).map((row) => mapQuestionRowToTriviaQuestion(row));
 }
 
 export async function getPastGames(userId: string): Promise<GameState[]> {

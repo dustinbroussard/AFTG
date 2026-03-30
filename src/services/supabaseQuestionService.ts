@@ -26,6 +26,15 @@ function mapQuestionRow(row: any): TriviaQuestion {
   const distractors = Array.isArray(row.distractors) ? row.distractors.map((entry: unknown) => String(entry)) : [];
   const choices = [row.correct_answer, ...distractors].filter((entry): entry is string => typeof entry === 'string');
   const correctIndex = Math.max(0, choices.indexOf(row.correct_answer));
+  const nestedPresentation = row.presentation && typeof row.presentation === 'object' ? row.presentation : {};
+  const stylingPresentation = row.styling && typeof row.styling === 'object' ? row.styling : {};
+  const wrongAnswerQuips = [
+    ...(Array.isArray(nestedPresentation.wrongAnswerQuips) ? nestedPresentation.wrongAnswerQuips : []),
+    ...(Array.isArray(stylingPresentation.wrongAnswerQuips) ? stylingPresentation.wrongAnswerQuips : []),
+    ...(Array.isArray(row.wrong_answer_quips) ? row.wrong_answer_quips : []),
+  ]
+    .map((entry: unknown) => String(entry).trim())
+    .filter(Boolean);
 
   return {
     id: row.id,
@@ -39,9 +48,10 @@ function mapQuestionRow(row: any): TriviaQuestion {
     used: false,
     status: row.validation_status,
     presentation: {
-      questionStyled: row.question_styled ?? undefined,
-      explanationStyled: row.explanation_styled ?? undefined,
-      hostLeadIn: row.host_lead_in ?? undefined,
+      questionStyled: nestedPresentation.questionStyled ?? stylingPresentation.questionStyled ?? row.question_styled ?? undefined,
+      explanationStyled: nestedPresentation.explanationStyled ?? stylingPresentation.explanationStyled ?? row.explanation_styled ?? undefined,
+      hostLeadIn: nestedPresentation.hostLeadIn ?? stylingPresentation.hostLeadIn ?? row.host_lead_in ?? undefined,
+      ...(wrongAnswerQuips.length > 0 ? { wrongAnswerQuips } : {}),
     },
     sourceType: row.source ?? 'manual',
     createdAt: row.created_at,

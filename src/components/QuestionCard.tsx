@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { TriviaQuestion, CATEGORY_COLORS } from '../types';
+import { TriviaQuestion, CATEGORY_COLORS, getHostLeadIn, getQuestionText } from '../types';
+import { SafeRichText } from './SafeRichText';
 
 interface QuestionCardProps {
   question: TriviaQuestion;
@@ -23,6 +24,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 }) => {
   const clampedProgress = Math.max(0, Math.min(1, timerProgress));
   const timerColor = clampedProgress <= 0.33 ? '#F43F5E' : '#06B6D4';
+  const hostLeadIn = getHostLeadIn(question);
+  const questionText = getQuestionText(question);
 
   return (
     <motion.div
@@ -61,9 +64,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       </div>
       
       <div className="min-h-0 overflow-y-auto pr-1 custom-scrollbar">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-5 sm:mb-7 leading-tight">
-          {question.question}
-        </h2>
+        <SafeRichText
+          as="p"
+          className="mb-3 text-sm font-black uppercase tracking-[0.18em] theme-text-muted"
+          html={hostLeadIn}
+        />
+        <SafeRichText
+          as="h2"
+          className="text-xl sm:text-2xl md:text-3xl font-black mb-5 sm:mb-7 leading-tight"
+          html={questionText}
+        />
       
         <div className="space-y-3 sm:space-y-4">
           {question.choices.map((choice, i) => {

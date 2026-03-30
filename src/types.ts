@@ -17,6 +17,7 @@ export interface TriviaQuestion {
     questionStyled?: string;
     explanationStyled?: string;
     hostLeadIn?: string;
+    wrongAnswerQuips?: string[];
   };
   sourceType: string;
   createdAt?: number | string; // Supabase uses ISO strings but app may use timestamp
@@ -28,6 +29,7 @@ export interface RoastState {
   explanation: string;
   isCorrect: boolean;
   questionId: string;
+  wrongAnswerQuip?: string;
   userId?: string | null;
   gameId?: string | null;
 }
@@ -205,4 +207,17 @@ export function getExplanationText(question: TriviaQuestion): string {
 
 export function getHostLeadIn(question: TriviaQuestion): string | undefined {
   return question.presentation?.hostLeadIn;
+}
+
+export function getWrongAnswerQuips(question: TriviaQuestion): string[] {
+  return question.presentation?.wrongAnswerQuips?.filter((quip) => typeof quip === 'string' && quip.trim().length > 0) ?? [];
+}
+
+export function getWrongAnswerQuip(question: TriviaQuestion, variant = 0): string | undefined {
+  const quips = getWrongAnswerQuips(question);
+  if (quips.length === 0) {
+    return undefined;
+  }
+
+  return quips[Math.abs(variant) % quips.length];
 }

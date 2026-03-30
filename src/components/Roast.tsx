@@ -3,17 +3,19 @@ import { motion } from 'motion/react';
 import { getRandomQuestionFlagLine } from '../content/questionFlagCopy';
 import { flagQuestion } from '../services/questionFlags';
 import { ConfirmModal } from './ConfirmModal';
+import { SafeRichText } from './SafeRichText';
 
 interface RoastProps {
   explanation: string;
   isCorrect: boolean;
   questionId: string;
+  wrongAnswerQuip?: string;
   userId?: string | null;
   gameId?: string | null;
   onClose: () => void;
 }
 
-export const Roast: React.FC<RoastProps> = ({ explanation, isCorrect, questionId, userId, gameId, onClose }) => {
+export const Roast: React.FC<RoastProps> = ({ explanation, isCorrect, questionId, wrongAnswerQuip, userId, gameId, onClose }) => {
   const [flagLine, setFlagLine] = useState(() => getRandomQuestionFlagLine());
   const [isFlagged, setIsFlagged] = useState(false);
   const [isSavingFlag, setIsSavingFlag] = useState(false);
@@ -66,9 +68,18 @@ export const Roast: React.FC<RoastProps> = ({ explanation, isCorrect, questionId
             }`}>
               {isCorrect ? 'Correct!' : 'Wrong!'}
             </h3>
-            <p className="text-lg font-semibold leading-relaxed mb-6">
-              {explanation}
-            </p>
+            {!isCorrect && (
+              <SafeRichText
+                as="p"
+                className="mb-4 text-base font-black leading-relaxed text-rose-200"
+                html={wrongAnswerQuip}
+              />
+            )}
+            <SafeRichText
+              as="div"
+              className="mb-6 text-lg font-semibold leading-relaxed"
+              html={explanation}
+            />
             <button type="button"
               onClick={onClose}
               className={`w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-lg ${

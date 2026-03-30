@@ -17,7 +17,46 @@ function normalizeRequestedCategory(category: string) {
   return isPlayableCategory(category) ? category : getPlayableCategories()[0];
 }
 
-function toBankQuestion(question: any, createdAt = Date.now()): TriviaQuestion {
+function normalizePresentation(question: any): TriviaQuestion['presentation'] {
+  const nestedPresentation = question.presentation && typeof question.presentation === 'object'
+    ? question.presentation
+    : {};
+  const stylingPresentation = question.styling && typeof question.styling === 'object'
+    ? question.styling
+    : {};
+  const wrongAnswerQuips = [
+    ...(Array.isArray(nestedPresentation.wrongAnswerQuips) ? nestedPresentation.wrongAnswerQuips : []),
+    ...(Array.isArray(stylingPresentation.wrongAnswerQuips) ? stylingPresentation.wrongAnswerQuips : []),
+    ...(Array.isArray(question.wrongAnswerQuips) ? question.wrongAnswerQuips : []),
+    ...(Array.isArray(question.wrong_answer_quips) ? question.wrong_answer_quips : []),
+  ]
+    .map((entry) => String(entry).trim())
+    .filter(Boolean);
+
+  return {
+    questionStyled:
+      nestedPresentation.questionStyled
+      ?? stylingPresentation.questionStyled
+      ?? question.questionStyled
+      ?? question.question_styled
+      ?? undefined,
+    explanationStyled:
+      nestedPresentation.explanationStyled
+      ?? stylingPresentation.explanationStyled
+      ?? question.explanationStyled
+      ?? question.explanation_styled
+      ?? undefined,
+    hostLeadIn:
+      nestedPresentation.hostLeadIn
+      ?? stylingPresentation.hostLeadIn
+      ?? question.hostLeadIn
+      ?? question.host_lead_in
+      ?? undefined,
+    ...(wrongAnswerQuips.length > 0 ? { wrongAnswerQuips } : {}),
+  };
+}
+
+export function mapQuestionRowToTriviaQuestion(question: any, createdAt = Date.now()): TriviaQuestion {
   const canonicalId = question.id || question.question_id;
   const distractors = Array.isArray(question.distractors)
     ? question.distractors.map((entry: unknown) => String(entry))
@@ -33,11 +72,7 @@ function toBankQuestion(question: any, createdAt = Date.now()): TriviaQuestion {
   const normalizedStatus = question.status ?? question.validation_status ?? question.validationStatus ?? 'pending';
   const normalizedDifficulty = question.difficulty ?? question.difficulty_level ?? 'medium';
   const normalizedQuestionText = question.question ?? question.content ?? '';
-  const normalizedPresentation = question.presentation || {
-    questionStyled: question.questionStyled ?? question.question_styled,
-    explanationStyled: question.explanationStyled ?? question.explanation_styled,
-    hostLeadIn: question.hostLeadIn ?? question.host_lead_in,
-  };
+  const normalizedPresentation = normalizePresentation(question);
 
   return {
     id: canonicalId,
@@ -88,7 +123,7 @@ async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Se
   }
 
   return (data || [])
-    .map((entry) => toBankQuestion(entry))
+    .map((entry) => mapQuestionRowToTriviaQuestion(entry))
     .filter((question) => question.choices.length === 4)
     .filter((question) => !excludeIds.has(question.id));
 }

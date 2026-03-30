@@ -25,7 +25,7 @@ import {
   sendInvite,
   subscribeToIncomingInvites,
 } from './services/inviteService';
-import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getPlayableCategories } from './types';
+import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getExplanationText, getPlayableCategories, getWrongAnswerQuip } from './types';
 import { getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
@@ -1477,9 +1477,10 @@ export default function App() {
     setCorrectAnswer(restoredQuestion.correctIndex);
     setShouldBlurQuestionBackground(true);
     setRoast({
-      explanation: restoredQuestion.explanation,
+      explanation: getExplanationText(restoredQuestion),
       isCorrect: currentQuestionAnswer.isCorrect,
       questionId: restoredQuestion.id,
+      wrongAnswerQuip: currentQuestionAnswer.isCorrect ? undefined : getWrongAnswerQuip(restoredQuestion, currentQuestionAnswer.answerIndex),
       userId: user.id,
       gameId: game.id,
     });
@@ -2191,13 +2192,17 @@ export default function App() {
           if (p.uid === user.id) return { ...p, streak: 0 };
           return p;
         });
+        const nextTurnOwner = isSolo ? user.id : getOpponentTurnOwner(game, user.id) ?? game.currentTurn;
+        const gamePatch = isSolo
+          ? { players: updatedPlayers, current_turn: user.id }
+          : { players: updatedPlayers };
 
         console.info('[turnSync] Incorrect-answer branch selected', {
           gameId: game.id,
           submittedBy: user.id,
           wasCorrect: false,
           previousTurnOwner: game.currentTurn,
-          nextTurnOwner: getOpponentTurnOwner(game, user.id) ?? game.currentTurn,
+          nextTurnOwner,
           updatedFields: ['game_state.players'],
           dbPatch: {
             players: updatedPlayers.map((player) => ({
@@ -2205,16 +2210,18 @@ export default function App() {
               score: player.score,
               streak: player.streak,
             })),
+            ...(isSolo ? { current_turn: user.id } : {}),
           },
-          realtimeWillOwnTurnSwitch: true,
+          realtimeWillOwnTurnSwitch: !isSolo,
         });
-        await updateGame(game.id, { players: updatedPlayers });
+        await updateGame(game.id, gamePatch);
         setPlayers(updatedPlayers);
         setGame((current) =>
           current
             ? {
                 ...current,
                 players: updatedPlayers,
+                currentTurn: isSolo ? user.id : current.currentTurn,
               }
             : current
         );
@@ -2233,9 +2240,10 @@ export default function App() {
 
         setShouldBlurQuestionBackground(true);
         setRoast({
-          explanation: currentQuestion.explanation,
+          explanation: getExplanationText(currentQuestion),
           isCorrect,
           questionId: currentQuestion.id,
+          wrongAnswerQuip: isCorrect ? undefined : getWrongAnswerQuip(currentQuestion, resolvedIndex >= 0 ? resolvedIndex : 0),
           userId: user.id,
           gameId: game.id,
         });
@@ -3412,6 +3420,7 @@ export default function App() {
             explanation={roast.explanation}
             isCorrect={roast.isCorrect}
             questionId={roast.questionId}
+            wrongAnswerQuip={roast.wrongAnswerQuip}
             userId={roast.userId}
             gameId={roast.gameId}
             onClose={nextTurn}
