@@ -88,29 +88,6 @@ interface PendingHeckleTrigger {
 const SettingsModal = lazy(() => import('./components/SettingsModal').then((module) => ({ default: module.SettingsModal })));
 const QuestionBankAdmin = lazy(() => import('./components/QuestionBankAdmin').then((module) => ({ default: module.QuestionBankAdmin })));
 
-const QUESTION_LOADING_LINES = [
-  'Stealing questions from smarter people...',
-  'Calibrating your inevitable disappointment...',
-  'Googling things you should already know...',
-  'Dusting off facts nobody asked for...',
-  'Assembling trivia with suspicious confidence...',
-  'Curating questions to expose your weak spots...',
-  'Searching for knowledge and bad decisions...',
-  'Preheating the humiliation engine...',
-  'Loading facts you will absolutely overthink...',
-  'Finding questions with just enough cruelty...',
-  'Rummaging through humanity’s collective homework...',
-  'Preparing multiple-choice regret...',
-  'Harvesting obscure confidence destroyers...',
-  'Compiling reasons to doubt your education...',
-  'Tuning the difficulty to “fairly rude”...',
-  'Locating facts that should ring a bell...',
-  'Polishing questions for your public struggle...',
-  'Stacking the deck with educational menace...',
-  'Retrieving trivia from the smug part of the internet...',
-  'Warming up the next opportunity to be wrong...',
-];
-
 const WINNING_CHAT_TITLES = [
   'Shit-Talk Central',
   'Enter Taunts Here',
@@ -188,9 +165,6 @@ export default function App() {
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [loadingStep, setLoadingStep] = useState<LoadingStep>('idle');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
-  const [activeQuestionLoadingLine, setActiveQuestionLoadingLine] = useState(
-    () => QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
-  );
 
   const [error, setError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(() =>
@@ -1620,22 +1594,6 @@ export default function App() {
     setSeenIncomingMessageCount(0);
   }, [game?.id]);
 
-  useEffect(() => {
-    if (!isFetchingQuestions) return;
-
-    setActiveQuestionLoadingLine(
-      QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
-    );
-
-    const interval = window.setInterval(() => {
-      setActiveQuestionLoadingLine(
-        QUESTION_LOADING_LINES[Math.floor(Math.random() * QUESTION_LOADING_LINES.length)]
-      );
-    }, 1800);
-
-    return () => window.clearInterval(interval);
-  }, [isFetchingQuestions]);
-
   // Fetch past games history
   useEffect(() => {
     if (!user?.id) {
@@ -2660,7 +2618,6 @@ export default function App() {
   const mobileChatBadgeClass =
     mobileChatBadgeClasses[(messages.length + (game?.id?.length || 0)) % mobileChatBadgeClasses.length];
   const setupLoadingCopy = getLoadingCopy(loadingStep);
-  const questionLoadingCopy = getLoadingCopy(loadingStep === 'idle' ? 'loading_questions' : loadingStep);
   const isLobbyBusy = isStartingGame || isJoiningGame || isCheckingForResume;
   const lobbyLoadingCopy = isCheckingForResume
     ? { title: 'Checking for an active game', flow: 'Checking account state -> Looking for active matches' }
@@ -3678,15 +3635,6 @@ export default function App() {
                                 setIsSpinning={setIsSpinning}
                                 soundEnabled={sfxEnabled}
                               />
-                            </div>
-                          )}
-                          {isFetchingQuestions && (
-                            <div className="flex items-center gap-2 theme-text-muted text-xs sm:text-sm text-center lg:pt-5">
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                              <span>{activeQuestionLoadingLine}</span>
-                              <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
-                                {questionLoadingCopy.flow}
-                              </span>
                             </div>
                           )}
                         </div>
