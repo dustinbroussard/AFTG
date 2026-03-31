@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react';
-import { signInWithMagicLink, signOutUser } from './services/auth';
+import { signInWithGoogle, signInWithMagicLink, signOutUser } from './services/auth';
 import {
   recordAnswer,
   subscribeToGame,
@@ -47,7 +47,7 @@ import {
 import { getTrashTalkLine, TrashTalkEvent, type TrashTalkGenerationContext } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check, Pencil } from 'lucide-react';
+import { Chrome, LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check, Pencil } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateHeckles, generateTrashTalk } from './services/gemini';
@@ -183,6 +183,7 @@ export default function App() {
   
   const [email, setEmail] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [authLoadingMode, setAuthLoadingMode] = useState<'magic-link' | 'google' | null>(null);
   const [isMagicLinkSent, setIsMagicLinkSent] = useState(false);
   const [nickname, setNickname] = useState('');
   const [isSavingNickname, setIsSavingNickname] = useState(false);
@@ -1993,6 +1994,7 @@ export default function App() {
 
     setError(null);
     setAuthLoading(true);
+    setAuthLoadingMode('magic-link');
     try {
       await signInWithMagicLink(email);
       setIsMagicLinkSent(true);
@@ -2007,6 +2009,23 @@ export default function App() {
       setError(message);
     } finally {
       setAuthLoading(false);
+      setAuthLoadingMode(null);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    if (authLoading) return;
+
+    setError(null);
+    setAuthLoading(true);
+    setAuthLoadingMode('google');
+    try {
+      await signInWithGoogle();
+    } catch (err: any) {
+      console.error('[handleGoogleSignIn] Failed:', err);
+      setError(err.message || 'Failed to start Google sign-in. Please try again.');
+      setAuthLoading(false);
+      setAuthLoadingMode(null);
     }
   };
 
@@ -3156,11 +3175,33 @@ export default function App() {
                       Sign In Instantly
                     </h3>
                     <p className="text-sm theme-text-muted">
-                      No password needed. We’ll email you a sign-in link.
+                      Use Google or get a magic link by email. No password needed.
                     </p>
                   </div>
 
                   <div className="space-y-4">
+                    <button
+                      type="button"
+                      onClick={() => void handleGoogleSignIn()}
+                      disabled={authLoading}
+                      className="w-full h-14 flex items-center justify-center gap-3 rounded-2xl theme-panel border font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+                    >
+                      {authLoading && authLoadingMode === 'google' ? (
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                      ) : (
+                        <>
+                          <Chrome className="w-5 h-5" />
+                          <span>Continue with Google</span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className="flex items-center gap-3">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.28em] theme-text-muted">or</span>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+
                     <div className="relative group">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 theme-text-muted group-focus-within:text-pink-500 transition-colors" />
                       <input
@@ -3180,7 +3221,7 @@ export default function App() {
                       disabled={authLoading}
                       className="w-full h-14 flex items-center justify-center rounded-2xl bg-pink-600 text-white font-black uppercase tracking-widest hover:bg-pink-500 transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-pink-900/20"
                     >
-                      {authLoading ? (
+                      {authLoading && authLoadingMode === 'magic-link' ? (
                         <Loader2 className="w-6 h-6 animate-spin" />
                       ) : (
                         'Send Login Link'

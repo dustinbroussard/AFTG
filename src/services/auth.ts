@@ -1,21 +1,18 @@
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 
-function getOAuthRedirectUrl() {
+function getAuthRedirectUrl() {
   if (typeof window === 'undefined') return undefined;
-  return `${window.location.origin}${window.location.pathname}${window.location.search}${window.location.hash}`;
+  return window.location.hostname === 'localhost'
+    ? 'http://localhost:3000/'
+    : 'https://a-fucking-trivia-game.vercel.app/';
 }
 
 export const signInWithMagicLink = async (email: string) => {
-  const isLocal = window.location.hostname === 'localhost';
-  const redirectTo = isLocal 
-    ? 'http://localhost:3000/' 
-    : 'https://a-fucking-trivia-game.vercel.app/';
-
   const { data, error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: redirectTo,
+      emailRedirectTo: getAuthRedirectUrl(),
       shouldCreateUser: true,
     },
   });
@@ -23,6 +20,20 @@ export const signInWithMagicLink = async (email: string) => {
   return data;
 };
 
+export const signInWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: getAuthRedirectUrl(),
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'select_account',
+      },
+    },
+  });
+  if (error) throw error;
+  return data;
+};
 
 export const signOutUser = async () => {
   const { error } = await supabase.auth.signOut();
