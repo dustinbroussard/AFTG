@@ -20,6 +20,8 @@ export function useSound(settings: UserSettings) {
   const wonAudioRef = useRef<HTMLAudioElement>(null);
   const lostAudioRef = useRef<HTMLAudioElement>(null);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
+  const newGameAudioRef = useRef<HTMLAudioElement>(null);
+  const heckleChimeAudioRef = useRef<HTMLAudioElement>(null);
 
   const themeAudioSrc = publicAsset('theme.mp3');
   const correctAudioSrc = publicAsset('correct.mp3');
@@ -27,6 +29,8 @@ export function useSound(settings: UserSettings) {
   const timesUpAudioSrc = publicAsset('times-up.mp3');
   const wonAudioSrc = publicAsset('won.mp3');
   const lostAudioSrc = publicAsset('lost.mp3');
+  const newGameAudioSrc = publicAsset('new-game.mp3');
+  const heckleChimeAudioSrc = publicAsset('heckle-chime.mp3');
   const [audioNeedsInteraction, setAudioNeedsInteraction] = useState(false);
 
   const resolveSettings = useCallback((overrides?: Partial<UserSettings>) => ({
@@ -82,6 +86,15 @@ export function useSound(settings: UserSettings) {
       }
     }
 
+    if (newGameAudioRef.current) {
+      newGameAudioRef.current.volume = 1.0;
+      newGameAudioRef.current.muted = !musicEnabled;
+      if (!musicEnabled) {
+        newGameAudioRef.current.pause();
+        newGameAudioRef.current.currentTime = 0;
+      }
+    }
+
     if (!nextSettings.soundEnabled) {
       [
         correctAudioRef,
@@ -89,6 +102,7 @@ export function useSound(settings: UserSettings) {
         timesUpAudioRef,
         wonAudioRef,
         lostAudioRef,
+        heckleChimeAudioRef,
       ].forEach((audioRef) => {
         if (!audioRef.current) return;
         audioRef.current.pause();
@@ -132,12 +146,16 @@ export function useSound(settings: UserSettings) {
     wonAudioRef,
     lostAudioRef,
     welcomeAudioRef,
+    newGameAudioRef,
+    heckleChimeAudioRef,
     themeAudioSrc,
     correctAudioSrc,
     wrongAudioSrc,
     timesUpAudioSrc,
     wonAudioSrc,
     lostAudioSrc,
+    newGameAudioSrc,
+    heckleChimeAudioSrc,
     audioNeedsInteraction,
     playSfx,
     playMusic,

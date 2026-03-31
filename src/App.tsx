@@ -147,9 +147,9 @@ export default function App() {
   const [settings, setSettings] = useState<UserSettings>(() => getLocalSettings());
   const {
     themeAudioRef, correctAudioRef, wrongAudioRef, timesUpAudioRef,
-    wonAudioRef, lostAudioRef, welcomeAudioRef,
+    wonAudioRef, lostAudioRef, welcomeAudioRef, newGameAudioRef, heckleChimeAudioRef,
     themeAudioSrc, correctAudioSrc, wrongAudioSrc, timesUpAudioSrc,
-    wonAudioSrc, lostAudioSrc,
+    wonAudioSrc, lostAudioSrc, newGameAudioSrc, heckleChimeAudioSrc,
     audioNeedsInteraction, playSfx, playMusic, tryPlay, syncAudioState, enableAudioFromGesture, setAudioNeedsInteraction
   } = useSound(settings);
 
@@ -216,6 +216,7 @@ export default function App() {
   const [matchIdCopied, setMatchIdCopied] = useState(false);
 
   const prevGameStatus = useRef<string | null>(null);
+  const prevGameIdRef = useRef<string | null>(null);
   const revealTimeoutRef = useRef<number | null>(null);
   const categoryRevealTimeoutRef = useRef<number | null>(null);
   const questionTimeoutRef = useRef<number | null>(null);
@@ -304,6 +305,37 @@ export default function App() {
     setPlayers(joinedGame.players || []);
     setGame(joinedGame);
   };
+
+  const playNewGameCue = useCallback(async () => {
+    if (!settings.soundEnabled || !settings.musicEnabled || !newGameAudioRef.current) {
+      return;
+    }
+
+    if (themeAudioRef.current) {
+      themeAudioRef.current.pause();
+    }
+    if (welcomeAudioRef.current) {
+      welcomeAudioRef.current.pause();
+    }
+
+    const newGameAudio = newGameAudioRef.current;
+    newGameAudio.onended = null;
+    newGameAudio.currentTime = 0;
+
+    const played = await tryPlay(newGameAudioRef, true);
+    if (!played) {
+      return;
+    }
+
+    newGameAudio.onended = () => {
+      newGameAudio.onended = null;
+      if (!themeAudioRef.current || !settings.soundEnabled || !settings.musicEnabled) {
+        return;
+      }
+      themeAudioRef.current.currentTime = 0;
+      void tryPlay(themeAudioRef);
+    };
+  }, [settings.soundEnabled, settings.musicEnabled, newGameAudioRef, themeAudioRef, welcomeAudioRef, tryPlay]);
 
   const updateSettings = useCallback((patch: Partial<UserSettings>) => {
     setSettings((current) => ({
@@ -1064,6 +1096,9 @@ export default function App() {
     }
 
     const [nextHeckle, ...remainingHeckles] = heckleQueue;
+    if (sfxEnabled) {
+      playSfx(heckleChimeAudioRef);
+    }
     setActiveHeckle(nextHeckle);
     setShowHeckle(true);
     setHeckleQueue(remainingHeckles);
@@ -1077,7 +1112,7 @@ export default function App() {
       setActiveHeckle(null);
       heckleTimer.current = null;
     }, HECKLE_ROTATION_MS);
-  }, [shouldShowOpponentHeckles, activeHeckle, heckleQueue]);
+  }, [shouldShowOpponentHeckles, activeHeckle, heckleQueue, sfxEnabled, playSfx, heckleChimeAudioRef]);
 
   useEffect(() => {
     if (!pendingHeckleTrigger || !shouldShowOpponentHeckles || activeHeckle || heckleQueue.length > 0) return;
@@ -1638,6 +1673,17 @@ export default function App() {
   useEffect(() => {
     syncAudioState();
   }, [syncAudioState]);
+
+  useEffect(() => {
+    const previousGameId = prevGameIdRef.current;
+    const currentGameId = game?.id ?? null;
+
+    if (!previousGameId && currentGameId) {
+      void playNewGameCue();
+    }
+
+    prevGameIdRef.current = currentGameId;
+  }, [game?.id, playNewGameCue]);
 
   useEffect(() => {
     if (game?.status === 'completed' && prevGameStatus.current !== 'completed') {
@@ -2950,6 +2996,8 @@ export default function App() {
         <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
         <audio ref={wonAudioRef} src={wonAudioSrc} />
         <audio ref={lostAudioRef} src={lostAudioSrc} />
+        <audio ref={newGameAudioRef} src={newGameAudioSrc} />
+        <audio ref={heckleChimeAudioRef} src={heckleChimeAudioSrc} />
 
         <div data-theme={themeMode} className="app-theme min-h-screen flex flex-col items-center justify-center p-6 space-y-6 relative">
           <Loader2 className="h-10 w-10 animate-spin text-pink-500" />
@@ -2973,6 +3021,8 @@ export default function App() {
         <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
         <audio ref={wonAudioRef} src={wonAudioSrc} />
         <audio ref={lostAudioRef} src={lostAudioSrc} />
+        <audio ref={newGameAudioRef} src={newGameAudioSrc} />
+        <audio ref={heckleChimeAudioRef} src={heckleChimeAudioSrc} />
 
         <div data-theme={themeMode} className="app-theme h-dvh min-h-dvh flex flex-col items-center px-4 pt-6 pb-5 sm:px-6 sm:pt-8 sm:pb-6 relative overflow-hidden">
           <div className="absolute top-6 right-6 flex gap-3 z-50">
@@ -3199,6 +3249,8 @@ export default function App() {
       <audio ref={timesUpAudioRef} src={timesUpAudioSrc} />
       <audio ref={wonAudioRef} src={wonAudioSrc} />
       <audio ref={lostAudioRef} src={lostAudioSrc} />
+      <audio ref={newGameAudioRef} src={newGameAudioSrc} />
+      <audio ref={heckleChimeAudioRef} src={heckleChimeAudioSrc} />
 
       <div data-theme={themeMode} className="app-theme h-dvh min-h-dvh overflow-hidden font-sans flex flex-col">
         {!isQuestionActive && (
