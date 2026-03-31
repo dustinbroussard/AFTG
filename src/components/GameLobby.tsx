@@ -222,26 +222,27 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   const showPrimaryActions = currentMode === 'IDLE';
   const isJoinMode = currentMode === 'JOIN';
   const showLobbyModal = isStatsOpen || isRecentPlayersOpen;
-  const shouldShowInvitePanel =
-    currentMode !== 'LOADING' &&
-    (incomingInvitesStatus === 'loading' || incomingInvitesStatus === 'error' || incomingInvites.length > 0);
+  const inviteCount = incomingInvites.length;
+  const shouldShowInviteSection =
+    incomingInvitesStatus === 'loading' || incomingInvitesStatus === 'error' || inviteCount > 0;
 
   useEffect(() => {
     console.info('[GameLobby] invite render state', {
       currentMode,
       showPrimaryActions,
-      shouldShowInvitePanel,
+      shouldShowInviteSection,
       incomingInvitesStatus,
       incomingInvitesError,
-      inviteCount: incomingInvites.length,
+      inviteCount,
       invites: incomingInvites,
     });
   }, [
     currentMode,
     showPrimaryActions,
-    shouldShowInvitePanel,
+    shouldShowInviteSection,
     incomingInvitesStatus,
     incomingInvitesError,
+    inviteCount,
     incomingInvites,
   ]);
 
@@ -357,11 +358,16 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
             <button
               type="button"
               onClick={handleToggleRecentPlayers}
-              aria-label="Show recent players"
-              title="Show recent players"
-              className="h-10 sm:h-12 rounded-xl theme-panel-strong border transition-all duration-300 flex items-center justify-center"
+              aria-label={`Show notifications, invites, and recent players${inviteCount > 0 ? ` (${inviteCount} pending invites)` : ''}`}
+              title="Show notifications and recent players"
+              className="relative h-10 sm:h-12 rounded-xl theme-panel-strong border transition-all duration-300 flex items-center justify-center"
             >
-              <Users className="w-5 h-5" />
+              <Bell className="w-5 h-5" />
+              {inviteCount > 0 && (
+                <span className="absolute right-2 top-1.5 min-w-5 h-5 px-1 rounded-full bg-pink-500 text-white text-[10px] font-black leading-none flex items-center justify-center shadow-lg shadow-pink-500/30">
+                  {inviteCount > 99 ? '99+' : inviteCount}
+                </span>
+              )}
             </button>
           </div>
         )}
@@ -477,59 +483,6 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           </motion.div>
         )}
       </div>
-
-      {shouldShowInvitePanel && (
-        <div className="w-full theme-panel backdrop-blur-xl border rounded-2xl p-4 sm:p-5 space-y-4 max-h-[28dvh] overflow-y-auto custom-scrollbar">
-          <div className="flex items-center gap-2">
-            <Bell className="w-4 h-4 text-pink-500" />
-            <h4 className="text-sm font-black uppercase tracking-widest">Incoming Invites</h4>
-          </div>
-
-          <div className="space-y-3">
-            {incomingInvitesStatus === 'loading' && (
-              <p className="text-sm theme-text-muted">Loading invites...</p>
-            )}
-            {incomingInvitesStatus === 'error' && (
-              <p className="text-sm text-rose-300">{incomingInvitesError || 'Failed to load invites.'}</p>
-            )}
-            {incomingInvites.map((invite) => (
-              <div key={invite.id} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
-                    {invite.fromAvatarUrl ? (
-                      <img src={invite.fromAvatarUrl} alt={invite.fromNickname} className="w-full h-full object-cover" />
-                    ) : (
-                      <User className="w-5 h-5 theme-text-muted" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold truncate">{invite.fromNickname || 'Someone'}</p>
-                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => onAcceptInvite(invite, effectiveAvatar)}
-                    className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors"
-                    aria-label={`Accept invite from ${invite.fromNickname}`}
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onDeclineInvite(invite)}
-                    className="p-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 transition-colors"
-                    aria-label={`Decline invite from ${invite.fromNickname}`}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <AnimatePresence>
         {showLobbyModal && (
@@ -649,8 +602,8 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                 <>
                   <div className="flex items-center justify-between gap-3 mb-4 shrink-0">
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-cyan-400" />
-                      <h4 id="lobby-recent-players-title" className="text-sm font-black uppercase tracking-widest">Recent Players</h4>
+                      <Bell className="w-4 h-4 text-pink-400" />
+                      <h4 id="lobby-recent-players-title" className="text-sm font-black uppercase tracking-widest">Notifications & Recent Players</h4>
                     </div>
                     <div className="flex items-center gap-3">
                       {inviteFeedback && (
@@ -665,114 +618,181 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                   </div>
 
                   <div className="overflow-y-auto custom-scrollbar pr-1 space-y-4">
-                    {recentPlayersStatus === 'loading' ? (
-                      <p className="text-sm theme-text-muted">Loading recent players...</p>
-                    ) : recentPlayersStatus === 'error' ? (
-                      <p className="text-sm text-rose-300">{recentPlayersError || 'Failed to load recent players.'}</p>
-                    ) : recentPlayers.length === 0 ? (
-                      <p className="text-sm theme-text-muted">Play a multiplayer match and recent opponents will show up here.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {recentPlayers.map((player) => (
-                          <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 space-y-3">
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                              <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
-                                  {getAvatarUrl(player) ? (
-                                    <img src={getAvatarUrl(player)} alt={getDisplayName(player)} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <User className="w-5 h-5 theme-text-muted" />
-                                  )}
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="text-sm font-bold truncate">{getDisplayName(player)}</p>
-                                  <p className="text-[10px] uppercase tracking-widest theme-text-muted">
-                                    Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-3 gap-2 shrink-0">
-                                <button
-                                  type="button"
-                                  onClick={() => onInspectMatchup(player)}
-                                  className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
-                                >
-                                  History
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => onInviteRecentPlayer(player, effectiveAvatar)}
-                                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg"
-                                >
-                                  <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => onRemoveRecentPlayer(player)}
-                                  className="p-2 rounded-xl theme-button"
-                                  aria-label={`Remove ${getDisplayName(player)} from recent players`}
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </div>
+                    {shouldShowInviteSection && (
+                      <section className="space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <Bell className="w-4 h-4 text-pink-500" />
+                            <h5 className="text-xs font-black uppercase tracking-widest">Game Invites</h5>
+                          </div>
+                          {inviteCount > 0 && (
+                            <span className="text-[10px] font-black uppercase tracking-widest text-pink-300">
+                              {inviteCount} Pending
+                            </span>
+                          )}
+                        </div>
 
-                            {selectedMatchup?.opponentId === player.uid && (
-                              <div className="border-t pt-3 space-y-3">
-                                {isLoadingMatchup ? (
-                                  <p className="text-sm theme-text-muted">Loading matchup history...</p>
-                                ) : (
-                                  <>
-                                    <div className="grid grid-cols-3 gap-3">
-                                      <div className="theme-panel-strong border rounded-2xl p-3">
-                                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
-                                        <p className="text-lg font-black">
-                                          {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
-                                        </p>
-                                      </div>
-                                      <div className="theme-panel-strong border rounded-2xl p-3">
-                                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
-                                        <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
-                                      </div>
-                                      <div className="theme-panel-strong border rounded-2xl p-3">
-                                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
-                                        <p className="text-sm font-black">
-                                          {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
-                                        </p>
-                                      </div>
-                                    </div>
-                                    {selectedMatchup.games.length === 0 ? (
-                                      <p className="text-sm theme-text-muted">No completed games against this player yet.</p>
+                        {incomingInvitesStatus === 'loading' ? (
+                          <p className="text-sm theme-text-muted">Loading invites...</p>
+                        ) : incomingInvitesStatus === 'error' ? (
+                          <p className="text-sm text-rose-300">{incomingInvitesError || 'Failed to load invites.'}</p>
+                        ) : (
+                          <div className="space-y-3">
+                            {incomingInvites.map((invite) => (
+                              <div key={invite.id} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-3 min-w-0">
+                                  <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
+                                    {invite.fromAvatarUrl ? (
+                                      <img src={invite.fromAvatarUrl} alt={invite.fromNickname} className="w-full h-full object-cover" />
                                     ) : (
-                                      <div className="space-y-2">
-                                        {selectedMatchup.games.map((game) => (
-                                          <div key={game.gameId} className="theme-panel-strong border rounded-2xl p-3 flex items-center justify-between gap-3">
-                                            <div>
-                                              <p className="text-sm font-bold">
-                                                Winner: {getDisplayName(game.players.find((entry) => entry.uid === game.winnerId))}
-                                              </p>
-                                              <p className="text-[10px] uppercase tracking-widest theme-text-muted">
-                                                {new Date(game.completedAt).toLocaleDateString()}
+                                      <User className="w-5 h-5 theme-text-muted" />
+                                    )}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-sm font-bold truncate">{invite.fromNickname || 'Someone'}</p>
+                                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <button
+                                    type="button"
+                                    onClick={() => onAcceptInvite(invite, effectiveAvatar)}
+                                    className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors"
+                                    aria-label={`Accept invite from ${invite.fromNickname}`}
+                                  >
+                                    <Check className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => onDeclineInvite(invite)}
+                                    className="p-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 transition-colors"
+                                    aria-label={`Decline invite from ${invite.fromNickname}`}
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </section>
+                    )}
+
+                    <section className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-cyan-400" />
+                        <h5 className="text-xs font-black uppercase tracking-widest theme-text-muted">Recent Players</h5>
+                      </div>
+
+                      {recentPlayersStatus === 'loading' ? (
+                        <p className="text-sm theme-text-muted">Loading recent players...</p>
+                      ) : recentPlayersStatus === 'error' ? (
+                        <p className="text-sm text-rose-300">{recentPlayersError || 'Failed to load recent players.'}</p>
+                      ) : recentPlayers.length === 0 ? (
+                        <p className="text-sm theme-text-muted">Play a multiplayer match and recent opponents will show up here.</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {recentPlayers.map((player) => (
+                            <div key={player.uid} className="theme-soft-surface border rounded-2xl p-4 space-y-3">
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="flex items-center gap-3 min-w-0">
+                                  <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
+                                    {getAvatarUrl(player) ? (
+                                      <img src={getAvatarUrl(player)} alt={getDisplayName(player)} className="w-full h-full object-cover" />
+                                    ) : (
+                                      <User className="w-5 h-5 theme-text-muted" />
+                                    )}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-sm font-bold truncate">{getDisplayName(player)}</p>
+                                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                      Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2 shrink-0">
+                                  <button
+                                    type="button"
+                                    onClick={() => onInspectMatchup(player)}
+                                    className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
+                                  >
+                                    History
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => onInviteRecentPlayer(player, effectiveAvatar)}
+                                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-lg"
+                                  >
+                                    <span className="inline-flex items-center gap-1"><SendHorizontal className="w-3.5 h-3.5" /> Invite</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => onRemoveRecentPlayer(player)}
+                                    className="p-2 rounded-xl theme-button"
+                                    aria-label={`Remove ${getDisplayName(player)} from recent players`}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {selectedMatchup?.opponentId === player.uid && (
+                                <div className="border-t pt-3 space-y-3">
+                                  {isLoadingMatchup ? (
+                                    <p className="text-sm theme-text-muted">Loading matchup history...</p>
+                                  ) : (
+                                    <>
+                                      <div className="grid grid-cols-3 gap-3">
+                                        <div className="theme-panel-strong border rounded-2xl p-3">
+                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
+                                          <p className="text-lg font-black">
+                                            {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
+                                          </p>
+                                        </div>
+                                        <div className="theme-panel-strong border rounded-2xl p-3">
+                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
+                                          <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
+                                        </div>
+                                        <div className="theme-panel-strong border rounded-2xl p-3">
+                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
+                                          <p className="text-sm font-black">
+                                            {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      {selectedMatchup.games.length === 0 ? (
+                                        <p className="text-sm theme-text-muted">No completed games against this player yet.</p>
+                                      ) : (
+                                        <div className="space-y-2">
+                                          {selectedMatchup.games.map((game) => (
+                                            <div key={game.gameId} className="theme-panel-strong border rounded-2xl p-3 flex items-center justify-between gap-3">
+                                              <div>
+                                                <p className="text-sm font-bold">
+                                                  Winner: {getDisplayName(game.players.find((entry) => entry.uid === game.winnerId))}
+                                                </p>
+                                                <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                                  {new Date(game.completedAt).toLocaleDateString()}
+                                                </p>
+                                              </div>
+                                              <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
+                                                {Object.entries(game.finalScores).map(([uid, score]) => {
+                                                  const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
+                                                  return `${getDisplayName(entry)} ${score}`;
+                                                }).join(' • ')}
                                               </p>
                                             </div>
-                                            <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
-                                              {Object.entries(game.finalScores).map(([uid, score]) => {
-                                                const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
-                                                return `${getDisplayName(entry)} ${score}`;
-                                              }).join(' • ')}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                                          ))}
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </section>
                   </div>
                 </>
               )}

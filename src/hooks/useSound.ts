@@ -29,6 +29,11 @@ export function useSound(settings: UserSettings) {
   const lostAudioSrc = publicAsset('lost.mp3');
   const [audioNeedsInteraction, setAudioNeedsInteraction] = useState(false);
 
+  const resolveSettings = useCallback((overrides?: Partial<UserSettings>) => ({
+    ...settings,
+    ...overrides,
+  }), [settings]);
+
   const tryPlay = useCallback(async (audioRef: React.RefObject<HTMLAudioElement | null>, resetTime = false) => {
     if (!audioRef.current) {
       return false;
@@ -55,29 +60,69 @@ export function useSound(settings: UserSettings) {
     }
   }, [settings.soundEnabled, settings.musicEnabled, tryPlay]);
 
-  const enableAudioFromGesture = useCallback(async () => {
-    if (!settings.soundEnabled) {
+  const syncAudioState = useCallback((overrides?: Partial<UserSettings>) => {
+    const nextSettings = resolveSettings(overrides);
+    const musicEnabled = nextSettings.soundEnabled && nextSettings.musicEnabled;
+
+    if (themeAudioRef.current) {
+      themeAudioRef.current.volume = 0.3;
+      themeAudioRef.current.muted = !musicEnabled;
+      if (!musicEnabled) {
+        themeAudioRef.current.pause();
+        themeAudioRef.current.currentTime = 0;
+      }
+    }
+
+    if (welcomeAudioRef.current) {
+      welcomeAudioRef.current.volume = 1.0;
+      welcomeAudioRef.current.muted = !musicEnabled;
+      if (!musicEnabled) {
+        welcomeAudioRef.current.pause();
+        welcomeAudioRef.current.currentTime = 0;
+      }
+    }
+
+    if (!nextSettings.soundEnabled) {
+      [
+        correctAudioRef,
+        wrongAudioRef,
+        timesUpAudioRef,
+        wonAudioRef,
+        lostAudioRef,
+      ].forEach((audioRef) => {
+        if (!audioRef.current) return;
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      });
+      setAudioNeedsInteraction(false);
+    }
+  }, [resolveSettings]);
+
+  const enableAudioFromGesture = useCallback(async (overrides?: Partial<UserSettings>) => {
+    const nextSettings = resolveSettings(overrides);
+    syncAudioState(nextSettings);
+
+    if (!nextSettings.soundEnabled) {
       setAudioNeedsInteraction(false);
       return false;
     }
 
-    let played = false;
-
-    if (settings.musicEnabled) {
-      if (themeAudioRef.current) {
-        themeAudioRef.current.volume = 0.3;
-      }
-      played = await tryPlay(themeAudioRef);
+    if (!nextSettings.musicEnabled) {
+      setAudioNeedsInteraction(false);
+      return true;
     }
 
-    if (!played && settings.musicEnabled && welcomeAudioRef.current) {
-      welcomeAudioRef.current.volume = 1.0;
+    let played = false;
+
+    played = await tryPlay(themeAudioRef);
+
+    if (!played && welcomeAudioRef.current) {
       played = await tryPlay(welcomeAudioRef, true);
     }
 
     setAudioNeedsInteraction(!played);
     return played;
-  }, [settings.musicEnabled, settings.soundEnabled, tryPlay]);
+  }, [resolveSettings, syncAudioState, tryPlay]);
 
   return {
     themeAudioRef,
@@ -97,6 +142,7 @@ export function useSound(settings: UserSettings) {
     playSfx,
     playMusic,
     tryPlay,
+    syncAudioState,
     enableAudioFromGesture,
     setAudioNeedsInteraction,
   };

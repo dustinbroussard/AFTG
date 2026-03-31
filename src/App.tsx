@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
+import React, { lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { signInWithMagicLink, signOutUser } from './services/auth';
 import {
   recordAnswer,
@@ -62,7 +62,7 @@ import { useGameStore } from './hooks/useGameStore';
 import { useQuestions } from './hooks/useQuestions';
 import { useSound } from './hooks/useSound';
 
-const QUESTION_TIME_LIMIT_SECONDS = 20;
+const QUESTION_TIME_LIMIT_SECONDS = 30;
 const logoSrc = publicAsset('logo.png');
 
 type ResultPhase = 'idle' | 'revealing' | 'explaining' | 'specialEvent';
@@ -150,7 +150,7 @@ export default function App() {
     wonAudioRef, lostAudioRef, welcomeAudioRef,
     themeAudioSrc, correctAudioSrc, wrongAudioSrc, timesUpAudioSrc,
     wonAudioSrc, lostAudioSrc,
-    audioNeedsInteraction, playSfx, playMusic, tryPlay, enableAudioFromGesture, setAudioNeedsInteraction
+    audioNeedsInteraction, playSfx, playMusic, tryPlay, syncAudioState, enableAudioFromGesture, setAudioNeedsInteraction
   } = useSound(settings);
 
   const [isSpinning, setIsSpinning] = useState(false);
@@ -305,21 +305,43 @@ export default function App() {
     setGame(joinedGame);
   };
 
-  const handleEnableSound = async () => {
-    updateSettings({ soundEnabled: true });
-    const played = await enableAudioFromGesture();
-    if (!played) {
-      setAudioNeedsInteraction(true);
-    }
-  };
-
-  const updateSettings = (patch: Partial<UserSettings>) => {
+  const updateSettings = useCallback((patch: Partial<UserSettings>) => {
     setSettings((current) => ({
       ...current,
       ...patch,
       updatedAt: Date.now(),
     }));
-  };
+  }, []);
+
+  const applySettingsPatch = useCallback(async (
+    patch: Partial<UserSettings>,
+    options?: { unlockAudio?: boolean }
+  ) => {
+    const nextSettings: UserSettings = {
+      ...settings,
+      ...patch,
+      updatedAt: Date.now(),
+    };
+
+    setSettings(nextSettings);
+    syncAudioState(nextSettings);
+
+    if (patch.soundEnabled === false) {
+      setAudioNeedsInteraction(false);
+      return;
+    }
+
+    if (options?.unlockAudio && nextSettings.soundEnabled) {
+      const played = await enableAudioFromGesture(nextSettings);
+      if (!played && nextSettings.musicEnabled) {
+        setAudioNeedsInteraction(true);
+      }
+    }
+  }, [enableAudioFromGesture, settings, setAudioNeedsInteraction, syncAudioState]);
+
+  const handleEnableSound = useCallback(async () => {
+    await applySettingsPatch({ soundEnabled: true }, { unlockAudio: true });
+  }, [applySettingsPatch]);
 
   const getLoadingCopy = (step: LoadingStep) => {
     switch (step) {
@@ -851,9 +873,6 @@ export default function App() {
     }
     if (!currentPlayer || !opponentPlayer) {
       return { allowed: false, reason: 'missing_player_context' };
-    }
-    if (heckleRequestInFlightRef.current) {
-      return { allowed: false, reason: 'request_in_flight' };
     }
     return { allowed: true, reason: 'eligible_waiting_state' };
   })();
@@ -1617,24 +1636,8 @@ export default function App() {
   }, [user?.id]);
 
   useEffect(() => {
-    if (!user) {
-      if (settings.soundEnabled && settings.musicEnabled) {
-        if (themeAudioRef.current) {
-          themeAudioRef.current.volume = 0.3;
-        }
-        if (welcomeAudioRef.current) {
-          welcomeAudioRef.current.volume = 1.0;
-        }
-      } else {
-        if (themeAudioRef.current) {
-          themeAudioRef.current.pause();
-        }
-        if (welcomeAudioRef.current) {
-          welcomeAudioRef.current.pause();
-        }
-      }
-    }
-  }, [settings.soundEnabled, settings.musicEnabled, user]);
+    syncAudioState();
+  }, [syncAudioState]);
 
   useEffect(() => {
     if (game?.status === 'completed' && prevGameStatus.current !== 'completed') {
@@ -2983,8 +2986,7 @@ export default function App() {
             <button type="button"
               onClick={() => {
                 if (settings.soundEnabled) {
-                  updateSettings({ soundEnabled: false });
-                  setAudioNeedsInteraction(false);
+                  void applySettingsPatch({ soundEnabled: false });
                   return;
                 }
                 void handleEnableSound();
@@ -3205,8 +3207,7 @@ export default function App() {
               <button type="button"
                 onClick={() => {
                   if (settings.soundEnabled) {
-                    updateSettings({ soundEnabled: false });
-                    setAudioNeedsInteraction(false);
+                    void applySettingsPatch({ soundEnabled: false });
                     return;
                   }
                   void handleEnableSound();
@@ -3334,7 +3335,7 @@ export default function App() {
                 aria-live="polite"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-medium text-cyan-100">Tap to enable sound.</p>
+                  <p className="text-sm font-medium text-cyan-950 dark:text-cyan-100">Tap to enable sound.</p>
                   <button
                     type="button"
                     onClick={() => void handleEnableSound()}
@@ -3752,7 +3753,12 @@ export default function App() {
             syncStatus={remoteSettingsResolved ? 'idle' : 'loading'}
             syncError={remoteSettingsError}
             onClose={() => setShowSettings(false)}
-            onUpdate={updateSettings}
+            onUpdate={(patch) => {
+              const shouldUnlockAudio =
+                (patch.soundEnabled === true && !settings.soundEnabled) ||
+                (patch.musicEnabled === true && settings.soundEnabled);
+              void applySettingsPatch(patch, { unlockAudio: shouldUnlockAudio });
+            }}
             onSignOut={openSignOutConfirm}
           />
         </Suspense>
