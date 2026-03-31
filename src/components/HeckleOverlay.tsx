@@ -34,7 +34,7 @@ export const HeckleOverlay: React.FC<HeckleOverlayProps> = ({ message, visible }
           className="relative z-10 w-full max-w-md"
         >
           <div className="theme-panel-strong border rounded-2xl min-h-[10.25rem] sm:min-h-[11rem] px-6 py-7 sm:px-8 sm:py-8 text-center shadow-[0_12px_36px_rgba(0,0,0,0.28),0_0_28px_rgba(217,70,239,0.12)] ring-1 ring-fuchsia-300/12">
-            <p className="mb-4 text-[10px] font-black uppercase tracking-[0.28em] text-fuchsia-400">
+            <p className="mb-4 text-[0.625rem] font-black uppercase tracking-[0.28em] text-fuchsia-400">
               Commentary Booth
             </p>
             <p className="text-[1.12rem] sm:text-[1.34rem] font-semibold leading-7 sm:leading-8 whitespace-pre-line text-balance">

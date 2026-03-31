@@ -70,7 +70,7 @@ export function DatabaseDashboard() {
             <div className="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity">
                <Layers className="h-10 w-10" />
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] theme-text-muted mb-3 flex items-center gap-2">
+            <p className="text-[0.625rem] font-black uppercase tracking-[0.25em] theme-text-muted mb-3 flex items-center gap-2">
               <Activity className="h-3 w-3" />
               Table
             </p>
@@ -100,9 +100,9 @@ export function DatabaseDashboard() {
            RLS (Row Level Security) is enabled on all tables. This dashboard reports counts based on the current user's session and the configured policies. If a table shows 'Access denied', it means the <code>public</code> role lacks <code>SELECT</code> permissions for that table.
         </p>
         <div className="flex flex-wrap gap-2">
-           <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-full text-[10px] font-black uppercase tracking-widest">Questions Open Read</span>
-           <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-full text-[10px] font-black uppercase tracking-widest">Auth RLS Enforced</span>
-           <span className="px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded-full text-[10px] font-black uppercase tracking-widest">Admin Overrides Only</span>
+           <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-full text-[0.625rem] font-black uppercase tracking-widest">Questions Open Read</span>
+           <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-full text-[0.625rem] font-black uppercase tracking-widest">Auth RLS Enforced</span>
+           <span className="px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded-full text-[0.625rem] font-black uppercase tracking-widest">Admin Overrides Only</span>
         </div>
       </div>
     </div>

@@ -14,7 +14,6 @@ import {
   setActiveGameQuestion as setActiveGameQuestionService,
   clearActiveGameQuestion as clearActiveGameQuestionService,
   getGameQuestions,
-  getPastGames,
   subscribeToMessages,
   sendMessage,
 } from './services/gameService';
@@ -48,7 +47,7 @@ import {
 import { getTrashTalkLine, TrashTalkEvent, type TrashTalkGenerationContext } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check, Pencil } from 'lucide-react';
+import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateHeckles, generateTrashTalk } from './services/gemini';
@@ -133,7 +132,7 @@ interface MatchupHistoryState {
 
 export default function App() {
   const { user, hasResolvedInitialAuthState } = useAuth();
-  const { 
+  const {
     game, setGame, players, setPlayers, messages, setMessages,
     playerProfile, setPlayerProfile, recentPlayers, recentCompletedGames, incomingInvites,
     hasResolvedProfile, profileError,
@@ -191,7 +190,7 @@ export default function App() {
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [seenIncomingMessageCount, setSeenIncomingMessageCount] = useState(0);
   const [inviteFeedback, setInviteFeedback] = useState<string | null>(null);
-  
+
   const [email, setEmail] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [authLoadingMode, setAuthLoadingMode] = useState<'magic-link' | 'google' | null>(null);
@@ -201,12 +200,8 @@ export default function App() {
   const [isSavingNickname, setIsSavingNickname] = useState(false);
   const [isEditingNickname, setIsEditingNickname] = useState(false);
 
-  const [pastGames, setPastGames] = useState<GameState[]>([]);
-  const [pastGamesStatus, setPastGamesStatus] = useState<'loading' | 'empty' | 'error' | 'success'>('loading');
-  const [pastGamesError, setPastGamesError] = useState<string | null>(null);
   const [selectedMatchup, setSelectedMatchup] = useState<MatchupHistoryState | null>(null);
   const [isLoadingMatchup, setIsLoadingMatchup] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
   const [revealedCategory, setRevealedCategory] = useState<string | null>(null);
@@ -282,7 +277,6 @@ export default function App() {
   const existingQuestionIds = questions.map((question) => question.id);
   const playableCategories = getPlayableCategories();
   const themeMode = settings.themeMode;
-  const headerDisplayName = truncateHeaderDisplayName(playerProfile?.nickname || user?.email || 'Player');
   const musicEnabled = settings.soundEnabled && settings.musicEnabled;
   const sfxEnabled = settings.soundEnabled && settings.sfxEnabled;
   const isQuestionActive =
@@ -892,7 +886,6 @@ export default function App() {
   const isBlockingHeckleModalOpen =
     !!confirmAction ||
     showSettings ||
-    showHistory ||
     !!resumePrompt ||
     isMobileChatOpen;
   const isWaitingForOpponent =
@@ -1054,7 +1047,6 @@ export default function App() {
       activeTrashTalkEvent,
       confirmAction,
       showSettings,
-      showHistory,
       isMobileChatOpen,
       requestInFlight: !!heckleRequestInFlightRef.current,
       existingHeckleShown: !!activeHeckle,
@@ -1077,7 +1069,6 @@ export default function App() {
     activeTrashTalkEvent,
     confirmAction,
     showSettings,
-    showHistory,
     isMobileChatOpen,
   ]);
 
@@ -1685,28 +1676,6 @@ export default function App() {
     setSeenIncomingMessageCount(0);
   }, [game?.id]);
 
-  // Fetch past games history
-  useEffect(() => {
-    if (!user?.id) {
-      setPastGames([]);
-      setPastGamesStatus('empty');
-      setPastGamesError(null);
-      return;
-    }
-
-    setPastGamesStatus('loading');
-    setPastGamesError(null);
-    getPastGames(user.id).then((games) => {
-      setPastGames(games);
-      setPastGamesStatus(games.length === 0 ? 'empty' : 'success');
-    }).catch(err => {
-      console.error("Error fetching history:", err);
-      setPastGames([]);
-      setPastGamesStatus('error');
-      setPastGamesError('Failed to load match history.');
-    });
-  }, [user?.id]);
-
   useEffect(() => {
     syncAudioState();
   }, [syncAudioState]);
@@ -1914,9 +1883,9 @@ export default function App() {
         typeof previousOpponent.lastResumedAt === 'number' &&
         opponent.lastResumedAt > previousOpponent.lastResumedAt
       ) || (
-        typeof opponent.lastResumedAt === 'number' &&
-        typeof previousOpponent.lastResumedAt !== 'number'
-      );
+          typeof opponent.lastResumedAt === 'number' &&
+          typeof previousOpponent.lastResumedAt !== 'number'
+        );
 
       if (game.status === 'active' && opponentResumed) {
         const message = `${opponent.name} resumed the game.`;
@@ -1998,7 +1967,7 @@ export default function App() {
       setError('Please enter your email.');
       return;
     }
-    
+
     // Simple email validation
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setError('Please enter a valid email address.');
@@ -2132,7 +2101,7 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      
+
       setGame(newGame);
     } catch (err) {
       console.error(err);
@@ -2168,7 +2137,7 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      
+
       setGame(newGame);
     } catch (err) {
       console.error('[startMultiplayerGame] Failed:', err);
@@ -2286,7 +2255,7 @@ export default function App() {
         userId: user.id,
       });
       await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
-      
+
       await sendInvite({
         uid: user.id,
         nickname: playerProfile?.nickname || user?.email || 'Host',
@@ -2566,7 +2535,7 @@ export default function App() {
         gameId: game.id,
         relyingOnSubscriptionRefresh: true,
       });
-      
+
       // Incrementally update player stats even if match isn't finished
       void recordQuestionStats({
         uid: user.id,
@@ -2580,7 +2549,7 @@ export default function App() {
         const newStreak = (currentPlayer?.streak || 0) + 1;
         const alreadyCompleted = currentPlayer?.completedCategories.includes(currentQuestion.category);
         const earnedNewTrophy = !alreadyCompleted;
-        const newCompletedCategories = alreadyCompleted 
+        const newCompletedCategories = alreadyCompleted
           ? currentPlayer?.completedCategories || []
           : [...(currentPlayer?.completedCategories || []), currentQuestion.category];
 
@@ -2650,7 +2619,7 @@ export default function App() {
             ? `Player missed ${currentQuestion.category} question and turn is handing to the opponent.`
             : `Player timed out in ${currentQuestion.category} and lost the round tempo.`
         );
-        
+
         const updatedPlayers = players.map(p => {
           if (p.uid === user.id) return { ...p, streak: 0 };
           return p;
@@ -2682,10 +2651,10 @@ export default function App() {
         setGame((current) =>
           current
             ? {
-                ...current,
-                players: updatedPlayers,
-                currentTurn: isSolo ? user.id : current.currentTurn,
-              }
+              ...current,
+              players: updatedPlayers,
+              currentTurn: isSolo ? user.id : current.currentTurn,
+            }
             : current
         );
       }
@@ -2831,12 +2800,12 @@ export default function App() {
       reasonSamePlayerCanKeepGoing:
         shouldShowCurrentTurnStage
           ? {
-              currentTurnMatchesUser: game.currentTurn === user.id,
-              currentQuestionVisible: !!currentQuestion,
-              revealedCategoryVisible: !!revealedCategory,
-              resultPhase,
-              roastVisible: !!roast,
-            }
+            currentTurnMatchesUser: game.currentTurn === user.id,
+            currentQuestionVisible: !!currentQuestion,
+            revealedCategoryVisible: !!revealedCategory,
+            resultPhase,
+            roastVisible: !!roast,
+          }
           : null,
     });
   }, [currentQuestion, game, players, revealedCategory, resultPhase, roast, shouldShowCurrentTurnStage, user?.id]);
@@ -2926,7 +2895,7 @@ export default function App() {
       });
       await persistQuestionsToGameService(game.id, initialQuestions.map(q => q.id));
       const nextQuestionIds = initialQuestions.map((question) => question.id);
-      
+
       const resetPlayers = players.map(p => ({
         ...p,
         score: 0,
@@ -3043,10 +3012,10 @@ export default function App() {
               <div className={`max-w-[78%] p-3 sm:p-4 rounded-2xl text-sm shadow-md ${m.messageType === 'system'
                 ? 'mx-auto theme-soft-surface border text-center'
                 : m.uid === user?.id
-                ? 'bg-purple-600 text-white rounded-tr-sm'
-                : 'theme-soft-surface rounded-tl-sm border'
+                  ? 'bg-purple-600 text-white rounded-tr-sm'
+                  : 'theme-soft-surface rounded-tl-sm border'
                 }`}>
-                <p className="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-wider">{m.name}</p>
+                <p className="text-[0.625rem] font-bold opacity-60 mb-1 uppercase tracking-wider">{m.name}</p>
                 <p className="leading-relaxed">{m.text}</p>
               </div>
             </div>
@@ -3277,7 +3246,7 @@ export default function App() {
               )}
             </AnimatePresence>
 
-          <div className="w-full text-center space-y-2">
+            <div className="w-full text-center space-y-2">
               {audioNeedsInteraction && settings.soundEnabled && (
                 <button
                   type="button"
@@ -3287,7 +3256,7 @@ export default function App() {
                   Tap to enable sound
                 </button>
               )}
-              <p className="theme-text-muted font-bold text-[10px] uppercase tracking-widest opacity-60">
+              <p className="theme-text-muted font-bold text-[0.625rem] uppercase tracking-widest opacity-60">
                 Pure Trivia. No Ads. No Bullsh*t. 🚫
               </p>
             </div>
@@ -3334,7 +3303,7 @@ export default function App() {
               />
             </div>
 
-              <button
+            <button
               type="button"
               onClick={handleSaveNickname}
               disabled={isSavingNickname || !sanitizeNicknameInput(nickname)}
@@ -3358,7 +3327,7 @@ export default function App() {
             </motion.div>
           )}
 
-          <button 
+          <button
             onClick={() => signOutUser()}
             className="text-xs font-bold uppercase tracking-widest theme-text-muted hover:text-pink-500 transition-colors"
           >
@@ -3384,133 +3353,64 @@ export default function App() {
 
       <div data-theme={themeMode} className="app-theme flex min-h-dvh flex-col overflow-x-hidden font-sans">
         {!isQuestionActive && (
-          <header className="z-40 shrink-0 border-b px-3 py-2.5 theme-panel backdrop-blur-md sm:px-4 sm:py-4">
-            <div className="flex flex-wrap items-start justify-between gap-3 sm:items-center">
-            <div className="flex w-full items-center gap-2 sm:w-auto sm:gap-4">
-              <button type="button"
-                onClick={() => {
-                  if (settings.soundEnabled) {
-                    void applySettingsPatch({ soundEnabled: false });
-                    return;
-                  }
-                  void handleEnableSound();
-                }}
-                className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors"
-                aria-label={settings.soundEnabled ? 'Mute all sound' : 'Enable sound'}
-              >
-                {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-              </button>
-              <button type="button"
-                onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
-                className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors"
-                title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
-              </button>
-              <button type="button"
-                onClick={() => setShowSettings(true)}
-                className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors"
-                title="Settings"
-                aria-label="Open settings"
-              >
-                <SlidersHorizontal className="w-5 h-5" />
-              </button>
-              {import.meta.env.DEV && (
+          <header className="z-40 shrink-0 border-b px-3 py-2.5 theme-panel backdrop-blur-md sm:px-4 sm:py-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-2 sm:gap-4">
                 <button type="button"
-                  onClick={() => setShowQuestionBankAdmin(true)}
-                  className="rounded-xl px-3 py-2 text-xs font-black uppercase tracking-widest theme-button"
-                  title="Question Bank Admin"
-                  aria-label="Open question bank admin"
+                  onClick={() => {
+                    if (settings.soundEnabled) {
+                      void applySettingsPatch({ soundEnabled: false });
+                      return;
+                    }
+                    void handleEnableSound();
+                  }}
+                  className="min-h-12 min-w-12 rounded-full p-2 theme-icon-button transition-colors"
+                  aria-label={settings.soundEnabled ? 'Mute all sound' : 'Enable sound'}
                 >
-                  Dev
+                  {settings.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
                 </button>
-              )}
-            </div>
-            <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:w-auto sm:flex-nowrap sm:gap-4">
-              {game && (
                 <button type="button"
-                  onClick={openQuitConfirm}
-                  className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors"
-                  title="Pause Match"
-                  aria-label="Pause current match"
+                  onClick={() => updateSettings({ themeMode: themeMode === 'dark' ? 'light' : 'dark' })}
+                  className="min-h-12 min-w-12 rounded-full p-2 theme-icon-button transition-colors"
+                  title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  {themeMode === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-cyan-500" />}
                 </button>
-              )}
-              {!game && (
                 <button type="button"
-                  onClick={() => setShowHistory(true)}
-                  className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors"
-                  title="Match History"
-                  aria-label="Open match history"
+                  onClick={() => setShowSettings(true)}
+                  className="min-h-12 min-w-12 rounded-full p-2 theme-icon-button transition-colors"
+                  title="Settings"
+                  aria-label="Open settings"
                 >
-                  <History className="w-5 h-5" />
+                  <SlidersHorizontal className="w-5 h-5" />
                 </button>
-              )}
-              <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
-                {isEditingNickname ? (
-                  <div className="flex min-w-0 flex-col items-end gap-2">
-                    <input
-                      type="text"
-                      value={nickname}
-                      onChange={(e) => setNickname(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          void handleSaveNickname();
-                        }
-                        if (e.key === 'Escape') {
-                          handleCancelNicknameEdit();
-                        }
-                      }}
-                      maxLength={MAX_NICKNAME_LENGTH}
-                      className="h-10 w-32 rounded-xl border bg-transparent px-3 text-xs font-bold tracking-wide theme-panel theme-inset focus:outline-none focus:ring-2 focus:ring-pink-500/50 sm:w-40"
-                      autoFocus
-                    />
-                    <div className="flex w-full items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => void handleSaveNickname()}
-                        disabled={isSavingNickname || !sanitizeNicknameInput(nickname)}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-pink-600 text-white transition-all disabled:opacity-50"
-                        aria-label={isSavingNickname ? 'Saving nickname' : 'Save nickname'}
-                        title={isSavingNickname ? 'Saving nickname' : 'Save nickname'}
-                      >
-                        {isSavingNickname ? (
-                          <span className="text-sm font-black">...</span>
-                        ) : (
-                          <Check className="w-4 h-4" />
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCancelNicknameEdit}
-                        disabled={isSavingNickname}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full theme-button transition-all disabled:opacity-50"
-                        aria-label="Cancel nickname edit"
-                        title="Cancel nickname edit"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleStartNicknameEdit}
-                    className="inline-flex min-h-11 max-w-[8.75rem] items-center gap-1.5 rounded-xl px-2.5 py-2 text-[0.625rem] font-bold uppercase tracking-[0.05em] theme-button theme-text-muted transition-colors sm:max-w-[10.5rem] sm:gap-2 sm:px-3 sm:text-[0.6875rem] sm:tracking-[0.08em]"
-                    title="Edit nickname"
-                    aria-label="Edit nickname"
+                {import.meta.env.DEV && (
+                  <button type="button"
+                    onClick={() => setShowQuestionBankAdmin(true)}
+                    className="rounded-xl px-3 py-2 text-xs font-black uppercase tracking-widest theme-button"
+                    title="Question Bank Admin"
+                    aria-label="Open question bank admin"
                   >
-                    <span className="max-w-[5.5rem] truncate sm:max-w-[7.5rem]">{headerDisplayName}</span>
-                    <Pencil className="w-3.5 h-3.5" />
+                    Dev
                   </button>
                 )}
-                <button type="button" onClick={openSignOutConfirm} className="min-h-11 min-w-11 rounded-full p-2 theme-icon-button transition-colors" aria-label="Sign out">
+              </div>
+              <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+                {game && (
+                  <button type="button"
+                    onClick={openQuitConfirm}
+                    className="min-h-12 min-w-12 rounded-full p-2 theme-icon-button transition-colors"
+                    title="Pause Match"
+                    aria-label="Pause current match"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                )}
+                <button type="button" onClick={openSignOutConfirm} className="min-h-12 min-w-12 rounded-full p-2 theme-icon-button transition-colors" aria-label="Sign out">
                   <LogOut className="w-5 h-5" />
                 </button>
               </div>
-            </div>
             </div>
           </header>
         )}
@@ -3591,77 +3491,13 @@ export default function App() {
             )}
           </AnimatePresence>
 
-          {/* History Modal */}
-          <AnimatePresence>
-            {showHistory && (
-              <motion.div
-                key="history-modal"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-end justify-center p-3 theme-overlay backdrop-blur-sm sm:items-center sm:p-4"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="history-modal-title"
-              >
-                <motion.div
-                  initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                  className="flex max-h-[min(85dvh,42rem)] w-full max-w-lg flex-col rounded-2xl border p-4 theme-panel-strong backdrop-blur-xl sm:p-6"
-                >
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 id="history-modal-title" className="text-2xl font-black uppercase tracking-tight">Match History</h2>
-                    <button type="button" onClick={() => setShowHistory(false)} className="p-2 theme-icon-button rounded-lg transition-all duration-300" aria-label="Close match history">
-                      <X className="w-6 h-6" />
-                    </button>
-                  </div>
-
-                  <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 space-y-3">
-                    {pastGamesStatus === 'loading' ? (
-                      <p className="theme-text-muted text-center py-8">Loading match history...</p>
-                    ) : pastGamesStatus === 'error' ? (
-                      <p className="text-rose-300 text-center py-8">{pastGamesError || 'Failed to load match history.'}</p>
-                    ) : pastGames.length === 0 ? (
-                      <p className="theme-text-muted text-center py-8">No completed games yet.</p>
-                    ) : (
-                      pastGames.map(g => (
-                        <div key={g.id} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between">
-                          <div>
-                            <p className="text-xs theme-text-muted font-medium mb-1">
-                              {g.lastUpdated ? new Date(g.lastUpdated).toLocaleDateString() : 'Unknown Date'}
-                            </p>
-                            <p className="text-sm font-bold">
-                              {g.gameMode === 'solo' ? 'Solo Game' : 'Multiplayer'}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            {g.winnerId === user.id ? (
-                              <span className="inline-flex items-center gap-1 text-emerald-400 font-black text-sm uppercase tracking-wider">
-                                <Trophy className="w-4 h-4" /> Won
-                              </span>
-                            ) : (
-                              <span className="theme-text-muted font-bold text-sm uppercase tracking-wider">
-                                Lost
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           <AnimatePresence mode="wait">
             {!game ? (
               <div key="lobby-view" className="relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
                 {resumePrompt && (
                   <div className="mb-6 rounded-2xl border theme-panel-strong backdrop-blur-xl p-5 shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
-                    <p className="text-[10px] font-black uppercase tracking-[0.22em] theme-text-muted mb-2">
+                    <p className="text-[0.625rem] font-black uppercase tracking-[0.22em] theme-text-muted mb-2">
                       Resume Match
                     </p>
                     <h2 className="text-2xl font-black tracking-tight mb-2">
@@ -3689,11 +3525,10 @@ export default function App() {
                   </div>
                 )}
                 <div
-                  className={`h-full min-h-0 transition-all duration-300 ${
-                    resumePrompt
+                  className={`h-full min-h-0 transition-all duration-300 ${resumePrompt
                       ? 'pointer-events-none opacity-40'
                       : ''
-                  }`}
+                    }`}
                 >
                   <GameLobby
                     onStartSolo={startSoloGame}
@@ -3724,6 +3559,14 @@ export default function App() {
                     onAvatarChange={handleSaveAvatar}
                     onAvatarRemove={handleRemoveAvatar}
                     inviteFeedback={inviteFeedback}
+                    displayName={truncateHeaderDisplayName(playerProfile?.nickname || user?.email || 'Player')}
+                    nickname={nickname}
+                    isEditingNickname={isEditingNickname}
+                    isSavingNickname={isSavingNickname}
+                    onNicknameChange={setNickname}
+                    onStartNicknameEdit={handleStartNicknameEdit}
+                    onSaveNickname={handleSaveNickname}
+                    onCancelNicknameEdit={handleCancelNicknameEdit}
                   />
                 </div>
               </div>
@@ -3748,7 +3591,7 @@ export default function App() {
                         {matchIdCopied ? 'Copied' : 'Copy'}
                       </button>
                       <div className="text-right">
-                        <p className="text-[10px] font-black uppercase tracking-widest theme-text-muted mb-1">Match ID</p>
+                        <p className="text-[0.625rem] font-black uppercase tracking-widest theme-text-muted mb-1">Match ID</p>
                         <p className="text-lg sm:text-xl font-black text-pink-500 tracking-tight leading-tight break-all">{game.id}</p>
                       </div>
                     </div>
@@ -3773,7 +3616,7 @@ export default function App() {
                       ))}
                     </div>
                     {shouldShowMatchChat && (
-                      <p className="md:hidden text-center text-[10px] font-bold uppercase tracking-[0.2em] theme-text-muted">
+                      <p className="md:hidden text-center text-[0.625rem] font-bold uppercase tracking-[0.2em] theme-text-muted">
                         Tap a player avatar to open chat
                       </p>
                     )}
@@ -3873,9 +3716,9 @@ export default function App() {
                   </div>
                 )}
               </motion.div>
-        )}
-      </AnimatePresence>
-    </main>
+            )}
+          </AnimatePresence>
+        </main>
 
         <AnimatePresence>
           {shouldShowMatchChat && isMobileChatOpen && (
@@ -3902,7 +3745,7 @@ export default function App() {
                   <div className="mx-auto mb-3 h-1.5 w-14 rounded-full bg-white/20" />
                   <div className="mb-3 flex items-center justify-between gap-3 px-1">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.22em] theme-text-muted">Match Chat</p>
+                      <p className="text-[0.625rem] font-black uppercase tracking-[0.22em] theme-text-muted">Match Chat</p>
                       <h3 className="text-base font-black">{matchChatTitle}</h3>
                     </div>
                     <button

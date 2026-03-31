@@ -58,95 +58,96 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
   }, [controls, isSpinning, onSpinComplete, rotation, segmentAngle, setIsSpinning, soundEnabled]);
 
   return (
-    <div className="relative mx-auto aspect-[1/1.18] w-full max-w-[min(92vw,24rem)] drop-shadow-2xl">
+    <div className="relative mx-auto w-full max-w-[min(92vw,24rem)] drop-shadow-2xl">
       <audio ref={spinAudioRef} src={spinAudioSrc} />
 
-      <motion.div
-        animate={controls}
-        initial={{ rotate: rotation }}
-        className="mx-auto size-[min(92vw,22rem)] rounded-full border-[0.5rem] overflow-hidden relative ring-4"
-        style={{ borderColor: 'var(--app-border-strong)', boxShadow: 'var(--app-shadow-soft)' }}
-      >
-        {/* SVG Wheel Background */}
-        <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-xl" style={{ transform: `rotate(${wheelInitialOffset}deg)` }}>
-          <circle cx="100" cy="100" r="100" fill="var(--app-bg-elevated)" />
-          {CATEGORIES.map((cat, i) => {
-            const startAngle = i * segmentAngle;
-            const endAngle = (i + 1) * segmentAngle;
-
-            const startRad = (startAngle * Math.PI) / 180;
-            const endRad = (endAngle * Math.PI) / 180;
-
-            const radius = 100;
-            const cx = 100;
-            const cy = 100;
-
-            const x1 = cx + radius * Math.cos(startRad);
-            const y1 = cy + radius * Math.sin(startRad);
-            const x2 = cx + radius * Math.cos(endRad);
-            const y2 = cy + radius * Math.sin(endRad);
-
-            const largeArcFlag = segmentAngle > 180 ? 1 : 0;
-            const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-
-            const textAngle = startAngle + segmentAngle / 2;
-            const textRad = (textAngle * Math.PI) / 180;
-
-            // Push icon outward, closer to rim
-            const iconRadius = 65;
-            const iconX = cx + iconRadius * Math.cos(textRad);
-            const iconY = cy + iconRadius * Math.sin(textRad);
-
-            return (
-              <g key={cat} className="transition-opacity hover:opacity-90">
-                <path
-                  d={pathData}
-                  fill={wheelSegmentColorVars[cat as Category]}
-                  stroke="rgba(0,0,0,0.2)"
-                  strokeWidth="0.5"
-                />
-                {(() => {
-                  const Icon = getCategoryIcon(cat);
-                  const iconSize = 26;
-                  const iconColor = cat === 'Random' ? 'var(--wheel-random-icon)' : 'var(--wheel-icon)';
-
-                  return (
-                    <g transform={`rotate(${textAngle + 90}, ${iconX}, ${iconY})`} style={{ pointerEvents: 'none' }}>
-                      {Icon && (
-                        <Icon
-                          x={iconX - iconSize / 2}
-                          y={iconY - iconSize / 2}
-                          width={iconSize}
-                          height={iconSize}
-                          color={iconColor}
-                          strokeWidth={2.5}
-                        />
-                      )}
-                    </g>
-                  );
-                })()}
-              </g>
-            );
-          })}
-
-          {/* Inner center peg for design */}
-          <circle cx="100" cy="100" r="28" fill="var(--wheel-center)" stroke="var(--wheel-center-stroke)" strokeWidth="2" />
-        </svg>
-      </motion.div>
-
-      <div className="absolute inset-x-0 top-0 flex h-[min(92vw,22rem)] items-center justify-center">
-        <button type="button"
-          onClick={() => !isSpinning && setIsSpinning(true)}
-          disabled={isSpinning}
-          className="z-30 flex min-h-20 min-w-20 items-center justify-center rounded-full border-[0.375rem] theme-button px-4 hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 sm:min-h-24 sm:min-w-24"
-          style={{ borderColor: 'var(--app-text)' }}
-          aria-label="Spin the category wheel"
+      {/* Shared Coordinate Space for Wheel and Button */}
+      <div className="relative mx-auto aspect-square w-full">
+        <motion.div
+          animate={controls}
+          initial={{ rotate: rotation }}
+          className="size-full rounded-full border-[0.5rem] overflow-hidden relative ring-4"
+          style={{ borderColor: 'var(--app-border-strong)', boxShadow: 'var(--app-shadow-soft)' }}
         >
-          <span className="ml-1 text-sm font-black uppercase tracking-[0.2em] sm:text-base">Spin</span>
-        </button>
-      </div>
+            {/* SVG Wheel Background */}
+            <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-xl" style={{ transform: `rotate(${wheelInitialOffset}deg)` }}>
+              <circle cx="100" cy="100" r="100" fill="var(--app-bg-elevated)" />
+              {CATEGORIES.map((cat, i) => {
+                const startAngle = i * segmentAngle;
+                const endAngle = (i + 1) * segmentAngle;
 
-      <div className="absolute left-1/2 bottom-0 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+                const startRad = (startAngle * Math.PI) / 180;
+                const endRad = (endAngle * Math.PI) / 180;
+
+                const radius = 100;
+                const cx = 100;
+                const cy = 100;
+
+                const x1 = cx + radius * Math.cos(startRad);
+                const y1 = cy + radius * Math.sin(startRad);
+                const x2 = cx + radius * Math.cos(endRad);
+                const y2 = cy + radius * Math.sin(endRad);
+
+                const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+
+                const textAngle = startAngle + segmentAngle / 2;
+                const textRad = (textAngle * Math.PI) / 180;
+
+                // Push icon outward, closer to rim
+                const iconRadius = 65;
+                const iconX = cx + iconRadius * Math.cos(textRad);
+                const iconY = cy + iconRadius * Math.sin(textRad);
+
+                return (
+                  <g key={cat} className="transition-opacity hover:opacity-90">
+                    <path
+                      d={pathData}
+                      fill={wheelSegmentColorVars[cat as Category]}
+                      stroke="rgba(0,0,0,0.2)"
+                      strokeWidth="0.5"
+                    />
+                    {(() => {
+                      const Icon = getCategoryIcon(cat);
+                      const iconSize = 26;
+                      const iconColor = cat === 'Random' ? 'var(--wheel-random-icon)' : 'var(--wheel-icon)';
+
+                      return (
+                        <g transform={`rotate(${textAngle + 90}, ${iconX}, ${iconY})`} style={{ pointerEvents: 'none' }}>
+                          {Icon && (
+                            <Icon
+                              x={iconX - iconSize / 2}
+                              y={iconY - iconSize / 2}
+                              width={iconSize}
+                              height={iconSize}
+                              color={iconColor}
+                              strokeWidth={2.5}
+                            />
+                          )}
+                        </g>
+                      );
+                    })()}
+                  </g>
+                );
+              })}
+            </svg>
+          </motion.div>
+
+          {/* Spin Button - Simplified without border to remove alignment friction */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <button type="button"
+              onClick={() => !isSpinning && setIsSpinning(true)}
+              disabled={isSpinning}
+              className="z-30 flex min-h-20 min-w-20 items-center justify-center rounded-full theme-button px-4 hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 sm:min-h-24 sm:min-w-24"
+              aria-label="Spin the category wheel"
+            >
+              <span className="ml-1 text-sm font-black uppercase tracking-[0.2em] sm:text-base">Spin</span>
+            </button>
+          </div>
+        </div>
+
+      {/* Pointer at the bottom */}
+      <div className="mt-4 flex flex-col items-center pointer-events-none">
         <div
           className="h-0 w-0 border-l-[18px] border-r-[18px] border-b-[26px] border-l-transparent border-r-transparent drop-shadow-[0_6px_14px_rgba(0,0,0,0.28)]"
           style={{ borderBottomColor: 'var(--wheel-pointer)' }}

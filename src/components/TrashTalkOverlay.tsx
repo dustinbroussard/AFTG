@@ -47,7 +47,7 @@ export const TrashTalkOverlay: React.FC<TrashTalkOverlayProps> = ({ event, messa
           className="relative z-10 w-full max-w-md"
         >
           <div className={`rounded-2xl border backdrop-blur-xl px-6 py-7 sm:px-8 sm:py-8 text-center shadow-[0_12px_36px_rgba(0,0,0,0.28)] ${cardClass}`}>
-            <p className={`mb-4 text-[10px] font-black uppercase tracking-[0.28em] ${accentClass}`}>
+            <p className={`mb-4 text-[0.625rem] font-black uppercase tracking-[0.28em] ${accentClass}`}>
               {TITLES[event]}
             </p>
             <p className="text-[1.12rem] sm:text-[1.3rem] font-semibold leading-7 sm:leading-8 text-balance">

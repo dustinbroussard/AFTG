@@ -75,7 +75,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Settings</p>
+                <p className="text-[0.625rem] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Settings</p>
                 <h2 id="settings-modal-title" className="text-2xl font-black">Game Preferences</h2>
               </div>
               <button type="button" onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close settings">

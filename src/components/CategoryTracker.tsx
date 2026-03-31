@@ -32,17 +32,17 @@ export const CategoryTracker: React.FC<CategoryTrackerProps> = ({
               type="button"
               onClick={onAvatarClick}
               aria-label={`Open chat with ${playerName}`}
-              className="relative min-h-11 min-w-11 cursor-pointer rounded-xl transition-transform active:scale-[0.97]"
+              className="relative min-h-12 min-w-12 cursor-pointer rounded-xl transition-transform active:scale-[0.97]"
             >
               {avatarUrl ? (
-                <img src={avatarUrl} alt="Avatar" className="h-10 w-10 rounded-xl object-cover shadow-inner border theme-border sm:h-11 sm:w-11" />
+                <img src={avatarUrl} alt="Avatar" className="h-10 w-10 rounded-xl object-cover shadow-inner border theme-border sm:h-11 sm:w-11" loading="lazy" />
               ) : (
                 <div className="h-10 w-10 theme-avatar-surface rounded-xl flex items-center justify-center text-lg shadow-inner border sm:h-11 sm:w-11">
                   👤
                 </div>
               )}
               {unreadCount > 0 && (
-                <span className={`absolute -right-1.5 -top-1.5 min-w-5 h-5 px-1 rounded-full text-[10px] font-black flex items-center justify-center shadow-md ${unreadBadgeClassName}`}>
+                <span className={`absolute -right-1.5 -top-1.5 min-w-5 h-5 px-1 rounded-full text-[0.625rem] font-black flex items-center justify-center shadow-md ${unreadBadgeClassName}`}>
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
@@ -50,7 +50,7 @@ export const CategoryTracker: React.FC<CategoryTrackerProps> = ({
           ) : (
             <div className="relative">
               {avatarUrl ? (
-                <img src={avatarUrl} alt="Avatar" className="h-10 w-10 rounded-xl object-cover shadow-inner border theme-border sm:h-11 sm:w-11" />
+                <img src={avatarUrl} alt="Avatar" className="h-10 w-10 rounded-xl object-cover shadow-inner border theme-border sm:h-11 sm:w-11" loading="lazy" />
               ) : (
                 <div className="h-10 w-10 theme-avatar-surface rounded-xl flex items-center justify-center text-lg shadow-inner border sm:h-11 sm:w-11">
                   👤
@@ -63,7 +63,7 @@ export const CategoryTracker: React.FC<CategoryTrackerProps> = ({
           </span>
         </div>
         {isCurrentTurn && (
-          <span className="shrink-0 rounded-full bg-cyan-400/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-cyan-400 animate-pulse">
+          <span className="shrink-0 rounded-full bg-cyan-400/10 px-2 py-1 text-[0.625rem] font-bold uppercase tracking-widest text-cyan-400 animate-pulse">
             Active
           </span>
         )}

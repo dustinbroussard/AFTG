@@ -149,7 +149,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
           >
             <div className="flex items-center justify-between px-6 py-5 border-b theme-border">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Dev Only</p>
+                <p className="text-[0.625rem] font-black uppercase tracking-[0.28em] text-cyan-400 mb-2">Dev Only</p>
                 <h2 className="text-2xl font-black">Question Bank Admin</h2>
               </div>
               <button type="button" onClick={onClose} className="p-2 theme-icon-button rounded-xl transition-colors" aria-label="Close question bank admin">

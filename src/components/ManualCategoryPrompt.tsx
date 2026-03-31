@@ -26,7 +26,7 @@ export const ManualCategoryPrompt: React.FC<ManualCategoryPromptProps> = ({
         exit={{ opacity: 0, y: 12, scale: 0.98 }}
         className="mx-auto w-full max-w-2xl rounded-2xl border p-5 theme-panel-strong sm:p-8"
       >
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-400 mb-3">
+        <p className="text-[0.625rem] font-black uppercase tracking-[0.28em] text-cyan-400 mb-3">
           {isWheelReward ? "Wheel's Choice" : "Player's Choice Unlocked"}
         </p>
         <h3 className="mb-2 text-2xl font-black sm:text-3xl">Pick your next move.</h3>

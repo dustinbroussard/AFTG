@@ -35,7 +35,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     >
       <div className="mb-4 sm:mb-5">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] theme-text-muted">
+          <span className="text-[0.625rem] font-black uppercase tracking-[0.25em] theme-text-muted">
             Time Remaining
           </span>
           <span
@@ -56,7 +56,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div 
-          className="inline-block px-3 py-1.5 rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-sm sm:px-4"
+          className="inline-block px-3 py-1.5 rounded-xl text-[0.6875rem] font-bold uppercase tracking-widest shadow-sm sm:px-4"
           style={{ backgroundColor: CATEGORY_COLORS[question.category] || '#fff', color: '#000' }}
         >
           {question.category}

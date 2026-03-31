@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Trophy, Users, Gamepad2, User, Upload, Bell, SendHorizontal, Check, X, BarChart3, Trash2 } from 'lucide-react';
+import { Trophy, Users, Gamepad2, User, Upload, Bell, SendHorizontal, Check, X, BarChart3, Trash2, Pencil } from 'lucide-react';
 import { publicAsset } from '../assets';
 import { CategoryPerformance, GameInvite, MatchupSummary, PlayerProfile, PlayerStatsSummary, RecentCompletedGame, RecentPlayer } from '../types';
+import { MAX_NICKNAME_LENGTH, sanitizeNicknameInput } from '../services/playerProfiles';
 
 interface GameLobbyProps {
   onStartSolo: (avatarUrl: string) => void;
@@ -33,6 +34,14 @@ interface GameLobbyProps {
   onAvatarChange: (avatarUrl: string) => void | Promise<void>;
   onAvatarRemove: () => void | Promise<void>;
   inviteFeedback?: string | null;
+  displayName: string;
+  nickname: string;
+  isEditingNickname: boolean;
+  isSavingNickname: boolean;
+  onNicknameChange: (value: string) => void;
+  onStartNicknameEdit: () => void;
+  onSaveNickname: () => void | Promise<void>;
+  onCancelNicknameEdit: () => void;
 }
 
 type LobbyMode = 'IDLE' | 'JOIN' | 'STATS' | 'RECENT_PLAYERS' | 'LOADING';
@@ -120,11 +129,20 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   onAvatarChange,
   onAvatarRemove,
   inviteFeedback,
+  displayName,
+  nickname,
+  isEditingNickname,
+  isSavingNickname,
+  onNicknameChange,
+  onStartNicknameEdit,
+  onSaveNickname,
+  onCancelNicknameEdit,
 }) => {
   const logoSrc = publicAsset('logo.png');
   const [joinCode, setJoinCode] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState('');
   const [currentMode, setCurrentMode] = useState<LobbyMode>('IDLE');
+  const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const profileStats = getProfileStats(playerProfile);
 
@@ -161,6 +179,14 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   useEffect(() => {
     setSelectedAvatar(playerProfile?.avatarUrl || '');
   }, [playerProfile?.avatarUrl]);
+
+  const effectiveAvatar = selectedAvatar || playerProfile?.avatarUrl || '';
+
+  useEffect(() => {
+    if (!effectiveAvatar && isAvatarMenuOpen) {
+      setIsAvatarMenuOpen(false);
+    }
+  }, [effectiveAvatar, isAvatarMenuOpen]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -200,6 +226,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           previewLength: nextAvatar.length,
         });
         setSelectedAvatar(nextAvatar);
+        setIsAvatarMenuOpen(false);
         Promise.resolve(onAvatarChange(nextAvatar)).catch((error) => {
           console.error('[GameLobby] avatar upload/save failed', error);
           setSelectedAvatar(playerProfile?.avatarUrl || '');
@@ -209,8 +236,6 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
     };
     reader.readAsDataURL(file);
   };
-
-  const effectiveAvatar = selectedAvatar || playerProfile?.avatarUrl || '';
 
   const overallAccuracy = profileStats.totalQuestionsSeen
     ? Math.round((profileStats.totalQuestionsCorrect / profileStats.totalQuestionsSeen) * 100)
@@ -288,7 +313,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   return (
     <div className="mx-auto flex min-h-full w-full max-w-[min(100%,34rem)] flex-col items-center gap-5 px-4 pt-4 pb-5 sm:gap-6 sm:px-6 sm:pt-6 sm:pb-6">
       <div className="text-center relative shrink-0">
-        <div className="relative inline-block aspect-square w-[min(72vw,20rem)] sm:w-[min(60vw,20rem)]">
+        <div className="relative inline-block aspect-square w-[min(72vw,16rem)] sm:w-[min(60vw,16rem)]">
           <img
             src={logoSrc}
             alt="A F-cking Trivia Game"
@@ -309,40 +334,126 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           onChange={handleImageUpload}
         />
 
-        <button
-          type="button"
-          onClick={() => {
-            if (isInteractionLocked) return;
-            fileInputRef.current?.click();
-          }}
-          aria-label="Upload avatar"
-          disabled={isInteractionLocked}
-          className="group relative flex min-h-22 min-w-22 items-center justify-center overflow-hidden rounded-2xl border-2 theme-panel-strong shadow-xl transition-all duration-300 ease-in-out hover:border-pink-500 hover:shadow-pink-500/20 sm:min-h-24 sm:min-w-24"
-        >
-          {effectiveAvatar ? (
-            <img src={effectiveAvatar} alt="Avatar" className="h-full w-full object-cover" decoding="async" />
-          ) : (
-            <User className="w-10 h-10 theme-text-muted group-hover:text-pink-500 transition-colors" />
-          )}
-
-          <div className="absolute inset-0 theme-overlay flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white">
-            <Upload className="w-6 h-6" />
-          </div>
-        </button>
-        {effectiveAvatar && (
+        <div className="relative flex flex-col items-center gap-2">
           <button
             type="button"
             onClick={() => {
               if (isInteractionLocked) return;
-              setSelectedAvatar('');
-              void onAvatarRemove();
+              setIsAvatarMenuOpen((open) => !open);
             }}
-            className="inline-flex items-center gap-2 rounded-xl theme-button px-3 py-2 text-[0.625rem] font-black uppercase tracking-[0.08em] transition-all duration-300"
+            aria-label="Open avatar options"
+            aria-expanded={isAvatarMenuOpen}
+            disabled={isInteractionLocked}
+            className="group relative flex h-20 w-20 max-h-[20vw] max-w-[20vw] min-h-16 min-w-16 items-center justify-center overflow-hidden rounded-2xl border-2 theme-panel-strong shadow-xl transition-all duration-300 ease-in-out hover:border-pink-500 hover:shadow-pink-500/20 sm:h-24 sm:w-24 sm:max-h-24 sm:max-w-24"
           >
-            <Trash2 className="w-4 h-4" />
-            Remove Avatar
+            {effectiveAvatar ? (
+              <img src={effectiveAvatar} alt="Avatar" className="h-full w-full object-cover" decoding="async" loading="lazy" />
+            ) : (
+              <User className="w-8 h-8 theme-text-muted group-hover:text-pink-500 transition-colors" />
+            )}
+
+            <div className="absolute inset-0 theme-overlay flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white">
+              <Upload className="w-5 h-5" />
+            </div>
           </button>
-        )}
+
+          {isEditingNickname ? (
+            <div className="flex w-full max-w-[16rem] flex-col items-center gap-2">
+              <input
+                type="text"
+                value={nickname}
+                onChange={(event) => onNicknameChange(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    void onSaveNickname();
+                  }
+                  if (event.key === 'Escape') {
+                    onCancelNicknameEdit();
+                  }
+                }}
+                maxLength={MAX_NICKNAME_LENGTH}
+                className="h-10 w-full rounded-xl border bg-transparent px-3 text-center text-sm font-bold tracking-wide theme-panel theme-inset focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                autoFocus
+              />
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => void onSaveNickname()}
+                  disabled={isSavingNickname || !sanitizeNicknameInput(nickname)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-pink-600 text-white transition-all disabled:opacity-50"
+                  aria-label={isSavingNickname ? 'Saving nickname' : 'Save nickname'}
+                  title={isSavingNickname ? 'Saving nickname' : 'Save nickname'}
+                >
+                  {isSavingNickname ? (
+                    <span className="text-sm font-black">...</span>
+                  ) : (
+                    <Check className="w-4 h-4" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={onCancelNicknameEdit}
+                  disabled={isSavingNickname}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full theme-button transition-all disabled:opacity-50"
+                  aria-label="Cancel nickname edit"
+                  title="Cancel nickname edit"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onStartNicknameEdit}
+              className="inline-flex max-w-[16rem] items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] theme-button theme-text-muted transition-colors"
+              title="Edit nickname"
+              aria-label="Edit nickname"
+            >
+              <span className="max-w-[12rem] truncate">{displayName}</span>
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+          )}
+
+          <AnimatePresence>
+            {isAvatarMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                className="absolute top-full z-10 mt-2 flex min-w-[11rem] flex-col gap-2 rounded-2xl border p-2 theme-panel-strong shadow-2xl"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isInteractionLocked) return;
+                    setIsAvatarMenuOpen(false);
+                    fileInputRef.current?.click();
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl theme-button px-3 py-2 text-[0.625rem] font-black uppercase tracking-[0.08em] transition-all duration-300"
+                >
+                  <Upload className="w-4 h-4" />
+                  {effectiveAvatar ? 'Replace Avatar' : 'Choose Avatar'}
+                </button>
+                {effectiveAvatar && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isInteractionLocked) return;
+                      setSelectedAvatar('');
+                      setIsAvatarMenuOpen(false);
+                      void onAvatarRemove();
+                    }}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl theme-button px-3 py-2 text-[0.625rem] font-black uppercase tracking-[0.08em] text-rose-300 transition-all duration-300"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Remove Avatar
+                  </button>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       <div className="w-full space-y-3 relative">
@@ -351,9 +462,9 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
             <button
               type="button"
               onClick={handleToggleStats}
-              aria-label="Show stats"
-              title="Show stats"
-              className="flex min-h-11 items-center justify-center rounded-xl border theme-panel-strong transition-all duration-300 sm:min-h-12"
+              aria-label="Show stats and match history"
+              title="Show stats and match history"
+              className="flex min-h-12 items-center justify-center rounded-xl border theme-panel-strong transition-all duration-300 sm:min-h-12"
             >
               <BarChart3 className="w-5 h-5" />
             </button>
@@ -362,11 +473,11 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
               onClick={handleToggleRecentPlayers}
               aria-label={`Show notifications, invites, and recent players${inviteCount > 0 ? ` (${inviteCount} pending invites)` : ''}`}
               title="Show notifications and recent players"
-              className="relative flex min-h-11 items-center justify-center rounded-xl border theme-panel-strong transition-all duration-300 sm:min-h-12"
+              className="relative flex min-h-12 items-center justify-center rounded-xl border theme-panel-strong transition-all duration-300 sm:min-h-12"
             >
               <Bell className="w-5 h-5" />
               {inviteCount > 0 && (
-                <span className="absolute right-2 top-1.5 min-w-5 h-5 px-1 rounded-full bg-pink-500 text-white text-[10px] font-black leading-none flex items-center justify-center shadow-lg shadow-pink-500/30">
+                <span className="absolute right-2 top-1.5 min-w-5 h-5 px-1 rounded-full bg-pink-500 text-white text-[0.625rem] font-black leading-none flex items-center justify-center shadow-lg shadow-pink-500/30">
                   {inviteCount > 99 ? '99+' : inviteCount}
                 </span>
               )}
@@ -444,7 +555,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           >
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] theme-text-muted mb-1">Join Match</p>
+                <p className="text-[0.625rem] font-black uppercase tracking-[0.22em] theme-text-muted mb-1">Join Match</p>
                 <p className="text-sm theme-text-secondary">Paste the match ID to connect.</p>
               </div>
               <button
@@ -512,7 +623,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                   <div className="flex items-center justify-between gap-3 mb-4 shrink-0">
                     <div className="flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-cyan-400" />
-                      <h4 id="lobby-stats-title" className="text-sm font-black uppercase tracking-widest">My Stats</h4>
+                      <h4 id="lobby-stats-title" className="text-sm font-black uppercase tracking-widest">Stats & Match History</h4>
                     </div>
                     <button type="button" onClick={closeLobbyModal} className="p-2 rounded-xl theme-button" aria-label="Close stats panel">
                       <X className="w-4 h-4" />
@@ -522,26 +633,26 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                   <div className="overflow-y-auto custom-scrollbar pr-1 space-y-4">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="theme-soft-surface border rounded-2xl p-4 flex flex-col justify-center">
-                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Win Rate</p>
+                        <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Win Rate</p>
                         <p className="text-3xl font-black">{profileStats.winPercentage}%</p>
                       </div>
                       <div className="theme-soft-surface border rounded-2xl p-4 flex flex-col justify-center">
-                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Accuracy</p>
+                        <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Accuracy</p>
                         <p className="text-3xl font-black text-cyan-400">{overallAccuracy}%</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
                       <div className="theme-soft-surface border rounded-2xl p-4 text-center">
-                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Wins</p>
+                        <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Wins</p>
                         <p className="text-xl font-black text-emerald-400">{profileStats.wins}</p>
                       </div>
                       <div className="theme-soft-surface border rounded-2xl p-4 text-center">
-                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Losses</p>
+                        <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Losses</p>
                         <p className="text-xl font-black text-rose-400">{profileStats.losses}</p>
                       </div>
                       <div className="theme-soft-surface border rounded-2xl p-4 text-center">
-                        <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Matches</p>
+                        <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Matches</p>
                         <p className="text-xl font-black">{profileStats.completedGames}</p>
                       </div>
                     </div>
@@ -564,7 +675,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                               <p className="text-sm font-bold">
                                 {game.players.map((player) => getDisplayName(player)).join(' vs ')}
                               </p>
-                              <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                              <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted">
                                 {new Date(game.completedAt).toLocaleDateString()} • {game.categoriesUsed.join(', ') || 'No categories'}
                               </p>
                             </div>
@@ -586,7 +697,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                             <div key={category} className="theme-soft-surface border rounded-2xl p-4 flex items-center justify-between gap-3">
                               <div>
                                 <p className="text-sm font-bold">{category}</p>
-                                <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted">
                                   {stats.correct}/{stats.seen} correct
                                 </p>
                               </div>
@@ -609,7 +720,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                     </div>
                     <div className="flex items-center gap-3">
                       {inviteFeedback && (
-                        <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
+                        <span className="text-[0.625rem] font-black uppercase tracking-widest text-emerald-400" role="status" aria-live="polite">
                           {inviteFeedback}
                         </span>
                       )}
@@ -628,7 +739,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                             <h5 className="text-xs font-black uppercase tracking-widest">Game Invites</h5>
                           </div>
                           {inviteCount > 0 && (
-                            <span className="text-[10px] font-black uppercase tracking-widest text-pink-300">
+                            <span className="text-[0.625rem] font-black uppercase tracking-widest text-pink-300">
                               {inviteCount} Pending
                             </span>
                           )}
@@ -645,14 +756,14 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                 <div className="flex items-center gap-3 min-w-0">
                                   <div className="w-11 h-11 theme-avatar-surface rounded-xl flex items-center justify-center overflow-hidden border shrink-0">
                                     {invite.fromAvatarUrl ? (
-                                      <img src={invite.fromAvatarUrl} alt={invite.fromNickname} className="w-full h-full object-cover" />
+                                      <img src={invite.fromAvatarUrl} alt={invite.fromNickname} className="w-full h-full object-cover" loading="lazy" />
                                     ) : (
                                       <User className="w-5 h-5 theme-text-muted" />
                                     )}
                                   </div>
                                   <div className="min-w-0">
                                     <p className="text-sm font-bold truncate">{invite.fromNickname || 'Someone'}</p>
-                                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
+                                    <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted">Wants a rematch</p>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 shrink-0">
@@ -707,7 +818,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                   </div>
                                   <div className="min-w-0">
                                     <p className="text-sm font-bold truncate">{getDisplayName(player)}</p>
-                                    <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                    <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted">
                                       Last played {new Date(player.lastPlayedAt).toLocaleDateString()}
                                     </p>
                                   </div>
@@ -716,7 +827,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onInspectMatchup(player)}
-                                    className="px-3 py-2 rounded-xl theme-button font-black text-[10px] uppercase tracking-widest"
+                                    className="px-3 py-2 rounded-xl theme-button font-black text-[0.625rem] uppercase tracking-widest"
                                   >
                                     History
                                   </button>
@@ -746,17 +857,17 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                     <>
                                       <div className="grid grid-cols-3 gap-3">
                                         <div className="theme-panel-strong border rounded-2xl p-3">
-                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Record</p>
+                                          <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Record</p>
                                           <p className="text-lg font-black">
                                             {selectedMatchup.summary?.wins ?? 0}-{selectedMatchup.summary?.losses ?? 0}
                                           </p>
                                         </div>
                                         <div className="theme-panel-strong border rounded-2xl p-3">
-                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Games</p>
+                                          <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Games</p>
                                           <p className="text-lg font-black">{selectedMatchup.summary?.totalGames ?? 0}</p>
                                         </div>
                                         <div className="theme-panel-strong border rounded-2xl p-3">
-                                          <p className="text-[10px] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
+                                          <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted mb-1">Last Played</p>
                                           <p className="text-sm font-black">
                                             {selectedMatchup.summary?.lastPlayedAt ? new Date(selectedMatchup.summary.lastPlayedAt).toLocaleDateString() : 'N/A'}
                                           </p>
@@ -772,11 +883,11 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                                 <p className="text-sm font-bold">
                                                   Winner: {getDisplayName(game.players.find((entry) => entry.uid === game.winnerId))}
                                                 </p>
-                                                <p className="text-[10px] uppercase tracking-widest theme-text-muted">
+                                                <p className="text-[0.625rem] uppercase tracking-widest theme-text-muted">
                                                   {new Date(game.completedAt).toLocaleDateString()}
                                                 </p>
                                               </div>
-                                              <p className="text-[10px] uppercase tracking-widest theme-text-secondary">
+                                              <p className="text-[0.625rem] uppercase tracking-widest theme-text-secondary">
                                                 {Object.entries(game.finalScores).map(([uid, score]) => {
                                                   const entry = game.players.find((playerEntry) => playerEntry.uid === uid);
                                                   return `${getDisplayName(entry)} ${score}`;
