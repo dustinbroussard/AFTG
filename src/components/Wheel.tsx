@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'motion/react';
-import { CATEGORIES, CATEGORY_COLORS } from '../types';
+import { CATEGORIES, Category } from '../types';
 import { getCategoryIcon } from '../content/categoryIcons';
 import { publicAsset } from '../assets';
 import { safePlay } from '../hooks/useSound';
@@ -21,6 +21,15 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
   const N = CATEGORIES.length;
   const segmentAngle = 360 / N;
   const wheelInitialOffset = -90 - (segmentAngle / 2); // Makes index 0 perfectly centered at the top
+  const wheelSegmentColorVars: Record<Category, string> = {
+    'History': 'var(--wheel-history)',
+    'Science': 'var(--wheel-science)',
+    'Pop Culture': 'var(--wheel-pop-culture)',
+    'Art & Music': 'var(--wheel-art-music)',
+    'Sports': 'var(--wheel-sports)',
+    'Technology': 'var(--wheel-technology)',
+    'Random': 'var(--wheel-random)',
+  };
 
   useEffect(() => {
     if (isSpinning) {
@@ -92,14 +101,14 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
               <g key={cat} className="transition-opacity hover:opacity-90">
                 <path
                   d={pathData}
-                  fill={CATEGORY_COLORS[cat]}
+                  fill={wheelSegmentColorVars[cat as Category]}
                   stroke="rgba(0,0,0,0.2)"
                   strokeWidth="0.5"
                 />
                 {(() => {
                   const Icon = getCategoryIcon(cat);
                   const iconSize = 26;
-                  const iconColor = cat === 'Random' ? '#18181B' : '#FFFFFF';
+                  const iconColor = cat === 'Random' ? 'var(--wheel-random-icon)' : 'var(--wheel-icon)';
 
                   return (
                     <g transform={`rotate(${textAngle + 90}, ${iconX}, ${iconY})`} style={{ pointerEvents: 'none' }}>
@@ -121,7 +130,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
           })}
 
           {/* Inner center peg for design */}
-          <circle cx="100" cy="100" r="28" fill="#18181b" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
+          <circle cx="100" cy="100" r="28" fill="var(--wheel-center)" stroke="var(--wheel-center-stroke)" strokeWidth="2" />
         </svg>
       </motion.div>
 

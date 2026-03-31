@@ -28,6 +28,17 @@
   --app-selection: rgba(236, 72, 153, 0.3);
   --app-shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.25);
   --app-shadow-strong: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --wheel-history: #be123c;
+  --wheel-science: #0e7490;
+  --wheel-pop-culture: #a21caf;
+  --wheel-art-music: #047857;
+  --wheel-sports: #b45309;
+  --wheel-technology: #1d4ed8;
+  --wheel-random: #d4d4d8;
+  --wheel-icon: #fafafa;
+  --wheel-random-icon: #18181b;
+  --wheel-center: #09090b;
+  --wheel-center-stroke: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="light"] {
@@ -50,6 +61,17 @@
   --app-selection: rgba(236, 72, 153, 0.18);
   --app-shadow-soft: 0 12px 30px rgba(89, 74, 53, 0.12);
   --app-shadow-strong: 0 24px 50px rgba(89, 74, 53, 0.18);
+  --wheel-history: #f43f5e;
+  --wheel-science: #06b6d4;
+  --wheel-pop-culture: #d946ef;
+  --wheel-art-music: #10b981;
+  --wheel-sports: #f59e0b;
+  --wheel-technology: #3b82f6;
+  --wheel-random: #ffffff;
+  --wheel-icon: #ffffff;
+  --wheel-random-icon: #18181b;
+  --wheel-center: #18181b;
+  --wheel-center-stroke: rgba(255, 255, 255, 0.1);
 }
 
 html,
