@@ -3599,7 +3599,7 @@ export default function App() {
                 )}
 
                 {!isQuestionActive && (
-                  <div className="shrink-0 space-y-2 lg:w-full lg:max-w-[min(860px,90vw)] lg:space-y-4">
+                  <div className="mx-auto w-[90%] shrink-0 space-y-2 min-[520px]:w-full lg:w-full lg:max-w-[min(860px,90vw)] lg:space-y-4">
                     <div className="grid grid-cols-1 gap-3 min-[520px]:grid-cols-2 sm:gap-4">
                       {players.map(p => (
                         <CategoryTracker

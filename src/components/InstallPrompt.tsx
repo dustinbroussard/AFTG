@@ -9,6 +9,18 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const INSTALL_PROMPT_SESSION_KEY = 'installPromptHandledThisSession';
+const INSTALL_PROMPT_LAST_HANDLED_KEY = 'installPromptLastHandledAt';
+
+export type InstallPromptFrequency = 'session' | 'daily' | 'weekly';
+
+interface InstallPromptProps {
+  resurfaceAfter?: InstallPromptFrequency;
+}
+
+const INSTALL_PROMPT_RESURFACE_MS: Record<Exclude<InstallPromptFrequency, 'session'>, number> = {
+  daily: 24 * 60 * 60 * 1000,
+  weekly: 7 * 24 * 60 * 60 * 1000,
+};
 
 function isAppInstalled() {
   if (typeof window === 'undefined') {
@@ -22,7 +34,34 @@ function isAppInstalled() {
   );
 }
 
-export function InstallPrompt() {
+function getLastHandledAt() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const storedValue = window.localStorage.getItem(INSTALL_PROMPT_LAST_HANDLED_KEY);
+  if (!storedValue) {
+    return null;
+  }
+
+  const parsedValue = Number(storedValue);
+  return Number.isFinite(parsedValue) ? parsedValue : null;
+}
+
+function shouldSuppressPromptForFrequency(resurfaceAfter: InstallPromptFrequency) {
+  if (typeof window === 'undefined' || resurfaceAfter === 'session') {
+    return false;
+  }
+
+  const lastHandledAt = getLastHandledAt();
+  if (!lastHandledAt) {
+    return false;
+  }
+
+  return Date.now() - lastHandledAt < INSTALL_PROMPT_RESURFACE_MS[resurfaceAfter];
+}
+
+export function InstallPrompt({ resurfaceAfter = 'session' }: InstallPromptProps) {
   const logoSrc = publicAsset('logo.png');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(() => isAppInstalled());
@@ -33,14 +72,21 @@ export function InstallPrompt() {
 
     return sessionStorage.getItem(INSTALL_PROMPT_SESSION_KEY) === 'true';
   });
+  const [isSuppressedByFrequency, setIsSuppressedByFrequency] = useState(() =>
+    shouldSuppressPromptForFrequency(resurfaceAfter)
+  );
 
   const isVisible = useMemo(
-    () => !!deferredPrompt && !isInstalled && !hasHandledPromptThisSession,
-    [deferredPrompt, hasHandledPromptThisSession, isInstalled]
+    () => !!deferredPrompt && !isInstalled && !hasHandledPromptThisSession && !isSuppressedByFrequency,
+    [deferredPrompt, hasHandledPromptThisSession, isInstalled, isSuppressedByFrequency]
   );
 
   useEffect(() => {
-    if (isInstalled || hasHandledPromptThisSession) {
+    setIsSuppressedByFrequency(shouldSuppressPromptForFrequency(resurfaceAfter));
+  }, [resurfaceAfter]);
+
+  useEffect(() => {
+    if (isInstalled || hasHandledPromptThisSession || isSuppressedByFrequency) {
       return;
     }
 
@@ -62,7 +108,7 @@ export function InstallPrompt() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, [hasHandledPromptThisSession, isInstalled]);
+  }, [hasHandledPromptThisSession, isInstalled, isSuppressedByFrequency]);
 
   useEffect(() => {
     const displayModeMediaQuery = window.matchMedia('(display-mode: standalone)');
@@ -76,9 +122,11 @@ export function InstallPrompt() {
     };
   }, []);
 
-  const markPromptHandledForSession = () => {
-    sessionStorage.setItem(INSTALL_PROMPT_SESSION_KEY, 'true');
+  const markPromptHandled = () => {
+    window.sessionStorage.setItem(INSTALL_PROMPT_SESSION_KEY, 'true');
+    window.localStorage.setItem(INSTALL_PROMPT_LAST_HANDLED_KEY, String(Date.now()));
     setHasHandledPromptThisSession(true);
+    setIsSuppressedByFrequency(shouldSuppressPromptForFrequency(resurfaceAfter));
   };
 
   const handleInstallClick = async () => {
@@ -91,12 +139,12 @@ export function InstallPrompt() {
       setIsInstalled(true);
     }
 
-    markPromptHandledForSession();
+    markPromptHandled();
     setDeferredPrompt(null);
   };
 
   const handleDismiss = () => {
-    markPromptHandledForSession();
+    markPromptHandled();
   };
 
   return (
