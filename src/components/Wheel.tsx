@@ -21,6 +21,7 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
   const N = CATEGORIES.length;
   const segmentAngle = 360 / N;
   const wheelInitialOffset = 90 - (segmentAngle / 2);
+  const pointerAngle = 90;
   const wheelSegmentColorVars: Record<Category, string> = {
     'History': 'var(--wheel-history)',
     'Science': 'var(--wheel-science)',
@@ -47,15 +48,15 @@ export const Wheel: React.FC<WheelProps> = ({ onSpinComplete, isSpinning, setIsS
         rotate: targetRotation,
         transition: { duration: 4, ease: [0.2, 0.8, 0.1, 1] } // Decelerating curve
       }).then(() => {
-        setRotation(targetRotation % 360);
         const normalizedRotation = targetRotation % 360;
-        const offsetAngle = (360 - (normalizedRotation % 360)) % 360;
-        const index = Math.floor(offsetAngle / segmentAngle);
+        const selectionAngle = (pointerAngle - wheelInitialOffset - normalizedRotation + 360) % 360;
+        const index = Math.floor(selectionAngle / segmentAngle);
+        setRotation(normalizedRotation);
         setIsSpinning(false);
         onSpinComplete(CATEGORIES[index]);
       });
     }
-  }, [controls, isSpinning, onSpinComplete, rotation, segmentAngle, setIsSpinning, soundEnabled]);
+  }, [controls, isSpinning, onSpinComplete, pointerAngle, rotation, segmentAngle, setIsSpinning, soundEnabled, wheelInitialOffset]);
 
   return (
     <div className="relative mx-auto w-full max-w-[min(92vw,24rem)] drop-shadow-2xl">
