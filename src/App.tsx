@@ -3132,7 +3132,7 @@ export default function App() {
               animate={{ scale: 1, opacity: 1 }}
               className="text-center relative"
             >
-              <div className="relative inline-block w-40 h-40 sm:w-48 sm:h-48">
+              <div className="relative inline-block w-50 h-50 sm:w-60 sm:h-60">
                 <img
                   src={logoSrc}
                   alt="A F-cking Trivia Game"
