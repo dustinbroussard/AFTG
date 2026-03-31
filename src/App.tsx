@@ -44,13 +44,13 @@ import {
   shouldEnableHeckles,
   type HeckleTriggerReason,
 } from './content/heckles';
-import { getTrashTalkLine, TrashTalkEvent } from './content/trashTalk';
+import { getTrashTalkLine, TrashTalkEvent, type TrashTalkGenerationContext } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
 import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, History, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check, Pencil } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
-import { generateHeckles } from './services/gemini';
+import { generateHeckles, generateTrashTalk } from './services/gemini';
 import { notifySafe, requestNotificationPermissionSafe } from './services/notify';
 import { ensurePlayerProfile, loadMatchupHistory, MAX_NICKNAME_LENGTH, recordCompletedGame, recordQuestionStats, removePlayerAvatar, removeRecentPlayer, sanitizeNicknameInput, savePlayerAvatar, savePlayerNickname, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers, updateRecentPlayer } from './services/playerProfiles';
 import { isSupabaseRlsInsertError } from './services/supabaseUtils';
@@ -748,7 +748,7 @@ export default function App() {
     resolvedQuestionIdRef.current = null;
   };
 
-  const triggerTrashTalk = (event: TrashTalkEvent) => {
+  const triggerTrashTalk = async (event: TrashTalkEvent, contextOverrides: Partial<TrashTalkGenerationContext> = {}) => {
     if (!settings.commentaryEnabled) {
       if (event === 'MATCH_LOSS' && lostAudioRef.current) {
         lostAudioRef.current.currentTime = 0;
@@ -757,10 +757,37 @@ export default function App() {
       return;
     }
 
+    const currentPlayer = contextOverrides.playerName
+      ? null
+      : players.find((player) => player.uid === user?.id) || null;
+    const opponentPlayer = contextOverrides.opponentName
+      ? null
+      : players.find((player) => player.uid !== user?.id) || null;
+
+    const context: TrashTalkGenerationContext = {
+      event,
+      playerName: contextOverrides.playerName || currentPlayer?.name || playerProfile?.nickname || user?.email || 'Player',
+      opponentName: contextOverrides.opponentName || opponentPlayer?.name || 'Opponent',
+      playerScore: contextOverrides.playerScore ?? currentPlayer?.score ?? 0,
+      opponentScore: contextOverrides.opponentScore ?? opponentPlayer?.score ?? 0,
+      scoreDelta: contextOverrides.scoreDelta ?? ((opponentPlayer?.score ?? 0) - (currentPlayer?.score ?? 0)),
+      playerTrophies: contextOverrides.playerTrophies ?? (currentPlayer?.completedCategories?.length ?? 0),
+      opponentTrophies: contextOverrides.opponentTrophies ?? (opponentPlayer?.completedCategories?.length ?? 0),
+      latestCategory: contextOverrides.latestCategory,
+      outcomeSummary: contextOverrides.outcomeSummary || `${event} triggered during live play.`,
+      isSolo,
+    };
+
+    const fallbackMessage = getTrashTalkLine(event);
+    const generatedMessage = await Promise.race<string | null>([
+      generateTrashTalk(context),
+      new Promise<null>((resolve) => window.setTimeout(() => resolve(null), 1800)),
+    ]);
+
     queueOrShowSpecialEvent({
       kind: 'TRASH_TALK',
       event,
-      message: getTrashTalkLine(event),
+      message: generatedMessage || fallbackMessage,
     });
   };
 
@@ -1698,7 +1725,9 @@ export default function App() {
 
       if (game.winnerId && game.winnerId !== user?.id && !hasTriggeredMatchLossRef.current) {
         hasTriggeredMatchLossRef.current = true;
-        triggerTrashTalk('MATCH_LOSS');
+        void triggerTrashTalk('MATCH_LOSS', {
+          outcomeSummary: `${players.find((player) => player.uid === game.winnerId)?.name || 'Your opponent'} closed out the match.`,
+        });
       }
     }
     prevGameStatus.current = game?.status || null;
@@ -1855,9 +1884,19 @@ export default function App() {
 
     if (opponent && previousOpponent) {
       const previousCompleted = new Set(previousOpponent.completedCategories || []);
-      const gainedTrophy = (opponent.completedCategories || []).some((category) => !previousCompleted.has(category));
+      const gainedCategory = (opponent.completedCategories || []).find((category) => !previousCompleted.has(category));
+      const gainedTrophy = !!gainedCategory;
       if (gainedTrophy) {
-        triggerTrashTalk('OPPONENT_TROPHY');
+        void triggerTrashTalk('OPPONENT_TROPHY', {
+          playerName: currentPlayer?.name || playerProfile?.nickname || user.email || 'Player',
+          opponentName: opponent.name,
+          playerScore: currentPlayer?.score ?? 0,
+          opponentScore: opponent.score ?? 0,
+          playerTrophies: currentPlayer?.completedCategories?.length ?? 0,
+          opponentTrophies: opponent.completedCategories?.length ?? 0,
+          latestCategory: gainedCategory,
+          outcomeSummary: `${opponent.name} just claimed ${gainedCategory || 'another category'}.`,
+        });
       }
 
       const opponentResumed = (
@@ -1885,7 +1924,15 @@ export default function App() {
       const scoreGap = (opponent.score || 0) - (currentPlayer.score || 0);
       if (scoreGap >= 3 && !hasWarnedBehindRef.current) {
         hasWarnedBehindRef.current = true;
-        triggerTrashTalk('PLAYER_FALLING_BEHIND');
+        void triggerTrashTalk('PLAYER_FALLING_BEHIND', {
+          playerName: currentPlayer.name,
+          opponentName: opponent.name,
+          playerScore: currentPlayer.score || 0,
+          opponentScore: opponent.score || 0,
+          playerTrophies: currentPlayer.completedCategories?.length ?? 0,
+          opponentTrophies: opponent.completedCategories?.length ?? 0,
+          outcomeSummary: `${currentPlayer.name} dropped behind by ${scoreGap} points while ${opponent.name} kept control.`,
+        });
         queueHeckleTrigger(
           'score_deficit',
           `${game.id}:${currentPlayer.uid}:score_deficit:${scoreGap}`,

@@ -31,7 +31,7 @@ export function shouldEnableHeckles(isSolo: boolean) {
 }
 
 export function buildHecklePrompt(context: HeckleGenerationContext) {
-  return `You generate short multiplayer trivia heckles for the waiting period during an opponent's turn.
+  return `You generate short multiplayer trivia heckles for the waiting period during an opponent's turn.  Imagine yourself as a sarcastic, smug, condescending, and witty game show host. 
 
 Return ONLY valid JSON.
 Do not include markdown.
@@ -63,11 +63,16 @@ Tone:
 
 Rules:
 - Write exactly ${MAX_HECKLES} heckles
-- Each heckle must be 1 to 3 lines max
+- Each heckle must be under 25 words
 - Keep them readable and punchy
+- Prefer sharp, concise phrasing over elaborate sentences
+- Use rhythm, contrast, or repetition when possible
+- Avoid long setups; land the punch quickly
+- Speak as if you are an authoritative observer of the game, not a participant
 - React to the specific failure and current score/streak state
+- Each heckle must use a different comedic structure (e.g., sarcasm, rhetorical question, mock praise, analogy)
 - Do not explain the rules of the game
-- Do not mention being an AI
+- When possible, incorporate category-specific references or metaphors
 - Do not repeat the same joke structure
 - Keep the insults playful rather than hateful
 - These are background flavor while the opponent plays, not result-screen summaries

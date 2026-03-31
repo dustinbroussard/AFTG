@@ -1,5 +1,19 @@
 export type TrashTalkEvent = 'OPPONENT_TROPHY' | 'PLAYER_FALLING_BEHIND' | 'MATCH_LOSS';
 
+export interface TrashTalkGenerationContext {
+  event: TrashTalkEvent;
+  playerName: string;
+  opponentName: string;
+  playerScore: number;
+  opponentScore: number;
+  scoreDelta: number;
+  playerTrophies: number;
+  opponentTrophies: number;
+  latestCategory?: string;
+  outcomeSummary: string;
+  isSolo: boolean;
+}
+
 const TRASH_TALK_LINES: Record<TrashTalkEvent, string[]> = {
   OPPONENT_TROPHY: [
     'They just grabbed another trophy. You may want to locate your pulse.',
@@ -24,4 +38,31 @@ const TRASH_TALK_LINES: Record<TrashTalkEvent, string[]> = {
 export function getTrashTalkLine(event: TrashTalkEvent): string {
   const bank = TRASH_TALK_LINES[event];
   return bank[Math.floor(Math.random() * bank.length)] || 'Rough scene.';
+}
+
+export function buildTrashTalkPrompt(context: TrashTalkGenerationContext) {
+  return `Write one short trivia trash-talk line for a dramatic in-game overlay.
+
+Context:
+- Event: ${context.event}
+- Player being addressed: ${context.playerName}
+- Opponent: ${context.opponentName}
+- Score: ${context.playerName} ${context.playerScore}, ${context.opponentName} ${context.opponentScore}
+- Score delta: ${context.scoreDelta}
+- Trophies: ${context.playerName} ${context.playerTrophies}, ${context.opponentName} ${context.opponentTrophies}
+- Latest category swing: ${context.latestCategory || 'Unknown'}
+- Outcome summary: ${context.outcomeSummary}
+
+Rules:
+- Return only the trash-talk line
+- One to two sentences max
+- Sound sharp, witty, smug, and playful
+- Make it feel handcrafted to this exact moment
+- No slurs
+- No hate content
+- No threats
+- No sexual content
+- No self-harm content
+- No meta commentary
+- Keep it concise enough for a modal-style overlay`;
 }

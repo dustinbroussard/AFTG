@@ -1,6 +1,7 @@
 import { Type } from '@google/genai';
 import type { HeckleGenerationContext } from '../content/heckles.js';
 import { MAX_HECKLES } from '../content/heckles.js';
+import type { TrashTalkGenerationContext } from '../content/trashTalk.js';
 
 export const heckleSchema = {
   type: Type.OBJECT,
@@ -30,6 +31,23 @@ async function requestHecklesFromApi(context: HeckleGenerationContext) {
   return data;
 }
 
+async function requestTrashTalkFromApi(context: TrashTalkGenerationContext) {
+  const response = await fetch('/api/generate-trash-talk', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(context),
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `Trash-talk generation failed with status ${response.status}`);
+  }
+
+  return data;
+}
+
 export async function generateHeckles(context: HeckleGenerationContext): Promise<string[]> {
   if (context.isSolo) {
     return [];
@@ -49,5 +67,23 @@ export async function generateHeckles(context: HeckleGenerationContext): Promise
       console.warn('[heckles] Generation failed:', error);
     }
     return [];
+  }
+}
+
+export async function generateTrashTalk(context: TrashTalkGenerationContext): Promise<string | null> {
+  if (context.isSolo) {
+    return null;
+  }
+
+  try {
+    const data = await requestTrashTalkFromApi(context);
+    const rawTrashTalk = typeof data.trashTalk === 'string' ? data.trashTalk : null;
+    const normalized = rawTrashTalk?.trim() || '';
+    return normalized.length > 0 ? normalized : null;
+  } catch (error) {
+    if (typeof process === 'undefined' || process.env.NODE_ENV !== 'production') {
+      console.warn('[trash-talk] Generation failed:', error);
+    }
+    return null;
   }
 }
