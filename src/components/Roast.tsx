@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { getRandomQuestionFlagLine } from '../content/questionFlagCopy';
 import { flagQuestion } from '../services/questionFlags';
 import { ConfirmModal } from './ConfirmModal';
+import { ResultCard } from './ResultCard';
 import { SafeRichText } from './SafeRichText';
 
 interface RoastProps {
@@ -55,40 +56,35 @@ export const Roast: React.FC<RoastProps> = ({ explanation, isCorrect, questionId
           aria-hidden="true"
           className="absolute inset-0 theme-overlay"
           initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-          animate={{ opacity: 1, backdropFilter: 'blur(6px)' }}
+          animate={{ opacity: 1, backdropFilter: 'blur(4px)' }}
           transition={{ duration: 0.28, ease: 'easeOut' }}
         />
 
         <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-5 text-center">
-          <div className={`w-full p-10 rounded-2xl border shadow-[0_8px_30px_rgb(0,0,0,0.25)] transition-all duration-300 ease-in-out ${
-            isCorrect ? 'bg-emerald-950/40 border-emerald-500/30' : 'bg-rose-950/40 border-rose-500/30'
-          }`}>
-            <h3 className={`text-4xl font-black uppercase tracking-tight mb-4 ${
-              isCorrect ? 'text-emerald-400' : 'text-rose-400'
-            }`}>
-              {isCorrect ? 'Correct!' : 'Wrong!'}
-            </h3>
-            {!isCorrect && (
-              <SafeRichText
-                as="p"
-                className="theme-incorrect-quip mb-4 text-base font-black leading-relaxed"
-                html={wrongAnswerQuip}
-              />
-            )}
-            <SafeRichText
-              as="div"
-              className="mb-6 text-lg font-semibold leading-relaxed"
-              html={explanation}
-            />
-            <button type="button"
-              onClick={onClose}
-              className={`w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest hover:scale-[1.02] transition-all duration-300 ease-in-out shadow-lg ${
-                isCorrect ? 'bg-emerald-500 hover:bg-emerald-400 text-emerald-950 shadow-emerald-500/25' : 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/25'
-              }`}
-            >
-              Continue
-            </button>
-          </div>
+          <ResultCard
+            variant={isCorrect ? 'correct' : 'wrong'}
+            label={isCorrect ? 'Answer Locked' : 'Answer Locked'}
+            title={isCorrect ? 'Correct!' : 'Wrong!'}
+            actionLabel="Continue"
+            onAction={onClose}
+            className="w-full"
+            body={
+              <>
+                {!isCorrect && (
+                  <SafeRichText
+                    as="p"
+                    className="theme-incorrect-quip mb-4 text-base font-black leading-relaxed"
+                    html={wrongAnswerQuip}
+                  />
+                )}
+                <SafeRichText
+                  as="div"
+                  className="text-lg font-semibold leading-relaxed"
+                  html={explanation}
+                />
+              </>
+            }
+          />
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
