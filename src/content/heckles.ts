@@ -1,4 +1,4 @@
-import { MODERN_HOST_PERSONA } from './hostPersona';
+import { MODERN_HOST_PERSONA } from './hostPersona.js';
 
 export const HECKLE_ROTATION_MS = 9200;
 export const MAX_HECKLES = 3;

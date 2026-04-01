@@ -1,5 +1,5 @@
-import type { RecentAiQuestionContext } from './heckles';
-import { MODERN_HOST_PERSONA } from './hostPersona';
+import type { RecentAiQuestionContext } from './heckles.js';
+import { MODERN_HOST_PERSONA } from './hostPersona.js';
 
 export interface EndgameRoastGenerationContext {
   winnerName: string;
