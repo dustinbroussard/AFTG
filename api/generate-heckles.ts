@@ -1,5 +1,3 @@
-import 'dotenv/config';
-import { GoogleGenAI } from '@google/genai';
 import { buildHecklePrompt, MAX_HECKLES, type HeckleGenerationContext } from '../src/content/heckles.js';
 import { MODERN_HOST_SYSTEM_PROMPT } from '../src/content/hostPersona.js';
 
@@ -126,6 +124,7 @@ async function generateWithGemini(prompt: string) {
     throw new Error('GEMINI_API_KEY is missing');
   }
 
+  const { GoogleGenAI } = await import('@google/genai');
   const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
