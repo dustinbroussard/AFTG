@@ -93,7 +93,7 @@ async function generateWithOpenRouter(prompt: string) {
       messages: [
         {
           role: 'system',
-          content: 'You write short, specific post-game trivia roasts in strict JSON. Use the exact winner, loser, and recent question context.',
+          content: 'You write short, specific post-game trivia roasts in strict JSON. Use the exact winner, loser, points score, trophy counts, and recent question context. Never invent impossible trophy totals or alternate scorelines.',
         },
         {
           role: 'user',

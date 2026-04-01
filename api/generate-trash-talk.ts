@@ -80,7 +80,7 @@ async function generateWithOpenRouter(prompt: string) {
       messages: [
         {
           role: 'system',
-          content: 'You write short, punchy trivia trash-talk lines for transient in-game overlays. Use the exact game context and avoid generic filler.',
+          content: 'You write short, punchy trivia trash-talk lines for transient in-game overlays. Use the exact points score, trophy counts, and event context. Never invent impossible trophy totals, fake scorelines, or a match-ending result unless the event says the match is over.',
         },
         {
           role: 'user',

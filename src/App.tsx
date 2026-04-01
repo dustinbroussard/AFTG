@@ -36,6 +36,7 @@ import { TrashTalkOverlay } from './components/TrashTalkOverlay';
 import { HeckleOverlay } from './components/HeckleOverlay';
 import { ConfirmModal } from './components/ConfirmModal';
 import { CategoryReveal } from './components/CategoryReveal';
+import { EndgameOverlay } from './components/EndgameOverlay';
 import { InstallPrompt } from './components/InstallPrompt';
 import {
   HECKLE_PROLONGED_WAIT_MS,
@@ -45,11 +46,11 @@ import {
   type RecentAiQuestionContext,
   type HeckleTriggerReason,
 } from './content/heckles';
-import type { EndgameRoastResult } from './content/endgameRoast';
+import { getFallbackEndgameMessage, type EndgameRoastResult } from './content/endgameRoast';
 import { getTrashTalkLine, TrashTalkEvent, type TrashTalkGenerationContext } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogOut, RefreshCcw, Trophy, ArrowLeft, Volume2, VolumeX, Send, Loader2, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check } from 'lucide-react';
+import { LogOut, RefreshCcw, ArrowLeft, Volume2, VolumeX, Send, Loader2, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
 import { generateEndgameRoast, generateHeckles, generateTrashTalk } from './services/gemini';
@@ -977,6 +978,25 @@ export default function App() {
 
   const currentPlayer = players.find((player) => player.uid === user?.id);
   const opponentPlayer = players.find((player) => player.uid !== user?.id);
+  const isCompletedMatch = game?.status === 'completed';
+  const completedMatchWinner = isCompletedMatch
+    ? players.find((player) => player.uid === game.winnerId) ?? null
+    : null;
+  const completedMatchLoser = isCompletedMatch
+    ? players.find((player) => player.uid !== game.winnerId) ?? null
+    : null;
+  const isViewingWinningEndgame = !!user?.id && game?.winnerId === user.id;
+  const trophyTarget = playableCategories.length;
+  const endgameViewerMessage = completedMatchWinner && completedMatchLoser
+    ? (
+      isViewingWinningEndgame
+        ? endgameRoast?.winnerCompliment
+        : endgameRoast?.loserRoast
+    ) || getFallbackEndgameMessage({
+      winnerName: completedMatchWinner.name || 'Winner',
+      loserName: completedMatchLoser.name || 'Loser',
+    }, isViewingWinningEndgame)
+    : '';
   const currentPlayerScore = currentPlayer?.score || 0;
   const opponentPlayerScore = opponentPlayer?.score || 0;
   const scoreDelta = currentPlayerScore - opponentPlayerScore;
@@ -3865,52 +3885,11 @@ export default function App() {
                 {/* Game Content */}
                 <div className={`relative flex-1 min-h-0 flex flex-col justify-center ${isQuestionActive ? 'py-2 sm:py-4' : 'py-4 sm:py-8'} lg:flex-none lg:w-full lg:max-w-[min(860px,90vw)] lg:justify-start lg:py-0`}>
                   {game.status === 'completed' ? (
-                    <motion.div
-                      initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                      animate={{ scale: 1, opacity: 1, y: 0 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                      className="space-y-6 rounded-2xl border p-6 text-center theme-panel-strong backdrop-blur-xl sm:space-y-8 sm:p-12"
-                    >
-                      <Trophy className="w-24 h-24 mx-auto text-yellow-400 drop-shadow-[0_0_30px_rgba(250,204,21,0.4)]" />
-                      <div>
-                        <h2 className="text-4xl font-black uppercase tracking-tight mb-2">Game Over</h2>
-                        <p className="text-xl theme-text-muted">
-                          {game.winnerId === user.id ? "You actually won. Incredible." : "You lost. Shocker."}
-                        </p>
-                      </div>
-                      {endgameRoast ? (
-                        <div className="space-y-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-left">
-                          <div className="space-y-1">
-                            <p className="text-[0.65rem] font-black uppercase tracking-[0.24em] text-rose-300">
-                              Final Insult For {players.find((player) => player.uid !== game.winnerId)?.name || 'The Loser'}
-                            </p>
-                            <p className="text-base font-semibold leading-relaxed text-white sm:text-lg">{endgameRoast.loserRoast}</p>
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-[0.65rem] font-black uppercase tracking-[0.24em] text-emerald-300">
-                              Backhanded Praise For {players.find((player) => player.uid === game.winnerId)?.name || 'The Winner'}
-                            </p>
-                            <p className="text-base font-semibold leading-relaxed text-white sm:text-lg">{endgameRoast.winnerCompliment}</p>
-                          </div>
-                        </div>
-                      ) : isGeneratingEndgameRoast ? (
-                        <p className="text-sm font-bold uppercase tracking-[0.2em] theme-text-muted">
-                          Preparing one last cheap shot...
-                        </p>
-                      ) : null}
-                      {game.hostId === user.id ? (
-                        <button type="button"
-                          onClick={playAgain}
-                          disabled={isStartingGame}
-                          className="mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_8px_30px_rgba(255,255,255,0.15)] disabled:opacity-50 ease-in-out"
-                        >
-                          {isStartingGame ? <Loader2 className="w-6 h-6 animate-spin" /> : <RefreshCcw className="w-6 h-6" />}
-                          Play Again
-                        </button>
-                      ) : (
-                        <p className="theme-text-muted font-bold uppercase tracking-widest">Waiting for host to play again...</p>
-                      )}
-                    </motion.div>
+                    <div className="rounded-3xl border p-6 text-center theme-panel opacity-70 sm:p-12 lg:w-full">
+                      <p className="text-sm font-bold uppercase tracking-[0.24em] theme-text-muted">
+                        Match Complete
+                      </p>
+                    </div>
                   ) : shouldShowCurrentTurnStage ? (
                     <div className="space-y-5 sm:space-y-8 lg:flex lg:w-full lg:flex-col lg:items-center lg:gap-6 lg:space-y-0">
                       {!currentQuestion ? (
@@ -4043,6 +4022,25 @@ export default function App() {
           event={activeTrashTalkEvent}
           message={activeTrashTalk}
         />
+
+        {isCompletedMatch && completedMatchWinner && completedMatchLoser && (
+          <EndgameOverlay
+            isOpen={true}
+            isWinner={isViewingWinningEndgame}
+            winnerName={completedMatchWinner.name || 'Winner'}
+            loserName={completedMatchLoser.name || 'Loser'}
+            winnerScore={completedMatchWinner.score || 0}
+            loserScore={completedMatchLoser.score || 0}
+            winnerTrophies={completedMatchWinner.completedCategories?.length ?? 0}
+            loserTrophies={completedMatchLoser.completedCategories?.length ?? 0}
+            trophyTarget={trophyTarget}
+            message={endgameViewerMessage}
+            isGeneratingMessage={isGeneratingEndgameRoast && !endgameRoast}
+            canPlayAgain={game.hostId === user.id}
+            isStartingGame={isStartingGame}
+            onPlayAgain={playAgain}
+          />
+        )}
 
         <Suspense fallback={null}>
           <SettingsModal
