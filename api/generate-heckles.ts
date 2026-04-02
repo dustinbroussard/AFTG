@@ -139,7 +139,7 @@ async function generateWithOpenRouter(prompt: string) {
       'X-Title': 'A F-cking Trivia Game',
     },
     body: JSON.stringify({
-      model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash',
+      model: process.env.OPENROUTER_MODEL || 'openrouter/free',
       messages: [
         {
           role: 'system',
