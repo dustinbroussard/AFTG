@@ -1,0 +1,2974 @@
+{
+  "questions": [
+    {
+      "id": "q1-1775099487502-0-m6neuxia2",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "medium",
+      "question": "Despite a riot that necessitated 30,000 federal troops to restore order, which Air Force veteran finally managed to enroll as the first African American student at the University of Mississippi in 1962?",
+      "choices": [
+        "James Meredith",
+        "Medgar Evers",
+        "John Lewis",
+        "Bayard Rustin"
+      ],
+      "correctIndex": 0,
+      "explanation": "James Meredith's enrollment at 'Ole Miss' was a pivotal and violent turning point in the struggle for educational integration, requiring significant federal intervention.",
+      "tags": [
+        "civil rights",
+        "american history",
+        "1960s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1962, a riot required 30,000 federal troops—a bit of an overreaction, perhaps?—to usher which Air Force veteran into <b>'Ole Miss'</b>?",
+        "explanationStyled": "It was <b>James Meredith</b>, whose mere existence as a student caused enough panic to justify a small army. Quite the dramatic entrance, wouldn't you agree?",
+        "hostLeadIn": "Let’s test your knowledge of 1960s chaos, if you can manage.",
+        "wrongAnswerQuips": [
+          "He had better things to do.",
+          "Nice try, but wrong hero.",
+          "Do you even know the era?"
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q2-1775099487502-1-1qdsvn0pr",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "easy",
+      "question": "If you want to secure the U.S. presidency without necessarily winning the popular vote, how many electoral votes—representing a majority of the 538 available—must you currently acquire?",
+      "choices": [
+        "250",
+        "270",
+        "300",
+        "538"
+      ],
+      "correctIndex": 1,
+      "explanation": "The magic number for the U.S. Presidency is 270, which is the smallest integer greater than half of the 538 total electoral votes.",
+      "tags": [
+        "government",
+        "elections",
+        "civics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Since math seems to elude the masses, how many electoral votes are actually required to secure the <b>U.S. presidency</b>?",
+        "explanationStyled": "The answer is <b>270</b>. It is simple arithmetic, though I realize that might be asking a lot from you.",
+        "hostLeadIn": "A civics question, assuming you pay attention to anything.",
+        "wrongAnswerQuips": [
+          "That is embarrassingly low.",
+          "Aiming for a tie, are we?",
+          "Why would it be everything?"
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q3-1775099487502-2-f9q1jq5ir",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "easy",
+      "question": "Upton Sinclair's 'The Jungle' was so effectively revolting that it forced Congress to pass which 1906 law, finally mandating that commercial meat isn't adulterated with floor sweepings?",
+      "choices": [
+        "The Sherman Antitrust Act",
+        "The Federal Reserve Act",
+        "The Meat Inspection Act",
+        "The Clayton Act"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Meat Inspection Act of 1906 was the legislative response to the unsanitary conditions exposed in the Chicago meatpacking industry.",
+      "tags": [
+        "progressive era",
+        "legislation",
+        "upton sinclair"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1906 legislation did Upton Sinclair’s <i>The Jungle</i> force upon a government that clearly preferred not to regulate <b>floor sweepings</b> in meat?",
+        "explanationStyled": "The <b>Meat Inspection Act</b>. It’s truly shocking that it took a book to stop people from consuming literal refuse.",
+        "hostLeadIn": "Try not to lose your appetite over this one.",
+        "wrongAnswerQuips": [
+          "That act is about money, genius.",
+          "Try looking for something edible.",
+          "Wrong industry entirely, darling."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q4-1775099487502-3-df2sizot9",
+      "category": "Science",
+      "subcategory": "Astronomy",
+      "difficulty": "medium",
+      "question": "Currently parked 1.5 million kilometers away at the L2 Lagrange point, which infrared space telescope is doing the heavy lifting as the long-awaited successor to Hubble?",
+      "choices": [
+        "Kepler Space Telescope",
+        "James Webb Space Telescope",
+        "Chandra X-ray Observatory",
+        "Spitzer Space Telescope"
+      ],
+      "correctIndex": 1,
+      "explanation": "The James Webb Space Telescope (JWST) observes the universe in infrared, allowing it to see through dust clouds and view the earliest stars.",
+      "tags": [
+        "space",
+        "technology",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Floating 1.5 million kilometers away, which infrared telescope is currently the <b>Hubble successor</b> that actually performs its job correctly?",
+        "explanationStyled": "The <b>James Webb Space Telescope</b>. It’s peering into the dawn of time, though I doubt you’ve seen a photo.",
+        "hostLeadIn": "Look at the stars, or at least try to.",
+        "wrongAnswerQuips": [
+          "That is an antique, hardly relevant.",
+          "You clearly haven't been keeping up.",
+          "Wrong spectrum and wrong era."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q5-1775099487502-4-q9n2bafkq",
+      "category": "Science",
+      "subcategory": "Genetics",
+      "difficulty": "easy",
+      "question": "What revolutionary gene-editing technology, utilizing the Cas9 enzyme to slice DNA like molecular scissors, earned Charpentier and Doudna a Nobel Prize in 2020?",
+      "choices": [
+        "CRISPR-Cas9",
+        "PCR amplification",
+        "Gel Electrophoresis",
+        "Sanger Sequencing"
+      ],
+      "correctIndex": 0,
+      "explanation": "CRISPR-Cas9 provides a precise and efficient method for editing genomes, vastly outperforming older genetic modification techniques.",
+      "tags": [
+        "genetics",
+        "nobel prize",
+        "biotechnology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What molecular scissor technology, involving <b>Cas9</b>, earned Charpentier and Doudna a Nobel Prize for editing life itself?",
+        "explanationStyled": "<b>CRISPR-Cas9</b>. It is a brilliant piece of genetic engineering, though it’s likely wasted on your DNA.",
+        "hostLeadIn": "Science class was clearly a struggle for you.",
+        "wrongAnswerQuips": [
+          "That is for copying, not editing.",
+          "Wrong century, try again.",
+          "That is basic laboratory equipment."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q6-1775099487502-5-okj1dqlx7",
+      "category": "Science",
+      "subcategory": "Paleontology",
+      "difficulty": "medium",
+      "question": "Because apparently a giant land predator wasn't scary enough, which theropod is now understood to have been semi-aquatic with a paddle-shaped tail and dense bones for diving?",
+      "choices": [
+        "Tyrannosaurus Rex",
+        "Velociraptor",
+        "Spinosaurus",
+        "Stegosaurus"
+      ],
+      "correctIndex": 2,
+      "explanation": "Recent findings have drastically re-imagined Spinosaurus aegyptiacus as a specialized water-dwelling predator rather than just a shore-wader.",
+      "tags": [
+        "dinosaurs",
+        "paleontology",
+        "science discoveries"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which dinosaur, previously thought to be just a land predator, is now considered a <b>semi-aquatic</b> diver with a paddle-shaped tail?",
+        "explanationStyled": "The <b>Spinosaurus</b>. It seems the prehistoric world was far more inconvenient for you than you realized.",
+        "hostLeadIn": "Dinosaurs: even they were more interesting than you.",
+        "wrongAnswerQuips": [
+          "That one is far too mainstream.",
+          "It was too busy being small.",
+          "A vegetarian in the water?"
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q7-1775099487502-6-8xcq30qw1",
+      "category": "Science",
+      "subcategory": "Robotics",
+      "difficulty": "easy",
+      "question": "Which robotics company keeps the internet in a state of constant existential dread with viral videos of its humanoid robot 'Atlas' and quadruped 'Spot'?",
+      "choices": [
+        "Tesla",
+        "Boston Dynamics",
+        "iRobot",
+        "ABB"
+      ],
+      "correctIndex": 1,
+      "explanation": "Boston Dynamics is the leader in mobile robotics, specializing in robots with high mobility, dexterity, and agility.",
+      "tags": [
+        "robotics",
+        "engineering",
+        "tech companies"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which robotics company is responsible for <b>Atlas</b> and <b>Spot</b>, providing you with a front-row seat to the inevitable robot uprising?",
+        "explanationStyled": "<b>Boston Dynamics</b>. Their robots are surprisingly agile; try not to let them hurt your feelings.",
+        "hostLeadIn": "Smile, the machines are probably watching you now.",
+        "wrongAnswerQuips": [
+          "They make vacuums, not nightmares.",
+          "Wrong decade, wrong company entirely.",
+          "That is a car company, silly."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q8-1775099487502-7-bk63z2f6f",
+      "category": "Pop Culture",
+      "subcategory": "Sitcoms",
+      "difficulty": "easy",
+      "question": "Which CBS sitcom, serving as a prequel to the already inescapable 'The Big Bang Theory', finally aired its series finale in May 2024?",
+      "choices": [
+        "Young Sheldon",
+        "The Goldbergs",
+        "Modern Family",
+        "Fuller House"
+      ],
+      "correctIndex": 0,
+      "explanation": "Young Sheldon chronicled the early life of Sheldon Cooper in Texas, concluding its seven-season run as one of TV's top-rated comedies.",
+      "tags": [
+        "television",
+        "sitcoms",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which sitcom, a prequel to the grating <i>The Big Bang Theory</i>, finally ended its run in 2024?",
+        "explanationStyled": "<b>Young Sheldon</b>. I’m sure you’ll miss the intellectual stimulation of a child prodigy you could never understand.",
+        "hostLeadIn": "A show about a genius, for everyone else.",
+        "wrongAnswerQuips": [
+          "That ended ages ago, dear.",
+          "Wrong decade and wrong network.",
+          "That is a completely different genre."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q9-1775099487502-8-s267yrtm2",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "easy",
+      "question": "Since insurance is too boring to sell on its own merit, which company uses a CGI gecko with a Cockney-ish accent to remind you that 15 minutes could save you 15 percent?",
+      "choices": [
+        "Progressive",
+        "State Farm",
+        "Allstate",
+        "GEICO"
+      ],
+      "correctIndex": 3,
+      "explanation": "The GEICO Gecko has been the face of the Government Employees Insurance Company since his debut in 1999 during a Screen Actors Guild strike.",
+      "tags": [
+        "advertising",
+        "mascots",
+        "brands"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which insurance company utilizes a <b>Cockney gecko</b> to annoy you into saving money?",
+        "explanationStyled": "<b>GEICO</b>. It’s a lizard, yet it’s arguably more charismatic than you are.",
+        "hostLeadIn": "Television advertising at its most insufferable.",
+        "wrongAnswerQuips": [
+          "They use an emu, keep trying.",
+          "Wrong jingle, wrong mascot.",
+          "That is for flo-wearing people."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q10-1775099487502-9-2fq8d38wt",
+      "category": "Pop Culture",
+      "subcategory": "1990s Country Music",
+      "difficulty": "medium",
+      "question": "Which 1990s country powerhouse confused the world in 1999 by releasing a pre-soundtrack album under the fictional, soul-patched rock persona 'Chris Gaines'?",
+      "choices": [
+        "George Strait",
+        "Garth Brooks",
+        "Tim McGraw",
+        "Alan Jackson"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Chris Gaines project was intended to be a tie-in for a movie called 'The Lamb,' which was never produced, leaving the persona as a strange footnote.",
+      "tags": [
+        "country music",
+        "1990s",
+        "garth brooks"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which country star decided to have a mid-life crisis by releasing an album as the <b>'Chris Gaines'</b> persona?",
+        "explanationStyled": "<b>Garth Brooks</b>. The soul patch alone should have disqualified him from humanity, let alone country stardom.",
+        "hostLeadIn": "A moment in music history we all wish to forget.",
+        "wrongAnswerQuips": [
+          "He would never ruin his image.",
+          "Wrong country, wrong decade.",
+          "He sings about water, not soul."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q11-1775099487502-10-h6mset6m3",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "easy",
+      "question": "In the psychological reality series 'The Traitors', what is the official name given to the majority group who must identify the killers before being picked off one by one?",
+      "choices": [
+        "The Innocent",
+        "The Survivors",
+        "The Faithful",
+        "The Hunters"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Faithful must work together to banish the Traitors at the 'Round Table' or risk losing the entire prize fund to the imposters.",
+      "tags": [
+        "reality tv",
+        "gaming",
+        "pop culture"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the psychological game <i>The Traitors</i>, what is the label for the poor souls who aren't currently <b>murdering</b> their friends?",
+        "explanationStyled": "<b>The Faithful</b>. A noble group, though unfortunately, they seem about as quick-witted as you.",
+        "hostLeadIn": "Testing your penchant for reality television, I see.",
+        "wrongAnswerQuips": [
+          "Too generic, try harder.",
+          "That is for a different show.",
+          "Not a hunter in sight here."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q12-1775099487502-11-pixhbxjjj",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "medium",
+      "question": "Which 2011 track featuring Kimbra is Gotye's only single to ever reach the top 10 on the Billboard Hot 100, effectively making the title a self-fulfilling prophecy?",
+      "choices": [
+        "Somebody That I Used to Know",
+        "Pumped Up Kicks",
+        "Riptide",
+        "Walking on a Dream"
+      ],
+      "correctIndex": 0,
+      "explanation": "Despite a massive global career in Australia, Gotye is primarily known in the U.S. for this single, which won two Grammy Awards.",
+      "tags": [
+        "music",
+        "one hit wonders",
+        "2010s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 2011 track featuring Kimbra made Gotye a <b>one-hit wonder</b> by being the only song of his you actually know?",
+        "explanationStyled": "<b>Somebody That I Used to Know</b>. It’s a tragic masterpiece, much like your trivia performance tonight.",
+        "hostLeadIn": "A song you played to death, I’m sure.",
+        "wrongAnswerQuips": [
+          "That is Foster the People, obviously.",
+          "Wrong band, wrong decade.",
+          "Not even close to that rhythm."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q13-1775099487502-12-kpszkjx12",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "hard",
+      "question": "Trailing only Paul McCartney for the most number-one singles as a songwriter on the Billboard Hot 100, which Swedish mastermind has written hits for everyone from Britney Spears to The Weeknd?",
+      "choices": [
+        "Dr. Luke",
+        "Benny Blanco",
+        "Max Martin",
+        "Jack Antonoff"
+      ],
+      "correctIndex": 2,
+      "explanation": "Max Martin (born Karl Martin Sandberg) is the architect of modern pop, with over 27 number-one hits as a songwriter as of 2024.",
+      "tags": [
+        "music industry",
+        "songwriting",
+        "pop music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who is the Swedish songwriter responsible for your favorite <b>pop hits</b>, trailing only Paul McCartney in success?",
+        "explanationStyled": "<b>Max Martin</b>. He writes the hits you mindlessly hum while failing at basic tasks.",
+        "hostLeadIn": "Let’s discuss the architect of your mediocre taste.",
+        "wrongAnswerQuips": [
+          "He is a producer, not a songwriter.",
+          "Wrong genre and wrong nationality.",
+          "A pretender to the throne."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q14-1775099487502-13-1nevd6fdd",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "easy",
+      "question": "Which French culinary method involves vacuum-sealing food in a bag and submerging it in a water bath held at a painstakingly precise temperature?",
+      "choices": [
+        "Braising",
+        "Sous-vide",
+        "Poaching",
+        "En papillote"
+      ],
+      "correctIndex": 1,
+      "explanation": "Sous-vide cooking ensures perfect edge-to-edge consistency that is nearly impossible to achieve through traditional high-heat methods.",
+      "tags": [
+        "culinary",
+        "cooking techniques",
+        "food"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which French cooking technique involves vacuum-sealing food and boiling it in a <b>precise water bath</b>?",
+        "explanationStyled": "<b>Sous-vide</b>. It produces excellent results, provided you don't overcomplicate it like everything else.",
+        "hostLeadIn": "A culinary question for the mildly sophisticated.",
+        "wrongAnswerQuips": [
+          "That is a slow roasting method.",
+          "That is poaching, learn the difference.",
+          "Wrong continent, darling."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q15-1775099487502-14-len990are",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "medium",
+      "question": "Which specific brand of hot sauce, manufactured by David Tran's company in Irwindale, became the subject of a nationwide 'shortage crisis' in 2022 due to a chili pepper drought?",
+      "choices": [
+        "Tabasco",
+        "Cholula",
+        "Huy Fong Sriracha",
+        "Frank's RedHot"
+      ],
+      "correctIndex": 2,
+      "explanation": "Huy Fong Foods' Sriracha is iconic for its rooster logo, and the 2022-2023 shortages led to bottles being resold for over $50 online.",
+      "tags": [
+        "food trends",
+        "brands",
+        "culinary"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which hot sauce brand, with the <b>iconic rooster</b>, suffered a supply shortage that sent the internet into a hysterics?",
+        "explanationStyled": "<b>Huy Fong Sriracha</b>. People acting like the world was ending over a condiment is truly peak society.",
+        "hostLeadIn": "Spice is important, or so you tell yourself.",
+        "wrongAnswerQuips": [
+          "That is way too sweet.",
+          "Wrong sauce, wrong company.",
+          "That one is much too mild."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q16-1775099487502-15-hgqwugo2o",
+      "category": "Sports",
+      "subcategory": "Formula 1",
+      "difficulty": "medium",
+      "question": "In a 2023 season that was basically just a victory lap, which Red Bull driver set a new record by winning 10 consecutive Formula 1 Grands Prix?",
+      "choices": [
+        "Lewis Hamilton",
+        "Charles Leclerc",
+        "Max Verstappen",
+        "Sergio Perez"
+      ],
+      "correctIndex": 2,
+      "explanation": "Max Verstappen won every race from the Miami Grand Prix to the Italian Grand Prix, shattering the previous record of nine straight wins held by Sebastian Vettel.",
+      "tags": [
+        "formula 1",
+        "racing",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Red Bull driver turned 2023 into a <b>boredom-inducing display</b> by winning 10 consecutive Grands Prix?",
+        "explanationStyled": "<b>Max Verstappen</b>. He was faster than everyone else, a feeling you might struggle to relate to.",
+        "hostLeadIn": "Formula 1: where money meets speed.",
+        "wrongAnswerQuips": [
+          "He only wins when it rains.",
+          "That is for the slower drivers.",
+          "Wrong team, wrong year."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q17-1775099487502-16-rv0v66zc2",
+      "category": "Sports",
+      "subcategory": "Basketball",
+      "difficulty": "medium",
+      "question": "In March 2024, which Iowa Hawkeyes phenom eclipsed Pete Maravich's 54-year-old record to become the all-time leading scorer in NCAA Division I history?",
+      "choices": [
+        "Angel Reese",
+        "Caitlin Clark",
+        "Paige Bueckers",
+        "Sabrina Ionescu"
+      ],
+      "correctIndex": 1,
+      "explanation": "Caitlin Clark finished her college career with 3,951 points, breaking records for both men's and women's Division I basketball.",
+      "tags": [
+        "basketball",
+        "ncaa",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Iowa phenom recently shattered the all-time <b>NCAA scoring record</b>, leaving her peers in the dust?",
+        "explanationStyled": "<b>Caitlin Clark</b>. She possesses actual talent, which is why it’s so shocking you’ve heard of her.",
+        "hostLeadIn": "Basketball greatness, at least for a moment.",
+        "wrongAnswerQuips": [
+          "She is good, but not that good.",
+          "A nice try, but wrong player.",
+          "Wrong league, wrong sport."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q18-1775099487502-17-6gpn1g1ik",
+      "category": "Sports",
+      "subcategory": "Football/Soccer",
+      "difficulty": "easy",
+      "question": "In a move that instantly tripled the ticket prices of a previously struggling franchise, which MLS team did Lionel Messi join in July 2023?",
+      "choices": [
+        "LA Galaxy",
+        "Inter Miami CF",
+        "New York City FC",
+        "Atlanta United"
+      ],
+      "correctIndex": 1,
+      "explanation": "Messi's arrival at Inter Miami CF, co-owned by David Beckham, resulted in an immediate League Cup trophy for the club.",
+      "tags": [
+        "soccer",
+        "mls",
+        "lionel messi"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which MLS team had the audacity to sign <b>Lionel Messi</b> in 2023 and suddenly became important?",
+        "explanationStyled": "<b>Inter Miami CF</b>. A small club that bought the greatest player in history to finally gain some relevance.",
+        "hostLeadIn": "Soccer, or as the rest of the world calls it, football.",
+        "wrongAnswerQuips": [
+          "They only like winning, not him.",
+          "A classic but failing team.",
+          "They play in the wrong city."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q19-1775099487502-18-wfvhtf6xa",
+      "category": "Sports",
+      "subcategory": "Chess & Mind Sports",
+      "difficulty": "medium",
+      "question": "Which American grandmaster found himself at the center of the biggest cheating scandal in chess history in 2022 after Magnus Carlsen abruptly withdrew from a tournament following a loss?",
+      "choices": [
+        "Hans Niemann",
+        "Fabiano Caruana",
+        "Hikaru Nakamura",
+        "Levon Aronian"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Niemann-Carlsen controversy involved allegations of fair play violations that resulted in a high-profile lawsuit and widespread internet speculation.",
+      "tags": [
+        "chess",
+        "controversy",
+        "sports news"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which grandmaster was at the heart of the <b>2022 chess cheating scandal</b> involving Magnus Carlsen?",
+        "explanationStyled": "<b>Hans Niemann</b>. The whole ordeal was delightful, though I assume you prefer checkers.",
+        "hostLeadIn": "Chess—a game of strategy, not luck.",
+        "wrongAnswerQuips": [
+          "He is a champion, not a cheat.",
+          "That is a commentator, not a player.",
+          "He wouldn't know a chess board."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q20-1775099487502-19-p9svh5ijn",
+      "category": "Sports",
+      "subcategory": "Unusual Sports",
+      "difficulty": "easy",
+      "question": "Which paddle sport, apparently designed for people who find tennis too strenuous and badminton too fast, was named the fastest-growing sport in the U.S. for the third year running in 2023?",
+      "choices": [
+        "Padel",
+        "Pickleball",
+        "Squash",
+        "Racquetball"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pickleball uses a perforated plastic ball and a composite paddle on a court roughly one-third the size of a tennis court.",
+      "tags": [
+        "sports trends",
+        "pickleball",
+        "leisure"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What paddle sport, perfect for those who find <b>tennis too difficult</b>, is taking over American parks?",
+        "explanationStyled": "<b>Pickleball</b>. It’s the sport of the masses; I find it appropriately pedestrian.",
+        "hostLeadIn": "The newest obsession for people who dislike effort.",
+        "wrongAnswerQuips": [
+          "That is for people with real skill.",
+          "That is much too fast-paced.",
+          "Try looking for something smaller."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q21-1775099487502-20-juefwrxow",
+      "category": "Technology",
+      "subcategory": "Cybersecurity",
+      "difficulty": "easy",
+      "question": "What is the standard cybersecurity term for requiring a user to prove their identity via two distinct channels, such as a password and a push notification?",
+      "choices": [
+        "Single Sign-On (SSO)",
+        "Multi-Factor Authentication (MFA)",
+        "Biometric Scanning",
+        "End-to-End Encryption"
+      ],
+      "correctIndex": 1,
+      "explanation": "MFA is a core component of Identity and Access Management (IAM), designed to mitigate the risks of compromised passwords.",
+      "tags": [
+        "cybersecurity",
+        "internet safety",
+        "tech basics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What is the industry term for requiring two distinct methods to prove you aren't an <b>internet simpleton</b>?",
+        "explanationStyled": "<b>Multi-Factor Authentication</b>. It keeps your pathetic accounts safe, provided you can actually use it.",
+        "hostLeadIn": "Cybersecurity—try to keep up, if you can.",
+        "wrongAnswerQuips": [
+          "That is just for websites.",
+          "Wrong terminology, look at the screen.",
+          "That is for high-level spies."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q22-1775099487502-21-kvsymoqpy",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "easy",
+      "question": "Attempting to capitalize on Twitter's chaos, which Meta-owned app launched in July 2023 and gained 100 million users in just five days?",
+      "choices": [
+        "Mastodon",
+        "Bluesky",
+        "Threads",
+        "Truth Social"
+      ],
+      "correctIndex": 2,
+      "explanation": "Threads was launched as a companion to Instagram, leveraging existing user graphs to achieve the fastest growth of any consumer app in history.",
+      "tags": [
+        "social media",
+        "meta",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Meta-owned app attempted to replace <b>Twitter</b> in 2023 with record-breaking speed?",
+        "explanationStyled": "<b>Threads</b>. It’s yet another place for people to scream into the void, which you clearly love.",
+        "hostLeadIn": "Social media: the digital mirror of our decline.",
+        "wrongAnswerQuips": [
+          "That is for professional photos.",
+          "That is the old version.",
+          "Too niche for your simple taste."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q23-1775099487502-22-tz7xzxdj9",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "medium",
+      "question": "Following the unprecedented four-term presidency of FDR, which amendment was ratified in 1951 to legally enforce the two-term tradition set by George Washington?",
+      "choices": [
+        "20th Amendment",
+        "22nd Amendment",
+        "25th Amendment",
+        "26th Amendment"
+      ],
+      "correctIndex": 1,
+      "explanation": "The 22nd Amendment limits a person to being elected President twice, or once if they served more than two years of someone else's term.",
+      "tags": [
+        "constitution",
+        "presidency",
+        "us history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Following FDR's excessive terms, which amendment was ratified in 1951 to ensure <b>future presidents</b> don't overstay their welcome?",
+        "explanationStyled": "The <b>22nd Amendment</b>. Finally, the government learned that some people simply don't know when to leave.",
+        "hostLeadIn": "History is a series of lessons we keep ignoring.",
+        "wrongAnswerQuips": [
+          "That one is about voting age.",
+          "Way too low a number, dear.",
+          "That is about succession, try again."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q24-1775099487502-23-k5eoes8e6",
+      "category": "Science",
+      "subcategory": "Ecology",
+      "difficulty": "medium",
+      "question": "What proposed geological epoch acknowledges that humans have officially become the primary drivers of Earth's climate and environmental changes?",
+      "choices": [
+        "Holocene",
+        "Pleistocene",
+        "Anthropocene",
+        "Pliocene"
+      ],
+      "correctIndex": 2,
+      "explanation": "Though not yet officially ratified by the IUGS, 'Anthropocene' is widely used by scientists to describe the period of significant human impact.",
+      "tags": [
+        "ecology",
+        "geology",
+        "environment"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What geological epoch do scientists use to describe the <b>human impact</b> on Earth, assuming we don't destroy it first?",
+        "explanationStyled": "The <b>Anthropocene</b>. We are officially the planet’s greatest mistake.",
+        "hostLeadIn": "Science, and our collective failure as a species.",
+        "wrongAnswerQuips": [
+          "That is the ice age, try again.",
+          "That is way too long ago.",
+          "Not a real word, honestly."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q25-1775099487502-24-x1uymxy3a",
+      "category": "Science",
+      "subcategory": "Particle Physics",
+      "difficulty": "easy",
+      "question": "Buried 100 meters underground near Geneva, what is the name of the 27-kilometer-long machine used to smash protons together and find the Higgs Boson?",
+      "choices": [
+        "Large Hadron Collider",
+        "Tevatron",
+        "Stanford Linear Accelerator",
+        "Brookhaven Collider"
+      ],
+      "correctIndex": 0,
+      "explanation": "The LHC is the world's largest and most powerful particle accelerator, managed by the European Organization for Nuclear Research (CERN).",
+      "tags": [
+        "physics",
+        "cern",
+        "science facilities"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What massive 27-kilometer machine, buried near Geneva, is used to smash <b>protons</b> for science?",
+        "explanationStyled": "The <b>Large Hadron Collider</b>. It’s far too sophisticated for your comprehension, but do try to remember the name.",
+        "hostLeadIn": "Particle physics: much harder than your daily chores.",
+        "wrongAnswerQuips": [
+          "That is for energy, not smashing.",
+          "That is a museum artifact.",
+          "That is for catching ghosts."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q26-1775099487502-25-74tcz3ne1",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "easy",
+      "question": "While politicians argue over bans and divestments, which Chinese conglomerate remains the parent company of the global short-form video giant TikTok?",
+      "choices": [
+        "Tencent",
+        "Alibaba",
+        "ByteDance",
+        "Baidu"
+      ],
+      "correctIndex": 2,
+      "explanation": "ByteDance owns both TikTok (global) and Douyin (China), maintaining separate ecosystems for the two very similar platforms.",
+      "tags": [
+        "tech companies",
+        "social media",
+        "tiktok"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Chinese conglomerate owns the <b>global disaster</b> that is the short-form video giant TikTok?",
+        "explanationStyled": "<b>ByteDance</b>. I’m sure you spend hours scrolling through their mindless content.",
+        "hostLeadIn": "Big tech and the apps that rot your brain.",
+        "wrongAnswerQuips": [
+          "They make phones, not apps.",
+          "Wrong continent and wrong industry.",
+          "A shopping site, clearly not."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q27-1775099487502-26-r2vep2nc9",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "medium",
+      "question": "Which 2003 Outkast smash hit actually prompted the Polaroid Corporation to issue a statement warning that shaking their film would actually damage the image?",
+      "choices": [
+        "Ms. Jackson",
+        "The Way You Move",
+        "Hey Ya!",
+        "Roses"
+      ],
+      "correctIndex": 2,
+      "explanation": "Andre 3000's lyric 'Shake it like a Polaroid picture' became a cultural staple, despite being technically bad advice for instant film development.",
+      "tags": [
+        "pop music",
+        "2000s",
+        "outkast"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 2003 Outkast hit forced Polaroid to warn you that <b>shaking their film</b> actually ruins the picture?",
+        "explanationStyled": "<b>Hey Ya!</b> It’s an iconic song, though you clearly didn't read the manual for your camera.",
+        "hostLeadIn": "Popular culture, often misunderstood by the public.",
+        "wrongAnswerQuips": [
+          "That one is about a lady.",
+          "Wrong song and wrong mood.",
+          "A bit too aggressive, don't you think?"
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q28-1775099487502-27-grzbqls69",
+      "category": "Sports",
+      "subcategory": "Combat Sports",
+      "difficulty": "medium",
+      "question": "Which fighter ended his three-year self-imposed exile in 2023 to submit Ciryl Gane in just over two minutes and claim the vacant UFC Heavyweight title?",
+      "choices": [
+        "Francis Ngannou",
+        "Stipe Miocic",
+        "Jon Jones",
+        "Daniel Cormier"
+      ],
+      "correctIndex": 2,
+      "explanation": "Jon Jones' move to the heavyweight division cemented his status as a GOAT contender by winning a title in a second weight class after a long layoff.",
+      "tags": [
+        "mma",
+        "ufc",
+        "combat sports"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who ended a three-year hiatus in 2023 to destroy Ciryl Gane and claim the <b>UFC Heavyweight</b> crown?",
+        "explanationStyled": "<b>Jon Jones</b>. He’s efficient, unlike the fighters you usually waste your time watching.",
+        "hostLeadIn": "MMA: the sophisticated art of physical dominance.",
+        "wrongAnswerQuips": [
+          "He is retired, and for good reason.",
+          "He doesn't fight in that weight.",
+          "Way too heavy for him."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q29-1775099487502-28-pfhr04ruu",
+      "category": "Science",
+      "subcategory": "Organic Chemistry",
+      "difficulty": "medium",
+      "question": "What 'wonder material', consisting of a 2D hexagonal lattice of carbon, is 200 times stronger than steel but thinner than a human hair?",
+      "choices": [
+        "Graphite",
+        "Graphene",
+        "Diamond",
+        "Fullerene"
+      ],
+      "correctIndex": 1,
+      "explanation": "Isolated in 2004 using Scotch tape, graphene is a superlative conductor of heat and electricity with potential in every tech sector.",
+      "tags": [
+        "materials science",
+        "chemistry",
+        "innovation"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What <b>2D carbon lattice</b> is 200 times stronger than steel, yet thinner than your patience for this quiz?",
+        "explanationStyled": "<b>Graphene</b>. It is a material of the future, far beyond your current grasp.",
+        "hostLeadIn": "Materials science: try to keep your eyes open.",
+        "wrongAnswerQuips": [
+          "That is just pencil lead.",
+          "That is for expensive jewelry.",
+          "That is far too thick."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "q30-1775099487502-29-67hwvnfb5",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "medium",
+      "question": "If you want your Japanese cuisine to have any flavor at all, you'll need which foundational stock made from steeping kombu and katsuobushi?",
+      "choices": [
+        "Miso",
+        "Dashi",
+        "Mirin",
+        "Tonkotsu"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dashi is the clear, umami-rich broth that serves as the base for miso soup, ramen, and countless other staples of Japanese cooking.",
+      "tags": [
+        "cooking",
+        "japanese food",
+        "culinary"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "If you want your Japanese food to have actual depth, which <b>foundational stock</b> do you absolutely need?",
+        "explanationStyled": "<b>Dashi</b>. It is the heart of Japanese flavor, which you clearly haven't tasted.",
+        "hostLeadIn": "Cooking, or what you call 'throwing things together'.",
+        "wrongAnswerQuips": [
+          "That is a condiment, not a base.",
+          "That is sweet, not savory.",
+          "That is a pork dish, dear."
+        ]
+      },
+      "timestamp": 1775099487502
+    },
+    {
+      "id": "hist_001-1775099670755-0-sf14q8um5",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "easy",
+      "question": "In a rare moment of U.S. government productivity, in what year did President Lyndon B. Johnson sign the landmark Civil Rights Act into law?",
+      "choices": [
+        "1960",
+        "1964",
+        "1968",
+        "1972"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Civil Rights Act of 1964 was signed on July 2, 1964, finally outlawing the 'separate but equal' nonsense that had plagued the nation.",
+      "tags": [
+        "civil rights",
+        "legislation",
+        "US history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In a rare, shocking display of competence, when did LBJ sign the <b>Civil Rights Act</b>?",
+        "explanationStyled": "It was 1964. Finally, someone managed to legislate away the <b>separate but equal</b> farce.",
+        "hostLeadIn": "Surely even you know this milestone of basic American history.",
+        "wrongAnswerQuips": [
+          "A bit too early for reality.",
+          "That was far too late.",
+          "History clearly isn't your forte."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "hist_002-1775099670755-1-sc6fstmj5",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "medium",
+      "question": "Which 1906 Upton Sinclair novel was intended to promote socialism but instead just made everyone nauseous about their sausages?",
+      "choices": [
+        "The Grapes of Wrath",
+        "The Great Gatsby",
+        "The Jungle",
+        "Silent Spring"
+      ],
+      "correctIndex": 2,
+      "explanation": "Sinclair famously lamented that he aimed for the public's heart and hit its stomach; 'The Jungle' led directly to the Meat Inspection Act.",
+      "tags": [
+        "progressive era",
+        "literature",
+        "reform"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1906 <b>Upton Sinclair</b> novel was meant to inspire socialism but just ruined everyone's lunch?",
+        "explanationStyled": "It was <i>The Jungle</i>. He aimed for the heart, but hitting the stomach was sufficient for reform.",
+        "hostLeadIn": "A literary question for those who actually read books.",
+        "wrongAnswerQuips": [
+          "Wrong era and wrong author.",
+          "Try a different American classic.",
+          "I expected better from you."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "hist_003-1775099670755-2-gq1gqkv6q",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "easy",
+      "question": "Which 1947 U.S. policy attempted to 'contain' communism by throwing money and military aid at Greece and Turkey?",
+      "choices": [
+        "The Monroe Doctrine",
+        "The Marshall Plan",
+        "The Truman Doctrine",
+        "The Eisenhower Doctrine"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Truman Doctrine established that the U.S. would support any nation resisting 'external or internal' threats to its democracy, i.e., communism.",
+      "tags": [
+        "cold war",
+        "foreign policy",
+        "truman"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1947 policy tried to 'contain' communism by throwing stacks of cash at Greece and Turkey?",
+        "explanationStyled": "The <b>Truman Doctrine</b>. It established that Uncle Sam would bankroll anyone resisting a red threat.",
+        "hostLeadIn": "Let's see if you understand basic Cold War strategy.",
+        "wrongAnswerQuips": [
+          "That was for Europe's recovery.",
+          "Way too late for that.",
+          "Incorrect, keep studying."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "hist_004-1775099670755-3-6l6z0g0v8",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "easy",
+      "question": "According to the U.S. Constitution, which legislative body holds the 'sole power' to actually impeach a federal official?",
+      "choices": [
+        "The Senate",
+        "The Supreme Court",
+        "The House of Representatives",
+        "The Cabinet"
+      ],
+      "correctIndex": 2,
+      "explanation": "The House of Representatives brings the charges (impeachment), while the Senate acts as the jury. Learn the difference, it matters.",
+      "tags": [
+        "government structure",
+        "congress",
+        "constitution"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "According to the Constitution, which body has the <b>sole power</b> to initiate the impeachment process?",
+        "explanationStyled": "The House of Representatives. They draft the charges, while the Senate plays judge. Do try to keep up.",
+        "hostLeadIn": "Even a cursory glance at the Constitution would clarify this.",
+        "wrongAnswerQuips": [
+          "The Senate is the jury.",
+          "They are far too busy.",
+          "Not a judicial function."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "hist_005-1775099670755-4-lrr85r3m5",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "medium",
+      "question": "Which French philosopher wrote 'The Social Contract,' arguing that people are 'born free' but are somehow 'everywhere in chains'?",
+      "choices": [
+        "Voltaire",
+        "Jean-Jacques Rousseau",
+        "Baron de Montesquieu",
+        "John Locke"
+      ],
+      "correctIndex": 1,
+      "explanation": "Rousseau’s 1762 work argued that the 'general will' should dictate law, providing the intellectual fuel for several upcoming revolutions.",
+      "tags": [
+        "enlightenment",
+        "philosophy",
+        "political science"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which French philosopher lamented that humans are 'born free' yet exist in <b>chains</b>?",
+        "explanationStyled": "Jean-Jacques Rousseau. His 'general will' concept provided the intellectual spark for various upheavals.",
+        "hostLeadIn": "I doubt you've read his work, but perhaps you've heard the name.",
+        "wrongAnswerQuips": [
+          "Wrong French thinker.",
+          "Try another Enlightenment figure.",
+          "He’s British, not French."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "sci_001-1775099670755-5-7s16imc94",
+      "category": "Science",
+      "subcategory": "Physics",
+      "difficulty": "easy",
+      "question": "Which standard SI unit is used to measure frequency, basically tracking how many times something happens per second?",
+      "choices": [
+        "Watt",
+        "Joule",
+        "Hertz",
+        "Pascal"
+      ],
+      "correctIndex": 2,
+      "explanation": "Named after Heinrich Hertz, one hertz equals one cycle per second. It’s not just for radio stations.",
+      "tags": [
+        "physics",
+        "units",
+        "frequency"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What standard SI unit measures <b>frequency</b>, or how often something repeats per second?",
+        "explanationStyled": "The <b>Hertz</b>. Named after Heinrich, it is sadly not just for those obsessed with radio.",
+        "hostLeadIn": "This is elementary physics. Don't disappoint me.",
+        "wrongAnswerQuips": [
+          "That measures power.",
+          "That measures energy.",
+          "That measures pressure."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "sci_002-1775099670755-6-gof5631zy",
+      "category": "Science",
+      "subcategory": "Microbiology",
+      "difficulty": "easy",
+      "question": "Which class of drugs is designed to combat bacteria, though people keep trying to use them for viral colds for some reason?",
+      "choices": [
+        "Antivirals",
+        "Antibiotics",
+        "Antifungals",
+        "Vaccines"
+      ],
+      "correctIndex": 1,
+      "explanation": "Antibiotics kill bacteria. They do nothing for viruses. Please stop contributing to the rise of superbugs.",
+      "tags": [
+        "medicine",
+        "biology",
+        "microbiology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which drugs kill bacteria, yet people still foolishly demand them for <b>viral</b> colds?",
+        "explanationStyled": "<b>Antibiotics</b>. They kill bacteria, not viruses. Your lack of medical literacy is fueling superbugs.",
+        "hostLeadIn": "A question for the scientifically illiterate masses.",
+        "wrongAnswerQuips": [
+          "Those treat viruses.",
+          "Those treat fungi.",
+          "Not a medication."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "sci_003-1775099670755-7-oazt49bfn",
+      "category": "Science",
+      "subcategory": "Astronomy",
+      "difficulty": "medium",
+      "question": "As of the mid-2023 count, which planet in our solar system holds the title for having the most confirmed moons?",
+      "choices": [
+        "Jupiter",
+        "Saturn",
+        "Neptune",
+        "Uranus"
+      ],
+      "correctIndex": 1,
+      "explanation": "Saturn reclaimed the lead from Jupiter in May 2023 with the discovery of 62 new moons, bringing its total to a crowded 146.",
+      "tags": [
+        "astronomy",
+        "saturn",
+        "recent events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "As of mid-2023, which planet boasts the most <b>confirmed moons</b> in our solar system?",
+        "explanationStyled": "Saturn. It reclaimed the lead from Jupiter with a staggering total of 146.",
+        "hostLeadIn": "Surely you haven't forgotten basic celestial geography.",
+        "wrongAnswerQuips": [
+          "That has far fewer.",
+          "Not the leader.",
+          "Don't be ridiculous."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "sci_004-1775099670755-8-2dfjutvi5",
+      "category": "Science",
+      "subcategory": "Chemistry",
+      "difficulty": "easy",
+      "question": "Which chemical compound, known scientifically as nitrous oxide, is often used by dentists to make you stop caring about the drill?",
+      "choices": [
+        "Carbon dioxide",
+        "Methane",
+        "Nitrous oxide",
+        "Sulfur hexafluoride"
+      ],
+      "correctIndex": 2,
+      "explanation": "Nitrous oxide (N2O) provides analgesic and anesthetic effects, leading to its 'laughing gas' nickname.",
+      "tags": [
+        "chemistry",
+        "gases",
+        "medicine"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which compound, colloquially known as <b>laughing gas</b>, makes you blissfully ignorant of the dentist's drill?",
+        "explanationStyled": "<b>Nitrous oxide</b>. It provides the analgesic numbness required to survive your incompetence.",
+        "hostLeadIn": "Even you likely have firsthand experience with this.",
+        "wrongAnswerQuips": [
+          "That is for photosynthesis.",
+          "Hardly a dental anesthetic.",
+          "That is a greenhouse gas."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "sci_005-1775099670755-9-0b89orz8i",
+      "category": "Science",
+      "subcategory": "Earth Science",
+      "difficulty": "easy",
+      "question": "What is the name of the supercontinent that existed 300 million years ago, before the Earth's crust decided to break up with itself?",
+      "choices": [
+        "Gondwana",
+        "Laurasia",
+        "Pangea",
+        "Rodinia"
+      ],
+      "correctIndex": 2,
+      "explanation": "Pangea was the most recent supercontinent. It was surrounded by a single massive ocean called Panthalassa.",
+      "tags": [
+        "geology",
+        "earth science",
+        "supercontinents"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What was the name of the <b>supercontinent</b> that existed before tectonic plates broke up with each other?",
+        "explanationStyled": "Pangea. It was surrounded by Panthalassa, the only ocean worth mentioning at the time.",
+        "hostLeadIn": "Let's travel back 300 million years, shall we?",
+        "wrongAnswerQuips": [
+          "That came much later.",
+          "An ancient, smaller continent.",
+          "That is simply incorrect."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "pop_001-1775099670755-10-400ivbwfz",
+      "category": "Pop Culture",
+      "subcategory": "Sitcoms",
+      "difficulty": "easy",
+      "question": "On the sitcom 'Friends,' what is the name of the coffee house where the characters somehow always found an open couch in Manhattan?",
+      "choices": [
+        "Monk's Cafe",
+        "Central Perk",
+        "The Cheesecake Factory",
+        "MacLaren's Pub"
+      ],
+      "correctIndex": 1,
+      "explanation": "Central Perk is the fictional setting. Fun fact: The 'Reserved' sign on the table explains why the couch was always empty.",
+      "tags": [
+        "friends",
+        "sitcoms",
+        "television"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 'Friends,' what is the coffee house where they somehow always secured <b>prime seating</b>?",
+        "explanationStyled": "Central Perk. The 'Reserved' sign explains the seating, though I know you didn't notice.",
+        "hostLeadIn": "Finally, a question about your mindless television habits.",
+        "wrongAnswerQuips": [
+          "That is from Seinfeld.",
+          "That is a chain restaurant.",
+          "That is from HIMYM."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "pop_002-1775099670755-11-4m7xypz2x",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "easy",
+      "question": "Which enthusiastic tiger has been shouting about the 'Gr-r-reat' qualities of Kellogg's Frosted Flakes since 1952?",
+      "choices": [
+        "Toucan Sam",
+        "Chester Cheetah",
+        "Tony the Tiger",
+        "Lucky the Leprechaun"
+      ],
+      "correctIndex": 2,
+      "explanation": "Tony the Tiger was originally designed by Eugene Kolkey and Edward Kern of the Leo Burnett advertising agency.",
+      "tags": [
+        "mascots",
+        "advertising",
+        "brands"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which tiger has been shouting about the 'Gr-r-reat' quality of <b>Frosted Flakes</b> since 1952?",
+        "explanationStyled": "Tony the Tiger. A triumph of advertising designed to sell sugar to the masses.",
+        "hostLeadIn": "I assume you recognize this commercial icon.",
+        "wrongAnswerQuips": [
+          "He's for a different cereal.",
+          "He's for cheetos.",
+          "He's for a leprechaun's cereal."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "pop_003-1775099670755-12-v7m8b0pm1",
+      "category": "Pop Culture",
+      "subcategory": "1990s Popular Music",
+      "difficulty": "easy",
+      "question": "Which British girl group demanded to know if you 'really, really, really wanna zigazig ha' in their 1996 debut single?",
+      "choices": [
+        "Destiny's Child",
+        "TLC",
+        "The Spice Girls",
+        "All Saints"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Spice Girls' 'Wannabe' became the best-selling single by a female group in history. Nobody actually knows what a zigazig ha is.",
+      "tags": [
+        "1990s music",
+        "pop music",
+        "spice girls"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which girl group famously demanded you explain your 'zigazig ha' in their <b>1996</b> hit?",
+        "explanationStyled": "The Spice Girls. Still the best-selling single by a female group, despite the nonsense lyrics.",
+        "hostLeadIn": "A truly profound query from your youth, I'm sure.",
+        "wrongAnswerQuips": [
+          "That's the wrong group.",
+          "A different R&B act.",
+          "They came much later."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "pop_004-1775099670755-13-v9vwyttvc",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "easy",
+      "question": "In the reality show 'Survivor,' what title is granted to the winner after they successfully backstab their way through the final jury?",
+      "choices": [
+        "The Ultimate Survivor",
+        "Sole Survivor",
+        "Master of the Island",
+        "Last Man Standing"
+      ],
+      "correctIndex": 1,
+      "explanation": "The 'Sole Survivor' is the title given to the winner at the final tribal council. They also get a million dollars, which helps with the trauma.",
+      "tags": [
+        "reality tv",
+        "survivor",
+        "television"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What title is bestowed upon the winner of <b>Survivor</b> after they outlast the rest?",
+        "explanationStyled": "The <b>Sole Survivor</b>. A million dollars helps them cope with their questionable life choices.",
+        "hostLeadIn": "Let's see if you can survive this trivia challenge.",
+        "wrongAnswerQuips": [
+          "Not a real title.",
+          "They are not masters.",
+          "A bit too generic."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "pop_005-1775099670755-14-knilxolzr",
+      "category": "Pop Culture",
+      "subcategory": "Ad Campaigns",
+      "difficulty": "easy",
+      "question": "Which tech company used the 'Think Different' campaign to convince people that buying their computers made them as smart as Einstein?",
+      "choices": [
+        "IBM",
+        "Microsoft",
+        "Apple",
+        "Sony"
+      ],
+      "correctIndex": 2,
+      "explanation": "Apple's 1997 campaign was a masterpiece of brand-building that signaled Steve Jobs' return to the company.",
+      "tags": [
+        "advertising",
+        "apple",
+        "technology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which tech giant used the <b>'Think Different'</b> campaign to inflate the egos of its customers?",
+        "explanationStyled": "Apple. A brilliant marketing scheme to convince users they were as intellectual as Einstein.",
+        "hostLeadIn": "I expect you've seen this branding on your overpriced trinkets.",
+        "wrongAnswerQuips": [
+          "They aren't that creative.",
+          "Wrong software empire.",
+          "They build components."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "art_001-1775099670755-15-ts2shsxhw",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "easy",
+      "question": "Which rapper's 1990 hit 'Ice Ice Baby' was the first hip-hop single to top the Billboard Hot 100, despite a 'minor' legal spat over a Queen sample?",
+      "choices": [
+        "MC Hammer",
+        "Marky Mark",
+        "Vanilla Ice",
+        "Coolio"
+      ],
+      "correctIndex": 2,
+      "explanation": "Vanilla Ice famously tried to argue the bassline from 'Under Pressure' was different because of a single extra beat. It didn't work.",
+      "tags": [
+        "music",
+        "90s",
+        "one hit wonders"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which rapper’s <b>'Ice Ice Baby'</b> topped the charts despite being a blatant musical theft?",
+        "explanationStyled": "Vanilla Ice. His legal gymnastics over the Queen sample were as embarrassing as the song itself.",
+        "hostLeadIn": "A masterpiece of mediocrity from the 90s.",
+        "wrongAnswerQuips": [
+          "He did 'U Can't Touch This'.",
+          "He was a different genre.",
+          "A slightly more talented artist."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "art_002-1775099670755-16-df5wnued4",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "easy",
+      "question": "Who was the 'Purple Rain' musician so prolific that he reportedly had a vault containing thousands of unreleased songs?",
+      "choices": [
+        "Michael Jackson",
+        "Prince",
+        "David Bowie",
+        "George Michael"
+      ],
+      "correctIndex": 1,
+      "explanation": "Prince wrote 'Purple Rain' for the 1984 film of the same name. He also played almost every instrument on many of his records.",
+      "tags": [
+        "music",
+        "songwriters",
+        "prince"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which <b>'Purple Rain'</b> musician famously hid thousands of unreleased songs in a private vault?",
+        "explanationStyled": "Prince. A prodigious talent who could likely play better with his feet than you can with your hands.",
+        "hostLeadIn": "A musician you surely pretend to appreciate.",
+        "wrongAnswerQuips": [
+          "The King of Pop.",
+          "The Thin White Duke.",
+          "The former Wham! member."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "art_003-1775099670755-17-suiuhnnob",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "easy",
+      "question": "Which scale is used to measure the spice levels of peppers, essentially quantifying how much capsaicin is trying to kill your taste buds?",
+      "choices": [
+        "Richter scale",
+        "Kelvin scale",
+        "Scoville scale",
+        "Mohs scale"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Scoville scale was named after Wilbur Scoville, who originally used human tasters to determine the heat level. Cruel, but effective.",
+      "tags": [
+        "cooking",
+        "culinary",
+        "food"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which scale measures the <b>heat</b> of peppers, specifically the capsaicin content?",
+        "explanationStyled": "The <b>Scoville scale</b>. Named for Wilbur Scoville, who subjected unfortunate souls to taste tests.",
+        "hostLeadIn": "Unless you lack taste buds, this should be simple.",
+        "wrongAnswerQuips": [
+          "That is for earthquakes.",
+          "That is for temperature.",
+          "That is for mineral hardness."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "art_004-1775099670755-18-95m4xyvk3",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "medium",
+      "question": "Which French culinary term refers to a bundle of herbs, usually thyme, bay leaf, and parsley, tied together and dropped into a pot?",
+      "choices": [
+        "Mirepoix",
+        "Roux",
+        "Bouquet garni",
+        "Consommé"
+      ],
+      "correctIndex": 2,
+      "explanation": "A bouquet garni allows the flavor to infuse the liquid without leaving chunks of herbs for the diners to choke on.",
+      "tags": [
+        "cooking",
+        "culinary",
+        "french food"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What is the French term for a <b>bundle of herbs</b> tossed into a pot for flavor?",
+        "explanationStyled": "A <b>bouquet garni</b>. It infuses flavor without leaving leafy debris for the peasants to choke on.",
+        "hostLeadIn": "Something you clearly haven't encountered in your microwave-dinner life.",
+        "wrongAnswerQuips": [
+          "That is a vegetable base.",
+          "That is a thickening agent.",
+          "That is a clear broth."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "art_005-1775099670755-19-wn4qfkbel",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "medium",
+      "question": "Which country legend wrote 'I Will Always Love You' in a single day, the same day she also wrote 'Jolene'?",
+      "choices": [
+        "Whitney Houston",
+        "Celine Dion",
+        "Dolly Parton",
+        "Reba McEntire"
+      ],
+      "correctIndex": 2,
+      "explanation": "Dolly Parton wrote it as a professional goodbye to her mentor Porter Wagoner. Whitney Houston just made it a billion-dollar ballad later.",
+      "tags": [
+        "music",
+        "songwriters",
+        "dolly parton"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which country legend penned <b>'I Will Always Love You'</b> and 'Jolene' in the same day?",
+        "explanationStyled": "Dolly Parton. She wrote it for a mentor, not for Whitney to belt into oblivion.",
+        "hostLeadIn": "A question of musical heritage for once.",
+        "wrongAnswerQuips": [
+          "She just sang the cover.",
+          "She writes power ballads.",
+          "She is a country singer."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "spt_001-1775099670755-20-jsf7efrrg",
+      "category": "Sports",
+      "subcategory": "Football/Soccer",
+      "difficulty": "easy",
+      "question": "Excluding World War II-related cancellations, the FIFA World Cup is held every how many years to ensure maximum global hype?",
+      "choices": [
+        "2 years",
+        "3 years",
+        "4 years",
+        "5 years"
+      ],
+      "correctIndex": 2,
+      "explanation": "The four-year interval allows time for qualification rounds and for the host nation to finish building stadiums they'll never use again.",
+      "tags": [
+        "soccer",
+        "world cup",
+        "sports"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Aside from war-time cancellations, every how many years does the <b>FIFA World Cup</b> occur?",
+        "explanationStyled": "Four years. It provides ample time for stadium construction and inflated global expectations.",
+        "hostLeadIn": "Even those who don't watch sports should know this.",
+        "wrongAnswerQuips": [
+          "A bit too frequent.",
+          "That happens every cycle.",
+          "Almost a lustrum."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "spt_002-1775099670755-21-ybuwcve7k",
+      "category": "Sports",
+      "subcategory": "Basketball",
+      "difficulty": "medium",
+      "question": "In 2023, which NBA player finally broke Kareem Abdul-Jabbar's 34-year-old record for most career points?",
+      "choices": [
+        "Michael Jordan",
+        "Kobe Bryant",
+        "LeBron James",
+        "Stephen Curry"
+      ],
+      "correctIndex": 2,
+      "explanation": "LeBron James broke the record on February 7, 2023. He's currently making it nearly impossible for anyone else to catch up.",
+      "tags": [
+        "basketball",
+        "nba",
+        "records"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which NBA player finally shattered <b>Kareem Abdul-Jabbar's</b> career scoring record in 2023?",
+        "explanationStyled": "LeBron James. He has effectively rendered the record book obsolete for future generations.",
+        "hostLeadIn": "I presume you track basketball statistics, however pointless that may be.",
+        "wrongAnswerQuips": [
+          "He is long retired.",
+          "He played for the Lakers.",
+          "He is a shooter."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "spt_003-1775099670755-22-4zl5jzplo",
+      "category": "Sports",
+      "subcategory": "Formula 1",
+      "difficulty": "medium",
+      "question": "Which British driver holds a record-tying seven Formula 1 World Championships, sharing the throne with Michael Schumacher?",
+      "choices": [
+        "Sebastian Vettel",
+        "Max Verstappen",
+        "Lewis Hamilton",
+        "Fernando Alonso"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hamilton won one title with McLaren and six with Mercedes. He is also the only F1 driver to have won a race in every season he competed in until 2022.",
+      "tags": [
+        "formula 1",
+        "racing",
+        "hamilton"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which driver equals Michael Schumacher's record of <b>seven</b> F1 World Championships?",
+        "explanationStyled": "Lewis Hamilton. A man who dominated the sport almost as much as I dominate these questions.",
+        "hostLeadIn": "Formula 1: where money goes to die in a circle.",
+        "wrongAnswerQuips": [
+          "He's a four-time winner.",
+          "He's current, but not there.",
+          "An older, retired driver."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "spt_004-1775099670755-23-1j6k8m3xj",
+      "category": "Sports",
+      "subcategory": "Tennis Grand Slams",
+      "difficulty": "easy",
+      "question": "Which Grand Slam tournament is famous for its 'crushed brick' red clay surface, which slows the ball down and tests your patience?",
+      "choices": [
+        "The Australian Open",
+        "Wimbledon",
+        "The French Open",
+        "The US Open"
+      ],
+      "correctIndex": 2,
+      "explanation": "Roland-Garros (The French Open) is the only Grand Slam played on clay, much to the chagrin of players with big serves and no slide.",
+      "tags": [
+        "tennis",
+        "grand slams",
+        "french open"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which <b>Grand Slam</b> tournament is played on 'crushed brick,' forcing players to actually move?",
+        "explanationStyled": "The French Open (Roland-Garros). It tests patience and destroys the dreams of big-serving amateurs.",
+        "hostLeadIn": "Tennis—the sport for people who enjoy grunting.",
+        "wrongAnswerQuips": [
+          "They use hard courts.",
+          "They use grass courts.",
+          "They also use hard courts."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "spt_005-1775099670755-24-q6muhmo15",
+      "category": "Sports",
+      "subcategory": "Golf Majors",
+      "difficulty": "easy",
+      "question": "At which prestigious golf tournament is the winner awarded a green jacket they aren't even allowed to take home after the first year?",
+      "choices": [
+        "The US Open",
+        "The Open Championship",
+        "The Masters",
+        "The PGA Championship"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Masters is held at Augusta National. Winners return the jacket to the club a year later to be stored in a special cloakroom.",
+      "tags": [
+        "golf",
+        "the masters",
+        "sports"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "At which tournament is the winner awarded a <b>green jacket</b> they can't even keep?",
+        "explanationStyled": "The Masters. You return it to the club, assuming you ever win, which is laughable.",
+        "hostLeadIn": "Golf: a sport that is essentially an expensive walk.",
+        "wrongAnswerQuips": [
+          "A different major tournament.",
+          "They play in Britain.",
+          "The final major of year."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "tech_001-1775099670755-25-nqetb5xbs",
+      "category": "Technology",
+      "subcategory": "Cybersecurity",
+      "difficulty": "easy",
+      "question": "What is the term for a fraudulent email that looks like it's from your bank but is actually just a hacker trying to buy a yacht with your savings?",
+      "choices": [
+        "Spoofing",
+        "Phishing",
+        "Skimming",
+        "Spamming"
+      ],
+      "correctIndex": 1,
+      "explanation": "Phishing involves social engineering where the attacker masquerades as a trusted entity to steal credentials.",
+      "tags": [
+        "cybersecurity",
+        "internet",
+        "safety"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What term describes a <b>fraudulent email</b> masquerading as a bank to steal your credentials?",
+        "explanationStyled": "Phishing. A clever play on words for harvesting the foolish.",
+        "hostLeadIn": "Given your digital footprint, you should know this term.",
+        "wrongAnswerQuips": [
+          "That is for phone numbers.",
+          "That is for credit cards.",
+          "That is for junk mail."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "tech_002-1775099670755-26-us8j6i971",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "medium",
+      "question": "Which social media site was the king of the internet from 2005 to 2008, back when your biggest concern was your 'Top 8' friends?",
+      "choices": [
+        "Friendster",
+        "Tumblr",
+        "Myspace",
+        "Orkut"
+      ],
+      "correctIndex": 2,
+      "explanation": "Myspace was once valued at $12 billion before Facebook turned it into a digital ghost town.",
+      "tags": [
+        "social media",
+        "technology history",
+        "internet"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which social site ruled the web from 2005–2008, when your 'Top 8' defined your status?",
+        "explanationStyled": "Myspace. A relic of the digital dark ages, now replaced by more efficient surveillance tools.",
+        "hostLeadIn": "Let's test your memory of the primitive internet.",
+        "wrongAnswerQuips": [
+          "That failed even earlier.",
+          "A blogging platform.",
+          "A Brazilian site."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "tech_003-1775099670755-27-94eqajjca",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "easy",
+      "question": "Which 1995 Microsoft operating system used 'Start Me Up' by the Rolling Stones for its massive marketing campaign?",
+      "choices": [
+        "Windows 3.1",
+        "Windows 98",
+        "Windows 95",
+        "Windows XP"
+      ],
+      "correctIndex": 2,
+      "explanation": "Windows 95 introduced the Start button and taskbar, features that have survived mostly intact for nearly 30 years.",
+      "tags": [
+        "software",
+        "microsoft",
+        "operating systems"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1995 Microsoft OS used the Rolling Stones for its <b>cringe-inducing</b> marketing campaign?",
+        "explanationStyled": "Windows 95. It gave us the Start button and taskbar, surviving nearly 30 years of development.",
+        "hostLeadIn": "Even you likely remember this legacy of bloatware.",
+        "wrongAnswerQuips": [
+          "The previous generation.",
+          "The successor.",
+          "The early 2000s release."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "tech_004-1775099670755-28-husuhdvc6",
+      "category": "Technology",
+      "subcategory": "Cybersecurity",
+      "difficulty": "easy",
+      "question": "What does VPN stand for, assuming you actually use it for privacy and not just to watch regional Netflix content?",
+      "choices": [
+        "Variable Private Network",
+        "Virtual Private Network",
+        "Verified Personal Network",
+        "Visible Public Node"
+      ],
+      "correctIndex": 1,
+      "explanation": "A Virtual Private Network extends a private network across a public one, encrypting your data in the process.",
+      "tags": [
+        "cybersecurity",
+        "networking",
+        "privacy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What does <b>VPN</b> stand for, beyond your desperate need to watch international content?",
+        "explanationStyled": "Virtual Private Network. It encrypts your data while you hide your browsing habits.",
+        "hostLeadIn": "Explain this to me, though I expect a fumbled attempt.",
+        "wrongAnswerQuips": [
+          "Not a real abbreviation.",
+          "A different terminology.",
+          "Sounds too public."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "tech_005-1775099670755-29-39xx7xtde",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "medium",
+      "question": "Which social platform did Chris Messina first suggest using the '#' symbol on in 2007, changing how we group internet garbage forever?",
+      "choices": [
+        "Facebook",
+        "Instagram",
+        "Twitter",
+        "LinkedIn"
+      ],
+      "correctIndex": 2,
+      "explanation": "Messina's first hashtag tweet was '#barcamp'. Twitter initially hated the idea, calling it 'too nerdy'. They were wrong.",
+      "tags": [
+        "social media",
+        "twitter",
+        "internet history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "On which platform was the <b>'#' symbol</b> first used to organize internet detritus?",
+        "explanationStyled": "Twitter. They called it 'too nerdy' initially—a rare moment of incompetence from them.",
+        "hostLeadIn": "The origin of your favorite way to be performative.",
+        "wrongAnswerQuips": [
+          "They adapted it later.",
+          "They focus on images.",
+          "They focus on careers."
+        ]
+      },
+      "timestamp": 1775099670755
+    },
+    {
+      "id": "q1-1775099848460-0-2m41d4ymy",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "medium",
+      "question": "While any schoolchild knows the 1965 'Bloody Sunday' march began in Selma, which specific bridge served as the site of the violent confrontation with state troopers?",
+      "choices": [
+        "George Washington Bridge",
+        "Edmund Pettus Bridge",
+        "Benjamin Tillman Bridge",
+        "Rosa Parks Memorial Bridge"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Edmund Pettus Bridge, named after a Confederate general and KKK leader, became the enduring symbol of the Selma to Montgomery marches.",
+      "tags": [
+        "civil rights",
+        "alabama",
+        "history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Even a simpleton knows the 1965 march started in Selma, but which specific <b>bridge</b> hosted that delightful display of state-sanctioned violence?",
+        "explanationStyled": "It was the <b>Edmund Pettus Bridge</b>, named for a lovely KKK fellow. Clearly, historical naming conventions were quite the enigma back then.",
+        "hostLeadIn": "I suppose I must test your grasp of basic historical geography today.",
+        "wrongAnswerQuips": [
+          "Not quite, try opening a book.",
+          "How tragically incorrect of you.",
+          "Wrong, but keep guessing blindly."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q2-1775099848460-1-lpvyzswvv",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "medium",
+      "question": "Jane Addams is the standard answer for Hull House, but which co-founder worked alongside her to establish this Chicago settlement house in 1889?",
+      "choices": [
+        "Alice Paul",
+        "Ellen Gates Starr",
+        "Ida B. Wells",
+        "Dorothea Dix"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ellen Gates Starr co-founded Hull House with Addams; her contribution is frequently overlooked by basic history surveys.",
+      "tags": [
+        "progressive era",
+        "activism",
+        "chicago"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Everyone prattles on about Jane Addams, but who was the secondary, far more obscure <b>co-founder</b> of Hull House in 1889?",
+        "explanationStyled": "It was <b>Ellen Gates Starr</b>. Most people are far too lazy to research the partner, but I suppose you are just average.",
+        "hostLeadIn": "Let us see if you can identify someone beyond the standard textbooks.",
+        "wrongAnswerQuips": [
+          "Swing and a miss, darling.",
+          "Utterly wrong, as expected.",
+          "Do try to pay attention."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q3-1775099848460-2-uun8880da",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "easy",
+      "question": "Under Article I, Section 3 of the U.S. Constitution, which official is designated as the President of the Senate with a tie-breaking vote?",
+      "choices": [
+        "Speaker of the House",
+        "President Pro Tempore",
+        "Vice President",
+        "Chief Justice"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Constitution explicitly grants the Vice President the role of President of the Senate, though they only vote to resolve a deadlock.",
+      "tags": [
+        "government",
+        "constitution",
+        "senate"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Under the Constitution, which official acts as the tie-breaking <b>President of the Senate</b>, assuming they can read the rules?",
+        "explanationStyled": "It is the <b>Vice President</b>. They possess the thrilling duty of presiding over a chamber they barely visit.",
+        "hostLeadIn": "A question so elementary that a toddler might find it insulting.",
+        "wrongAnswerQuips": [
+          "Wrong, try focusing on reality.",
+          "Absolutely incorrect, how painful.",
+          "No, perhaps study civics tomorrow."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q4-1775099848460-3-oe0hg9rhv",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "medium",
+      "question": "In the 2024 election cycle, which state's Republican party maintained its tradition of holding the nation's first caucus, despite the DNC's schedule overhaul?",
+      "choices": [
+        "New Hampshire",
+        "South Carolina",
+        "Iowa",
+        "Nevada"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Iowa GOP held their caucus on Jan 15, 2024, whereas the Democrats moved their primary start to South Carolina.",
+      "tags": [
+        "elections",
+        "politics",
+        "iowa"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "While the Democrats scrambled, which state’s GOP stubbornly kept its <b>caucus</b> first in the 2024 cycle?",
+        "explanationStyled": "The <b>Iowa</b> GOP. Tradition is a lovely excuse for doing things exactly the way they always have.",
+        "hostLeadIn": "Try to keep up with the current political circus, if you can.",
+        "wrongAnswerQuips": [
+          "Wrong, but I expected little.",
+          "Not even close, frankly.",
+          "Try picking a state that exists."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q5-1775099848460-4-lkzglhkdk",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "medium",
+      "question": "What was the formal title of the 1948 legislation, commonly known as the Marshall Plan, that authorized economic aid to Western Europe?",
+      "choices": [
+        "European Recovery Program",
+        "Atlantic Alliance Act",
+        "Truman Reconstruction Initiative",
+        "Western Stabilization Fund"
+      ],
+      "correctIndex": 0,
+      "explanation": "The European Recovery Program (ERP) was the official name; Marshall Plan is merely the popular shorthand for the $13 billion program.",
+      "tags": [
+        "foreign policy",
+        "cold war",
+        "history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What was the formal, far less catchy name for the 1948 <b>Marshall Plan</b> that showered Europe with aid?",
+        "explanationStyled": "The <b>European Recovery Program</b>. 'Marshall Plan' is just shorthand for those who can't handle complex bureaucratic titles.",
+        "hostLeadIn": "Let's see if you understand the nuance of post-war legislative titles.",
+        "wrongAnswerQuips": [
+          "Wrong, simply embarrassing.",
+          "Quite inaccurate, dear child.",
+          "Try again, with more effort."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q6-1775099848460-5-crrpu6onn",
+      "category": "Science",
+      "subcategory": "Astronomy",
+      "difficulty": "medium",
+      "question": "Following the confirmation of 62 new satellites in May 2023, which planet reclaimed the title for the most known moons in the solar system?",
+      "choices": [
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune"
+      ],
+      "correctIndex": 1,
+      "explanation": "Saturn jumped to 146 moons in 2023, surpassing Jupiter's count of 95 and ending a brief period where Jupiter held the lead.",
+      "tags": [
+        "planets",
+        "astronomy",
+        "space"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which planet reclaimed its <b>moon count</b> lead in 2023, leaving Jupiter feeling rather inadequate in comparison?",
+        "explanationStyled": "It is <b>Saturn</b>. It now has 146 moons, making it the most cluttered neighborhood in the solar system.",
+        "hostLeadIn": "Astronomy is rarely a strong suit for the masses, but do try.",
+        "wrongAnswerQuips": [
+          "Wrong, how utterly predictable.",
+          "No, try reading a science journal.",
+          "Not even remotely correct."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q7-1775099848460-6-7nbx599ob",
+      "category": "Science",
+      "subcategory": "Genetics",
+      "difficulty": "easy",
+      "question": "In Mendelian genetics, what term describes the expressed physical traits of an organism, as opposed to its internal genetic makeup?",
+      "choices": [
+        "Genotype",
+        "Phenotype",
+        "Haplotype",
+        "Allele"
+      ],
+      "correctIndex": 1,
+      "explanation": "Phenotype refers to observable traits (like eye color) resulting from the interaction of the genotype with the environment.",
+      "tags": [
+        "biology",
+        "genetics",
+        "science"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In genetics, what is the delightful term for the <b>observable physical traits</b> of an organism, if you haven't forgotten high school biology?",
+        "explanationStyled": "The <b>Phenotype</b>. It is what you see, as opposed to the internal mess of your genotype.",
+        "hostLeadIn": "I trust your grasp of basic Mendelian concepts is not entirely nonexistent.",
+        "wrongAnswerQuips": [
+          "Wrong, keep trying.",
+          "Hardly, do pay attention.",
+          "Incorrect, as I assumed."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q8-1775099848460-7-ypqvd20si",
+      "category": "Science",
+      "subcategory": "Earth Science",
+      "difficulty": "easy",
+      "question": "The Saffir-Simpson scale measures the potential property damage and flooding of a hurricane based solely on which variable?",
+      "choices": [
+        "Barometric Pressure",
+        "Sustained Wind Speed",
+        "Storm Surge Height",
+        "Total Rainfall"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Saffir-Simpson Hurricane Wind Scale is a 1 to 5 rating based only on a hurricane's maximum sustained wind speed.",
+      "tags": [
+        "weather",
+        "earth science",
+        "disasters"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Saffir-Simpson scale determines hurricane intensity based on exactly <b>one variable</b>. Can you grasp what it is?",
+        "explanationStyled": "Only <b>sustained wind speed</b>. Rain and storm surge are far too complex for such a simple scale, apparently.",
+        "hostLeadIn": "Here is a question on weather, simplified for your convenience.",
+        "wrongAnswerQuips": [
+          "Incorrect, you clearly missed class.",
+          "Not quite, try again.",
+          "Wrong, how delightful for me."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q9-1775099848460-8-e8k7xjzuf",
+      "category": "Science",
+      "subcategory": "Paleontology",
+      "difficulty": "medium",
+      "question": "Often confused with dinosaurs, which Mesozoic marine reptiles were characterized by four flippers and often extremely elongated necks?",
+      "choices": [
+        "Mosasaurs",
+        "Ichthyosaurs",
+        "Plesiosaurs",
+        "Pterosaurs"
+      ],
+      "correctIndex": 2,
+      "explanation": "Plesiosaurs were marine reptiles, not dinosaurs. They are easily distinguished from the dolphin-like Ichthyosaurs by their neck length.",
+      "tags": [
+        "paleontology",
+        "prehistoric",
+        "fossils"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "These <b>marine reptiles</b> had long necks and flippers, yet simpletons still mistake them for dinosaurs. What are they?",
+        "explanationStyled": "<b>Plesiosaurs</b>. They aren't dinosaurs, but I suppose all large, extinct creatures look the same to you.",
+        "hostLeadIn": "Let us test if you can differentiate between basic prehistoric categories.",
+        "wrongAnswerQuips": [
+          "Wrong, how tedious.",
+          "Incorrect, try again, darling.",
+          "No, you clearly lack vision."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q10-1775099848460-9-ina7l3eyk",
+      "category": "Science",
+      "subcategory": "Robotics",
+      "difficulty": "easy",
+      "question": "In the aviation industry, a 'UAV' is the technical term for a drone, but what does the 'V' specifically stand for?",
+      "choices": [
+        "Vessel",
+        "Vehicle",
+        "Vectored",
+        "Velocity"
+      ],
+      "correctIndex": 1,
+      "explanation": "UAV stands for Unmanned Aerial Vehicle. It refers to the aircraft itself, whereas UAS refers to the entire system.",
+      "tags": [
+        "robotics",
+        "technology",
+        "aviation"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "A drone is a UAV, but surely even you know what the <b>'V'</b> specifically stands for?",
+        "explanationStyled": "It stands for <b>Vehicle</b>. Unmanned Aerial Vehicle. Really, this is basic technology 101.",
+        "hostLeadIn": "Technology is advancing quite rapidly; try not to get left behind.",
+        "wrongAnswerQuips": [
+          "Wrong, try again.",
+          "How embarrassing for you.",
+          "Incorrect, as expected."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q11-1775099848460-10-w6tvcknli",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "medium",
+      "question": "The tagline 'Outwit, Outplay, Outlast' belongs to Survivor, but what was the name of the Swedish show it was originally adapted from?",
+      "choices": [
+        "The Island",
+        "Expedition Robinson",
+        "Desert Quest",
+        "Solitary"
+      ],
+      "correctIndex": 1,
+      "explanation": "Survivor is based on the 1997 Swedish show 'Expedition Robinson', created by Charlie Parsons.",
+      "tags": [
+        "reality tv",
+        "television",
+        "pop culture"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Survivor is a pillar of intellectual television, but what was the <b>Swedish original</b> that birthed this cultural masterpiece?",
+        "explanationStyled": "<b>Expedition Robinson</b>. Apparently, the Swedes were the first to find reality TV profitable.",
+        "hostLeadIn": "Let us pivot to the intellectual wasteland of reality television.",
+        "wrongAnswerQuips": [
+          "Wrong, how disappointing.",
+          "Not even close, honestly.",
+          "Try again, perhaps with research."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q12-1775099848460-11-q5tbk61tj",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "hard",
+      "question": "In 1989, Domino's Pizza's 'The Noid' mascot was involved in a real-life hostage crisis in Georgia caused by a man with which surname?",
+      "choices": [
+        "Noid",
+        "Little",
+        "Caesar",
+        "Hut"
+      ],
+      "correctIndex": 0,
+      "explanation": "Kenneth Noid held employees hostage because he believed the 'Avoid the Noid' campaign was a personal attack on him.",
+      "tags": [
+        "commercials",
+        "mascots",
+        "1980s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1989, a man held hostages over a Domino's mascot. What was his <b>surname</b>, which clearly fueled his delusion?",
+        "explanationStyled": "His name was <b>Kenneth Noid</b>. He felt personally targeted by an advertisement. The irony is, frankly, exquisite.",
+        "hostLeadIn": "A bit of morbid trivia to brighten your dull day.",
+        "wrongAnswerQuips": [
+          "Incorrect, you are clueless.",
+          "Wrong, how typical of you.",
+          "No, try harder."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q13-1775099848460-12-ovc3h8r8a",
+      "category": "Pop Culture",
+      "subcategory": "1990s Popular Music",
+      "difficulty": "medium",
+      "question": "Which Spice Girl's departure in 1998 effectively signaled the beginning of the end for the group's original dominant era?",
+      "choices": [
+        "Victoria Adams",
+        "Geri Halliwell",
+        "Melanie Brown",
+        "Emma Bunton"
+      ],
+      "correctIndex": 1,
+      "explanation": "Geri Halliwell (Ginger Spice) left the group in May 1998, citing exhaustion and creative differences.",
+      "tags": [
+        "music",
+        "90s",
+        "pop"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Spice Girl had the audacity to <b>leave</b> in 1998, crumbling your precious pop culture facade?",
+        "explanationStyled": "<b>Geri Halliwell</b>. Ginger Spice decided the group was beneath her, or perhaps she just wanted a vacation.",
+        "hostLeadIn": "Nostalgia for the 90s is so terribly bourgeois, but proceed.",
+        "wrongAnswerQuips": [
+          "Wrong, how droll.",
+          "Incorrect, try to focus.",
+          "No, you are mistaken."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q14-1775099848460-13-h0q6qmmkx",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "hard",
+      "question": "Beyoncé's 2003 hit 'Crazy in Love' famously samples the horn hook from which 1970 song by The Chi-Lites?",
+      "choices": [
+        "Have You Seen Her",
+        "Are You My Woman? (Tell Me So)",
+        "Oh Girl",
+        "Homely Girl"
+      ],
+      "correctIndex": 1,
+      "explanation": "Producer Rich Harrison sampled the 1970 track 'Are You My Woman? (Tell Me So)' to create the iconic brass intro for 'Crazy in Love'.",
+      "tags": [
+        "music",
+        "2000s",
+        "pop"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Beyoncé’s 'Crazy in Love' samples a 1970 song by The Chi-Lites. Name that <b>horn-heavy track</b>.",
+        "explanationStyled": "<b>'Are You My Woman? (Tell Me So)'</b>. It took a producer to find it, but now you know.",
+        "hostLeadIn": "A question for those who pretend to appreciate musical history.",
+        "wrongAnswerQuips": [
+          "Wrong, naturally.",
+          "Incorrect, try again.",
+          "No, that's just a guess."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q15-1775099848460-14-5z2en4p7r",
+      "category": "Pop Culture",
+      "subcategory": "Sitcomes",
+      "difficulty": "medium",
+      "question": "In the U.S. version of The Office, what is the name of the printer company that acquires Dunder Mifflin in Season 6?",
+      "choices": [
+        "Initech",
+        "Sabre",
+        "Vance Refrigeration",
+        "Prince Paper"
+      ],
+      "correctIndex": 1,
+      "explanation": "Sabre (pronounced 'SAY-ber') acquired the bankrupt Dunder Mifflin, bringing Kathy Bates' character Jo Bennett into the show.",
+      "tags": [
+        "sitcoms",
+        "television",
+        "comedy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In The Office, what is the name of the <b>printer company</b> that acquired Dunder Mifflin, much to everyone’s chagrin?",
+        "explanationStyled": "<b>Sabre</b>. An excellent case study in how corporate acquisitions can ruin even the most mediocre office.",
+        "hostLeadIn": "Let us discuss American television, as if it matters.",
+        "wrongAnswerQuips": [
+          "Wrong, how tedious.",
+          "Incorrect, you bore me.",
+          "No, pay attention next time."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q16-1775099848460-15-h0n7vjr1a",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "medium",
+      "question": "Bob Dylan won the 2016 Nobel Prize in Literature, but which 1960s album of his was the first to feature entirely original compositions?",
+      "choices": [
+        "Bob Dylan",
+        "The Freewheelin' Bob Dylan",
+        "Highway 61 Revisited",
+        "Bringing It All Back Home"
+      ],
+      "correctIndex": 1,
+      "explanation": "His 1962 debut contained mostly covers; 1963's 'The Freewheelin' Bob Dylan' established him as a premier songwriter.",
+      "tags": [
+        "music",
+        "literature",
+        "awards"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Bob Dylan is a Nobel laureate, but which 1963 <b>album</b> first showcased his original compositions?",
+        "explanationStyled": "<b>The Freewheelin' Bob Dylan</b>. It was the moment he decided he was better than everyone else, which I find quite relatable.",
+        "hostLeadIn": "I expect you to know at least this much about music.",
+        "wrongAnswerQuips": [
+          "Wrong, try again.",
+          "Incorrect, truly pathetic.",
+          "No, that is incorrect."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q17-1775099848460-16-yp8jiyk2z",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "easy",
+      "question": "Which French culinary phrase, popularized by Auguste Escoffier, translates to 'everything in its place'?",
+      "choices": [
+        "A la minute",
+        "Mise en place",
+        "Hors d'oeuvre",
+        "Sous vide"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mise en place is the essential practice of organizing ingredients and tools before the actual cooking begins.",
+      "tags": [
+        "cooking",
+        "culinary",
+        "food"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What is the French term for <b>'everything in its place'</b> that chefs obsess over to feel superior?",
+        "explanationStyled": "<b>Mise en place</b>. Without it, your kitchen is as disorganized as your thoughts.",
+        "hostLeadIn": "Culinary arts are far too sophisticated for your palate, but try anyway.",
+        "wrongAnswerQuips": [
+          "Wrong, how predictable.",
+          "Incorrect, try harder.",
+          "No, that's clearly false."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q18-1775099848460-17-gatnrdbxh",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "easy",
+      "question": "The 1996 global dance craze 'Macarena' was recorded by Los del Río, a duo consisting of Antonio Romero Monge and which other artist?",
+      "choices": [
+        "Rafael Ruiz Perdigones",
+        "Enrique Iglesias",
+        "Daddy Yankee",
+        "Luis Fonsi"
+      ],
+      "correctIndex": 0,
+      "explanation": "Los del Río is a Spanish Latin pop and dance duo; the Bayside Boys remix turned their song into a worldwide phenomenon.",
+      "tags": [
+        "music",
+        "90s",
+        "one hit wonder"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Macarena was a plague, but who was the <b>other duo member</b> alongside Antonio Romero Monge?",
+        "explanationStyled": "<b>Rafael Ruiz Perdigones</b>. A name you will likely forget immediately, and for good reason.",
+        "hostLeadIn": "A question about one-hit wonders for a one-hit intellect.",
+        "wrongAnswerQuips": [
+          "Wrong, naturally.",
+          "Incorrect, you are hopeless.",
+          "No, try again."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q19-1775099848460-18-8d5tguhqa",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "medium",
+      "question": "A classic Hollandaise sauce is an emulsion of lemon juice and egg yolks with which specific type of fat?",
+      "choices": [
+        "Olive Oil",
+        "Clarified Butter",
+        "Heavy Cream",
+        "Duck Fat"
+      ],
+      "correctIndex": 1,
+      "explanation": "Clarified butter is preferred for Hollandaise to achieve the correct stability and smooth texture without the milk solids found in whole butter.",
+      "tags": [
+        "cooking",
+        "culinary",
+        "sauces"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Hollandaise is an emulsion of yolks and lemon, but what <b>fat</b> is required to make it worthy of consumption?",
+        "explanationStyled": "<b>Clarified butter</b>. It requires patience, a virtue you clearly lack.",
+        "hostLeadIn": "Can you distinguish between basic fats, or are you hopeless?",
+        "wrongAnswerQuips": [
+          "Wrong, quite frankly.",
+          "Incorrect, stick to cereal.",
+          "No, try again."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q20-1775099848460-19-ocdpnxk7f",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "medium",
+      "question": "Tracy Chapman's 'Fast Car' won a CMA award in 2023 for Song of the Year, making her the first Black songwriter to win in that category. Who performed the cover version?",
+      "choices": [
+        "Morgan Wallen",
+        "Luke Combs",
+        "Chris Stapleton",
+        "Zach Bryan"
+      ],
+      "correctIndex": 1,
+      "explanation": "Luke Combs' faithful cover of the 1988 track brought it to a new generation and top of the Country charts.",
+      "tags": [
+        "music",
+        "songwriting",
+        "current events"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Tracy Chapman’s 'Fast Car' had a resurgence thanks to a <b>country cover</b>. Who performed it?",
+        "explanationStyled": "<b>Luke Combs</b>. He managed to make a classic song popular with people who think country is a personality.",
+        "hostLeadIn": "Even modern music has a history, if you look closely enough.",
+        "wrongAnswerQuips": [
+          "Wrong, try again.",
+          "Incorrect, how droll.",
+          "No, absolutely wrong."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q21-1775099848460-20-xt5yvdc6n",
+      "category": "Sports",
+      "subcategory": "Tennis Grand Slams",
+      "difficulty": "easy",
+      "question": "The French Open is the only tennis Grand Slam played on 'terre battue', which is a surface composed of what material?",
+      "choices": [
+        "Synthetic Grass",
+        "Red Clay",
+        "Blue Hardcourt",
+        "Natural Turf"
+      ],
+      "correctIndex": 1,
+      "explanation": "Terre battue (crushed brick/red clay) slows down the ball and produces a high bounce, favoring baseline players.",
+      "tags": [
+        "tennis",
+        "sports",
+        "grand slam"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The French Open uses 'terre battue,' but what is this <b>surface material</b> actually composed of?",
+        "explanationStyled": "<b>Red Clay</b>. It slows the ball down, ensuring the match lasts far longer than it really should.",
+        "hostLeadIn": "I assume you watch tennis, or at least recognize the court.",
+        "wrongAnswerQuips": [
+          "Wrong, as I suspected.",
+          "Incorrect, truly abysmal.",
+          "No, how boring."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q22-1775099848460-21-pnt2n1vbj",
+      "category": "Sports",
+      "subcategory": "Formula 1",
+      "difficulty": "medium",
+      "question": "Lewis Hamilton was the first driver in F1 history to reach 100 pole positions. At which Grand Prix circuit did he achieve this milestone in 2021?",
+      "choices": [
+        "Silverstone",
+        "Monaco",
+        "Circuit de Barcelona-Catalunya",
+        "Monza"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hamilton secured his 100th pole position at the Spanish Grand Prix (Barcelona) in May 2021.",
+      "tags": [
+        "f1",
+        "racing",
+        "sports"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Lewis Hamilton secured his 100th F1 pole at which <b>Grand Prix</b> in 2021?",
+        "explanationStyled": "The <b>Spanish Grand Prix</b> in Barcelona. A predictable outcome for a driver of his specific caliber.",
+        "hostLeadIn": "F1 is a game of speed, not that you'd know about that.",
+        "wrongAnswerQuips": [
+          "Wrong, keep dreaming.",
+          "Incorrect, try focusing.",
+          "No, that's quite wrong."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q23-1775099848460-22-qsbh5id7s",
+      "category": "Sports",
+      "subcategory": "Chess & Mind Sports",
+      "difficulty": "medium",
+      "question": "In chess, if a player is not in check but possesses no legal moves, the game is a draw. What is the specific name for this condition?",
+      "choices": [
+        "Zugzwang",
+        "Checkmate",
+        "Stalemate",
+        "En Passant"
+      ],
+      "correctIndex": 2,
+      "explanation": "Stalemate is a common drawing resource for the defending side in an endgame with limited material.",
+      "tags": [
+        "chess",
+        "games",
+        "strategy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What do we call it in chess when a player has no legal moves but <b>isn't in check</b>?",
+        "explanationStyled": "<b>Stalemate</b>. It is the perfect term for a game that goes nowhere, much like your progress here.",
+        "hostLeadIn": "Test your knowledge of the only board game that requires a brain.",
+        "wrongAnswerQuips": [
+          "Wrong, how typical.",
+          "Incorrect, try again.",
+          "No, absolutely wrong."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q24-1775099848460-23-xt449ry9g",
+      "category": "Sports",
+      "subcategory": "Golf Majors",
+      "difficulty": "easy",
+      "question": "Since 1949, the winner of The Masters is awarded the Green Jacket. Which club traditionally hosts this tournament every April?",
+      "choices": [
+        "St. Andrews",
+        "Pebble Beach",
+        "Augusta National",
+        "Pinehurst"
+      ],
+      "correctIndex": 2,
+      "explanation": "Augusta National Golf Club in Georgia is the permanent home of The Masters, unlike other majors that rotate venues.",
+      "tags": [
+        "golf",
+        "sports",
+        "masters"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Masters winner receives a Green Jacket, but at which <b>club</b> does this tournament take place?",
+        "explanationStyled": "<b>Augusta National</b>. It is where wealth and ego congregate under the guise of golf.",
+        "hostLeadIn": "Even the golf-illiterate should be able to answer this one.",
+        "wrongAnswerQuips": [
+          "Wrong, stay focused.",
+          "Incorrect, how sad.",
+          "No, keep trying."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q25-1775099848460-24-qlx0pei67",
+      "category": "Sports",
+      "subcategory": "Combat Sports",
+      "difficulty": "medium",
+      "question": "The UFC was founded in 1993, but in which U.S. city did the very first event (UFC 1) take place?",
+      "choices": [
+        "Las Vegas",
+        "Denver",
+        "Atlantic City",
+        "Miami"
+      ],
+      "correctIndex": 1,
+      "explanation": "UFC 1 was held at the McNichols Sports Arena in Denver, Colorado, on November 12, 1993.",
+      "tags": [
+        "mma",
+        "combat sports",
+        "ufc"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "UFC 1 was an amateurish brawl in 1993, but in which <b>city</b> did this event occur?",
+        "explanationStyled": "<b>Denver</b>. It was the beginning of modern combat sports, before it became a billion-dollar spectacle.",
+        "hostLeadIn": "Let us see if you know your history of organized violence.",
+        "wrongAnswerQuips": [
+          "Wrong, try again.",
+          "Incorrect, how droll.",
+          "No, you failed."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q26-1775099848460-25-t37x5hze8",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "medium",
+      "question": "Before it was 'TheFacebook', Mark Zuckerberg created which controversial Harvard-only site that ranked students by attractiveness?",
+      "choices": [
+        "HarvardConnection",
+        "Facemash",
+        "ConnectU",
+        "SocialNet"
+      ],
+      "correctIndex": 1,
+      "explanation": "Facemash was the short-lived predecessor that nearly got Zuckerberg expelled before he pivoted to the social directory concept.",
+      "tags": [
+        "tech history",
+        "social media",
+        "internet"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before Facebook, Zuckerberg created <b>Facemash</b>. What was the site's primary function?",
+        "explanationStyled": "It ranked students by <b>attractiveness</b>. It was both crude and fundamentally representative of his early character.",
+        "hostLeadIn": "Technology history is rarely as polished as the PR team suggests.",
+        "wrongAnswerQuips": [
+          "Wrong, try again.",
+          "Incorrect, you are hopeless.",
+          "No, how typical."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q27-1775099848460-26-movxs0q45",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "medium",
+      "question": "Apple transitioned 'OS X' to 'macOS' in 2016. What was the first version (10.12) to carry this new branding name?",
+      "choices": [
+        "Yosemite",
+        "El Capitan",
+        "Sierra",
+        "High Sierra"
+      ],
+      "correctIndex": 2,
+      "explanation": "macOS Sierra (10.12) was released in late 2016, unifying the naming convention with iOS, tvOS, and watchOS.",
+      "tags": [
+        "apple",
+        "operating systems",
+        "tech"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Apple rebranded 'OS X' in 2016. What was the first <b>macOS</b> version?",
+        "explanationStyled": "<b>Sierra</b> (10.12). A simple branding change, but even that confuses the average user.",
+        "hostLeadIn": "I trust your knowledge of Apple operating systems is current.",
+        "wrongAnswerQuips": [
+          "Wrong, keep guessing.",
+          "Incorrect, try focus.",
+          "No, truly abysmal."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q28-1775099848460-27-uxojw0icd",
+      "category": "Technology",
+      "subcategory": "Cybersecurity",
+      "difficulty": "medium",
+      "question": "What is the specific term for a phishing attack that is highly personalized and targets a specific individual or organization?",
+      "choices": [
+        "Vishing",
+        "Spear Phishing",
+        "Whaling",
+        "Smishing"
+      ],
+      "correctIndex": 1,
+      "explanation": "While 'phishing' is broad, 'spear phishing' refers to customized attacks using gathered personal details to increase credibility.",
+      "tags": [
+        "cybersecurity",
+        "tech",
+        "security"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What is the specific, highly personalized term for a <b>phishing attack</b> targeting one individual?",
+        "explanationStyled": "<b>Spear Phishing</b>. Because regular phishing is far too broad for someone you intend to rob.",
+        "hostLeadIn": "Cybersecurity—a concept far beyond your current digital security practices.",
+        "wrongAnswerQuips": [
+          "Wrong, so very wrong.",
+          "Incorrect, try again.",
+          "No, that's not it."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q29-1775099848460-28-58j1rhx7y",
+      "category": "Technology",
+      "subcategory": "Social Media History",
+      "difficulty": "medium",
+      "question": "Twitter acquired the 6-second video app Vine in 2012 before its launch, but who was the primary co-founder who later created the app HQ Trivia?",
+      "choices": [
+        "Dom Hofmann",
+        "Rus Yusupov",
+        "Colin Kroll",
+        "Jack Dorsey"
+      ],
+      "correctIndex": 2,
+      "explanation": "Colin Kroll and Rus Yusupov co-founded both Vine and the later viral hit HQ Trivia.",
+      "tags": [
+        "social media",
+        "tech history",
+        "video"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Twitter bought Vine, but which <b>co-founder</b> went on to create the ephemeral HQ Trivia?",
+        "explanationStyled": "<b>Colin Kroll</b>. He enjoyed short-lived success with both apps, which is quite the irony.",
+        "hostLeadIn": "The internet is a graveyard of abandoned apps; let's discuss one.",
+        "wrongAnswerQuips": [
+          "Wrong, you bore me.",
+          "Incorrect, try again.",
+          "No, absolutely incorrect."
+        ]
+      },
+      "timestamp": 1775099848460
+    },
+    {
+      "id": "q30-1775099848460-29-pi13l8bnh",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "Before settling on 'Windows' for the 1985 release, what was Bill Gates' originally intended (and much less catchy) name for the GUI?",
+      "choices": [
+        "Interface Manager",
+        "System Shell",
+        "Vision Desktop",
+        "MS-Graphics"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gates wanted to call it 'Interface Manager,' but marketing executive Rowland Hanson convinced him that 'Windows' was a better brand.",
+      "tags": [
+        "windows",
+        "microsoft",
+        "operating systems"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before the name 'Windows,' what was Gates' <b>original, uninspired</b> name for the GUI?",
+        "explanationStyled": "<b>Interface Manager</b>. It sounds exactly like the bureaucratic nightmare it was intended to replace.",
+        "hostLeadIn": "Let's see if you can handle some Microsoft corporate history.",
+        "wrongAnswerQuips": [
+          "Wrong, how typical.",
+          "Incorrect, try again.",
+          "No, you failed yet again."
+        ]
+      },
+      "timestamp": 1775099848460
+    }
+  ]
+}

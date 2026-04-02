@@ -6,10 +6,14 @@ interface GetQuestionsForSessionParams {
   count: number;
   excludeQuestionIds?: string[];
   userId?: string;
+  userIds?: string[];
 }
 
 const SEEN_QUESTIONS_TABLE = 'user_seen_questions';
 const SEEN_QUESTIONS_USER_COLUMN = 'user_id';
+const MIN_FETCH_CANDIDATES = 40;
+const MAX_FETCH_CANDIDATES = 180;
+const RANDOM_FETCH_WINDOWS = 3;
 
 const seenQuestionIdsCache = new Map<string, Promise<Set<string>>>();
 
@@ -108,28 +112,102 @@ function dedupeById(questions: TriviaQuestion[]) {
   });
 }
 
-async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Set<string>, count: number) {
+function shuffleQuestions<T>(items: T[]) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function buildRandomOffsets(totalCount: number, windowSize: number) {
+  const maxOffset = Math.max(0, totalCount - windowSize);
+  const offsets = new Set<number>([0]);
+
+  if (maxOffset <= 0) {
+    return [0];
+  }
+
+  offsets.add(maxOffset);
+
+  while (offsets.size < Math.min(RANDOM_FETCH_WINDOWS, totalCount)) {
+    offsets.add(Math.floor(Math.random() * (maxOffset + 1)));
+  }
+
+  return shuffleQuestions([...offsets]);
+}
+
+async function fetchApprovedQuestionCount(category: string) {
+  const { count, error } = await supabase
+    .from('questions')
+    .select('id', { count: 'exact', head: true })
+    .eq('category', category)
+    .eq('validation_status', 'approved');
+
+  if (error) {
+    console.error('Error counting questions from Supabase:', error);
+    return null;
+  }
+
+  return count ?? 0;
+}
+
+async function fetchApprovedQuestionWindow(category: string, from: number, to: number) {
   const { data, error } = await supabase
     .from('questions')
     .select('*')
     .eq('category', category)
     .eq('validation_status', 'approved')
     .order('created_at', { ascending: false })
-    .limit(Math.max(count * 5, 20));
+    .range(from, to);
 
   if (error) {
     console.error('Error fetching questions from Supabase:', error);
     return [];
   }
 
-  return (data || [])
-    .map((entry) => mapQuestionRowToTriviaQuestion(entry))
-    .filter((question) => question.choices.length === 4)
-    .filter((question) => !excludeIds.has(question.id));
+  return data || [];
 }
 
-async function loadSeenQuestionIds(userId?: string): Promise<Set<string>> {
-  if (!userId) return new Set<string>();
+async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Set<string>, count: number) {
+  const requestedCandidateCount = Math.min(
+    MAX_FETCH_CANDIDATES,
+    Math.max(MIN_FETCH_CANDIDATES, count * 12)
+  );
+
+  const totalCount = await fetchApprovedQuestionCount(category);
+  const fallbackRows = totalCount === null
+    ? await fetchApprovedQuestionWindow(category, 0, requestedCandidateCount - 1)
+    : [];
+
+  const sourceRows = totalCount === null
+    ? fallbackRows
+    : await (async () => {
+        if (totalCount === 0) return [];
+
+        const windowSize = Math.min(totalCount, requestedCandidateCount);
+        const offsets = buildRandomOffsets(totalCount, windowSize);
+        const windows = await Promise.all(
+          offsets.map((offset) => fetchApprovedQuestionWindow(category, offset, offset + windowSize - 1))
+        );
+
+        return windows.flat();
+      })();
+
+  return shuffleQuestions(
+    dedupeById(
+      sourceRows
+        .map((entry) => mapQuestionRowToTriviaQuestion(entry))
+        .filter((question) => question.choices.length === 4)
+        .filter((question) => !excludeIds.has(question.id))
+    )
+  );
+}
+
+async function loadSeenQuestionIdsForUser(userId: string): Promise<Set<string>> {
   const cached = seenQuestionIdsCache.get(userId);
   if (cached) {
     const cachedIds = new Set(await cached);
@@ -163,6 +241,19 @@ async function loadSeenQuestionIds(userId?: string): Promise<Set<string>> {
 
   seenQuestionIdsCache.set(userId, loadPromise);
   return new Set(await loadPromise);
+}
+
+async function loadSeenQuestionIds(userIds: string[]): Promise<Set<string>> {
+  if (userIds.length === 0) return new Set<string>();
+
+  const seenSets = await Promise.all(userIds.map((userId) => loadSeenQuestionIdsForUser(userId)));
+  const merged = new Set<string>();
+
+  seenSets.forEach((seenIds) => {
+    seenIds.forEach((questionId) => merged.add(questionId));
+  });
+
+  return merged;
 }
 
 function preferUnseenQuestions(
@@ -200,10 +291,12 @@ export async function getQuestionsForSession({
   count,
   excludeQuestionIds = [],
   userId,
+  userIds,
 }: GetQuestionsForSessionParams): Promise<TriviaQuestion[]> {
   const uniqueCategories = [...new Set(categories.map(normalizeRequestedCategory))];
   const excludeIds = new Set(excludeQuestionIds);
-  const seenQuestionIds = await loadSeenQuestionIds(userId);
+  const normalizedUserIds = [...new Set((userIds ?? [userId]).filter((entry): entry is string => typeof entry === 'string' && entry.length > 0))];
+  const seenQuestionIds = await loadSeenQuestionIds(normalizedUserIds);
   const selected: TriviaQuestion[] = [];
 
   for (const category of uniqueCategories) {
@@ -212,7 +305,7 @@ export async function getQuestionsForSession({
       seenQuestionIds,
       count,
       category,
-      userId
+      normalizedUserIds.join(',')
     );
     approved.forEach((question) => excludeIds.add(question.id));
     selected.push(...approved);

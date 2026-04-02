@@ -400,6 +400,32 @@ export default function App() {
     return 'Failed to start game.';
   };
 
+  useEffect(() => {
+    if (!game || questions.length === 0) {
+      return;
+    }
+
+    const usedQuestionIds = new Set<string>([
+      ...Object.keys(game.answers || {}),
+      ...(game.currentQuestionId ? [game.currentQuestionId] : []),
+    ]);
+
+    setQuestions((current) => {
+      let changed = false;
+      const next = current.map((question) => {
+        const shouldBeUsed = usedQuestionIds.has(question.id);
+        if (Boolean(question.used) === shouldBeUsed) {
+          return question;
+        }
+
+        changed = true;
+        return { ...question, used: shouldBeUsed };
+      });
+
+      return changed ? next : current;
+    });
+  }, [game?.answers, game?.currentQuestionId, game?.id, questions.length, setQuestions]);
+
   const navigateToJoinedGame = (joinedGame: GameState, source: 'joinGame' | 'joinWaitingGameById') => {
     console.info('[joinFlow] Navigating to game screen', {
       source,
@@ -723,6 +749,15 @@ export default function App() {
         return false;
       }
 
+      if (isNewJoiner && joinedGame.playerIds.length >= 2) {
+        setIsFetchingQuestions(true);
+        setLoadingStep('loading_questions');
+        await buildQuestionPoolForPlayers({
+          gameId: joinedGame.id,
+          playerIds: joinedGame.playerIds,
+        });
+      }
+
       setLoadingStep('finalizing_lobby');
       navigateToJoinedGame(joinedGame, 'joinWaitingGameById');
       return true;
@@ -741,6 +776,26 @@ export default function App() {
       console.error(`[persistQuestionsToGame] Failed for game ${gameId}:`, err);
     }
   };
+
+  const buildQuestionPoolForPlayers = useCallback(async ({
+    gameId,
+    playerIds,
+    excludeQuestionIds = [],
+  }: {
+    gameId: string;
+    playerIds: string[];
+    excludeQuestionIds?: string[];
+  }) => {
+    const initialQuestions = await getQuestionsForSession({
+      categories: playableCategories,
+      count: 3,
+      excludeQuestionIds,
+      userIds: playerIds,
+    });
+    setQuestions(initialQuestions);
+    await persistQuestionsToGameService(gameId, initialQuestions.map((question) => question.id));
+    return initialQuestions;
+  }, [playableCategories, setQuestions]);
 
   const syncGameQuestionIds = async (gameId: string, questionIds: string[]) => {
     try {
@@ -1126,6 +1181,9 @@ export default function App() {
     setSelectedCategory(category);
     setRevealedCategory(category);
     setCurrentQuestion(null);
+    setQuestions((current) => current.map((entry) => (
+      entry.id === question.id ? { ...entry, used: true } : entry
+    )));
 
     categoryRevealTimeoutRef.current = window.setTimeout(() => {
       setRevealedCategory(null);
@@ -1902,7 +1960,17 @@ export default function App() {
   }, [game?.status, game?.winnerId, user?.id, settings.soundEnabled, settings.sfxEnabled, lastTrashTalkEvent, tryPlay]);
 
   useEffect(() => {
-    if (game?.status !== 'completed' || !game.id || questions.length > 0 || (game.questionIds?.length ?? 0) === 0) {
+    if (!game?.id || (game.questionIds?.length ?? 0) === 0) {
+      return;
+    }
+
+    const localQuestionIds = questions.map((question) => question.id);
+    const storedQuestionIds = game.questionIds ?? [];
+    const localMatchesStored =
+      localQuestionIds.length === storedQuestionIds.length &&
+      localQuestionIds.every((questionId, index) => questionId === storedQuestionIds[index]);
+
+    if (localMatchesStored) {
       return;
     }
 
@@ -1917,7 +1985,7 @@ export default function App() {
         setQuestions(storedQuestions);
       })
       .catch((error) => {
-        console.error('[endgame-roast] Failed to load stored game questions', {
+        console.error('[game-questions] Failed to load stored game questions', {
           gameId: game.id,
           error,
         });
@@ -1926,7 +1994,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [game?.status, game?.id, game?.questionIds, questions.length, setQuestions]);
+  }, [game?.id, game?.questionIds, questions.length, setQuestions]);
 
   useEffect(() => {
     if (game?.status !== 'completed' || !game?.id) {
@@ -2369,13 +2437,11 @@ export default function App() {
 
       setIsFetchingQuestions(true);
       setLoadingStep('loading_questions');
-      const initialQuestions = await getQuestionsForSession({
-        categories: playableCategories,
-        count: 3,
+      await buildQuestionPoolForPlayers({
+        gameId,
+        playerIds: [user.id],
         excludeQuestionIds: existingQuestionIds,
-        userId: user.id,
       });
-      await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
 
       setGame(newGame);
     } catch (err) {
@@ -2405,13 +2471,11 @@ export default function App() {
 
       setIsFetchingQuestions(true);
       setLoadingStep('loading_questions');
-      const initialQuestions = await getQuestionsForSession({
-        categories: playableCategories,
-        count: 3,
+      await buildQuestionPoolForPlayers({
+        gameId,
+        playerIds: [user.id],
         excludeQuestionIds: existingQuestionIds,
-        userId: user.id,
       });
-      await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
 
       setGame(newGame);
     } catch (err) {
@@ -2475,6 +2539,7 @@ export default function App() {
         return;
       }
 
+      const isNewJoiner = !waitingGame.playerIds.includes(user.id);
       const joinedGame = waitingGame.playerIds.includes(user.id)
         ? waitingGame
         : await joinGameById(waitingGame.id, user.id, playerProfile?.nickname || user.email || 'Player', avatarUrl || playerProfile?.avatarUrl || '');
@@ -2492,6 +2557,15 @@ export default function App() {
         });
         setError('Failed to join game.');
         return;
+      }
+
+      if (isNewJoiner && joinedGame.playerIds.length >= 2) {
+        setIsFetchingQuestions(true);
+        setLoadingStep('loading_questions');
+        await buildQuestionPoolForPlayers({
+          gameId: joinedGame.id,
+          playerIds: joinedGame.playerIds,
+        });
       }
 
       setLoadingStep('finalizing_lobby');
@@ -2523,13 +2597,11 @@ export default function App() {
 
       setIsFetchingQuestions(true);
       setLoadingStep('loading_questions');
-      const initialQuestions = await getQuestionsForSession({
-        categories: playableCategories,
-        count: 3,
+      await buildQuestionPoolForPlayers({
+        gameId,
+        playerIds: [user.id],
         excludeQuestionIds: existingQuestionIds,
-        userId: user.id,
       });
-      await persistQuestionsToGameService(gameId, initialQuestions.map(q => q.id));
 
       await sendInvite({
         uid: user.id,
@@ -2670,11 +2742,12 @@ export default function App() {
         categories: [resolvedCategory],
         count: 3,
         excludeQuestionIds: existingQuestionIds,
-        userId: user!.id,
+        userIds: game.playerIds.length > 0 ? game.playerIds : [user!.id],
       }).then(newQs => {
         if (newQs.length > 0) {
           setLoadingStep('finalizing_round');
           const q = newQs[0];
+          setQuestions((current) => [...current, ...newQs]);
           const nextQuestionIds = [
             ...(game.questionIds || []),
             ...newQs.map((question) => question.id),
@@ -3171,8 +3244,9 @@ export default function App() {
         categories: playableCategories,
         count: 3,
         excludeQuestionIds: existingQuestionIds, // maybe clear this for new game?
-        userId: user.id,
+        userIds: game.playerIds.length > 0 ? game.playerIds : [user.id],
       });
+      setQuestions(initialQuestions);
       await persistQuestionsToGameService(game.id, initialQuestions.map(q => q.id));
       const nextQuestionIds = initialQuestions.map((question) => question.id);
 
