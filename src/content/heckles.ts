@@ -45,6 +45,7 @@ export function shouldEnableHeckles(isSolo: boolean) {
 
 export function buildHecklePrompt(context: HeckleGenerationContext) {
   return `You generate short multiplayer trivia heckles for the waiting period during an opponent's turn.
+These should feel like they were written by one sharp host reacting to this exact game, not by a joke vending machine.
 
 Return ONLY valid JSON.
 Do not include markdown.
@@ -81,6 +82,9 @@ Tone:
 - Witty, sarcastic, funny
 - Adult-oriented; mild profanity is allowed when it sharpens the sting
 - Smart, not sloppy
+- Sophisticated enough to surprise an adult player
+- Original enough that the lines do not sound mass-produced
+- Context-aware enough that a player could tell what blunder or score swing inspired the line
 
 Rules:
 - Write exactly ${MAX_HECKLES} heckles
@@ -92,11 +96,16 @@ Rules:
 - Speak as if you are an authoritative observer of the game, not a participant
 - React to the specific failure and current score/streak state
 - Each heckle must use a different comedic structure (e.g., sarcasm, rhetorical question, mock praise, analogy)
+- Make each one feel like a fresh angle on the situation rather than three versions of the same joke
 - Use at least one concrete detail from the provided context whenever possible: question topic, wrong answer, correct answer, category, difficulty, trophies, or score state
+- If a wrong answer is especially revealing, exploit what it implies about the player rather than merely repeating it
+- Favor layered jokes: a clean insult plus a smart observation beats random cruelty
+- Prefer references or metaphors that fit the category or answer, but keep them instantly understandable
 - Do not write generic filler that could fit any trivia game moment
 - If the recent context is thin, lean into the exact score state or trigger rather than vague insults
 - When possible, incorporate category-specific references or metaphors
 - Do not repeat the same joke structure
+- Do not repeat signature words, phrasing, or sentence rhythm across the three heckles
 - Do not comment on loading, delays, or wait time itself
 - These are background flavor while the opponent plays, not result-screen summaries
 - Favor clever contempt over random noise
@@ -109,7 +118,7 @@ Rules:
 - Keep each heckle short enough to fit as a quick waiting-state commentary card
 
 Good example:
-"An ambitious answer, ${context.playerName}. Wrong, obviously, but ambitious. ${context.opponentName} now has the floor, which is probably safer for everyone."
+"${context.playerName} turned a ${context.difficulty || 'hard'} ${context.category || 'trivia'} question into a live demonstration of misplaced confidence. Mercifully, ${context.opponentName} now gets to restore adult supervision."
 
 Bad example:
 "LOL you suck this is bad wow terrible answer hahaha."

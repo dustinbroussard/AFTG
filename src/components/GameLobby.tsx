@@ -313,7 +313,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
   return (
     <div className="mx-auto flex min-h-full w-full max-w-[min(100%,34rem)] flex-col items-center gap-5 px-4 pt-4 pb-5 sm:gap-6 sm:px-6 sm:pt-6 sm:pb-6">
       <div className="text-center relative shrink-0">
-        <div className="relative inline-block aspect-square w-[min(72vw,16rem)] sm:w-[min(60vw,16rem)]">
+        <div className="relative inline-block aspect-square w-[min(72vw,18.4rem)] sm:w-[min(60vw,18.4rem)]">
           <img
             src={logoSrc}
             alt="A F-cking Trivia Game"
@@ -344,7 +344,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
             aria-label="Open avatar options"
             aria-expanded={isAvatarMenuOpen}
             disabled={isInteractionLocked}
-            className="group relative flex h-20 w-20 max-h-[20vw] max-w-[20vw] min-h-16 min-w-16 items-center justify-center overflow-hidden rounded-2xl border-2 theme-panel-strong shadow-xl transition-all duration-300 ease-in-out hover:border-pink-500 hover:shadow-pink-500/20 sm:h-24 sm:w-24 sm:max-h-24 sm:max-w-24"
+            className="group relative flex h-24 w-24 max-h-[24vw] max-w-[24vw] min-h-16 min-w-16 items-center justify-center overflow-hidden rounded-2xl border-2 theme-panel-strong shadow-xl transition-all duration-300 ease-in-out hover:border-pink-500 hover:shadow-pink-500/20 sm:h-[7.2rem] sm:w-[7.2rem] sm:max-h-[7.2rem] sm:max-w-[7.2rem]"
           >
             {effectiveAvatar ? (
               <img src={effectiveAvatar} alt="Avatar" className="h-full w-full object-cover" decoding="async" loading="lazy" />

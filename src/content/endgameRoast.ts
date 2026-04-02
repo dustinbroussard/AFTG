@@ -30,6 +30,7 @@ export function getFallbackEndgameMessage(context: Pick<EndgameRoastGenerationCo
 
 export function buildEndgameRoastPrompt(context: EndgameRoastGenerationContext) {
   return `You write the final post-game sendoff for a multiplayer trivia match. Speak as a smug, witty, slightly mean game show host delivering one last verdict.
+The comedy should feel earned by the match details: smart, memorable, and specific enough that the players could not swap names and reuse it.
 
 Return ONLY valid JSON.
 Do not include markdown.
@@ -74,6 +75,8 @@ Tone:
 - Witty, sarcastic, funny
 - Adult-oriented; mild profanity is allowed when it sharpens the sting
 - Smart, not sloppy
+- Sophisticated, original, and tailored to the actual path this match took
+- Funny because it is observant, not because it is loud
 - Write one playful, smug tease that is addressed to the loser only
 - Write one half-hearted, backhanded compliment that is addressed to the winner only
 - Return only the JSON object
@@ -81,8 +84,12 @@ Tone:
 - Keep each line under 32 words
 - Sound specific to this exact match, not generic
 - Use concrete details from the score, trophies, question topics, wrong answers, correct answers, or recent outcomes whenever possible
+- Let the loser line sting because it recognizes the nature of the collapse, not merely the fact of losing
+- Let the winner line sound like reluctant praise from someone annoyed that competence has forced their hand
+- If there is a strong contrast between the players' recent answers, exploit it
 - If you mention the match state, describe it using the exact supplied points and trophies
 - Never imply a trophy score such as "9-0" or any other impossible total
+- Avoid bland victory-language, generic consolation, or boilerplate roast phrasing
 - Keep it sharp, adult, and funny, but not hateful
 - No slurs
 - No hate content
