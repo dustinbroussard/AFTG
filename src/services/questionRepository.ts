@@ -106,7 +106,7 @@ export function mapQuestionRowToTriviaQuestion(question: any, createdAt = Date.n
   };
 }
 
-function normalizeQuestionFingerprint(question: Partial<TriviaQuestion> & Record<string, any>) {
+export function getQuestionFingerprint(question: Partial<TriviaQuestion> & Record<string, any>) {
   const explicitHash = question.question_hash ?? question.questionHash ?? question.metadata?.questionHash;
   if (typeof explicitHash === 'string' && explicitHash.trim().length > 0) {
     return explicitHash.trim().toLowerCase();
@@ -119,12 +119,12 @@ function normalizeQuestionFingerprint(question: Partial<TriviaQuestion> & Record
   return `${category}::${normalizedQuestionText}`;
 }
 
-function dedupeQuestions(questions: TriviaQuestion[]) {
+export function dedupeQuestionsByIdentity(questions: TriviaQuestion[]) {
   const seenIds = new Set<string>();
   const seenFingerprints = new Set<string>();
 
   return questions.filter((question) => {
-    const fingerprint = normalizeQuestionFingerprint(question);
+    const fingerprint = getQuestionFingerprint(question);
     if (!question.id || seenIds.has(question.id) || seenFingerprints.has(fingerprint)) {
       return false;
     }
@@ -238,7 +238,7 @@ async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Se
 
   return shuffleQuestions(
     sortQuestionsForFairness(
-      dedupeQuestions(
+      dedupeQuestionsByIdentity(
         sourceRows
           .map((entry) => mapQuestionRowToTriviaQuestion(entry))
           .filter((question) => question.choices.length === 4)
@@ -281,7 +281,7 @@ async function fetchQuestionsViaRpc({
     throw error;
   }
 
-  return dedupeQuestions(
+  return dedupeQuestionsByIdentity(
     (data || [])
       .map((entry) => mapQuestionRowToTriviaQuestion(entry))
       .filter((question) => question.choices.length === 4)
@@ -395,7 +395,7 @@ export async function getQuestionsForSession({
     selected.push(...approved);
   }
 
-  return dedupeQuestions(selected);
+  return dedupeQuestionsByIdentity(selected);
 }
 
 export async function markQuestionSeen({

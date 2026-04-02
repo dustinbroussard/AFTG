@@ -26,7 +26,7 @@ import {
   subscribeToIncomingInvites,
 } from './services/inviteService';
 import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getExplanationText, getPlayableCategories, getWrongAnswerQuip } from './types';
-import { getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
+import { dedupeQuestionsByIdentity, getQuestionFingerprint, getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
@@ -161,34 +161,8 @@ function truncateHeaderDisplayName(value: string, maxLength = HEADER_DISPLAY_NAM
   return trimmed.slice(0, maxLength);
 }
 
-function normalizeQuestionFingerprint(question: Pick<TriviaQuestion, 'category' | 'question' | 'metadata'>) {
-  const explicitHash = question.metadata?.questionHash;
-  if (typeof explicitHash === 'string' && explicitHash.trim().length > 0) {
-    return explicitHash.trim().toLowerCase();
-  }
-
-  const category = String(question.category ?? '').trim().toLowerCase();
-  const normalizedQuestionText = String(question.question ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
-  return `${category}::${normalizedQuestionText}`;
-}
-
 function mergeQuestionsByIdentity(existing: TriviaQuestion[], incoming: TriviaQuestion[]) {
-  const merged: TriviaQuestion[] = [];
-  const seenIds = new Set<string>();
-  const seenFingerprints = new Set<string>();
-
-  for (const question of [...existing, ...incoming]) {
-    const fingerprint = normalizeQuestionFingerprint(question);
-    if (!question.id || seenIds.has(question.id) || seenFingerprints.has(fingerprint)) {
-      continue;
-    }
-
-    seenIds.add(question.id);
-    seenFingerprints.add(fingerprint);
-    merged.push(question);
-  }
-
-  return merged;
+  return dedupeQuestionsByIdentity([...existing, ...incoming]);
 }
 
 const ACTIVE_GAME_STORAGE_KEY = 'activeGameId';
@@ -829,12 +803,12 @@ export default function App() {
     replaceExisting?: boolean;
     countPerCategory?: number;
   }) => {
-    const initialQuestions = await getQuestionsForSession({
+    const initialQuestions = dedupeQuestionsByIdentity(await getQuestionsForSession({
       categories: playableCategories,
       count: countPerCategory,
       excludeQuestionIds,
       userIds: playerIds,
-    });
+    }));
     setQuestions(initialQuestions);
     if (replaceExisting) {
       await replaceQuestionsInGameService(gameId, initialQuestions.map((question) => question.id));
@@ -878,9 +852,19 @@ export default function App() {
         return [];
       }
 
-      setQuestions((current) => mergeQuestionsByIdentity(current, newQuestions));
-      await persistQuestionsToGameService(gameId, newQuestions.map((question) => question.id));
-      return newQuestions;
+      let addedQuestions: TriviaQuestion[] = [];
+      setQuestions((current) => {
+        const existingFingerprints = new Set(current.map((question) => getQuestionFingerprint(question)));
+        const merged = mergeQuestionsByIdentity(current, newQuestions);
+        addedQuestions = merged.filter((question) => !existingFingerprints.has(getQuestionFingerprint(question)));
+        return merged;
+      });
+
+      if (addedQuestions.length > 0) {
+        await persistQuestionsToGameService(gameId, addedQuestions.map((question) => question.id));
+      }
+
+      return addedQuestions;
     } finally {
       categoriesToFetch.forEach((category) => questionPoolTopUpCategoriesRef.current.delete(category));
     }
@@ -2085,6 +2069,15 @@ export default function App() {
       .then((storedQuestions) => {
         if (cancelled || storedQuestions.length === 0) {
           return;
+        }
+
+        const sanitizedQuestionIds = storedQuestions.map((question) => question.id);
+        const storedQuestionIdsHaveDuplicates =
+          sanitizedQuestionIds.length !== storedQuestionIds.length ||
+          sanitizedQuestionIds.some((questionId, index) => questionId !== storedQuestionIds[index]);
+
+        if (storedQuestionIdsHaveDuplicates) {
+          void syncGameQuestionIds(game.id, sanitizedQuestionIds);
         }
 
         setQuestions(applyQuestionUsageState(storedQuestions, game));

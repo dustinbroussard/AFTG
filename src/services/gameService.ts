@@ -2,13 +2,14 @@ import { supabase } from '../lib/supabase';
 import { ChatMessage, GameAnswer, GameState, PersistedGameState, Player, TriviaQuestion } from '../types';
 import {
   getGameDisplayCode,
+  isMissingFunctionError,
   isMissingTableError,
   isMissingRowError,
   isUuid,
   logSupabaseError,
   nowIsoString,
 } from './supabaseUtils';
-import { mapQuestionRowToTriviaQuestion } from './questionRepository';
+import { dedupeQuestionsByIdentity, mapQuestionRowToTriviaQuestion } from './questionRepository';
 
 function createGameId() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -611,6 +612,27 @@ export async function setActiveGameQuestion(
     logSupabaseError('games', 'update', error, { gameId, questionId, purpose: 'setActiveGameQuestion' });
     throw error;
   }
+
+  const { error: incrementError } = await supabase.rpc('increment_question_used_count', {
+    q_id: questionId,
+  });
+
+  if (incrementError) {
+    if (isMissingFunctionError(incrementError)) {
+      console.warn('[setActiveGameQuestion] increment_question_used_count RPC is missing from the current database schema.', {
+        gameId,
+        questionId,
+      });
+      return;
+    }
+
+    logSupabaseError('rpc:increment_question_used_count', 'rpc', incrementError, {
+      gameId,
+      questionId,
+      purpose: 'setActiveGameQuestion',
+    });
+    throw incrementError;
+  }
 }
 
 export async function clearActiveGameQuestion(gameId: string) {
@@ -938,9 +960,9 @@ export async function getGameQuestions(gameId: string): Promise<TriviaQuestion[]
   }
 
   const questionById = new Map((data || []).map((row) => [row.id, mapQuestionRowToTriviaQuestion(row)]));
-  return questionIds
+  return dedupeQuestionsByIdentity(questionIds
     .map((questionId) => questionById.get(questionId))
-    .filter((question): question is TriviaQuestion => Boolean(question));
+    .filter((question): question is TriviaQuestion => Boolean(question)));
 }
 
 export async function getPastGames(userId: string): Promise<GameState[]> {

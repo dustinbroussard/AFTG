@@ -65,6 +65,18 @@ as $$
   where rq.selection_rank <= greatest(p_count_per_category, 0);
 $$;
 
+create or replace function public.increment_question_used_count(q_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  update public.questions
+  set used_count = used_count + 1
+  where id = q_id;
+end;
+$$;
+
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   firebase_uid text unique,

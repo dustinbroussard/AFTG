@@ -1,0 +1,3947 @@
+{
+  "questions": [
+    {
+      "id": "hist-001-1775112423834-0-afw95i523",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "hard",
+      "question": "Assuming you aren't allergic to actual history, which activist's 1964 DNC testimony was so politically threatening that LBJ staged a fake press conference just to knock her off the live broadcast?",
+      "choices": [
+        "Fannie Lou Hamer",
+        "Septima Clark",
+        "Ella Baker",
+        "Diane Nash"
+      ],
+      "correctIndex": 0,
+      "explanation": "Fannie Lou Hamer's testimony for the MFDP was so powerful that President Johnson called a last-minute press conference to divert media attention away from her accounts of voter suppression.",
+      "tags": [
+        "civil rights",
+        "1964 DNC",
+        "voter suppression"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Try to focus: which activist's 1964 DNC testimony was so <b>politically scathing</b> that LBJ panicked and staged a pathetic press conference just to silence her?",
+        "explanationStyled": "Fannie Lou Hamer was the target. LBJ's diversionary press conference was a transparent attempt to hide her horrific account of state-sponsored voter suppression from the American public.",
+        "hostLeadIn": "I suppose I have to explain the Civil Rights Movement to you.",
+        "wrongAnswerQuips": [
+          "Incorrect. Try reading a book for once.",
+          "That is simply embarrassing for you.",
+          "Wrong. Honestly, how do you manage?",
+          "No, but thanks for playing the fool."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist-002-1775112423834-1-e2hbwjnts",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "hard",
+      "question": "The Keating-Owen Act of 1916 tried to stop child labor, but which 1918 Supreme Court case predictably struck it down, claiming it exceeded federal commerce powers?",
+      "choices": [
+        "Hammer v. Dagenhart",
+        "Bailey v. Drexel Furniture Co.",
+        "Lochner v. New York",
+        "Adkins v. Children's Hospital"
+      ],
+      "correctIndex": 0,
+      "explanation": "In Hammer v. Dagenhart, the Court ruled that the power to regulate commerce did not include the power to regulate the conditions of production, effectively legalizing child labor for another two decades.",
+      "tags": [
+        "progressive era",
+        "supreme court",
+        "labor law"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 1916 Keating-Owen Act was a noble effort, but which 1918 Supreme Court case <b>inevitably</b> gutted it, prioritizing corporate greed over basic human decency?",
+        "explanationStyled": "Hammer v. Dagenhart. The court decided that federal commerce power apparently stops at the factory door, which is a truly marvelous piece of legal gymnastics.",
+        "hostLeadIn": "Let's test your knowledge of legal failure.",
+        "wrongAnswerQuips": [
+          "Wrong. Did you guess, or were you just confused?",
+          "Try again. Failure is becoming your signature.",
+          "Incorrect. Shocking, isn't it?"
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist-003-1775112423834-2-q4xkigl4e",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "hard",
+      "question": "If you can look past the 'secret' label, the 1905 Taft-Katsura Agreement was essentially a imperialist 'quid pro quo' where the U.S. traded its influence in Korea for Japanese recognition of control over which territory?",
+      "choices": [
+        "The Philippines",
+        "Guam",
+        "Hawaii",
+        "Samoa"
+      ],
+      "correctIndex": 0,
+      "explanation": "This secret memorandum saw the U.S. accept Japan's suzerainty over Korea in exchange for Japan's pledge not to interfere with the U.S. administration of the Philippines.",
+      "tags": [
+        "imperialism",
+        "diplomacy",
+        "east asia"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 1905 Taft-Katsura Agreement was a classic imperialist <b>quid pro quo</b>—the U.S. essentially traded Korea to Japan in exchange for control over which territory?",
+        "explanationStyled": "The U.S. traded its influence in Korea to secure dominance over the Philippines. International diplomacy is such a charmingly brutal game, isn't it?",
+        "hostLeadIn": "You look like you've never opened a diplomatic history textbook.",
+        "wrongAnswerQuips": [
+          "Incorrect. Truly an uninspired guess.",
+          "Wrong. Is basic geography too much to ask?",
+          "No. My dog could have guessed better than that."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist-004-1775112423834-3-6hx0zplwd",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "medium",
+      "question": "Section 4 of the 25th Amendment is for the truly paranoid; to officially sideline a sitting President, the Vice President and Cabinet must send their written 'incapacity' notice to which two specific officials?",
+      "choices": [
+        "President pro tempore of the Senate and the Speaker of the House",
+        "The Chief Justice and the Secretary of State",
+        "The Senate Majority Leader and the Speaker of the House",
+        "The Attorney General and the President pro tempore"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Constitution specifies the Speaker of the House and the President pro tempore of the Senate as the recipients of the declaration of presidential inability.",
+      "tags": [
+        "constitution",
+        "succession",
+        "executive branch"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "If you're ever feeling <b>sufficiently paranoid</b> about presidential succession, to which two specific officials must the Cabinet report a sitting President's 'incapacity'?",
+        "explanationStyled": "The Speaker of the House and the President pro tempore of the Senate. It’s written in the Constitution—you might want to read it sometime.",
+        "hostLeadIn": "Let's see if you understand how government actually functions.",
+        "wrongAnswerQuips": [
+          "Wrong. Clearly you didn't pay attention in civics.",
+          "Incorrect. Do you need a map?",
+          "No. Try harder, if that's even possible."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist-005-1775112423834-4-97el9iqgp",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "hard",
+      "question": "Before everyone started quoting him without reading him, which 1748 work by Montesquieu argued that 'liberty' is only possible if the three government powers are not 'united in the same person'?",
+      "choices": [
+        "The Spirit of the Laws",
+        "Persian Letters",
+        "The Social Contract",
+        "Elements of the Philosophy of Newton"
+      ],
+      "correctIndex": 0,
+      "explanation": "De l'Esprit des Loix (The Spirit of the Laws) is the definitive text that codified the separation of powers into executive, legislative, and judicial branches.",
+      "tags": [
+        "enlightenment",
+        "philosophy",
+        "political theory"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before the masses started <b>pretentiously citing</b> it without reading a single word, which 1748 Montesquieu text argued that power must be divided to preserve liberty?",
+        "explanationStyled": "The Spirit of the Laws. Montesquieu literally mapped out the separation of powers while you were busy forgetting your own name.",
+        "hostLeadIn": "I'm going to lower my expectations for this one.",
+        "wrongAnswerQuips": [
+          "Incorrect. Did you even try?",
+          "Wrong. How utterly predictable.",
+          "No. Keep trying, you might get one right eventually."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist-006-1775112423834-5-jc2na1c2l",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "hard",
+      "question": "In the 1948 election, Strom Thurmond’s Dixiecrat party didn’t just throw a tantrum; they won four states. Which of these was NOT one of them?",
+      "choices": [
+        "Georgia",
+        "Alabama",
+        "Mississippi",
+        "South Carolina"
+      ],
+      "correctIndex": 0,
+      "explanation": "Thurmond won Alabama, Mississippi, South Carolina, and Louisiana. Georgia actually stayed with the mainstream Democratic ticket under Truman.",
+      "tags": [
+        "elections",
+        "dixiecrats",
+        "southern history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1948, Strom Thurmond’s 'Dixiecrats' had a little tantrum and actually carried four states. Which of these was <b>not</b> part of their little rebellion?",
+        "explanationStyled": "Georgia. They actually stuck with Truman, which must have been quite the betrayal for poor old Strom.",
+        "hostLeadIn": "A question about electoral misery. Perfect for your intellect.",
+        "wrongAnswerQuips": [
+          "Incorrect. Maybe stick to modern politics?",
+          "Wrong. That's a pathetic attempt at history.",
+          "No. Did you even read the question?"
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "sci-001-1775112423834-6-6lhnyeglr",
+      "category": "Science",
+      "subcategory": "Physics",
+      "difficulty": "hard",
+      "question": "Since physics isn't just magic for people who like magnets, what is the term for the total expulsion of magnetic flux lines from the interior of a superconductor as it crosses its critical temperature?",
+      "choices": [
+        "Meissner effect",
+        "Bose-Einstein condensation",
+        "Cooper pairing",
+        "London penetration depth"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Meissner effect is a defining characteristic of superconductivity where the material becomes perfectly diamagnetic, expelling all internal magnetic fields.",
+      "tags": [
+        "physics",
+        "superconductivity",
+        "quantum mechanics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Physics isn't just magic, dear. What do we call the total expulsion of magnetic flux from a superconductor as it crosses its <b>critical temperature</b>?",
+        "explanationStyled": "The Meissner effect. It’s when a material decides it simply isn't interested in being magnetic anymore. A bit like me and this conversation.",
+        "hostLeadIn": "Let's see if you understand basic physics or just magnets.",
+        "wrongAnswerQuips": [
+          "Wrong. Don't worry, physics is hard for everyone.",
+          "Incorrect. That was a pitiful guess.",
+          "No. Science obviously isn't your strong suit."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "sci-002-1775112423834-7-heihyca1s",
+      "category": "Science",
+      "subcategory": "Biology",
+      "difficulty": "hard",
+      "question": "If you can graduate from the 'post office' analogy, which specific face of the Golgi apparatus is responsible for receiving vesicles primarily from the Rough Endoplasmic Reticulum?",
+      "choices": [
+        "The cis face",
+        "The trans face",
+        "The medial cisternae",
+        "The trans-Golgi network"
+      ],
+      "correctIndex": 0,
+      "explanation": "The 'cis' face is the receiving side, typically oriented toward the nucleus/ER, while the 'trans' face is the shipping side that sends vesicles to their final destinations.",
+      "tags": [
+        "cell biology",
+        "organelles",
+        "cytology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Assuming you can move beyond simple 'post office' metaphors, which face of the Golgi apparatus receives vesicles directly from the <b>Rough Endoplasmic Reticulum</b>?",
+        "explanationStyled": "The 'cis' face. It's the front door of the cell’s logistics center—not that you'd ever visit.",
+        "hostLeadIn": "Biology. Brace yourself for some actual terminology.",
+        "wrongAnswerQuips": [
+          "Wrong. How embarrassing for you.",
+          "Incorrect. Did you guess, or were you sleeping?",
+          "No. That's just sad."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "sci-003-1775112423834-8-cwmvk4oxj",
+      "category": "Science",
+      "subcategory": "Geology",
+      "difficulty": "hard",
+      "question": "Because calling it a 'wet canyon' is too simple, what is the term for the shallow submerged ridge at the mouth of a fjord that restricts water exchange with the open ocean?",
+      "choices": [
+        "Sill",
+        "Marene",
+        "Thalweg",
+        "Escarpment"
+      ],
+      "correctIndex": 0,
+      "explanation": "Fjords often have a 'sill' at their mouth, a shallower area created by terminal moraines left by retreating glaciers, which can lead to stagnant bottom water in the fjord.",
+      "tags": [
+        "geology",
+        "glaciology",
+        "oceanography"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Calling it a 'wet canyon' is so pedestrian. What is the geological term for that shallow ridge at a fjord's mouth that <b>restricts water exchange</b>?",
+        "explanationStyled": "It’s called a sill. It’s essentially a giant submerged speed bump left behind by glaciers. Fascinating, right?",
+        "hostLeadIn": "Try to keep up with the geology, if you can.",
+        "wrongAnswerQuips": [
+          "Wrong. A toddler could have answered that.",
+          "Incorrect. My patience for your guessing is waning.",
+          "No. How underwhelming."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "sci-004-1775112423834-9-heu66t064",
+      "category": "Science",
+      "subcategory": "Physics",
+      "difficulty": "hard",
+      "question": "The 'strong' nuclear force is great at holding things together, but which specific gauge boson is the actual mediator responsible for this 'color charge' interaction?",
+      "choices": [
+        "Gluon",
+        "W boson",
+        "Pion",
+        "Graviton"
+      ],
+      "correctIndex": 0,
+      "explanation": "While pions mediate the residual strong force between nucleons, gluons are the fundamental gauge bosons that mediate the strong interaction between quarks.",
+      "tags": [
+        "particle physics",
+        "quantum chromodynamics",
+        "fundamental forces"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The strong nuclear force holds the universe together, but which gauge boson is responsible for the interaction between <b>color charges</b>?",
+        "explanationStyled": "The gluon. It’s the glue of the universe, which is more than I can say for your intellectual consistency.",
+        "hostLeadIn": "Prepare yourself for a particle physics reality check.",
+        "wrongAnswerQuips": [
+          "Wrong. Absolutely dismal.",
+          "Incorrect. Do you even know what a boson is?",
+          "No. Try reading a science journal next time."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-001-1775112423834-10-0hl9qphr0",
+      "category": "Pop Culture",
+      "subcategory": "Sitcoms",
+      "difficulty": "hard",
+      "question": "In the meta-experiment known as 'Seinfeld', what was the name of the specific actor who played the version of 'Kramer' in the fictional pilot 'Jerry'?",
+      "choices": [
+        "Jeremy Piven",
+        "Larry Hankin",
+        "Rick Overton",
+        "Kevin Dunn"
+      ],
+      "correctIndex": 1,
+      "explanation": "Larry Hankin played 'Tom Pepper' (the Kramer character) in the pilot within the show; interestingly, Hankin had actually auditioned for the real-life role of Kramer.",
+      "tags": [
+        "seinfeld",
+        "tv history",
+        "meta-television"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the meta-fictional pilot 'Jerry', who was the <b>actual actor</b> tasked with playing the 'Kramer' version for a television audience?",
+        "explanationStyled": "Larry Hankin. The irony is, he auditioned for the actual part and lost. Life is so cruel, isn't it?",
+        "hostLeadIn": "Let’s test your trivial knowledge of a sitcom.",
+        "wrongAnswerQuips": [
+          "Wrong. Clearly not a real fan.",
+          "Incorrect. A tragic guess.",
+          "No. You're hopeless."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-002-1775112423834-11-deytzxjgb",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "hard",
+      "question": "If you think Tony the Tiger was a lock for the Frosted Flakes job, you're wrong. Which of these characters was one of the three original 1952 losers who failed to beat Tony in a popularity contest?",
+      "choices": [
+        "Katy the Kangaroo",
+        "Toucan Sam",
+        "Dig 'Em Frog",
+        "Snap"
+      ],
+      "correctIndex": 0,
+      "explanation": "In 1952, Kellogg's ran a contest between Tony the Tiger, Katy the Kangaroo, Elmo the Elephant, and Newt the Gnu. Tony won; the others were relegated to the trash heap of marketing history.",
+      "tags": [
+        "advertising",
+        "mascots",
+        "brand history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Poor, forgotten mascots. Which character failed to beat Tony the Tiger in the <b>1952 Kellogg's popularity contest</b>?",
+        "explanationStyled": "Katy the Kangaroo. She was discarded, much like your hopes of getting this right.",
+        "hostLeadIn": "Let's see if you remember corporate mascots from 1952.",
+        "wrongAnswerQuips": [
+          "Incorrect. Try again.",
+          "Wrong. Truly forgettable.",
+          "No. Stick to current trends, this is too hard."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-003-1775112423834-12-gmwxa2e7w",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "hard",
+      "question": "Before CBS colonized the 2000s with 'Survivor', it was based on a 1997 Swedish show. What was that original show called?",
+      "choices": [
+        "Expedition Robinson",
+        "The Island of Eden",
+        "Castaway Kings",
+        "Wilderness Trials"
+      ],
+      "correctIndex": 0,
+      "explanation": "Expedition Robinson, created by Charlie Parsons, was the Swedish precursor that established the format for the global 'Survivor' franchise.",
+      "tags": [
+        "reality tv",
+        "television formats",
+        "survivor"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before CBS inflicted 'Survivor' on us, it was a Swedish experiment. What was the <b>original</b> show called?",
+        "explanationStyled": "Expedition Robinson. It birthed the reality genre, for better or—usually—for worse.",
+        "hostLeadIn": "Reality TV. The pinnacle of human culture, right?",
+        "wrongAnswerQuips": [
+          "Wrong. How embarrassing.",
+          "Incorrect. Try harder.",
+          "No. That was a weak attempt."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-004-1775112423834-13-1tprvjfyx",
+      "category": "Pop Culture",
+      "subcategory": "Ad Campaigns",
+      "difficulty": "hard",
+      "question": "The 'Think Small' campaign for Volkswagen didn't just sell cars; it killed the 'Detroit' style of advertising. Who was the specific art director at DDB responsible for its iconic minimalist layout?",
+      "choices": [
+        "Helmut Krone",
+        "Julian Koenig",
+        "Bill Bernbach",
+        "George Lois"
+      ],
+      "correctIndex": 0,
+      "explanation": "While Koenig wrote the copy, Helmut Krone is the art director who designed the revolutionary layout featuring a tiny car and massive white space.",
+      "tags": [
+        "advertising",
+        "graphic design",
+        "marketing history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 'Think Small' ad campaign was legendary, but who was the <b>DDB art director</b> behind that minimalist layout?",
+        "explanationStyled": "Helmut Krone. He realized that less is more—a concept you clearly haven't mastered.",
+        "hostLeadIn": "Marketing history. A bit too sophisticated for you?",
+        "wrongAnswerQuips": [
+          "Incorrect. Not even close.",
+          "Wrong. That's a guess, clearly.",
+          "No. Do some research."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-005-1775112423834-14-50l585uam",
+      "category": "Pop Culture",
+      "subcategory": "1990s Country Music",
+      "difficulty": "hard",
+      "question": "Shania Twain's 'Come On Over' sold enough copies to drown a small nation, but which rock producer (and her then-husband) co-wrote and produced the entire record?",
+      "choices": [
+        "Robert John 'Mutt' Lange",
+        "Rick Rubin",
+        "Jim Steinman",
+        "Brendan O'Brien"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mutt Lange, known for producing Def Leppard and AC/DC, was the architect of Shania Twain's massive crossover success in the late 90s.",
+      "tags": [
+        "music production",
+        "shania twain",
+        "1990s music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Shania Twain’s 'Come On Over' was everywhere. Which rock producer and husband <b>engineered</b> that massive crossover success?",
+        "explanationStyled": "Robert John 'Mutt' Lange. He went from Def Leppard to country pop, proving that money really does transcend taste.",
+        "hostLeadIn": "Let's see if you know anything about music production.",
+        "wrongAnswerQuips": [
+          "Wrong. Pathetic.",
+          "Incorrect. Were you not even listening?",
+          "No. That's a disaster of a guess."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-006-1775112423834-15-d7b904oyx",
+      "category": "Pop Culture",
+      "subcategory": "1990s Popular Music",
+      "difficulty": "hard",
+      "question": "Before they were the 'Spice Girls', the group was manufactured via an open call audition in 1994. What was their original group name before the rebranding?",
+      "choices": [
+        "Touch",
+        "Spice",
+        "Sugar",
+        "The Geri Halliwell Project"
+      ],
+      "correctIndex": 0,
+      "explanation": "The group was originally called 'Touch' and even recorded several demos under that name before firing their original management and becoming the Spice Girls.",
+      "tags": [
+        "spice girls",
+        "1990s pop",
+        "music industry"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before the Spice Girls were the global phenomenon, what was their <b>original group name</b> in 1994?",
+        "explanationStyled": "They were called 'Touch'. A far less marketable name, honestly.",
+        "hostLeadIn": "I suppose you'll know this pop trivia.",
+        "wrongAnswerQuips": [
+          "Wrong. How disappointing.",
+          "Incorrect. Try reading a magazine.",
+          "No. Honestly, why are you guessing?"
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-007-1775112423834-16-m6ufredr4",
+      "category": "Pop Culture",
+      "subcategory": "1980s Popular Music",
+      "difficulty": "hard",
+      "question": "Everyone knows 'Thriller', but which legendary horror actor was paid a mere $600 for his iconic voiceover contribution to the title track?",
+      "choices": [
+        "Vincent Price",
+        "Christopher Lee",
+        "Peter Cushing",
+        "Bela Lugosi"
+      ],
+      "correctIndex": 0,
+      "explanation": "Vincent Price recorded the 'rap' and the laugh in two takes. He reportedly turned down a percentage of the album's royalties in favor of a flat $600 fee—a catastrophic financial decision.",
+      "tags": [
+        "michael jackson",
+        "horror",
+        "1980s music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Michael Jackson’s 'Thriller' featured a legendary horror actor. Who was <b>paid a mere $600</b> for his iconic contribution?",
+        "explanationStyled": "Vincent Price. He chose a flat fee over royalties, which makes him the greatest horror story of all.",
+        "hostLeadIn": "A bit of musical history for the masses.",
+        "wrongAnswerQuips": [
+          "Incorrect. Try again.",
+          "Wrong. That's just sad.",
+          "No. Not even close."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "pop-008-1775112423834-17-0qh5n7vhr",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "hard",
+      "question": "In the music video for 'Hey Ya!', André 3000 plays all eight members of a fictional band. What was the name of this fictional ensemble?",
+      "choices": [
+        "The Love Below",
+        "The Speakerboxxxers",
+        "The Emeralds",
+        "The Velvet Revival"
+      ],
+      "correctIndex": 0,
+      "explanation": "The video features André 3000 playing all members of 'The Love Below', performing on a set designed to mimic the Beatles' debut on Ed Sullivan.",
+      "tags": [
+        "outkast",
+        "music videos",
+        "2000s pop"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the 'Hey Ya!' video, André 3000 portrays every member of a fictional ensemble. What was the <b>name</b> of this group?",
+        "explanationStyled": "The Love Below. A bit too clever for an OutKast fan, perhaps?",
+        "hostLeadIn": "Let's talk about music videos, assuming you watch them.",
+        "wrongAnswerQuips": [
+          "Wrong. Embarrassing.",
+          "Incorrect. Do better.",
+          "No. Try harder next time."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "art-001-1775112423834-18-z6c8c2iyi",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "hard",
+      "question": "Soft Cell's 1981 version of 'Tainted Love' is a classic, but who was the American 'Northern Soul' artist who originally recorded the song in 1964?",
+      "choices": [
+        "Gloria Jones",
+        "Martha Reeves",
+        "Tammi Terrell",
+        "Darlene Love"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gloria Jones recorded the original version in 1964. She later became Marc Bolan's girlfriend and was driving the car during his fatal accident.",
+      "tags": [
+        "cover songs",
+        "northern soul",
+        "synth-pop"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Soft Cell didn't invent 'Tainted Love.' Which <b>'Northern Soul' artist</b> recorded the original in 1964?",
+        "explanationStyled": "Gloria Jones. She deserves the credit, despite you likely having no idea who she is.",
+        "hostLeadIn": "Music trivia. Brace yourself for some real history.",
+        "wrongAnswerQuips": [
+          "Incorrect. How dull.",
+          "Wrong. Did you guess randomly?",
+          "No. That was a bad guess."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "art-002-1775112423834-19-jx9gd4sq0",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "hard",
+      "question": "Willie Nelson wrote 'Crazy', but he sold the rights to a different song for $50 to buy food for his family early in his career. Which song was it?",
+      "choices": [
+        "Family Bible",
+        "Night Life",
+        "Hello Walls",
+        "Funny How Time Slips Away"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nelson sold 'Family Bible' to Claude Gray's guitarist for $50 because he was broke. It became a huge hit for Gray in 1960.",
+      "tags": [
+        "willie nelson",
+        "songwriting",
+        "country music history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Willie Nelson wrote 'Crazy', but he sold which other song for <b>$50</b> because he was desperate?",
+        "explanationStyled": "Family Bible. He sold it for a pittance to feed his family. Tragic, yet common.",
+        "hostLeadIn": "Let's test your knowledge of country music lore.",
+        "wrongAnswerQuips": [
+          "Wrong. Keep trying.",
+          "Incorrect. You're failing.",
+          "No. Try to focus."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "art-003-1775112423834-20-ulb3d9200",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "hard",
+      "question": "Sous-vide isn't just for pretentious home cooks; which French chef is credited with 'discovering' the method for restaurants in 1974 while trying to reduce foie gras shrinkage?",
+      "choices": [
+        "Georges Pralus",
+        "Paul Bocuse",
+        "Auguste Escoffier",
+        "Alain Ducasse"
+      ],
+      "correctIndex": 0,
+      "explanation": "Georges Pralus of the Restaurant Troisgros in Roanne adopted the technique to cook foie gras, finding it kept the fat from melting away and improved texture.",
+      "tags": [
+        "culinary history",
+        "modernist cuisine",
+        "french chefs"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Sous-vide is the favorite toy of chefs. Which Frenchman <b>'discovered'</b> it in 1974 while obsessing over foie gras shrinkage?",
+        "explanationStyled": "Georges Pralus. He wanted to cook fancy duck liver without it disappearing, because that's the kind of thing French chefs do.",
+        "hostLeadIn": "Cooking. Can you handle something culinary?",
+        "wrongAnswerQuips": [
+          "Incorrect. Obviously wrong.",
+          "Wrong. Did you guess?",
+          "No. That's a sad answer."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "art-004-1775112423834-21-sjxsyiuyk",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "hard",
+      "question": "If you follow Escoffier's rigid classification, which of the five mother sauces is the only one traditionally made with a 'blond' roux rather than a white or brown one?",
+      "choices": [
+        "Velouté",
+        "Béchamel",
+        "Espagnole",
+        "Allemande"
+      ],
+      "correctIndex": 0,
+      "explanation": "Velouté uses a blond roux (cooked slightly longer than white) combined with a light stock (chicken, veal, or fish).",
+      "tags": [
+        "culinary arts",
+        "french cuisine",
+        "escoffier"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Among the five mother sauces, which is the <b>only one</b> traditionally made with a 'blond' roux?",
+        "explanationStyled": "Velouté. It’s stock and roux, simmered to a state of acceptable mediocrity—much like your performance today.",
+        "hostLeadIn": "Let’s see if you know basic French cooking.",
+        "wrongAnswerQuips": [
+          "Wrong. How embarrassing.",
+          "Incorrect. Try a cookbook.",
+          "No. That was entirely wrong."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "spo-001-1775112423834-22-7hrzzlpbi",
+      "category": "Sports",
+      "subcategory": "Basketball",
+      "difficulty": "hard",
+      "question": "John Stockton's assist record (15,806) is widely considered unbreakable. Who is the only other player in NBA history to even cross the 12,000-assist threshold?",
+      "choices": [
+        "Jason Kidd",
+        "Chris Paul",
+        "Mark Jackson",
+        "Steve Nash"
+      ],
+      "correctIndex": 0,
+      "explanation": "Jason Kidd retired with 12,091 assists. Even though he is #2 all-time, he is still nearly 4,000 assists behind Stockton.",
+      "tags": [
+        "nba",
+        "basketball stats",
+        "john stockton"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "John Stockton's assist record is untouchable. Who is the only other player in history to <b>ever</b> cross the 12,000 threshold?",
+        "explanationStyled": "Jason Kidd. He’s second, but he’s basically in another league—a league far below Stockton.",
+        "hostLeadIn": "Basketball stats. Not for the faint of heart.",
+        "wrongAnswerQuips": [
+          "Incorrect. How predictable.",
+          "Wrong. Are you even watching the game?",
+          "No. Try to learn the stats."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "spo-002-1775112423834-23-i34h9pb38",
+      "category": "Sports",
+      "subcategory": "Tennis",
+      "difficulty": "hard",
+      "question": "The French Open's 'clay' courts aren't actually clay. What is the specific material used for the thin top layer of the courts at Roland Garros?",
+      "choices": [
+        "Crushed white limestone and brick dust",
+        "Natural terra cotta",
+        "Pulverized volcanic rock",
+        "Synthetic polymer-coated sand"
+      ],
+      "correctIndex": 0,
+      "explanation": "The courts consist of five layers, but the 'clay' is actually a base of white limestone covered with a few millimeters of powdered red brick dust.",
+      "tags": [
+        "tennis",
+        "roland garros",
+        "sports technology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Roland Garros isn't actually dirt. What is the material used for the <b>thin top layer</b> of those courts?",
+        "explanationStyled": "Crushed brick dust over limestone. It’s basically glorified rubble, which is ironic given its prestige.",
+        "hostLeadIn": "Sports knowledge. Keep up, if you can.",
+        "wrongAnswerQuips": [
+          "Wrong. Do better.",
+          "Incorrect. My goodness.",
+          "No. How underwhelming."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "spo-003-1775112423834-24-f6abwc39v",
+      "category": "Sports",
+      "subcategory": "Baseball",
+      "difficulty": "hard",
+      "question": "Cal Ripken Jr. played 2,632 consecutive games, but which pitcher holds the somewhat more painful record for the most consecutive 'complete games' started and finished at 202?",
+      "choices": [
+        "Jack Taylor",
+        "Cy Young",
+        "Walter Johnson",
+        "Grover Cleveland Alexander"
+      ],
+      "correctIndex": 0,
+      "explanation": "Between 1901 and 1906, Jack Taylor threw 202 consecutive complete games, a record reflecting a completely different era of physical durability (or lack of medical oversight).",
+      "tags": [
+        "mlb",
+        "baseball records",
+        "pitching"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Cal Ripken Jr. was durable, but which pitcher threw <b>202 consecutive</b> complete games to set a record for sheer punishment?",
+        "explanationStyled": "Jack Taylor. He played in an era where 'pitch count' wasn't even a whisper in a doctor's mind.",
+        "hostLeadIn": "Baseball trivia. Try to hit a home run.",
+        "wrongAnswerQuips": [
+          "Incorrect. A dismal guess.",
+          "Wrong. Clearly guessing.",
+          "No. How uninspired."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "spo-004-1775112423834-25-542yu0wm7",
+      "category": "Sports",
+      "subcategory": "Golf",
+      "difficulty": "hard",
+      "question": "In 1935, Gene Sarazen hit 'the shot heard 'round the world' at the Masters to help secure his Career Grand Slam. What was the specific club and score on that par-5 15th hole?",
+      "choices": [
+        "4-wood for an Albatross",
+        "3-iron for an Eagle",
+        "5-wood for a Hole-in-one",
+        "7-iron for a Birdie"
+      ],
+      "correctIndex": 0,
+      "explanation": "Sarazen used a 4-wood (spoon) from 235 yards out to card an albatross (double eagle) on the 15th, forcing a playoff he eventually won.",
+      "tags": [
+        "golf history",
+        "masters",
+        "gene sarazen"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1935, Gene Sarazen hit the 'shot heard 'round the world.' What was the club and <b>score</b> on that par-5 hole?",
+        "explanationStyled": "4-wood for an albatross. It’s the kind of shot that happens once in a lifetime, unlike your incorrect guesses.",
+        "hostLeadIn": "Golf trivia. Try not to miss the green.",
+        "wrongAnswerQuips": [
+          "Wrong. That's just sad.",
+          "Incorrect. Try to pay attention.",
+          "No. How embarrassing."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "tech-001-1775112423834-26-7xssv17pk",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "If you're using 'chmod' like a professional rather than a script kiddie, what octal permission code would you use to grant 'read and execute' to everyone, but 'write' only to the owner?",
+      "choices": [
+        "755",
+        "644",
+        "777",
+        "711"
+      ],
+      "correctIndex": 0,
+      "explanation": "755 translates to: Owner (Read/Write/Execute = 4+2+1=7), Group (Read/Execute = 4+1=5), and Others (Read/Execute = 4+1=5).",
+      "tags": [
+        "linux",
+        "permissions",
+        "cybersecurity"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "If you want to use 'chmod' properly, what code grants 'read and execute' to everyone, but 'write' <b>only</b> to the owner?",
+        "explanationStyled": "755. It’s fundamental Linux security, but I suspect you're just clicking buttons at random.",
+        "hostLeadIn": "Let’s see if you can manage basic terminal commands.",
+        "wrongAnswerQuips": [
+          "Incorrect. Do you even Linux?",
+          "Wrong. Embarrassing for you.",
+          "No. Stick to the GUI."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "tech-002-1775112423834-27-hpt7tofxh",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "Mac OS X 10.0 'Cheetah' was a disaster, but which version of the OS was the first to actually be sold on a disc that could boot the computer without a pre-existing OS 9 installation?",
+      "choices": [
+        "10.1 Puma",
+        "10.0 Cheetah",
+        "10.2 Jaguar",
+        "10.3 Panther"
+      ],
+      "correctIndex": 2,
+      "explanation": "10.2 Jaguar was the first version to truly stand on its own and signaled the end of the transition from the 'Classic' Mac OS environment.",
+      "tags": [
+        "apple",
+        "macos",
+        "computing history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Cheetah was an abomination. Which version of Mac OS X was the first to boot <b>independently</b>, without needing a classic OS 9 installation?",
+        "explanationStyled": "10.2 Jaguar. It was the moment Apple finally decided to act like a modern company.",
+        "hostLeadIn": "Operating systems. Try to remember your tech history.",
+        "wrongAnswerQuips": [
+          "Wrong. How depressing.",
+          "Incorrect. Did you even use a Mac?",
+          "No. Try harder."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "tech-003-1775112423834-28-qzdiztmrd",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "Debian is the grandfather of Linux distributions, but what is the unique naming convention for every one of its official releases?",
+      "choices": [
+        "Characters from Toy Story",
+        "Names of astronomical nebulae",
+        "Types of rare gemstones",
+        "Mathematical constants"
+      ],
+      "correctIndex": 0,
+      "explanation": "Since its inception, Debian versions have been named after characters from the film Toy Story (e.g., Buzz, Rex, Bo, Hamm, Sid).",
+      "tags": [
+        "linux",
+        "debian",
+        "open source"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Debian is legendary. What is the <b>unique naming convention</b> for every single one of its releases?",
+        "explanationStyled": "Toy Story characters. The developers have some truly odd priorities, but it's consistent at least.",
+        "hostLeadIn": "Linux history. A test for the actual geeks.",
+        "wrongAnswerQuips": [
+          "Incorrect. Not even close.",
+          "Wrong. Truly uninspired.",
+          "No. Try to learn the culture."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "tech-004-1775112423834-29-p2akx5z4q",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "The Windows Registry is a nightmare to navigate. Which of the five 'Root Hives' contains the file extension associations and OLE class registration data?",
+      "choices": [
+        "HKEY_CLASSES_ROOT",
+        "HKEY_CURRENT_USER",
+        "HKEY_LOCAL_MACHINE",
+        "HKEY_USERS"
+      ],
+      "correctIndex": 0,
+      "explanation": "HKEY_CLASSES_ROOT (HKCR) stores information about registered applications, including file associations and COM/OLE object data.",
+      "tags": [
+        "windows",
+        "registry",
+        "it infrastructure"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Windows Registry is a mess. Which 'Root Hive' holds the <b>file associations</b> and OLE registration data?",
+        "explanationStyled": "HKEY_CLASSES_ROOT. It’s the dungeon where Windows keeps all its confusing data, and you’re clearly lost in it.",
+        "hostLeadIn": "Let's see if you can handle the registry.",
+        "wrongAnswerQuips": [
+          "Wrong. How embarrassing.",
+          "Incorrect. Do you need a manual?",
+          "No. Total failure."
+        ]
+      },
+      "timestamp": 1775112423834
+    },
+    {
+      "id": "hist_01-1775112585404-0-8js1jwjuy",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "hard",
+      "question": "Ignoring the mainstream gloss, which activist co-founded the Mississippi Freedom Democratic Party and disrupted the 1964 DNC with her 'sick and tired' testimony?",
+      "choices": [
+        "Ella Baker",
+        "Fannie Lou Hamer",
+        "Septima Clark",
+        "Diane Nash"
+      ],
+      "correctIndex": 1,
+      "explanation": "Fannie Lou Hamer's testimony about the violence she faced while registering to vote was so impactful that President Lyndon B. Johnson called an impromptu press conference to divert media coverage.",
+      "tags": [
+        "Civil Rights",
+        "1960s",
+        "MFDP"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Forget the sanitized textbook version; which activist co-founded the <b>Mississippi Freedom Democratic Party</b> and famously shamed the establishment in 1964?",
+        "explanationStyled": "It was <b>Fannie Lou Hamer</b>. Her harrowing testimony on voter registration violence was so inconvenient for the political elite that LBJ frantically called a press conference just to silence her.",
+        "hostLeadIn": "Prepare to be embarrassed by your lack of historical depth.",
+        "wrongAnswerQuips": [
+          "Are you guessing blindly now?",
+          "Educate yourself, please.",
+          "Not even remotely close."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_02-1775112585404-1-1eyq7256l",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "medium",
+      "question": "The 1908 Supreme Court case Muller v. Oregon, while appearing to protect workers, actually justified sex discrimination by limiting the labor hours of which group?",
+      "choices": [
+        "Child laborers",
+        "Coal miners",
+        "Female factory workers",
+        "Railroad engineers"
+      ],
+      "correctIndex": 2,
+      "explanation": "The court used the 'Brandeis Brief' to argue that women's physical structure and maternal functions necessitated state protection, setting a precedent for gender-based labor laws.",
+      "tags": [
+        "Supreme Court",
+        "Labor History",
+        "Progressive Era"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 1908 <b>Muller v. Oregon</b> case claimed to 'protect' workers, but which group was actually being condescendingly sidelined by the court?",
+        "explanationStyled": "It was <b>female factory workers</b>. They used the 'Brandeis Brief' to argue women were too fragile for labor, establishing a precedent that basically infantilized an entire workforce.",
+        "hostLeadIn": "Let us see if you can parse legal history without hurting yourself.",
+        "wrongAnswerQuips": [
+          "A fascinatingly wrong choice.",
+          "Do try to pay attention.",
+          "That is just adorable."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_03-1775112585404-2-f4uu5m73s",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "hard",
+      "question": "In the 1953 geopolitical chess match known as Operation Ajax, the CIA and MI6 orchestrated a coup to remove which democratically elected Prime Minister?",
+      "choices": [
+        "Jacobo Árbenz",
+        "Patrice Lumumba",
+        "Mohammad Mosaddegh",
+        "Salvador Allende"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mohammad Mosaddegh was targeted primarily due to his nationalization of the Anglo-Iranian Oil Company, marking a pivotal moment in Cold War interventionism.",
+      "tags": [
+        "Cold War",
+        "CIA",
+        "Middle East"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the 1953 geopolitical chess match called <b>Operation Ajax</b>, which democratically elected leader did the CIA and MI6 decide needed to 'disappear'?",
+        "explanationStyled": "It was <b>Mohammad Mosaddegh</b>. Naturally, the West preferred regime change over him daring to nationalize their precious oil assets.",
+        "hostLeadIn": "Try to keep up with the machinations of the Cold War.",
+        "wrongAnswerQuips": [
+          "A truly mediocre attempt at history.",
+          "Did you sleep through school?",
+          "Wrong continent, wrong century, wrong life."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_04-1775112585404-3-l1eo9ze6p",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "medium",
+      "question": "Since politicians love creative borders, the term 'gerrymandering' was coined after a 19th-century political cartoon mocked a district map from which state?",
+      "choices": [
+        "New York",
+        "Massachusetts",
+        "Virginia",
+        "Pennsylvania"
+      ],
+      "correctIndex": 1,
+      "explanation": "The term combined the name of Governor Elbridge Gerry with 'salamander' to describe the bizarrely shaped district he approved in Massachusetts in 1812.",
+      "tags": [
+        "Politics",
+        "Etymology",
+        "Redistricting"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Politicians have been cheating with maps for centuries; <b>gerrymandering</b> was coined to mock a bizarrely shaped district in which state?",
+        "explanationStyled": "It was <b>Massachusetts</b>, back in 1812. They combined Governor Elbridge Gerry’s name with a salamander because, well, look at the map—it’s pathetic.",
+        "hostLeadIn": "A question about political corruption, as if that is a new concept.",
+        "wrongAnswerQuips": [
+          "I expected better, frankly.",
+          "Incorrect, as per usual.",
+          "Hardly a stellar performance."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_05-1775112585404-4-o037kap8h",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "hard",
+      "question": "Which Enlightenment thinker's 1764 treatise 'On Crimes and Punishments' was so influential that it basically dictated the terms of the U.S. Constitution's Eighth Amendment?",
+      "choices": [
+        "Cesare Beccaria",
+        "Baron de Montesquieu",
+        "John Locke",
+        "Voltaire"
+      ],
+      "correctIndex": 0,
+      "explanation": "Cesare Beccaria's work argued that the certainty of punishment is a more effective deterrent than its severity, fundamentally shaping modern Western criminal justice.",
+      "tags": [
+        "Philosophy",
+        "Law",
+        "Enlightenment"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Enlightenment thinker’s 1764 treatise actually dared to suggest that justice shouldn't be cruel, effectively birthing the <b>Eighth Amendment</b>?",
+        "explanationStyled": "That would be <b>Cesare Beccaria</b>. He argued that certainty of punishment outweighs severity, a concept far too nuanced for the simpletons of his era to grasp.",
+        "hostLeadIn": "Let us test your grasp of the intellectual foundation of your own country.",
+        "wrongAnswerQuips": [
+          "A pedestrian mistake.",
+          "Keep guessing, you might eventually hit the mark.",
+          "How utterly pedestrian."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_06-1775112585404-5-5qc3tw36p",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "medium",
+      "question": "In the legendary 1960 visual disaster for Richard Nixon, which Chicago TV station served as the host for the first-ever televised presidential debate?",
+      "choices": [
+        "WGN-TV",
+        "WBBM-TV",
+        "WLS-TV",
+        "WMAQ-TV"
+      ],
+      "correctIndex": 1,
+      "explanation": "The first debate took place at the studios of WBBM-TV, a CBS affiliate, where Kennedy's prepared appearance significantly outperformed a sickly, un-made-up Nixon.",
+      "tags": [
+        "Presidential Elections",
+        "Television",
+        "1960s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the 1960 televised disaster for Richard Nixon, which Chicago TV station hosted the very first <b>presidential debate</b>?",
+        "explanationStyled": "It was <b>WBBM-TV</b>. Poor Nixon looked like a corpse, while Kennedy looked like a star. Television—the great equalizer of the intellectually vapid.",
+        "hostLeadIn": "Oh, goody, another question about television's role in the decay of politics.",
+        "wrongAnswerQuips": [
+          "Staggering incompetence.",
+          "Try again, champ.",
+          "Are you even trying?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_07-1775112585404-6-5adhlwm5z",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "medium",
+      "question": "In 1960, four college students from the Agricultural and Technical College of North Carolina launched a sit-in at a segregated Woolworth's in which city?",
+      "choices": [
+        "Raleigh",
+        "Charlotte",
+        "Greensboro",
+        "Durham"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Greensboro Four initiated a movement that spread rapidly through the South, leading to the desegregation of the Woolworth's lunch counter by July of that year.",
+      "tags": [
+        "Civil Rights",
+        "Protest",
+        "North Carolina"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1960, four students launched a sit-in at a segregated Woolworth's lunch counter. Do you even know which <b>city</b> they were in?",
+        "explanationStyled": "It was <b>Greensboro</b>. Their act of basic human decency sparked a movement that, quite frankly, was long overdue.",
+        "hostLeadIn": "History is a series of brave acts, not that you would know.",
+        "wrongAnswerQuips": [
+          "Clearly, your geography is as weak as your history.",
+          "Wrong. Shocking.",
+          "Do try to be useful."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_08-1775112585404-7-4hqt95qaw",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "medium",
+      "question": "After decades of struggle, the 19th Amendment only became law in 1920 after which state's legislature provided the narrow, final 'Perfect 36' ratification vote?",
+      "choices": [
+        "Tennessee",
+        "Kentucky",
+        "North Carolina",
+        "Virginia"
+      ],
+      "correctIndex": 0,
+      "explanation": "Tennessee's Harry T. Burn famously changed his vote to 'yea' at the last minute after receiving a letter from his mother telling him to 'be a good boy' and help Mrs. Catt.",
+      "tags": [
+        "Constitutional Amendments",
+        "Suffrage",
+        "Women's History"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 19th Amendment barely scraped by in 1920; which state provided the 'Perfect 36' final <b>ratification</b> vote?",
+        "explanationStyled": "It was <b>Tennessee</b>. Harry T. Burn did as his mother asked and changed his vote, proving that even in politics, mothers are the only ones with sense.",
+        "hostLeadIn": "Let's see if you can identify a crucial turning point for democracy.",
+        "wrongAnswerQuips": [
+          "A truly underwhelming answer.",
+          "Wrong. Do better.",
+          "Are you guessing?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_09-1775112585404-8-9rsh5wunz",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "medium",
+      "question": "While the PR team called it the 'Marshall Plan,' what was the actually boring formal name of the 1948 initiative to rebuild post-WWII Western Europe?",
+      "choices": [
+        "The Truman Doctrine",
+        "The European Recovery Program",
+        "The Atlantic Charter",
+        "The Warsaw Pact"
+      ],
+      "correctIndex": 1,
+      "explanation": "The European Recovery Program (ERP) provided over $13 billion in aid, ostensibly to rebuild but also to prevent the spread of Soviet communism.",
+      "tags": [
+        "Post-War",
+        "Economics",
+        "Diplomacy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "They rebranded the 1948 initiative to rebuild Europe as the 'Marshall Plan,' but what was the actual, <b>boring formal name</b>?",
+        "explanationStyled": "The <b>European Recovery Program</b>. Bureaucrats love giving grand initiatives dreadfully dry titles to hide their true geopolitical intentions.",
+        "hostLeadIn": "Prepare for a question that requires actual reading comprehension.",
+        "wrongAnswerQuips": [
+          "How disappointing.",
+          "Not a chance.",
+          "Are you even trying to win?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "hist_10-1775112585404-9-yh40wnebj",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "hard",
+      "question": "In the 'Corrupt Bargain' of 1824, which candidate managed the impressive feat of winning both the popular and electoral plurality but still losing the presidency?",
+      "choices": [
+        "John Quincy Adams",
+        "Henry Clay",
+        "William H. Crawford",
+        "Andrew Jackson"
+      ],
+      "correctIndex": 3,
+      "explanation": "Because no candidate held an absolute majority of electoral votes, the House of Representatives chose John Quincy Adams after Henry Clay threw his support behind him.",
+      "tags": [
+        "19th Century",
+        "Andrew Jackson",
+        "Political Controversy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "During the 'Corrupt Bargain' of 1824, who won the popular vote but still managed to <b>lose the presidency</b>?",
+        "explanationStyled": "It was <b>Andrew Jackson</b>. He learned the hard way that democracy in the House of Representatives is more about wheeling and dealing than actual votes.",
+        "hostLeadIn": "Let us see if you understand the failures of the electoral process.",
+        "wrongAnswerQuips": [
+          "Try to use your brain.",
+          "Utterly incorrect.",
+          "Keep guessing; it's amusing."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "sci_01-1775112585404-10-xzhnd1581",
+      "category": "Science",
+      "subcategory": "Physics",
+      "difficulty": "medium",
+      "question": "What's the name for the physics magic trick where a liquid skitters across a surface significantly hotter than its boiling point on a cushion of vapor?",
+      "choices": [
+        "The Doppler Effect",
+        "The Leidenfrost Effect",
+        "The Tyndall Effect",
+        "The Bernoulli Principle"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Leidenfrost Effect occurs when the bottom of a drop evaporates instantly, creating a vapor layer that slows further heat transfer and allows the drop to levitate.",
+      "tags": [
+        "Thermodynamics",
+        "Physics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What do we call the physics trick where a liquid skitters on a <b>vapor cushion</b> over a hot surface?",
+        "explanationStyled": "That is the <b>Leidenfrost Effect</b>. It is simple thermodynamics, though I suppose it qualifies as magic for the mathematically illiterate.",
+        "hostLeadIn": "I hope you have some grasp of basic physics principles.",
+        "wrongAnswerQuips": [
+          "You are embarrassing yourself.",
+          "Not even close.",
+          "Maybe try science fiction instead?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "sci_02-1775112585404-11-oqsvceeoe",
+      "category": "Science",
+      "subcategory": "Biology",
+      "difficulty": "hard",
+      "question": "If we are talking sheer terrestrial acceleration, which land mammal can hit 60 mph in 3 seconds, leaving basically everything else in the dust?",
+      "choices": [
+        "Pronghorn",
+        "Cheetah",
+        "Peregrine Falcon",
+        "Greyhound"
+      ],
+      "correctIndex": 1,
+      "explanation": "The cheetah's acceleration is comparable to a high-performance sports car, utilizing its semi-retractable claws and flexible spine for maximum traction and stride.",
+      "tags": [
+        "Zoology",
+        "Speed"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which terrestrial mammal exhibits such absurd <b>acceleration</b> that it hits 60 mph in a mere three seconds?",
+        "explanationStyled": "It is the <b>cheetah</b>. Their physiological efficiency is quite frankly enviable, unlike your performance here.",
+        "hostLeadIn": "Here is a question for the simple-minded biological observer.",
+        "wrongAnswerQuips": [
+          "A laughable answer.",
+          "Clearly you don't watch nature documentaries.",
+          "Wrong, obviously."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "sci_03-1775112585404-12-s7pvhvod6",
+      "category": "Science",
+      "subcategory": "Atmospheric Science",
+      "difficulty": "medium",
+      "question": "At what altitude, specifically 100 kilometers above sea level, do we officially stop calling it 'sky' and start calling it 'space' according to the FAI?",
+      "choices": [
+        "The Armstrong Limit",
+        "The Stratopause",
+        "The Kármán Line",
+        "The Exobase"
+      ],
+      "correctIndex": 2,
+      "explanation": "Named after Theodore von Kármán, the Kármán Line is the altitude where the atmosphere becomes too thin to support aeronautical flight using lift.",
+      "tags": [
+        "Aeronautics",
+        "Space"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "At what specific altitude, measured in kilometers, does the atmosphere end and <b>space</b> begin?",
+        "explanationStyled": "That would be the <b>Kármán Line</b> at 100 kilometers. It is the threshold where aeronautics become utterly useless.",
+        "hostLeadIn": "I assume you have some notion of where the atmosphere ends?",
+        "wrongAnswerQuips": [
+          "Incorrect, as I expected.",
+          "Is that your best guess?",
+          "Don't quit your day job."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "sci_04-1775112585404-13-r84omym8d",
+      "category": "Science",
+      "subcategory": "Materials Science",
+      "difficulty": "medium",
+      "question": "In 1995, scientists finally created which 'fifth' state of matter where atoms are so cold they lose their individual identities and act as a single wave?",
+      "choices": [
+        "Plasma",
+        "Supercritical Fluid",
+        "Bose-Einstein Condensate",
+        "Degenerate Matter"
+      ],
+      "correctIndex": 2,
+      "explanation": "Bose-Einstein Condensates were first achieved by Eric Cornell and Carl Wieman using lasers and magnetic traps to cool rubidium gas to nanokelvin temperatures.",
+      "tags": [
+        "Quantum Physics",
+        "States of Matter"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1995, scientists chilled atoms to near absolute zero to create which <b>fifth state of matter</b>?",
+        "explanationStyled": "The <b>Bose-Einstein Condensate</b>. When atoms act as a single wave, it is truly beautiful, though likely beyond your comprehension.",
+        "hostLeadIn": "Let us see if you can identify a fundamental state of matter.",
+        "wrongAnswerQuips": [
+          "Fascinatingly wrong.",
+          "Try again, slowly.",
+          "How disappointing."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_01-1775112585404-14-e8qyex3zf",
+      "category": "Pop Culture",
+      "subcategory": "Sitcoms",
+      "difficulty": "medium",
+      "question": "Despite 'I Love Lucy' getting all the credit for being 'edgy,' which 1947 sitcom was actually the first to show a married couple in the same bed?",
+      "choices": [
+        "I Love Lucy",
+        "The Honeymooners",
+        "Mary Kay and Johnny",
+        "The Dick Van Dyke Show"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mary Kay and Johnny Stearns were a real-life married couple whose show pioneered many sitcom tropes, including the depiction of a shared bed and pregnancy.",
+      "tags": [
+        "TV History",
+        "Sitcoms"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1947 sitcom was the actual pioneer of showing a married couple in a <b>shared bed</b>?",
+        "explanationStyled": "It was <b>Mary Kay and Johnny</b>. They were the original trendsetters, despite you probably thinking it was something much more modern.",
+        "hostLeadIn": "History of television? Doubtful you know anything beyond mindless streaming.",
+        "wrongAnswerQuips": [
+          "Not even close.",
+          "A truly uninspired answer.",
+          "Do try to be accurate."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_02-1775112585404-15-g179z2iok",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "easy",
+      "question": "For some reason, people actually like insurance mascots. What is the official first name of the animated gecko representing GEICO?",
+      "choices": [
+        "Gordon",
+        "Martin",
+        "Geoffrey",
+        "Gary"
+      ],
+      "correctIndex": 1,
+      "explanation": "The GEICO Gecko is named Martin, named after the Martin Agency, the advertising firm that originally developed the character in 1999.",
+      "tags": [
+        "Advertising",
+        "Mascots"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "We are stuck with insurance mascots, but what is the official <b>first name</b> of that animated GEICO lizard?",
+        "explanationStyled": "His name is <b>Martin</b>, chosen to honor the agency that created the creature. A trivia bit as pointless as his existence.",
+        "hostLeadIn": "Let's see if you waste your time on pop culture trivia.",
+        "wrongAnswerQuips": [
+          "Wrong again, unsurprisingly.",
+          "That is simply incorrect.",
+          "I expected nothing less."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_03-1775112585404-16-30wutldyh",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "medium",
+      "question": "Back when reality TV was almost a social experiment, which corporate strategist became the first 'Sole Survivor' in the Borneo season in 2000?",
+      "choices": [
+        "Kelly Wiglesworth",
+        "Rudy Boesch",
+        "Richard Hatch",
+        "Colby Donaldson"
+      ],
+      "correctIndex": 2,
+      "explanation": "Richard Hatch's strategic 'alliance' gameplay set the template for all future seasons of the show, leading to his 4-3 victory over Kelly Wiglesworth.",
+      "tags": [
+        "Reality TV",
+        "2000s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who was the strategist that manipulated his way to becoming the very first <b>'Sole Survivor'</b> in 2000?",
+        "explanationStyled": "It was <b>Richard Hatch</b>. His alliance-based gameplay was a masterclass in social ruthlessness, a quality you clearly lack.",
+        "hostLeadIn": "Reality television—the pinnacle of your intellectual diet, no doubt.",
+        "wrongAnswerQuips": [
+          "Incorrect. Pathetic.",
+          "Hardly a clever choice.",
+          "No, try again."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_04-1775112585404-17-hlm90csb0",
+      "category": "Pop Culture",
+      "subcategory": "Ad Campaigns",
+      "difficulty": "hard",
+      "question": "In a masterclass of marketing manipulation, copywriter Frances Gerety created the 'A Diamond is Forever' slogan in 1947 for which giant?",
+      "choices": [
+        "Tiffany & Co.",
+        "Cartier",
+        "De Beers",
+        "Zales"
+      ],
+      "correctIndex": 2,
+      "explanation": "The De Beers campaign successfully convinced the public that a diamond ring was a mandatory symbol of engagement, controlling both supply and demand for decades.",
+      "tags": [
+        "Advertising",
+        "Business History"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Frances Gerety created the 'A Diamond is Forever' slogan for which <b>gemstone titan</b> in 1947?",
+        "explanationStyled": "It was <b>De Beers</b>. They manipulated the entire world into believing diamonds are essential for marriage. Well played, corporate greed.",
+        "hostLeadIn": "I’m sure you’re very familiar with consumerist marketing traps.",
+        "wrongAnswerQuips": [
+          "A predictable failure.",
+          "Don't give up your day job.",
+          "How quaintly wrong."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_05-1775112585404-18-iqchwqz5i",
+      "category": "Pop Culture",
+      "subcategory": "1980s Popular Music",
+      "difficulty": "medium",
+      "question": "The Bangles' 1986 hit 'Manic Monday' was actually a charity case written by which legendary artist using the pseudonym 'Christopher'?",
+      "choices": [
+        "David Bowie",
+        "Prince",
+        "George Michael",
+        "Bruce Springsteen"
+      ],
+      "correctIndex": 1,
+      "explanation": "Prince originally wrote the song for the group Apollonia 6 in 1984 but later gave it to The Bangles after becoming a fan of their sound.",
+      "tags": [
+        "1980s Music",
+        "Songwriting"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Bangles’ 'Manic Monday' was written by which legendary artist using the pseudonym <b>'Christopher'</b>?",
+        "explanationStyled": "That would be <b>Prince</b>. A genius songwriter who could write a hit for anyone, including this band.",
+        "hostLeadIn": "Try to identify an artist of actual substance.",
+        "wrongAnswerQuips": [
+          "Incorrect. How tragic.",
+          "Do try to be correct.",
+          "Struggling, are we?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_06-1775112585404-19-lwv06wkx8",
+      "category": "Pop Culture",
+      "subcategory": "1990s Country Music",
+      "difficulty": "easy",
+      "question": "Which 1997 Shania Twain album is so successful it remains the best-selling studio album by a female act in the history of music?",
+      "choices": [
+        "The Woman in Me",
+        "Up!",
+        "Come On Over",
+        "Shania Twain"
+      ],
+      "correctIndex": 2,
+      "explanation": "'Come On Over' has sold over 40 million copies worldwide and holds the record for the best-selling country album of all time.",
+      "tags": [
+        "Country Music",
+        "Records",
+        "1990s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1997 album by <b>Shania Twain</b> remains the best-selling studio album by a female act ever?",
+        "explanationStyled": "'<b>Come On Over</b>.' A massive success that clearly proves people will buy anything if it’s catchy enough.",
+        "hostLeadIn": "I’m guessing your music taste is as mainstream as your intellect.",
+        "wrongAnswerQuips": [
+          "A pathetic guess.",
+          "No. Try harder.",
+          "Are you even awake?"
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "pop_07-1775112585404-20-2e8vglvix",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "hard",
+      "question": "In 2003, which OutKast track proved that digital music was here to stay by becoming the first song to reach one million legal downloads?",
+      "choices": [
+        "Ms. Jackson",
+        "The Way You Move",
+        "Hey Ya!",
+        "Roses"
+      ],
+      "correctIndex": 2,
+      "explanation": "'Hey Ya!' was a cultural juggernaut that dominated both radio and the emerging digital marketplace of the early 2000s.",
+      "tags": [
+        "Music History",
+        "Digital Media",
+        "2000s"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 2003, which <b>OutKast track</b> became the first to reach one million legal digital downloads?",
+        "explanationStyled": "It was '<b>Hey Ya!</b>.' A song that managed to infect everyone’s brain and successfully pioneered the digital music era.",
+        "hostLeadIn": "Surely even you have heard this track at a wedding.",
+        "wrongAnswerQuips": [
+          "Wrong. How embarrassing.",
+          "That is incorrect, obviously.",
+          "Do try to focus."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_01-1775112585404-21-jjgsvvd9u",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "medium",
+      "question": "Lou Bega made a career out of which 1949 mambo instrumental originally composed by the 'King of the Mambo,' Pérez Prado?",
+      "choices": [
+        "Tequila",
+        "Mambo No. 5",
+        "Oye Como Va",
+        "Cherry Pink and Apple Blossom White"
+      ],
+      "correctIndex": 1,
+      "explanation": "Lou Bega's 1999 version added lyrics to the instrumental structure of Prado's original, resulting in a legal battle over songwriting credits.",
+      "tags": [
+        "1990s Music",
+        "One Hit Wonder"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Lou Bega’s 1999 hit was a recycled version of which 1949 <b>mambo instrumental</b>?",
+        "explanationStyled": "'<b>Mambo No. 5</b>.' Lou Bega simply added lyrics to a classic, proving talent is secondary to marketing.",
+        "hostLeadIn": "A question about a one-hit wonder. How entirely appropriate for you.",
+        "wrongAnswerQuips": [
+          "Incorrect. Sad.",
+          "Try again, genius.",
+          "Not even in the ballpark."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_02-1775112585404-22-q94n2mauv",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "hard",
+      "question": "Whitney Houston may have sang it louder, but who actually wrote and first recorded the massive ballad 'I Will Always Love You' in 1973?",
+      "choices": [
+        "Linda Ronstadt",
+        "Dolly Parton",
+        "Celine Dion",
+        "Patti LaBelle"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dolly Parton wrote the song for Porter Wagoner when she decided to pursue a solo career; she famously refused to give Elvis Presley half the publishing rights to it.",
+      "tags": [
+        "Songwriting",
+        "Country Music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who actually wrote and recorded the 1973 ballad 'I Will Always Love You' long before <b>Whitney Houston</b> covered it?",
+        "explanationStyled": "The incomparable <b>Dolly Parton</b>. She wrote it with real emotion, unlike the kitschy corporate versions that followed.",
+        "hostLeadIn": "If you miss this, I might just lose my remaining faith in humanity.",
+        "wrongAnswerQuips": [
+          "Wrong again. How predictable.",
+          "Clearly you don't appreciate classics.",
+          "A stunning lack of knowledge."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_03-1775112585404-23-01j86gqn1",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "medium",
+      "question": "The Scoville scale doesn't just measure 'pain'; it technically measures the concentration of which specific chemical compound in peppers?",
+      "choices": [
+        "Piperine",
+        "Capsaicin",
+        "Allicin",
+        "Gingerol"
+      ],
+      "correctIndex": 1,
+      "explanation": "The scale was originally based on the 'Scoville Organoleptic Test,' which measured how many parts of sugar water were needed to dilute a pepper's heat until it was undetectable.",
+      "tags": [
+        "Cooking",
+        "Science of Food"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Scoville scale measures heat, but which <b>chemical compound</b> is it actually quantifying in peppers?",
+        "explanationStyled": "It is <b>capsaicin</b>. The scale is a simple metric for spice, though I imagine you find black pepper challenging.",
+        "hostLeadIn": "Let’s test your knowledge of culinary chemistry.",
+        "wrongAnswerQuips": [
+          "An amateur mistake.",
+          "Try again, if you must.",
+          "How disappointing."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_04-1775112585404-24-aiw5u0suz",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "hard",
+      "question": "The Maillard reaction is why your steak tastes good, but what are the two specific organic components reacting to create that browning?",
+      "choices": [
+        "Fatty acids and Glucose",
+        "Amino acids and Reducing sugars",
+        "Nucleic acids and Fructose",
+        "Lipids and Lactose"
+      ],
+      "correctIndex": 1,
+      "explanation": "This chemical reaction between amino acids and reducing sugars gives browned food its distinctive flavor and aroma, occurring typically above 285°F.",
+      "tags": [
+        "Culinary Science",
+        "Chemistry"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Maillard reaction makes steak taste delicious; what two <b>organic components</b> are reacting to create it?",
+        "explanationStyled": "<b>Amino acids and reducing sugars</b>. A fundamental chemical process that brings flavor to browned food, provided you aren't overcooking it.",
+        "hostLeadIn": "Surely you understand the basics of what you consume?",
+        "wrongAnswerQuips": [
+          "A disastrously incorrect answer.",
+          "I expected nothing more.",
+          "Back to school for you."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_05-1775112585404-25-w4oimcd5u",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "easy",
+      "question": "If you survived the 90s, you know the dance. Which Spanish duo is responsible for the 1993 earworm 'Macarena'?",
+      "choices": [
+        "Gipsy Kings",
+        "Los del Río",
+        "Baccara",
+        "Azúcar Moreno"
+      ],
+      "correctIndex": 1,
+      "explanation": "Los del Río's track became a global phenomenon after it was remixed by the Bayside Boys, leading to a 14-week run at number one on the Billboard Hot 100.",
+      "tags": [
+        "1990s Music",
+        "Dance"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "If you survived the 90s, you remember the dance. Which Spanish duo is responsible for the <b>'Macarena'</b>?",
+        "explanationStyled": "<b>Los del Río</b>. A song that plagued the entire decade and ensured that no wedding was safe from its rhythmic monotony.",
+        "hostLeadIn": "A question about a global earworm. You likely remember this vividly.",
+        "wrongAnswerQuips": [
+          "No. Try again.",
+          "Are you guessing?",
+          "How embarrassingly incorrect."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "art_06-1775112585404-26-dtfj95yhg",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "medium",
+      "question": "Two years before Aretha Franklin 'R-E-S-P-E-C-T'-ed herself into history, which soul legend wrote and recorded the original version?",
+      "choices": [
+        "Sam Cooke",
+        "Otis Redding",
+        "Wilson Pickett",
+        "Marvin Gaye"
+      ],
+      "correctIndex": 1,
+      "explanation": "Otis Redding's original 1965 version was a demand for respect from a man to a woman, which Aretha famously flipped into a feminist and civil rights anthem.",
+      "tags": [
+        "Soul Music",
+        "Songwriting"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Two years before Aretha Franklin turned it into an anthem, which soul legend wrote and recorded <b>'Respect'</b>?",
+        "explanationStyled": "<b>Otis Redding</b>. His original was a demand for subservience, which Aretha cleverly inverted. Brilliant, really.",
+        "hostLeadIn": "Let's see if you recognize the origin of a musical classic.",
+        "wrongAnswerQuips": [
+          "Struggling, are we?",
+          "That is simply wrong.",
+          "Keep trying, champ."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "spr_01-1775112585404-27-7x9r5adt7",
+      "category": "Sports",
+      "subcategory": "American Football",
+      "difficulty": "hard",
+      "question": "Despite what every other team claims, which NFL squad is the only one to actually finish a full season and postseason with a 0 in the loss column?",
+      "choices": [
+        "2007 New England Patriots",
+        "1985 Chicago Bears",
+        "1972 Miami Dolphins",
+        "1978 Pittsburgh Steelers"
+      ],
+      "correctIndex": 2,
+      "explanation": "The 1972 Miami Dolphins finished 17-0; the 2007 Patriots came close but lost the Super Bowl, making the Dolphins' record unique in the Super Bowl era.",
+      "tags": [
+        "NFL History",
+        "Records"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which NFL team is the only squad to finish a full season and postseason with a <b>perfect record</b>?",
+        "explanationStyled": "The <b>1972 Miami Dolphins</b>. A feat of consistency that remains unmatched in the Super Bowl era, unlike your history of wrong answers.",
+        "hostLeadIn": "Sports trivia for the masses. Let's see if you can manage.",
+        "wrongAnswerQuips": [
+          "Incorrect. Try harder.",
+          "Hardly a surprising failure.",
+          "How tragically wrong."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "tech_01-1775112585404-28-92vhfnsdt",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "medium",
+      "question": "For those who think Apple is all 'magic,' macOS is actually built on a Unix-based kernel known by what three-letter name?",
+      "choices": [
+        "Linux",
+        "NT",
+        "XNU",
+        "Hurd"
+      ],
+      "correctIndex": 2,
+      "explanation": "XNU stands for 'X is Not Unix' and is the kernel of the Darwin operating system, combining the Mach microkernel with components from FreeBSD.",
+      "tags": [
+        "Computing",
+        "Apple"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Apple loves its branding, but what is the actual <b>three-letter name</b> of the Unix-based kernel powering macOS?",
+        "explanationStyled": "<b>XNU</b>. It stands for 'X is Not Unix,' a clever little bit of software nomenclature that flies right over most users' heads.",
+        "hostLeadIn": "Do you even know what runs your precious little computer?",
+        "wrongAnswerQuips": [
+          "A predictable failure.",
+          "Don't give up your day job.",
+          "How quaintly wrong."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "tech_02-1775112585404-29-uxlbb5pia",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "Before it was the 1995 blockbuster that introduced the 'Start' menu, what was the internal development codename for Windows 95?",
+      "choices": [
+        "Cairo",
+        "Chicago",
+        "Memphis",
+        "Whistler"
+      ],
+      "correctIndex": 1,
+      "explanation": "Codenamed 'Chicago,' Windows 95 was a massive shift for Microsoft, merging MS-DOS and Windows products into a single integrated operating system.",
+      "tags": [
+        "Software History",
+        "Microsoft"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before it became the 1995 monolith, what was the internal <b>development codename</b> for Windows 95?",
+        "explanationStyled": "It was <b>Chicago</b>. A massive milestone in software history, though I assume you just click buttons until things work.",
+        "hostLeadIn": "Let's test your depth regarding computer history.",
+        "wrongAnswerQuips": [
+          "Incorrect. How sad.",
+          "Keep guessing, genius.",
+          "Not a chance."
+        ]
+      },
+      "timestamp": 1775112585404
+    },
+    {
+      "id": "q-1-1775112799462-0-ttzs85d09",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "hard",
+      "question": "In the 1968 election for New York's 12th congressional district, Shirley Chisholm became the first Black woman in Congress by defeating which prominent civil rights leader and co-founder of CORE?",
+      "choices": [
+        "Bayard Rustin",
+        "James Farmer",
+        "Roy Wilkins",
+        "Whitney Young"
+      ],
+      "correctIndex": 1,
+      "explanation": "Shirley Chisholm defeated James Farmer, who ran on the Liberal Party ticket, in 1968 to represent Brooklyn's 12th district.",
+      "tags": [
+        "congress",
+        "political firsts",
+        "civil rights era"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1968, Shirley Chisholm shattered glass ceilings, but which <b>civil rights pioneer</b> did she steamroll to claim her seat?",
+        "explanationStyled": "The answer is <b>James Farmer</b>. Even a prominent co-founder of CORE was no match for Chisholm's political prowess.",
+        "hostLeadIn": "Surely even you know who she defeated to become a historical first.",
+        "wrongAnswerQuips": [
+          "Not the king of protest.",
+          "Nice try, but wrong activist.",
+          "Try keeping up with history."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-2-1775112799462-1-26di51eii",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "hard",
+      "question": "Before the 17th Amendment mandated direct popular election of U.S. Senators in 1913, which state pioneered the 'Oregon System' to circumvent legislative appointments?",
+      "choices": [
+        "Wisconsin",
+        "Oregon",
+        "California",
+        "Kansas"
+      ],
+      "correctIndex": 1,
+      "explanation": "Oregon led the way in the early 1900s by using primary elections to essentially force state legislators to honor the popular vote for U.S. Senators.",
+      "tags": [
+        "constitutional amendments",
+        "voting",
+        "progressive reforms"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before the 17th Amendment, which state was <b>presumptuous</b> enough to implement the 'Oregon System' for senate selection?",
+        "explanationStyled": "It was <b>Oregon</b>, showing that even over a century ago, some places couldn't wait for federal bureaucracy to catch up.",
+        "hostLeadIn": "A rudimentary question about the evolution of American democratic processes.",
+        "wrongAnswerQuips": [
+          "Wisconsin was busy with cheese.",
+          "California wasn't that progressive yet.",
+          "Wrong state entirely, obviously."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-3-1775112799462-2-oa766eytg",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "hard",
+      "question": "The 1947 Truman Doctrine, which fundamentally shifted U.S. policy toward containment, specifically requested $400 million in aid to prevent the collapse of which two nations?",
+      "choices": [
+        "Italy and France",
+        "Greece and Turkey",
+        "Korea and Vietnam",
+        "Poland and Hungary"
+      ],
+      "correctIndex": 1,
+      "explanation": "Truman's address to Congress specifically sought aid for Greece and Turkey to prevent them from falling under Soviet influence.",
+      "tags": [
+        "cold war",
+        "containment",
+        "presidential policy"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 1947 Truman Doctrine: throwing $400 million at the wall to prevent Soviet expansion in which <b>two specific nations</b>?",
+        "explanationStyled": "The aid was for <b>Greece and Turkey</b>, the front lines of containment. Try to keep the Cold War straight.",
+        "hostLeadIn": "If you passed tenth-grade history, this might actually be solvable.",
+        "wrongAnswerQuips": [
+          "Geopolitics isn't your strong suit.",
+          "Wrong continent, quite predictably.",
+          "Clearly missed that history lecture."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-4-1775112799462-3-7qt2ujw04",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "medium",
+      "question": "Under Article I, Section 7 of the U.S. Constitution, the ten-day period a president has to sign a bill to avoid a 'pocket veto' explicitly excludes which specific days?",
+      "choices": [
+        "Saturdays",
+        "Sundays",
+        "Federal Holidays",
+        "Bank Holidays"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Constitution states the President has ten days '(Sundays excepted)' to sign a bill; if Congress adjourns during that window, it cannot become law without a signature.",
+      "tags": [
+        "presidency",
+        "legislative process",
+        "veto"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Article I, Section 7: the President gets ten days to sign a bill, but which <b>day of the week</b> is conveniently excluded?",
+        "explanationStyled": "The Constitution explicitly excludes <b>Sundays</b>. I assume you don't work on Sundays either?",
+        "hostLeadIn": "Even the founding fathers knew when to take a day off.",
+        "wrongAnswerQuips": [
+          "Saturdays are for working, clearly.",
+          "Federal holidays aren't the answer.",
+          "Banks have nothing to do with it."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-5-1775112799462-4-0oqqgwuaa",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "medium",
+      "question": "While Montesquieu popularized the 'separation of powers' in 1748, his observation was famously based on a somewhat idealized and misunderstood interpretation of which country's constitution?",
+      "choices": [
+        "The Roman Republic",
+        "Great Britain",
+        "The United States",
+        "The Venetian Republic"
+      ],
+      "correctIndex": 1,
+      "explanation": "Montesquieu’s 'The Spirit of the Laws' analyzed the British system, though many scholars argue his depiction of a strict separation of powers was not how the British government actually functioned at the time.",
+      "tags": [
+        "philosophy",
+        "political theory",
+        "separation of powers"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Montesquieu popularized the 'separation of powers,' but which country's constitution did he <b>clumsily idealize</b> to reach that conclusion?",
+        "explanationStyled": "He was obsessed with <b>Great Britain</b>, even though his understanding of their system was, charitably speaking, fiction.",
+        "hostLeadIn": "Another philosopher whose work you've likely never actually read.",
+        "wrongAnswerQuips": [
+          "The Romans had different problems.",
+          "He barely understood the US.",
+          "Venice wasn't his model, sadly."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-6-1775112799462-5-twvgavxfx",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "hard",
+      "question": "In the 1824 'Corrupt Bargain' election, which fourth candidate suffered a stroke during the campaign, finishing third in electoral votes but effectively being sidelined by the House of Representatives?",
+      "choices": [
+        "Henry Clay",
+        "William H. Crawford",
+        "John C. Calhoun",
+        "Daniel Webster"
+      ],
+      "correctIndex": 1,
+      "explanation": "William H. Crawford finished third in electoral votes, but his poor health and the political maneuvering of Henry Clay led the House to choose John Quincy Adams.",
+      "tags": [
+        "presidential elections",
+        "19th century history",
+        "voting results"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the 1824 election, which <b>stricken candidate</b> finished third in electoral votes, only to be tossed aside by the House?",
+        "explanationStyled": "It was <b>William H. Crawford</b>. Being sidelined by a stroke is tragic; being forgotten by history is just inevitable for men like him.",
+        "hostLeadIn": "Ah, the 'Corrupt Bargain'—a favorite for anyone who enjoys political backstabbing.",
+        "wrongAnswerQuips": [
+          "Clay did the bargaining, clearly.",
+          "Calhoun was too busy plotting.",
+          "Webster was not in contention."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-7-1775112799462-6-ucvchihk5",
+      "category": "Science",
+      "subcategory": "Genetics",
+      "difficulty": "hard",
+      "question": "The 'CRISPR' acronym refers to 'Clustered Regularly Interspaced Short Palindromic Repeats.' These repeats are separated by 'spacers' that are derived from what source?",
+      "choices": [
+        "Host cell introns",
+        "DNA from past viral invaders",
+        "Synthesized RNA primers",
+        "Mitochondrial DNA"
+      ],
+      "correctIndex": 1,
+      "explanation": "The spacers are snippets of DNA from viruses that previously attacked the bacterium, serving as a genetic memory for the immune system to recognize and cut invading DNA.",
+      "tags": [
+        "biotechnology",
+        "genetic engineering",
+        "modern science"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "CRISPR uses spacers to identify threats. Are you <b>genetically gifted</b> enough to know what these spacers are derived from?",
+        "explanationStyled": "They are <b>DNA from past viral invaders</b>. It is an evolutionary memory bank—something your own brain clearly lacks.",
+        "hostLeadIn": "Let's see if you understand basic biotechnology.",
+        "wrongAnswerQuips": [
+          "Not host cell introns, sorry.",
+          "RNA primers are for beginners.",
+          "Mitochondria are the powerhouse, not this."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-8-1775112799462-7-nc2hhkl8t",
+      "category": "Pop Culture",
+      "subcategory": "Sitcoms",
+      "difficulty": "medium",
+      "question": "Before Jason Alexander was cast as George Costanza in 'Seinfeld,' which actor—who would later play a recurring role as George's rival—was a top choice for the character based on Larry David?",
+      "choices": [
+        "Wayne Knight",
+        "Danny DeVito",
+        "Steve Buscemi",
+        "Richard Lewis"
+      ],
+      "correctIndex": 3,
+      "explanation": "Richard Lewis was a close friend of Larry David and was considered for the role, though Larry David eventually decided Jason Alexander was the perfect fit to channel his own neuroses.",
+      "tags": [
+        "seinfeld",
+        "90s television",
+        "character origins"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before Jason Alexander made George Costanza pathetic, which actor was the <b>original choice</b> for the role?",
+        "explanationStyled": "It was <b>Richard Lewis</b>. Imagine if the neuroticism had been even more palpable.",
+        "hostLeadIn": "A bit of trivia for those who spend too much time watching reruns.",
+        "wrongAnswerQuips": [
+          "Newman was always Newman.",
+          "DeVito was far too short.",
+          "Buscemi is too naturally twitchy."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-9-1775112799462-8-xgenjh0wx",
+      "category": "Pop Culture",
+      "subcategory": "Commercial Mascots",
+      "difficulty": "medium",
+      "question": "The GEICO Gecko, a mainstay of insurance advertising, was voiced in his 1999 debut by which actor, before the character's accent shifted to a more distinct Cockney/English tone?",
+      "choices": [
+        "Jake Wood",
+        "Kelsey Grammer",
+        "Will Arnett",
+        "Billy West"
+      ],
+      "correctIndex": 1,
+      "explanation": "Kelsey Grammer provided the original voice for the Gecko in his first commercial appearance in 1999.",
+      "tags": [
+        "advertising",
+        "mascots",
+        "insurance"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before the GEICO Gecko adopted that grating Cockney accent, who provided his <b>sophisticated original voice</b> in 1999?",
+        "explanationStyled": "The answer is <b>Kelsey Grammer</b>. Yes, Frasier Crane was once a gecko. How the mighty have fallen.",
+        "hostLeadIn": "A question about the lowest form of advertising, insurance mascots.",
+        "wrongAnswerQuips": [
+          "Jake Wood is the Cockney.",
+          "Will Arnett is too gravelly.",
+          "Billy West has other voices."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-10-1775112799462-9-cy87phm3k",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "hard",
+      "question": "While Nena's '99 Luftballons' reached #1 in the US in its original German version, the English re-recording '99 Red Balloons' famously failed to chart in which major market where the German version was a hit?",
+      "choices": [
+        "The United Kingdom",
+        "Canada",
+        "The United States",
+        "Australia"
+      ],
+      "correctIndex": 2,
+      "explanation": "In the United States, the German version was the hit; the English version didn't chart on the Billboard Hot 100 because fans preferred the original recording.",
+      "tags": [
+        "80s music",
+        "one hit wonders",
+        "german pop"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Nena's '99 Luftballons' was a hit everywhere, but in which <b>major market</b> did the English version fail to chart?",
+        "explanationStyled": "The <b>United States</b>. For once, American taste actually preferred the authentic German original.",
+        "hostLeadIn": "Pop music trivia, because your brain clearly needs a break from complexity.",
+        "wrongAnswerQuips": [
+          "Canada loved the English version.",
+          "The UK was quite receptive.",
+          "Australia was not the market."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-11-1775112799462-10-lypy16pz4",
+      "category": "Sports",
+      "subcategory": "Tennis",
+      "difficulty": "hard",
+      "question": "Steffi Graf is the only player to achieve a calendar year 'Golden Slam.' In which of the four 1988 Grand Slam finals did she win with a 'double bagel' (6-0, 6-0) in just 32 minutes?",
+      "choices": [
+        "Australian Open",
+        "French Open",
+        "Wimbledon",
+        "U.S. Open"
+      ],
+      "correctIndex": 1,
+      "explanation": "Graf defeated Natasha Zvereva 6-0, 6-0 in the 1988 French Open final, the shortest Grand Slam final in the Open Era.",
+      "tags": [
+        "tennis records",
+        "grand slam",
+        "olympics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Steffi Graf's 1988 'Golden Slam': which final did she conclude in a <b>humiliating 32 minutes</b>?",
+        "explanationStyled": "She obliterated Natasha Zvereva at the <b>French Open</b>. Thirty-two minutes. Imagine being that efficient.",
+        "hostLeadIn": "Tennis history for those who think watching a match is an intellectual pursuit.",
+        "wrongAnswerQuips": [
+          "She took longer at Wimbledon.",
+          "The US Open wasn't it.",
+          "Australia requires more effort."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-12-1775112799462-11-3329ewovt",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "In his August 1991 Usenet post announcing the Linux project, Linus Torvalds famously stated it was 'just a hobby' and wouldn't be 'big and professional' like which other project?",
+      "choices": [
+        "Windows NT",
+        "GNU",
+        "Unix",
+        "BSD"
+      ],
+      "correctIndex": 1,
+      "explanation": "Torvalds' original message on the comp.os.minix newsgroup compared his project to GNU, noting it wouldn't be as massive as Richard Stallman's endeavor.",
+      "tags": [
+        "open source",
+        "computing history",
+        "software development"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1991, Linus Torvalds called Linux a 'hobby' that wouldn't be as big as which <b>other project</b>?",
+        "explanationStyled": "He cited <b>GNU</b>. Even a genius like Torvalds can be hilariously wrong about his own future.",
+        "hostLeadIn": "A question about software that actually runs the world, unlike you.",
+        "wrongAnswerQuips": [
+          "Windows was the enemy, obviously.",
+          "Unix was the standard model.",
+          "BSD was not the comparison."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-13-1775112799462-12-kn3vfxec9",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "hard",
+      "question": "In the final tribal council of the first season of 'Survivor,' what was the final vote count that awarded Richard Hatch the million-dollar prize over Kelly Wiglesworth?",
+      "choices": [
+        "4-3",
+        "5-2",
+        "7-0",
+        "6-1"
+      ],
+      "correctIndex": 0,
+      "explanation": "Richard Hatch won in a narrow 4-3 vote, largely secured after Greg Buis famously asked the final two to pick a number between 1 and 10.",
+      "tags": [
+        "reality television",
+        "2000s pop culture",
+        "competition shows"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The first season of 'Survivor' ended with Richard Hatch taking the prize. What was the <b>final vote count</b>?",
+        "explanationStyled": "It was a <b>4-3</b> split. Riveting television for people who enjoy watching strangers suffer in the mud.",
+        "hostLeadIn": "Reality television, the peak of modern intellectual decay.",
+        "wrongAnswerQuips": [
+          "Too lopsided to be dramatic.",
+          "A blowout is unrealistic.",
+          "Not a narrow victory, sadly."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-14-1775112799462-13-mbrc3vrly",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "hard",
+      "question": "Max Martin has written more Billboard #1 hits than anyone except Lennon and McCartney. Which 1998 song served as his first-ever US Billboard Hot 100 number one?",
+      "choices": [
+        "...Baby One More Time",
+        "I Want It That Way",
+        "Quit Playing Games (with My Heart)",
+        "That's the Way It Is"
+      ],
+      "correctIndex": 0,
+      "explanation": "Britney Spears' '...Baby One More Time' was Max Martin's first #1 hit on the Hot 100, launching his era of chart dominance.",
+      "tags": [
+        "music production",
+        "songwriting",
+        "billboard charts"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Max Martin: chart dominator. Which <b>1998 track</b> gave him his very first US Billboard Hot 100 number one?",
+        "explanationStyled": "It was <b>...Baby One More Time</b>. You probably sang along to it, didn't you?",
+        "hostLeadIn": "If you listen to pop music, you should know this name.",
+        "wrongAnswerQuips": [
+          "That came later, try again.",
+          "Not that boy band anthem.",
+          "That was a Celine track."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-15-1775112799462-14-e925qewrt",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "hard",
+      "question": "The Béchamel sauce is named after Louis de Béchameil, who held what title in the court of King Louis XIV?",
+      "choices": [
+        "Master Chef",
+        "Chief Steward",
+        "Royal Physician",
+        "Finance Minister"
+      ],
+      "correctIndex": 1,
+      "explanation": "Louis de Béchameil was a financier who served as Chief Steward to the King; though the sauce bears his name, it was likely perfected by royal cooks and dedicated to him.",
+      "tags": [
+        "culinary arts",
+        "french cuisine",
+        "cooking techniques"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Béchamel sauce: a culinary staple named after which <b>self-important figure</b> in Louis XIV's court?",
+        "explanationStyled": "Louis de Béchameil was the <b>Chief Steward</b>. He gets the credit, even though he probably couldn't cook an egg.",
+        "hostLeadIn": "Even in the kitchen, titles matter more than talent.",
+        "wrongAnswerQuips": [
+          "He wasn't the Master Chef.",
+          "A physician would never cook.",
+          "A minister has no time."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-16-1775112799462-15-cadaifhkt",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "hard",
+      "question": "When President Eisenhower federalized the Arkansas National Guard and sent the 101st Airborne to Little Rock in 1957, which Governor was he specifically overriding?",
+      "choices": [
+        "George Wallace",
+        "Orval Faubus",
+        "Strom Thurmond",
+        "Ross Barnett"
+      ],
+      "correctIndex": 1,
+      "explanation": "Governor Orval Faubus had used the Arkansas National Guard to block the integration of Central High School, prompting Eisenhower's federal intervention.",
+      "tags": [
+        "little rock nine",
+        "desegregation",
+        "eisenhower"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1957, Eisenhower had to teach a certain Arkansas governor a lesson. Which one was <b>being difficult</b>?",
+        "explanationStyled": "That would be <b>Orval Faubus</b>. He really thought he could defy the federal government. Cute.",
+        "hostLeadIn": "A lesson in federal supremacy for those who need a refresher.",
+        "wrongAnswerQuips": [
+          "Wallace was just a loudmouth.",
+          "Thurmond was in the Senate.",
+          "Barnett came later, try harder."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-17-1775112799462-16-n8v9eobb8",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "hard",
+      "question": "Upton Sinclair's 'The Jungle' was originally published in 1905 as a serial in which socialist newspaper before it was released as a novel in 1906?",
+      "choices": [
+        "The Masses",
+        "The Liberator",
+        "Appeal to Reason",
+        "Daily Worker"
+      ],
+      "correctIndex": 2,
+      "explanation": "The novel was first serialized in the Kansas-based socialist newspaper 'Appeal to Reason' before gaining mainstream attention and leading to legislative reform.",
+      "tags": [
+        "muckraking",
+        "labor history",
+        "progressive era literature"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Upton Sinclair's 'The Jungle': before it was a book, it was a <b>serial</b> in which socialist paper?",
+        "explanationStyled": "It appeared in <b>Appeal to Reason</b>. A rather grand title for a publication that, frankly, didn't change much.",
+        "hostLeadIn": "Muckraking literature. Surely you've heard of it, or perhaps you prefer comic books?",
+        "wrongAnswerQuips": [
+          "Not a common choice, try again.",
+          "That one is far too modern.",
+          "Wrong socialist rag, obviously."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-18-1775112799462-17-96mp8t7qk",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "hard",
+      "question": "The 1961 Bay of Pigs Invasion was executed by Brigade 2506, a paramilitary group of Cuban exiles. What was the CIA's official code name for the invasion operation?",
+      "choices": [
+        "Operation Mongoose",
+        "Operation Zapata",
+        "Operation Pluto",
+        "Operation Gold"
+      ],
+      "correctIndex": 1,
+      "explanation": "While 'Operation Pluto' was an early planning phase, the invasion itself was conducted under the name 'Operation Zapata.'",
+      "tags": [
+        "cold war",
+        "kennedy administration",
+        "cuba"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The Bay of Pigs Invasion: a masterpiece of planning. What was the CIA's official <b>code name</b> for the operation?",
+        "explanationStyled": "The invasion was <b>Operation Zapata</b>. Such a bold name for such a spectacular failure.",
+        "hostLeadIn": "Cold War history is tragic, but at least this part is short.",
+        "wrongAnswerQuips": [
+          "That was for the rats.",
+          "Pluto was just the draft.",
+          "Gold was a different project."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-19-1775112799462-18-8gvwu4f5e",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "hard",
+      "question": "While three-fourths of states are required to ratify an amendment, what is the required threshold for Congress to *propose* an amendment before it even reaches the states?",
+      "choices": [
+        "Simple majority",
+        "Three-fifths majority",
+        "Two-thirds majority",
+        "Unanimous consent"
+      ],
+      "correctIndex": 2,
+      "explanation": "Article V requires a two-thirds vote in both the House and the Senate (or a convention called by two-thirds of the states) to propose an amendment.",
+      "tags": [
+        "constitutional law",
+        "amendment process",
+        "federalism"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Article V: Congress wants to propose an amendment. What <b>legislative majority</b> is required to get it moving?",
+        "explanationStyled": "You need a <b>two-thirds majority</b>. A daunting threshold for a group of people who can barely agree on lunch.",
+        "hostLeadIn": "Constitutional law: the only thing keeping you from total anarchy.",
+        "wrongAnswerQuips": [
+          "A majority is far too easy.",
+          "Three-fifths is for tax bills.",
+          "Unanimous is mathematically impossible."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-20-1775112799462-19-bx6rop5sh",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "hard",
+      "question": "Seventeen years before 'The Wealth of Nations,' Adam Smith published which influential work of moral philosophy that provided the ethical framework for his later economic theories?",
+      "choices": [
+        "The Theory of Moral Sentiments",
+        "An Enquiry Concerning Human Understanding",
+        "The Social Contract",
+        "The Fable of the Bees"
+      ],
+      "correctIndex": 0,
+      "explanation": "Published in 1759, 'The Theory of Moral Sentiments' explored the nature of sympathy and self-interest, laying the groundwork for his ideas on the 'invisible hand.'",
+      "tags": [
+        "economics",
+        "political philosophy",
+        "enlightenment"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Adam Smith, 1759: before 'The Wealth of Nations,' he wrote which <b>moral work</b>?",
+        "explanationStyled": "<b>The Theory of Moral Sentiments</b>. Most people ignore it, which explains why the world is so lacking in ethics.",
+        "hostLeadIn": "If you want to sound intelligent, reference this book.",
+        "wrongAnswerQuips": [
+          "That was Hume, obviously.",
+          "Rousseau wrote that, keep up.",
+          "Mandeville was the predecessor, not this."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-21-1775112799462-20-sl7vr448e",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "hard",
+      "question": "In the final vote for the 19th Amendment in the Tennessee House, who was the 24-year-old representative who famously changed his 'no' vote to 'yes' after receiving a note from his mother?",
+      "choices": [
+        "Harry T. Burn",
+        "Seth Walker",
+        "Banks Turner",
+        "Luke Lea"
+      ],
+      "correctIndex": 0,
+      "explanation": "Harry T. Burn wore a red carnation (signifying opposition) but voted 'aye' because his mother, Phoebe Ensminger Burn, wrote to him telling him to 'be a good boy' and help Mrs. Catt with the ratification.",
+      "tags": [
+        "suffrage",
+        "voting rights",
+        "19th amendment"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 19th Amendment ratification: who was the <b>young man</b> swayed by a note from his mother?",
+        "explanationStyled": "<b>Harry T. Burn</b>. A mother's guilt is apparently more powerful than legislative obstructionism.",
+        "hostLeadIn": "A bit of heartwarming trivia before we get back to the serious stuff.",
+        "wrongAnswerQuips": [
+          "Walker was against the movement.",
+          "Turner was a minor player.",
+          "Lea was no hero here."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-22-1775112799462-21-hg6j3g91h",
+      "category": "Science",
+      "subcategory": "Astronomy",
+      "difficulty": "hard",
+      "question": "The supermassive black hole at the center of the M87 galaxy, imaged in 2019, was subsequently given what Hawaiian name, meaning 'the adorned fathomless dark creation'?",
+      "choices": [
+        "Powehi",
+        "Oumuamua",
+        "Kala",
+        "Haleakala"
+      ],
+      "correctIndex": 0,
+      "explanation": "Pōwehi was the name given to the black hole by language professor Larry Kimura, working with the EHT team and astronomers in Hawaii.",
+      "tags": [
+        "astrophysics",
+        "black holes",
+        "recent science"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The 2019 black hole image: what <b>Hawaiian name</b> was bestowed upon this abyss?",
+        "explanationStyled": "It is called <b>Powehi</b>. A poetic name for a hole that sucks in light, much like this trivia sucks in your time.",
+        "hostLeadIn": "Scientific discovery, explained in terms even you might grasp.",
+        "wrongAnswerQuips": [
+          "That's a comet name, genius.",
+          "Kala is not the answer.",
+          "Haleakala is a volcano, try again."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-23-1775112799462-22-kf4pl3yrf",
+      "category": "Pop Culture",
+      "subcategory": "Ad Campaigns",
+      "difficulty": "hard",
+      "question": "The very first 'Got Milk?' television commercial in 1993, featuring a history buff unable to answer a radio trivia question about Aaron Burr, was directed by which future blockbuster filmmaker?",
+      "choices": [
+        "David Fincher",
+        "Michael Bay",
+        "Zack Snyder",
+        "Ridley Scott"
+      ],
+      "correctIndex": 1,
+      "explanation": "Before his career in action films like 'Transformers,' Michael Bay directed the iconic 'Aaron Burr' commercial for the California Milk Processor Board.",
+      "tags": [
+        "advertising history",
+        "branding",
+        "90s pop culture"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "The first 'Got Milk?' commercial: directed by which <b>future action-movie hack</b>?",
+        "explanationStyled": "It was <b>Michael Bay</b>. Explosions were missing, but the irony remains perfectly intact.",
+        "hostLeadIn": "Advertising nostalgia for the masses.",
+        "wrongAnswerQuips": [
+          "Fincher is too clever for milk.",
+          "Snyder prefers DC heroes.",
+          "Scott does real cinema."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-24-1775112799462-23-p2myqjme5",
+      "category": "Pop Culture",
+      "subcategory": "1990s Country Music",
+      "difficulty": "hard",
+      "question": "Although popularized by Garth Brooks, 'Friends in Low Places' was originally recorded and released earlier in 1990 by which fellow country artist?",
+      "choices": [
+        "Mark Chesnutt",
+        "George Strait",
+        "Alan Jackson",
+        "Clint Black"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark Chesnutt recorded and released his version on the album 'Too Cold at Home' slightly before Garth Brooks' version became a massive cultural phenomenon.",
+      "tags": [
+        "country music",
+        "90s hits",
+        "garth brooks"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Garth Brooks didn't originate 'Friends in Low Places.' Who was the <b>first artist</b> to release it?",
+        "explanationStyled": "<b>Mark Chesnutt</b>. He did it first, but Brooks did it for the masses. Such is life.",
+        "hostLeadIn": "Country music trivia, if you can stand the twang.",
+        "wrongAnswerQuips": [
+          "Strait would never sing that.",
+          "Jackson has his own hits.",
+          "Black was busy elsewhere."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-25-1775112799462-24-834lmpdnc",
+      "category": "Pop Culture",
+      "subcategory": "1990s Popular Music",
+      "difficulty": "medium",
+      "question": "During the recording of Nirvana's 'Nevermind,' producer Butch Vig famously convinced Kurt Cobain to double-track his vocals by citing which artist as someone who always did it?",
+      "choices": [
+        "David Bowie",
+        "John Lennon",
+        "Mick Jagger",
+        "Robert Plant"
+      ],
+      "correctIndex": 1,
+      "explanation": "Cobain was initially resistant to double-tracking his voice, but Vig told him 'John Lennon did it,' which successfully persuaded the Beatles-loving frontman.",
+      "tags": [
+        "grunge",
+        "rock history",
+        "90s music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Butch Vig made Kurt Cobain double-track vocals. Which <b>legend</b> did he invoke to convince him?",
+        "explanationStyled": "He name-dropped <b>John Lennon</b>. Apparently, the Beatles are the universal shorthand for 'do it because I said so.'",
+        "hostLeadIn": "Nirvana trivia, for the aging grunge enthusiasts.",
+        "wrongAnswerQuips": [
+          "Bowie didn't fit the vibe.",
+          "Jagger is not the comparison.",
+          "Plant has a different range."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-26-1775112799462-25-zfvb39hm4",
+      "category": "Pop Culture",
+      "subcategory": "1980s Popular Music",
+      "difficulty": "hard",
+      "question": "Most of the tracks on Prince's 'Purple Rain' album, including the title track, were actually recorded live during a benefit concert at which Minneapolis venue in 1983?",
+      "choices": [
+        "The Armory",
+        "First Avenue",
+        "Target Center",
+        "7th St Entry"
+      ],
+      "correctIndex": 1,
+      "explanation": "The recording of 'Purple Rain' took place at the First Avenue club during a benefit for the Minnesota Dance Theatre on August 3, 1983.",
+      "tags": [
+        "prince",
+        "80s music",
+        "soundtracks"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Most of Prince's 'Purple Rain' was recorded <b>live</b> at which legendary Minneapolis club?",
+        "explanationStyled": "The answer is <b>First Avenue</b>. I hope you aren't expecting me to explain why this venue matters.",
+        "hostLeadIn": "Musical geography for the cultured few.",
+        "wrongAnswerQuips": [
+          "The Armory is for hockey.",
+          "Target is for corporate pop.",
+          "7th St is too small."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-27-1775112799462-26-4svufoj6f",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "hard",
+      "question": "The vintage soul sound of Amy Winehouse's 'Back to Black' was heavily defined by the instrumentation of which Brooklyn-based funk and soul band?",
+      "choices": [
+        "The Dap-Kings",
+        "The Budos Band",
+        "Antibalas",
+        "Vulfpeck"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark Ronson hired The Dap-Kings (Sharon Jones' backing band) to play on the album, giving it its authentic 1960s Wall of Sound aesthetic.",
+      "tags": [
+        "neo soul",
+        "2000s music",
+        "grammy winners"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Amy Winehouse's soul sound: which <b>Brooklyn-based band</b> provided the authentic instrumentation?",
+        "explanationStyled": "The <b>Dap-Kings</b>. They added the soul she desperately needed to sound like she was from the sixties.",
+        "hostLeadIn": "A question about actual musicianship.",
+        "wrongAnswerQuips": [
+          "Budos Band is for psych.",
+          "Antibalas is for afrobeat.",
+          "Vulfpeck is just for nerds."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-28-1775112799462-27-9anip7rch",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "hard",
+      "question": "While the principle of cooking in vacuum-sealed bags is old, the modern sous-vide method was refined in the 1970s by Georges Pralus to reduce the shrinkage of what specific food item?",
+      "choices": [
+        "Foie gras",
+        "Beef tenderloin",
+        "Lobster tail",
+        "Salmon fillet"
+      ],
+      "correctIndex": 0,
+      "explanation": "Pralus discovered that cooking foie gras sous-vide prevented it from losing nearly half its weight in fat compared to traditional methods.",
+      "tags": [
+        "culinary techniques",
+        "modernist cuisine",
+        "cooking terminology"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Sous-vide: the secret to not ruining expensive food. Georges Pralus used it to save which <b>rich item</b>?",
+        "explanationStyled": "He was focused on <b>foie gras</b>. Naturally, the French were obsessed with preserving duck liver.",
+        "hostLeadIn": "Cooking techniques you are likely far too lazy to attempt.",
+        "wrongAnswerQuips": [
+          "Tenderloin is for amateurs.",
+          "Lobster is too rubbery.",
+          "Salmon is just too basic."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-29-1775112799462-28-9j3fon28b",
+      "category": "Sports",
+      "subcategory": "Baseball",
+      "difficulty": "hard",
+      "question": "In 1893, Major League Baseball moved the pitcher's mound to its current distance of 60 feet 6 inches. Where had the pitcher's box been located prior to this change?",
+      "choices": [
+        "45 feet",
+        "50 feet",
+        "55 feet",
+        "40 feet"
+      ],
+      "correctIndex": 1,
+      "explanation": "Before 1893, pitchers threw from a distance of only 50 feet, making the game far more difficult for hitters.",
+      "tags": [
+        "mlb",
+        "sports measurements",
+        "baseball rules"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Before 1893, pitchers threw from a distance of what?",
+        "explanationStyled": "A mere <b>50 feet</b>. I suppose pitchers were just naturally shorter then, or perhaps the game was just simpler.",
+        "hostLeadIn": "Baseball measurements, if you care for such trivialities.",
+        "wrongAnswerQuips": [
+          "Too short even for them.",
+          "Too long, obviously.",
+          "40 feet is a backyard."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "q-30-1775112799462-29-93k1g6sxa",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "When Microsoft and IBM were still partners on OS/2, what was the internal code name for the version that Microsoft eventually branched off to become Windows NT?",
+      "choices": [
+        "OS/3",
+        "Portable OS",
+        "OS/2 NT",
+        "New-Kernel"
+      ],
+      "correctIndex": 2,
+      "explanation": "Windows NT was originally planned as OS/2 3.0 (or OS/2 NT) before the fallout between Microsoft and IBM led Microsoft to rebrand it as a Windows product.",
+      "tags": [
+        "software history",
+        "microsoft",
+        "ibm"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Microsoft and IBM were once friends. What was the <b>internal code name</b> for the OS/2 version that became Windows NT?",
+        "explanationStyled": "It was <b>OS/2 NT</b>. They couldn't even bother to come up with a creative name, could they?",
+        "hostLeadIn": "Ancient computing history, try to keep up.",
+        "wrongAnswerQuips": [
+          "OS/3 is not the name.",
+          "Portable is too generic.",
+          "New-Kernel is just a guess."
+        ]
+      },
+      "timestamp": 1775112799462
+    },
+    {
+      "id": "Q1-1775112971890-0-lpogn574k",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "medium",
+      "question": "While the world focuses on the marches, which specific legal strategist led the NAACP Legal Defense Fund as the chief attorney in the 1954 case Brown v. Board of Education?",
+      "choices": [
+        "Thurgood Marshall",
+        "Medgar Evers",
+        "Bayard Rustin",
+        "Ralph Abernathy"
+      ],
+      "correctIndex": 0,
+      "explanation": "Thurgood Marshall was the director-counsel of the NAACP Legal Defense and Educational Fund and argued the case before the Supreme Court twice before his eventual appointment as a Justice.",
+      "tags": [
+        "civil-rights",
+        "legal-history",
+        "us-history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "While the masses were busy with their little marches, which legal strategist orchestrated the NAACP Legal Defense Fund during the monumental 1954 <b>Brown v. Board of Education</b> case?",
+        "explanationStyled": "<b>Thurgood Marshall</b>, obviously. He led the charge before the Supreme Court twice, eventually ascending to the bench himself—a trajectory perhaps too complex for some.",
+        "hostLeadIn": "Let us see if your grasp of legal history exceeds basic literacy.",
+        "wrongAnswerQuips": [
+          "A quaint guess, but utterly incorrect.",
+          "Perhaps read a book occasionally?",
+          "Heavens, no. Try to focus."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q2-1775112971890-1-61a1hznk6",
+      "category": "History",
+      "subcategory": "The Progressive Era",
+      "difficulty": "hard",
+      "question": "Passed on the exact same day in 1906 as the Pure Food and Drug Act, which specific legislation mandated the post-mortem inspection of every carcass in facilities shipping across state lines?",
+      "choices": [
+        "The Clayton Act",
+        "The Federal Food, Drug, and Cosmetic Act",
+        "The Meat Inspection Act",
+        "The Hepburn Act"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Meat Inspection Act of 1906 was the direct regulatory response to the sanitation horrors exposed in Upton Sinclair's 'The Jungle', distinct from the broader Pure Food and Drug Act.",
+      "tags": [
+        "progressive-era",
+        "legislation",
+        "upton-sinclair"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Following the unwashed chaos of 1906, which specific legislation was mandated to ensure the sanitary inspection of every carcass, unlike the broadly useless Pure Food and Drug Act?",
+        "explanationStyled": "The <b>Meat Inspection Act</b> of 1906 was the only rational response to Sinclair's rather vivid descriptions. One would think sanitation standards are self-explanatory.",
+        "hostLeadIn": "It seems your culinary education is as deficient as the 19th-century meatpacking industry.",
+        "wrongAnswerQuips": [
+          "Delightfully wrong. Do try harder.",
+          "Your ignorance of history is showing.",
+          "Was that an attempt at an answer?"
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q3-1775112971890-2-0pygtz3qy",
+      "category": "History",
+      "subcategory": "American Foreign Policy",
+      "difficulty": "medium",
+      "question": "In 1947, which foreign policy doctrine specifically earmarked $400 million in emergency aid to Greece and Turkey to preempt Soviet influence, effectively launching the containment policy?",
+      "choices": [
+        "The Marshall Plan",
+        "The Truman Doctrine",
+        "The Eisenhower Doctrine",
+        "The NSC-68 Directive"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Truman Doctrine was a pivot point in US history where the nation committed to supporting 'free peoples who are resisting attempted subjugation by armed minorities or by outside pressures'.",
+      "tags": [
+        "cold-war",
+        "foreign-policy",
+        "harry-truman"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1947, which grand, multi-million dollar <b>foreign policy doctrine</b> did the U.S. employ to prevent Soviet influence from infecting Greece and Turkey?",
+        "explanationStyled": "The <b>Truman Doctrine</b> was the inaugural move in the containment game. It is quite basic geopolitical strategy, though I suppose it is lost on the uninitiated.",
+        "hostLeadIn": "A rudimentary query regarding the Cold War's infancy. Try not to embarrass yourself.",
+        "wrongAnswerQuips": [
+          "Hardly. Your historical intuition is failing.",
+          "Wrong. Don't quit your day job.",
+          "Painfully incorrect. Just stop."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q4-1775112971890-3-9mdk881px",
+      "category": "History",
+      "subcategory": "Structure of American Government",
+      "difficulty": "medium",
+      "question": "Assuming you have read Article I, Section 3 of the US Constitution, which specific legislative body holds the 'sole Power to try all Impeachments'?",
+      "choices": [
+        "The House of Representatives",
+        "The Supreme Court",
+        "The Senate",
+        "The Court of Appeals for the D.C. Circuit"
+      ],
+      "correctIndex": 2,
+      "explanation": "While the House 'impeaches' (brings the charges), the Senate acts as the court and jury for the trial. This is basic civic architecture.",
+      "tags": [
+        "constitution",
+        "government-structure",
+        "senate"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Assuming you have actually perused Article I, Section 3 of the Constitution, which body possesses the <b>'sole Power to try all Impeachments'</b>?",
+        "explanationStyled": "The <b>Senate</b> acts as judge and jury. The House merely initiates the dramatics. One would hope you'd know your own government's architecture by now.",
+        "hostLeadIn": "A question of civics, though I anticipate a staggering lack of insight.",
+        "wrongAnswerQuips": [
+          "Clearly, you skipped that section.",
+          "Oh dear, back to school with you.",
+          "Wrong. How utterly predictable."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q5-1775112971890-4-bq9ufttj2",
+      "category": "History",
+      "subcategory": "The Age of Enlightenment",
+      "difficulty": "hard",
+      "question": "In his 1748 treatise 'The Spirit of the Laws', which French social commentator argued that the only way to preserve liberty was to separate the legislative, executive, and judicial powers?",
+      "choices": [
+        "John Locke",
+        "Voltaire",
+        "Baron de Montesquieu",
+        "Jean-Jacques Rousseau"
+      ],
+      "correctIndex": 2,
+      "explanation": "Charles-Louis de Secondat, Baron de Montesquieu, provided the theoretical framework for the 'checks and balances' system later adopted by the American Founders.",
+      "tags": [
+        "enlightenment",
+        "philosophy",
+        "political-science"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In his 1748 treatise, which French intellectual argued that the <b>separation of powers</b> was the only safeguard against tyranny?",
+        "explanationStyled": "The <b>Baron de Montesquieu</b> provided the framework for our system of checks and balances. I realize reading 18th-century philosophy is not exactly 'trending', but do try to keep up.",
+        "hostLeadIn": "I expect even your limited vocabulary might have stumbled across this name.",
+        "wrongAnswerQuips": [
+          "A pathetic guess, honestly.",
+          "Wrong. It is embarrassing to watch.",
+          "Try again, when you have a brain."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q6-1775112971890-5-d2rwsl41d",
+      "category": "History",
+      "subcategory": "Elections",
+      "difficulty": "hard",
+      "question": "Which specific Florida Secretary of State became the focal point of controversy for certifying the 2000 US Presidential election results while serving as a co-chair for the Bush campaign?",
+      "choices": [
+        "Katherine Harris",
+        "Janet Reno",
+        "Teresa Lepore",
+        "Sandra Day O'Connor"
+      ],
+      "correctIndex": 0,
+      "explanation": "Katherine Harris was the central figure in the Florida recount debacle; the question has been elevated from the state to the individual to ensure actual knowledge.",
+      "tags": [
+        "elections",
+        "supreme-court",
+        "2000-election"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which Florida official had the audacity to certify the 2000 Presidential election results while co-chairing the Bush campaign?",
+        "explanationStyled": "<b>Katherine Harris</b>. The center of that recount debacle. Surely you remember the melodrama, unless you were distracted by something shiny.",
+        "hostLeadIn": "Let us revisit the turn of the millennium—a time of incompetence and confusion.",
+        "wrongAnswerQuips": [
+          "Not even close. How tragic.",
+          "Did you pull that from thin air?",
+          "Incorrect. Please educate yourself."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q7-1775112971890-6-xahreh5re",
+      "category": "Science",
+      "subcategory": "Biology",
+      "difficulty": "hard",
+      "question": "What is the precise term for the mechanism used by radiotrophic fungi at the Chernobyl site to utilize melanin for converting ionizing radiation into chemical energy?",
+      "choices": [
+        "Phototropism",
+        "Radiosynthesis",
+        "Beta-oxidation",
+        "Chemolithotrophy"
+      ],
+      "correctIndex": 1,
+      "explanation": "Radiosynthesis is the fungal equivalent of photosynthesis, using melanin instead of chlorophyll to harvest high-energy electromagnetic radiation.",
+      "tags": [
+        "fungi",
+        "biology",
+        "radiation"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "At the Chernobyl site, what is the precise term for the mechanism by which fungi use melanin to convert ionizing radiation into <b>chemical energy</b>?",
+        "explanationStyled": "<b>Radiosynthesis</b>. It is a brilliant fungal adaptation. I doubt you could explain how a toaster works, let alone this.",
+        "hostLeadIn": "I hope you are ready for actual science, not just trivia.",
+        "wrongAnswerQuips": [
+          "Wrong. Scientific illiteracy is a disease.",
+          "Truly a hopeless endeavor.",
+          "Absolutely not. You are lost."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q8-1775112971890-7-lahnt5hz6",
+      "category": "Science",
+      "subcategory": "Space Exploration",
+      "difficulty": "medium",
+      "question": "NASA's 2022 DART mission proved we might survive an asteroid impact by successfully altering the orbital period of which specific moonlet orbiting the asteroid Didymos?",
+      "choices": [
+        "Bennu",
+        "Ryugu",
+        "Dimorphos",
+        "Phobos"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Double Asteroid Redirection Test (DART) impacted Dimorphos, shortening its orbit around Didymos by approximately 32 minutes.",
+      "tags": [
+        "nasa",
+        "dart-mission",
+        "asteroids"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 2022, which moonlet—orbited by Didymos—became the target of NASA's DART mission to prove we might just survive an <b>asteroid impact</b>?",
+        "explanationStyled": "The target was <b>Dimorphos</b>. The collision proved we can nudge a rock in space, which is far more than you have accomplished today.",
+        "hostLeadIn": "A trivial bit of space exploration. Do try to get this right.",
+        "wrongAnswerQuips": [
+          "Not even in the right neighborhood.",
+          "Wrong. Your ignorance is vast.",
+          "Try focusing for once."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q9-1775112971890-8-cxizew9o6",
+      "category": "Pop Culture",
+      "subcategory": "Sitcomes",
+      "difficulty": "hard",
+      "question": "In the meta-fictional fourth season of 'Seinfeld', what was the specific name of the character played by Jeremy Piven in the pilot episode of the show-within-a-show 'Jerry'?",
+      "choices": [
+        "The Kramer",
+        "George Costanza",
+        "The Butler",
+        "The Neighbor"
+      ],
+      "correctIndex": 1,
+      "explanation": "While many remember the show was titled 'Jerry', only a true fan recalls Jeremy Piven played the role of 'George' in the pilot production within the show.",
+      "tags": [
+        "seinfeld",
+        "sitcoms",
+        "90s-tv"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In the meta-fictional fourth season of <i>Seinfeld</i>, what was the role played by <b>Jeremy Piven</b> in the pilot episode of the show-within-a-show 'Jerry'?",
+        "explanationStyled": "He played <b>George Costanza</b>. A bit of meta-casting that likely went completely over your head.",
+        "hostLeadIn": "Pop culture for the commoner. This should be trivial, assuming you have ever watched television.",
+        "wrongAnswerQuips": [
+          "Wrong. Simply pathetic.",
+          "Was that an answer? It was wrong.",
+          "Not even close, try harder."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q10-1775112971890-9-36fl5u5vf",
+      "category": "Pop Culture",
+      "subcategory": "Commercial mascots",
+      "difficulty": "medium",
+      "question": "Since his 1968 introduction by the Leo Burnett agency, which character has officially served as the 'Head Elf' and primary spokesperson for the Keebler brand?",
+      "choices": [
+        "Zoot",
+        "Ernie",
+        "Fast Eddie",
+        "Buckeye"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ernie Keebler is the leader of the elves in the Hollow Tree. If you missed this, you likely haven't seen a television since the late 60s.",
+      "tags": [
+        "mascots",
+        "advertising",
+        "brands"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Since 1968, which Keebler character has held the prestigious title of 'Head Elf' and spokesperson for their sugary, processed cookies?",
+        "explanationStyled": "<b>Ernie</b> is the leader of the elves. If you missed this, you clearly have not emerged from your cave since the late 60s.",
+        "hostLeadIn": "I find myself forced to ask about cookies. A delightful waste of intellect.",
+        "wrongAnswerQuips": [
+          "Wrong. Go sit in the corner.",
+          "Are you even trying?",
+          "Hardly. Try to think."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q11-1775112971890-10-1vrenac0c",
+      "category": "Pop Culture",
+      "subcategory": "Reality TV",
+      "difficulty": "medium",
+      "question": "In the year 2000, which American reality competition series debuted on the island of Pulau Tiga, eventually awarding its first million-dollar prize to Richard Hatch?",
+      "choices": [
+        "The Amazing Race",
+        "Big Brother",
+        "Survivor",
+        "Eco-Challenge"
+      ],
+      "correctIndex": 2,
+      "explanation": "Survivor: Borneo was the cultural phenomenon that birthed the modern era of social strategy reality TV. Pulau Tiga is the specific location often overlooked.",
+      "tags": [
+        "reality-tv",
+        "survivor",
+        "2000s-culture"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 2000, which reality series debuted on Pulau Tiga, forever altering the landscape of modern television by crowning Richard Hatch?",
+        "explanationStyled": "<b>Survivor</b>. The genesis of our reality TV apocalypse. I am sure you have wasted thousands of hours watching it.",
+        "hostLeadIn": "A question on the degradation of modern culture. Right up your alley.",
+        "wrongAnswerQuips": [
+          "Pathetic. You failed.",
+          "Absolutely incorrect. How typical.",
+          "You truly are hopeless."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q12-1775112971890-11-pwk87bmih",
+      "category": "Pop Culture",
+      "subcategory": "Ad Campaigns",
+      "difficulty": "hard",
+      "question": "The 1959 advertising masterpiece 'Think Small' is credited with redefining the industry; which agency was responsible for this minimalist Volkswagen campaign?",
+      "choices": [
+        "Ogilvy & Mather",
+        "Doyle Dane Bernbach",
+        "Chiat/Day",
+        "Young & Rubicam"
+      ],
+      "correctIndex": 1,
+      "explanation": "DDB (Doyle Dane Bernbach) revolutionized advertising by using honesty and white space, a stark contrast to the bloated car ads of the era.",
+      "tags": [
+        "advertising",
+        "volkswagen",
+        "business-history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which legendary ad agency was responsible for the 1959 'Think Small' Volkswagen campaign, a masterclass in <b>minimalism</b> you likely cannot comprehend?",
+        "explanationStyled": "<b>Doyle Dane Bernbach</b> (DDB). They utilized white space instead of your typical, loud-mouthed garbage. An elegant choice.",
+        "hostLeadIn": "A question regarding advertising brilliance. Please try not to disappoint me.",
+        "wrongAnswerQuips": [
+          "Not even close.",
+          "Wrong again. My disappointment is immeasurable.",
+          "That is simply embarrassing."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q13-1775112971890-12-75upd7ak5",
+      "category": "Pop Culture",
+      "subcategory": "1990s Country Music",
+      "difficulty": "medium",
+      "question": "Despite the notoriety of 'Indian Outlaw', which 1994 story-song actually secured Tim McGraw's first #1 spot on the Billboard Hot Country Songs chart?",
+      "choices": [
+        "Indian Outlaw",
+        "Don't Take the Girl",
+        "I Like It, I Love It",
+        "Refried Dreams"
+      ],
+      "correctIndex": 1,
+      "explanation": "'Don't Take the Girl' reached the top spot in May 1994, marking the beginning of McGraw's dominant run on the country charts.",
+      "tags": [
+        "country-music",
+        "90s-music",
+        "tim-mcgraw"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Despite your probable affection for trashy music, which 1994 song actually earned Tim McGraw his <b>first #1 spot</b> on the Billboard charts?",
+        "explanationStyled": "'<b>Don't Take the Girl</b>'. A tear-jerker for the masses. I imagine it is the pinnacle of your musical taste.",
+        "hostLeadIn": "Country music. Let us suffer through this together.",
+        "wrongAnswerQuips": [
+          "Wrong. Such poor taste.",
+          "Hardly. Please, stop guessing.",
+          "That is a dismal failure."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q14-1775112971890-13-e31rk0leu",
+      "category": "Pop Culture",
+      "subcategory": "1990s Popular Music",
+      "difficulty": "medium",
+      "question": "In 1996, the debut single 'Wannabe' dominated the global charts; which group of five women recorded this track in less than an hour at Strongroom Studios?",
+      "choices": [
+        "All Saints",
+        "Spice Girls",
+        "Eternal",
+        "B*Witched"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Spice Girls' 'Wannabe' became the best-selling single by a female group in history, regardless of how much it annoyed music critics at the time.",
+      "tags": [
+        "90s-pop",
+        "spice-girls",
+        "music-history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which ensemble of five women recorded the global chart-dominating single 'Wannabe' in less than an hour at <b>Strongroom Studios</b>?",
+        "explanationStyled": "The <b>Spice Girls</b>. They dominated the airwaves, whether we wanted them to or not.",
+        "hostLeadIn": "More pop culture sludge. Do try to remember the name.",
+        "wrongAnswerQuips": [
+          "Wrong. I am not surprised.",
+          "How utterly pedestrian.",
+          "You are failing quite consistently."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q15-1775112971890-14-t5tr8cgw9",
+      "category": "Pop Culture",
+      "subcategory": "1980s Popular Music",
+      "difficulty": "hard",
+      "question": "Which 1984 soundtrack album managed to hold the #1 spot on the Billboard 200 for 24 consecutive weeks, yielding five top-ten singles and two #1 hits?",
+      "choices": [
+        "Thriller",
+        "Purple Rain",
+        "Like a Virgin",
+        "Whitney Houston"
+      ],
+      "correctIndex": 1,
+      "explanation": "Prince's 'Purple Rain' is the undisputed heavyweight of 1984 soundtracks, eclipsing even Michael Jackson's chart dominance that year.",
+      "tags": [
+        "80s-music",
+        "prince",
+        "billboard-charts"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1984 soundtrack album spent 24 consecutive weeks at #1, proving that <b>Prince</b> was the undisputed artist of that year?",
+        "explanationStyled": "<i><b>Purple Rain</b></i>. Even Michael Jackson could not touch it. I hope you at least recognize true talent when it is presented.",
+        "hostLeadIn": "Music from an era with actual artistic integrity. Let us see if you know it.",
+        "wrongAnswerQuips": [
+          "A laughable answer.",
+          "Wrong. You clearly lack taste.",
+          "Don't make me laugh."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q16-1775112971890-15-na6kclk4i",
+      "category": "Pop Culture",
+      "subcategory": "2000s Popular Music",
+      "difficulty": "medium",
+      "question": "Which André 3000-led track spent nine weeks atop the Billboard Hot 100 in 2003-2004, famously instructing listeners to 'shake it like a Polaroid picture'?",
+      "choices": [
+        "Ms. Jackson",
+        "The Way You Move",
+        "Hey Ya!",
+        "Roses"
+      ],
+      "correctIndex": 2,
+      "explanation": "'Hey Ya!' from the Speakerboxxx/The Love Below double album was a massive crossover hit that combined funk, pop, and indie-rock elements.",
+      "tags": [
+        "2000s-music",
+        "outkast",
+        "grammys"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which track by Outkast spent nine weeks at #1, instructing listeners to 'shake it like a <b>Polaroid picture</b>'?",
+        "explanationStyled": "'<b>Hey Ya!</b>'. It was impossible to escape that song, regardless of how much one tried.",
+        "hostLeadIn": "I despise pop music, but let us get this over with.",
+        "wrongAnswerQuips": [
+          "Hardly. Your knowledge is superficial.",
+          "Wrong. Try to engage your brain.",
+          "Pathetic. That is incorrect."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q17-1775112971890-16-9arnndupr",
+      "category": "Art & Music",
+      "subcategory": "Music: One Hit Wonders",
+      "difficulty": "medium",
+      "question": "Often dismissed as a simple drinking song, the 1997 hit 'Tubthumping' was actually the sole US top-10 hit for which anarchist British rock collective?",
+      "choices": [
+        "Harvey Danger",
+        "Chumbawamba",
+        "Semisonic",
+        "The Verve"
+      ],
+      "correctIndex": 1,
+      "explanation": "Chumbawamba had a long history of radical political activism before 'Tubthumping' accidentally made them worldwide pop stars for fifteen minutes.",
+      "tags": [
+        "one-hit-wonders",
+        "90s-rock",
+        "music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "'Tubthumping' was the sole US top-10 hit for which <b>anarchist rock collective</b>, who spent most of their time being miserable?",
+        "explanationStyled": "<b>Chumbawamba</b>. They hated pop music almost as much as I hate asking this question.",
+        "hostLeadIn": "One-hit wonders. A collection of musical mediocrity.",
+        "wrongAnswerQuips": [
+          "Not even in the right decade.",
+          "Wrong. Do try harder.",
+          "That is just sad."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q18-1775112971890-17-dndasmigj",
+      "category": "Art & Music",
+      "subcategory": "Songwriters",
+      "difficulty": "hard",
+      "question": "On a single legendary day in 1973, which songwriter penned both the future Whitney Houston hit 'I Will Always Love You' and the classic 'Jolene'?",
+      "choices": [
+        "Carole King",
+        "Dolly Parton",
+        "Carly Simon",
+        "Loretta Lynn"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dolly Parton's productivity that day resulted in two of the most lucrative and covered songs in the history of the music industry.",
+      "tags": [
+        "songwriting",
+        "dolly-parton",
+        "country-music"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "On one productive day in 1973, which songwriter penned both 'I Will Always Love You' and 'Jolene'?",
+        "explanationStyled": "<b>Dolly Parton</b>. The woman is an icon, though I imagine you barely understand the genius behind it.",
+        "hostLeadIn": "A question about songwriting excellence. Try not to embarrass yourself.",
+        "wrongAnswerQuips": [
+          "Wrong. Simply abysmal.",
+          "You clearly haven't a clue.",
+          "How disappointing."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q19-1775112971890-18-6txmh1hk6",
+      "category": "Art & Music",
+      "subcategory": "Cooking",
+      "difficulty": "medium",
+      "question": "If you wish to satisfy a professional chef, what specific knife cut must result in uniform matchstick strips measuring approximately 3mm x 3mm x 5cm?",
+      "choices": [
+        "Brunoise",
+        "Mince",
+        "Julienne",
+        "Batonnet"
+      ],
+      "correctIndex": 2,
+      "explanation": "Julienne is a precision cut; anything thicker is a batonnet, and anything smaller is a brunoise. Use a ruler if you are unsure.",
+      "tags": [
+        "culinary-techniques",
+        "cooking-basics",
+        "knife-skills"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "If you aspire to be more than a home-cook disaster, what is the precise knife cut for 3mm x 3mm x 5cm matchstick strips?",
+        "explanationStyled": "A <b>Julienne</b>. If your strips are uneven, you are wasting perfectly good vegetables.",
+        "hostLeadIn": "Let us see if your culinary skills are as sharp as a dull butter knife.",
+        "wrongAnswerQuips": [
+          "Wrong. Your technique is likely amateur.",
+          "That is not even close.",
+          "Try picking up a knife sometime."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q20-1775112971890-19-0vngzxhu4",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "medium",
+      "question": "Which of the five French 'Mother Sauces' consists simply of a white roux combined with milk and seasoned with salt and nutmeg?",
+      "choices": [
+        "Espagnole",
+        "Velouté",
+        "Béchamel",
+        "Allemande"
+      ],
+      "correctIndex": 2,
+      "explanation": "Béchamel is the simplest of the mother sauces and forms the foundation for Mornay and other cheese-based secondary sauces.",
+      "tags": [
+        "french-cuisine",
+        "cooking",
+        "sauces"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which of the five French 'Mother Sauces' is a simple white roux combined with milk, salt, and nutmeg?",
+        "explanationStyled": "<b>Béchamel</b>. If you cannot master this, give up and eat toast.",
+        "hostLeadIn": "Cooking basics. Don't make me sigh.",
+        "wrongAnswerQuips": [
+          "Wrong. Your pantry is probably empty.",
+          "Incorrect. Do you even cook?",
+          "That is a pathetic guess."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q21-1775112971890-20-8qng8nkce",
+      "category": "Sports",
+      "subcategory": "General",
+      "difficulty": "easy",
+      "question": "In 2024, which European capital city hosted the Summer Olympic Games for the third time in history, a century after its 1924 hosting?",
+      "choices": [
+        "London",
+        "Athens",
+        "Paris",
+        "Berlin"
+      ],
+      "correctIndex": 2,
+      "explanation": "Paris hosted in 1900, 1924, and 2024, joining London as one of the few cities to host three separate Summer Games.",
+      "tags": [
+        "olympics",
+        "2024",
+        "sports-history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 2024, which European capital hosted the Summer Olympics for the third time in history, marking 100 years since its 1924 games?",
+        "explanationStyled": "<b>Paris</b>. It's not rocket science, though judging by your confusion, it might as well be.",
+        "hostLeadIn": "A simple geography and sports question. Try not to miss it.",
+        "wrongAnswerQuips": [
+          "Wrong. That is just sad.",
+          "Pathetic. You are truly lost.",
+          "Incorrect. Go study a map."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q22-1775112971890-21-7f8zn8p0x",
+      "category": "Sports",
+      "subcategory": "General",
+      "difficulty": "medium",
+      "question": "In February 2023, which Los Angeles Laker scored his 38,388th point against the OKC Thunder, finally ending Kareem Abdul-Jabbar's 39-year reign as the all-time scoring leader?",
+      "choices": [
+        "Kevin Durant",
+        "Stephen Curry",
+        "LeBron James",
+        "Carmelo Anthony"
+      ],
+      "correctIndex": 2,
+      "explanation": "LeBron James broke the record that many thought was untouchable, further fueling the endless and exhausting GOAT debate.",
+      "tags": [
+        "basketball",
+        "nba",
+        "lebron-james"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who finally dethroned Kareem Abdul-Jabbar as the NBA's all-time leading scorer in February 2023?",
+        "explanationStyled": "<b>LeBron James</b>. The GOAT debate continues, which is tedious, but the stats are final.",
+        "hostLeadIn": "Sports trivia. How terribly mainstream.",
+        "wrongAnswerQuips": [
+          "Wrong. A complete failure.",
+          "Do you even watch sports?",
+          "Not even close, try harder."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q23-1775112971890-22-gtdzewxtl",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "In 1991, Linus Torvalds released the first version of his kernel via a post to the comp.os.minix newsgroup. What was the version number of that initial release?",
+      "choices": [
+        "0.01",
+        "1.0",
+        "0.1",
+        "0.95"
+      ],
+      "correctIndex": 0,
+      "explanation": "Torvalds released Linux 0.01 in September 1991. If you answered 'Linux', you weren't paying attention to the difficulty level.",
+      "tags": [
+        "linux",
+        "open-source",
+        "tech-history"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In 1991, what was the specific version number of the initial <b>Linux kernel</b> released by Linus Torvalds?",
+        "explanationStyled": "<b>0.01</b>. If you don't know this, don't pretend you are a tech expert.",
+        "hostLeadIn": "Tech history. This separates the power users from the toddlers.",
+        "wrongAnswerQuips": [
+          "Wrong. How utterly predictable.",
+          "Incorrect. You are not a nerd.",
+          "Try again, with a brain."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q24-1775112971890-23-q8c3ggddf",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "Which specific 1993 release was the first to use the 32-bit Windows NT kernel, marking the shift away from the DOS-based consumer architecture?",
+      "choices": [
+        "Windows 95",
+        "Windows 2000",
+        "Windows XP",
+        "Windows NT 3.1"
+      ],
+      "correctIndex": 3,
+      "explanation": "Windows NT 3.1 was the first in the NT family. Microsoft started the versioning at 3.1 to match the current consumer version of Windows 3.1.",
+      "tags": [
+        "windows",
+        "microsoft",
+        "operating-systems"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which 1993 release was the first to utilize the <b>32-bit Windows NT kernel</b>, ending the DOS-based consumer era?",
+        "explanationStyled": "<b>Windows NT 3.1</b>. It started the transition to a semi-competent operating system.",
+        "hostLeadIn": "An operating system question for those who actually understand computers.",
+        "wrongAnswerQuips": [
+          "Wrong. Stay in your lane.",
+          "Pathetic. Try using a computer.",
+          "Incorrect. Do better."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q25-1775112971890-24-4ou6tkxcu",
+      "category": "History",
+      "subcategory": "Civil Rights Movement",
+      "difficulty": "hard",
+      "question": "Who was the first Black woman to ever win a seat in the US Congress, representing the Bedford-Stuyvesant neighborhood starting in 1969?",
+      "choices": [
+        "Barbara Jordan",
+        "Shirley Chisholm",
+        "Fannie Lou Hamer",
+        "Carol Moseley Braun"
+      ],
+      "correctIndex": 1,
+      "explanation": "Shirley Chisholm was elected in 1968 and served from 1969. She was also the first woman and Black person to run for a major party presidential nomination.",
+      "tags": [
+        "civil-rights",
+        "black-history",
+        "congress"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Who was the first Black woman to serve in the US Congress, representing Bedford-Stuyvesant starting in 1969?",
+        "explanationStyled": "<b>Shirley Chisholm</b>. A pioneer, though I suspect her historical impact is lost on you.",
+        "hostLeadIn": "A history lesson you likely missed while napping.",
+        "wrongAnswerQuips": [
+          "Wrong. Read a history book.",
+          "Incorrect. Simply sad.",
+          "You clearly have no knowledge."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q26-1775112971890-25-myx8lgryy",
+      "category": "Science",
+      "subcategory": "Astronomy",
+      "difficulty": "medium",
+      "question": "What is the specific astronomical term for the point in an elliptical orbit where a satellite is at its minimum distance from Earth?",
+      "choices": [
+        "Apogee",
+        "Perihelion",
+        "Perigee",
+        "Periapsis"
+      ],
+      "correctIndex": 2,
+      "explanation": "Perigee is specific to orbits around Earth. Periapsis is the general term for any body, and perihelion is specific to the Sun.",
+      "tags": [
+        "astronomy",
+        "orbital-mechanics",
+        "physics"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What is the astronomical term for the point in an elliptical orbit where a satellite is <b>closest to Earth</b>?",
+        "explanationStyled": "<b>Perigee</b>. It is basic terminology for anyone with a passing interest in the cosmos.",
+        "hostLeadIn": "Astronomy. Hopefully, you can manage this.",
+        "wrongAnswerQuips": [
+          "Wrong. Gravity is clearly pulling you down.",
+          "Incorrect. A dismal failure.",
+          "Are you even trying to think?"
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q27-1775112971890-26-d36oxgjxn",
+      "category": "Pop Culture",
+      "subcategory": "Sitcomes",
+      "difficulty": "medium",
+      "question": "Tina Fey's '30 Rock' followed the chaotic production of a fictional NBC sketch show; what was the original name of that show-within-a-show before its revamp?",
+      "choices": [
+        "TGS with Tracy Jordan",
+        "The Girlie Show",
+        "Saturday Night Live",
+        "The Girly Show"
+      ],
+      "correctIndex": 1,
+      "explanation": "Before Tracy Jordan joined and the title was changed to 'TGS', the fictional show was simply called 'The Girlie Show'.",
+      "tags": [
+        "sitcoms",
+        "tina-fey",
+        "nbc"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "In Tina Fey's '30 Rock', what was the original name of the sketch show before it was rebranded as <b>TGS with Tracy Jordan</b>?",
+        "explanationStyled": "It was '<b>The Girlie Show</b>'. A title that was apparently too honest for network executives.",
+        "hostLeadIn": "Sitcom trivia. Try not to strain your brain.",
+        "wrongAnswerQuips": [
+          "Wrong. That's embarrassing.",
+          "Incorrect. Do you even watch TV?",
+          "Hardly. Try harder."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q28-1775112971890-27-3etvf28ce",
+      "category": "Art & Music",
+      "subcategory": "Culinary",
+      "difficulty": "hard",
+      "question": "Which specific vanilloid alkaloid is the active irritant responsible for the chemesthesis—or perceived burning sensation—found in the fruit of the genus Capsicum?",
+      "choices": [
+        "Piperine",
+        "Capsaicin",
+        "Gingerol",
+        "Isothiocyanate"
+      ],
+      "correctIndex": 1,
+      "explanation": "Capsaicin binds to TRPV1 receptors, which normally detect heat, tricking your brain into thinking your mouth is actually on fire.",
+      "tags": [
+        "chemistry",
+        "food-science",
+        "spices"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "Which vanilloid alkaloid is responsible for the burning sensation—chemesthesis—found in the fruit of the <b>genus Capsicum</b>?",
+        "explanationStyled": "<b>Capsaicin</b>. It targets TRPV1 receptors to trick your brain. Simple chemistry, if you could comprehend it.",
+        "hostLeadIn": "Chemistry meets the kitchen. Let us see if you know your spice.",
+        "wrongAnswerQuips": [
+          "Wrong. That's not even close.",
+          "Pathetic. Try focusing.",
+          "Incorrect. How disappointing."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q29-1775112971890-28-ex3jnauxh",
+      "category": "Sports",
+      "subcategory": "General",
+      "difficulty": "medium",
+      "question": "In MLB history, there have been over 300 no-hitters, but how many 'Perfect Games'—where no batter reached base—have officially occurred as of the end of the 2023 season?",
+      "choices": [
+        "21",
+        "24",
+        "27",
+        "31"
+      ],
+      "correctIndex": 1,
+      "explanation": "Domingo Germán threw the 24th perfect game in June 2023. This is one of the rarest feats in all of professional sports.",
+      "tags": [
+        "baseball",
+        "mlb",
+        "sports-records"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "As of the end of the 2023 MLB season, exactly how many <b>'Perfect Games'</b> have been officially recorded in history?",
+        "explanationStyled": "<b>24</b>. It is an exceptionally rare feat, unlikely to be achieved by you in any capacity.",
+        "hostLeadIn": "Baseball statistics. Try not to strike out.",
+        "wrongAnswerQuips": [
+          "Wrong. That is not even close.",
+          "Pathetic. You are failing.",
+          "Incorrect. Do some research."
+        ]
+      },
+      "timestamp": 1775112971890
+    },
+    {
+      "id": "Q30-1775112971890-29-c1s5guskh",
+      "category": "Technology",
+      "subcategory": "Operating Systems",
+      "difficulty": "hard",
+      "question": "While released in 2001, what was the internal Apple codename for the first commercial version of Mac OS X (version 10.0)?",
+      "choices": [
+        "Cheetah",
+        "Puma",
+        "Jaguar",
+        "Kodiak"
+      ],
+      "correctIndex": 0,
+      "explanation": "10.0 was Cheetah. Kodiak was the public beta. Puma was 10.1. If you didn't know the difference, don't call yourself a power user.",
+      "tags": [
+        "apple",
+        "macos",
+        "operating-systems"
+      ],
+      "status": "approved",
+      "sourceType": "ai",
+      "presentation": {
+        "questionStyled": "What was the internal Apple codename for the first commercial version of Mac OS X (10.0), released in 2001?",
+        "explanationStyled": "<b>Cheetah</b>. If you thought it was Kodiak, you are confusing the beta with the final release. How quaint.",
+        "hostLeadIn": "Apple history. A bit of trivial knowledge for the uninspired.",
+        "wrongAnswerQuips": [
+          "Wrong. You clearly lack nuance.",
+          "Incorrect. Please stop guessing.",
+          "That is simply embarrassing."
+        ]
+      },
+      "timestamp": 1775112971890
+    }
+  ]
+}
