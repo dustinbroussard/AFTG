@@ -1,6 +1,6 @@
 import { buildHecklePrompt, type HeckleGenerationContext } from '../src/content/heckles.js';
 import { MODERN_HOST_SYSTEM_PROMPT } from '../src/content/hostPersona.js';
-import { createHeckleFallback, generateWithFallback, validateHeckles } from './_lib/commentary.js';
+import { generateWithFallback, validateHeckles } from './_lib/commentary.js';
 
 interface HeckleApiResponse {
   heckle: string | null;
@@ -76,11 +76,7 @@ export default async function handler(req: any, res: any) {
       console.error('[heckles/api] Missing required request fields', {
         requestSummary,
       });
-      sendJson(res, 200, createHeckleFallback({
-        playerName: body.playerName ?? 'The player',
-        opponentName: body.opponentName,
-        category: body.category,
-      }));
+      sendJson(res, 200, []);
       return;
     }
 
@@ -109,12 +105,7 @@ export default async function handler(req: any, res: any) {
       temperature: 0.9,
       maxTokens: 120,
       validate: validateHeckles,
-      localFallback: () =>
-        createHeckleFallback({
-          playerName: body.playerName!,
-          opponentName: body.opponentName,
-          category: body.category,
-        }),
+      localFallback: () => [],
     });
 
     console.info('[heckles/api] Commentary resolved', {
@@ -129,10 +120,6 @@ export default async function handler(req: any, res: any) {
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : null,
     });
-    sendJson(res, 200, createHeckleFallback({
-      playerName: body.playerName ?? 'The player',
-      opponentName: body.opponentName,
-      category: body.category,
-    }));
+    sendJson(res, 200, []);
   }
 }

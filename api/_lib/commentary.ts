@@ -411,26 +411,6 @@ export function validateEndgameRoast(rawText: string | null): ValidationResult<E
   };
 }
 
-export function createHeckleFallback(context: Pick<HeckleGenerationContext, 'playerName' | 'opponentName' | 'category'>) {
-  const opponent = context.opponentName || 'their opponent';
-  const category = context.category || 'trivia';
-  return [
-    `${context.playerName} just turned ${category} into an argument for adult supervision.`,
-    `${opponent} gets the next turn, which feels medically responsible.`,
-    `${context.playerName} is still in this match, though the evidence remains mostly theoretical.`,
-  ];
-}
-
-export function createTrashTalkFallback(
-  context: Pick<TrashTalkGenerationContext, 'playerName' | 'opponentName' | 'event'>
-) {
-  if (context.event === 'MATCH_LOSS') {
-    return `${context.playerName}, the match is over and ${context.opponentName} filed the final paperwork.`;
-  }
-
-  return `${context.playerName}, ${context.opponentName} is playing trivia while you're rehearsing disappointment.`;
-}
-
 export function createEndgameFallback(
   context: Pick<EndgameRoastGenerationContext, 'winnerName' | 'loserName'>
 ): EndgameRoastResult {

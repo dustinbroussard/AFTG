@@ -1,7 +1,7 @@
 import type { TrashTalkGenerationContext } from '../src/content/trashTalk.js';
 import { buildTrashTalkPrompt } from '../src/content/trashTalk.js';
 import { MODERN_HOST_SYSTEM_PROMPT } from '../src/content/hostPersona.js';
-import { createTrashTalkFallback, generateWithFallback, validateTrashTalk } from './_lib/commentary.js';
+import { generateWithFallback, validateTrashTalk } from './_lib/commentary.js';
 
 interface TrashTalkApiResponse {
   trashTalk: string | null;
@@ -65,17 +65,7 @@ export default async function handler(req: any, res: any) {
       console.warn('[trash-talk/api] Request skipped: missing eligibility or required fields', {
         requestSummary,
       });
-      sendJson(
-        res,
-        200,
-        body.playerName && body.opponentName && body.event
-          ? createTrashTalkFallback({
-              playerName: body.playerName,
-              opponentName: body.opponentName,
-              event: body.event,
-            })
-          : null
-      );
+      sendJson(res, 200, null);
       return;
     }
 
@@ -101,12 +91,7 @@ export default async function handler(req: any, res: any) {
       temperature: 0.95,
       maxTokens: 120,
       validate: validateTrashTalk,
-      localFallback: () =>
-        createTrashTalkFallback({
-          playerName: body.playerName!,
-          opponentName: body.opponentName!,
-          event: body.event!,
-        }),
+      localFallback: () => null,
     });
 
     console.info('[trash-talk/api] Commentary resolved', {
@@ -121,16 +106,6 @@ export default async function handler(req: any, res: any) {
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : null,
     });
-    sendJson(
-      res,
-      200,
-      body.playerName && body.opponentName && body.event
-        ? createTrashTalkFallback({
-            playerName: body.playerName,
-            opponentName: body.opponentName,
-            event: body.event,
-          })
-        : null
-    );
+    sendJson(res, 200, null);
   }
 }
