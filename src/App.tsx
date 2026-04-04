@@ -927,7 +927,7 @@ export default function App() {
   const specialEventPriority = (event: QueuedSpecialEvent) => {
     if (event.kind === 'MANUAL_CATEGORY_UNLOCK') return 3;
     if (event.event === 'MATCH_LOSS') return 4;
-    if (event.event === 'OPPONENT_TROPHY') return 2;
+    if (event.event === 'OPPONENT_CORRECT') return 2;
     return 1;
   };
 
@@ -1088,7 +1088,7 @@ export default function App() {
       opponentTrophies: contextOverrides.opponentTrophies ?? (opponentPlayer?.completedCategories?.length ?? 0),
       latestCategory: contextOverrides.latestCategory,
       outcomeSummary: contextOverrides.outcomeSummary || `${event} triggered during live play.`,
-      recentQuestionHistory: recentAiQuestionHistoryRef.current,
+      recentQuestionHistory: contextOverrides.recentQuestionHistory ?? recentAiQuestionHistoryRef.current,
       isSolo,
     };
 
@@ -1302,9 +1302,7 @@ export default function App() {
     !!user &&
     game.status === 'active' &&
     players.length > 1 &&
-    effectiveCurrentTurnOwner !== user.id &&
-    !currentQuestion &&
-    !revealedCategory;
+    effectiveCurrentTurnOwner !== user.id;
   const heckleWaitStateKey =
     isWaitingForOpponent && game && user
       ? `${game.id}:${game.status}:${effectiveCurrentTurnOwner}:${user.id}:${currentPlayerScore}:${opponentPlayerScore}`
@@ -1327,12 +1325,6 @@ export default function App() {
     }
     if (currentPlayerCanAct) {
       return { allowed: false, reason: 'current_player_can_act' };
-    }
-    if (currentQuestion) {
-      return { allowed: false, reason: 'question_input_expected' };
-    }
-    if (revealedCategory) {
-      return { allowed: false, reason: 'category_reveal_active' };
     }
     if (isHighPriorityOverlayActive) {
       return { allowed: false, reason: 'critical_transition_active' };
@@ -2574,17 +2566,22 @@ export default function App() {
     if (opponent && previousOpponent) {
       const previousCompleted = new Set(previousOpponent.completedCategories || []);
       const gainedCategory = (opponent.completedCategories || []).find((category) => !previousCompleted.has(category));
-      const gainedTrophy = !!gainedCategory;
-      if (gainedTrophy) {
-        void triggerTrashTalk('OPPONENT_TROPHY', {
+      const opponentScoreIncreased = (opponent.score || 0) > (previousOpponent.score || 0);
+      if (opponentScoreIncreased) {
+        const latestOpponentQuestionHistory = getRecentQuestionHistoryForPlayer(game, questions, opponent.uid);
+        const latestOpponentQuestion = latestOpponentQuestionHistory[0];
+        void triggerTrashTalk('OPPONENT_CORRECT', {
           playerName: currentPlayer?.name || playerProfile?.nickname || user.email || 'Player',
           opponentName: opponent.name,
           playerScore: currentPlayer?.score ?? 0,
           opponentScore: opponent.score ?? 0,
           playerTrophies: currentPlayer?.completedCategories?.length ?? 0,
           opponentTrophies: opponent.completedCategories?.length ?? 0,
-          latestCategory: gainedCategory,
-          outcomeSummary: `${opponent.name} just claimed ${gainedCategory || 'another category'}.`,
+          latestCategory: latestOpponentQuestion?.category || gainedCategory,
+          outcomeSummary: latestOpponentQuestion
+            ? `${opponent.name} just answered a ${latestOpponentQuestion.category} question correctly with "${latestOpponentQuestion.correctAnswer}".`
+            : `${opponent.name} just answered correctly and kept control.`,
+          recentQuestionHistory: latestOpponentQuestionHistory,
         });
       }
 
@@ -2633,7 +2630,7 @@ export default function App() {
     }
 
     prevPlayersRef.current = players;
-  }, [players, game?.id, user?.id, lastTrashTalkEvent]);
+  }, [players, game, questions, user?.id, playerProfile?.nickname, user?.email]);
 
   useEffect(() => {
     if (!game?.id || !user?.id || isSolo || players.length < 2) return;
@@ -4523,11 +4520,6 @@ export default function App() {
                     <div className="space-y-3 rounded-3xl border p-6 text-center theme-panel sm:space-y-5 sm:p-12 lg:w-full">
                       <Loader2 className="w-8 h-8 text-pink-500 animate-spin mx-auto mb-4" />
                       <p className="text-lg font-medium theme-text-muted">Waiting for {waitingForPlayerName} to spin...</p>
-                      <HeckleOverlay
-                        message={activeHeckle}
-                        visible={showHeckle && shouldShowOpponentHeckles}
-                        onClose={dismissHeckleOverlay}
-                      />
                     </div>
                   )}
                 </div>
@@ -4600,6 +4592,12 @@ export default function App() {
         )}
 
         <CategoryReveal category={revealedCategory} />
+
+        <HeckleOverlay
+          message={activeHeckle}
+          visible={showHeckle && shouldShowOpponentHeckles}
+          onClose={dismissHeckleOverlay}
+        />
 
         <TrashTalkOverlay
           event={activeTrashTalkEvent}
