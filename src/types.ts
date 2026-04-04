@@ -1,4 +1,5 @@
 export type Category = 'History' | 'Science' | 'Pop Culture' | 'Art & Music' | 'Sports' | 'Technology' | 'Random';
+const NON_PLAYABLE_QUESTION_STATUSES = new Set(['pending', 'rejected', 'flagged']);
 
 export interface TriviaQuestion {
   id: string; // uuid
@@ -12,7 +13,7 @@ export interface TriviaQuestion {
   explanation: string;
   tags: string[];
   used?: boolean;
-  status: 'pending' | 'verified' | 'approved' | 'rejected' | 'flagged';
+  status: string;
   presentation: {
     questionStyled?: string;
     explanationStyled?: string;
@@ -185,6 +186,15 @@ export function getPlayableCategories(): Exclude<Category, 'Random'>[] {
 
 export function isPlayableCategory(category: string): boolean {
   return getPlayableCategories().includes(category as Exclude<Category, 'Random'>);
+}
+
+export function isGameReadyQuestionStatus(status: string | null | undefined): boolean {
+  const normalizedStatus = String(status ?? '').trim().toLowerCase();
+  if (!normalizedStatus) {
+    return false;
+  }
+
+  return !NON_PLAYABLE_QUESTION_STATUSES.has(normalizedStatus);
 }
 
 export const CATEGORY_COLORS: Record<string, string> = {

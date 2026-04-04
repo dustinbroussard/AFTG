@@ -382,6 +382,7 @@ export default function App() {
   const endgameRoastRequestKeyRef = useRef<string>('');
   const endgameRoastAbortRef = useRef<AbortController | null>(null);
   const trashTalkAbortRef = useRef<AbortController | null>(null);
+  const trashTalkRequestIdRef = useRef(0);
   const latestHeckleEligibilityRef = useRef<{ allowed: boolean; reason: string }>({
     allowed: false,
     reason: 'uninitialized',
@@ -1118,16 +1119,24 @@ export default function App() {
       },
     });
 
-    trashTalkAbortRef.current?.abort();
     const requestController = new AbortController();
     trashTalkAbortRef.current = requestController;
+    const requestId = ++trashTalkRequestIdRef.current;
 
     const generatedMessage = await generateTrashTalk(context, {
       signal: requestController.signal,
       timeoutMs: 5000,
     });
 
-    if (trashTalkAbortRef.current !== requestController) {
+    if (
+      trashTalkAbortRef.current !== requestController ||
+      requestId !== trashTalkRequestIdRef.current
+    ) {
+      console.info('[trash-talk] Response discarded: superseded request', {
+        event,
+        requestId,
+        activeRequestId: trashTalkRequestIdRef.current,
+      });
       return;
     }
 
@@ -1144,6 +1153,7 @@ export default function App() {
 
     console.info('[trash-talk] Message accepted for overlay', {
       event,
+      requestId,
       messageLength: generatedMessage.length,
     });
     queueOrShowSpecialEvent({
@@ -1310,7 +1320,7 @@ export default function App() {
     effectiveCurrentTurnOwner !== user.id;
   const heckleWaitStateKey =
     isWaitingForOpponent && game && user
-      ? `${game.id}:${game.status}:${effectiveCurrentTurnOwner}:${user.id}:${currentPlayerScore}:${opponentPlayerScore}`
+      ? `${game.id}:${game.status}:${effectiveCurrentTurnOwner}:${user.id}`
       : null;
   const heckleEligibility = (() => {
     if (!settings.commentaryEnabled) {
@@ -1734,7 +1744,9 @@ export default function App() {
           return;
         }
 
-        const waitStateStillEligible = currentWaitingStateKeyRef.current === heckleWaitStateKey;
+        const waitStateStillEligible =
+          currentWaitingStateKeyRef.current === heckleWaitStateKey &&
+          latestHeckleEligibilityRef.current.allowed;
 
         if (!waitStateStillEligible) {
           console.info('[heckles] Response discarded because waiting ended', {
@@ -1799,6 +1811,7 @@ export default function App() {
       }
       trashTalkAbortRef.current?.abort();
       trashTalkAbortRef.current = null;
+      trashTalkRequestIdRef.current += 1;
       heckleRequestAbortRef.current?.abort();
       heckleRequestAbortRef.current = null;
       endgameRoastAbortRef.current?.abort();
@@ -2433,6 +2446,9 @@ export default function App() {
 
   useEffect(() => {
     if (settings.commentaryEnabled) return;
+    trashTalkAbortRef.current?.abort();
+    trashTalkAbortRef.current = null;
+    trashTalkRequestIdRef.current += 1;
     setActiveTrashTalk(null);
     setActiveTrashTalkEvent(null);
     setQueuedSpecialEvent((current) => current?.kind === 'TRASH_TALK' ? null : current);

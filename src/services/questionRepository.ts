@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { isMissingFunctionError } from './supabaseUtils';
-import { TriviaQuestion, getPlayableCategories, isPlayableCategory } from '../types';
+import { TriviaQuestion, getPlayableCategories, isGameReadyQuestionStatus, isPlayableCategory } from '../types';
 
 interface GetQuestionsForSessionParams {
   categories: string[];
@@ -179,18 +179,17 @@ function buildRandomOffsets(totalCount: number, windowSize: number) {
 }
 
 async function fetchApprovedQuestionCount(category: string) {
-  const { count, error } = await supabase
+  const { data, error } = await supabase
     .from('questions')
-    .select('id', { count: 'exact', head: true })
-    .eq('category', category)
-    .eq('validation_status', 'approved');
+    .select('id, validation_status')
+    .eq('category', category);
 
   if (error) {
     console.error('Error counting questions from Supabase:', error);
     return null;
   }
 
-  return count ?? 0;
+  return (data || []).filter((row) => isGameReadyQuestionStatus(row.validation_status)).length;
 }
 
 async function fetchApprovedQuestionWindow(category: string, from: number, to: number) {
@@ -198,7 +197,6 @@ async function fetchApprovedQuestionWindow(category: string, from: number, to: n
     .from('questions')
     .select('*')
     .eq('category', category)
-    .eq('validation_status', 'approved')
     .order('used_count', { ascending: true })
     .order('created_at', { ascending: true })
     .range(from, to);
@@ -241,6 +239,7 @@ async function fetchApprovedQuestionsByCategory(category: string, excludeIds: Se
       dedupeQuestionsByIdentity(
         sourceRows
           .map((entry) => mapQuestionRowToTriviaQuestion(entry))
+          .filter((question) => isGameReadyQuestionStatus(question.status))
           .filter((question) => question.choices.length === 4)
           .filter((question) => !excludeIds.has(question.id))
       )
@@ -284,6 +283,7 @@ async function fetchQuestionsViaRpc({
   return dedupeQuestionsByIdentity(
     (data || [])
       .map((entry) => mapQuestionRowToTriviaQuestion(entry))
+      .filter((question) => isGameReadyQuestionStatus(question.status))
       .filter((question) => question.choices.length === 4)
       .filter((question) => !excludeQuestionIds.includes(question.id))
   );

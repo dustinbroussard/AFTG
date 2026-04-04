@@ -40,7 +40,7 @@ as $$
     from public.questions q
     join requested_categories rc on rc.category = q.category
     left join seen_questions sq on sq.question_id = q.id
-    where q.validation_status = 'approved'
+    where coalesce(q.validation_status::text, '') not in ('pending', 'rejected', 'flagged')
       and not (q.id = any(coalesce(p_exclude_question_ids, '{}'::uuid[])))
       and sq.question_id is null
   ),

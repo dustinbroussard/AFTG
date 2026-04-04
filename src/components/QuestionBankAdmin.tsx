@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { X, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { TriviaQuestion, getPlayableCategories } from '../types';
+import { TriviaQuestion, getPlayableCategories, isGameReadyQuestionStatus } from '../types';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 
@@ -36,18 +36,17 @@ function normalizeQuestion(row: any): TriviaQuestion {
   };
 }
 
-async function fetchApprovedCount(filters?: { category?: string; difficulty?: string }) {
+async function fetchGameReadyCount(filters?: { category?: string; difficulty?: string }) {
   let request = supabase
     .from('questions')
-    .select('*', { count: 'exact', head: true })
-    .eq('validation_status', 'approved');
+    .select('id, validation_status');
 
   if (filters?.category) request = request.eq('category', filters.category);
   if (filters?.difficulty) request = request.eq('difficulty_level', filters.difficulty);
 
-  const { count, error } = await request;
+  const { data, error } = await request;
   if (error) throw error;
-  return count ?? 0;
+  return (data ?? []).filter((row) => isGameReadyQuestionStatus(row.validation_status)).length;
 }
 
 export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, onClose }) => {
@@ -65,15 +64,15 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
   const loadSummary = async () => {
     setIsLoadingSummary(true);
     try {
-      setTotalCount(await fetchApprovedCount());
+      setTotalCount(await fetchGameReadyCount());
 
       const categoryEntries = await Promise.all(
         playableCategories.map(async (category) => {
-          const categoryCount = await fetchApprovedCount({ category });
+          const categoryCount = await fetchGameReadyCount({ category });
           const difficultyEntries = await Promise.all(
             DIFFICULTIES.map(async (difficulty) => [
               difficulty,
-              await fetchApprovedCount({ category, difficulty }),
+              await fetchGameReadyCount({ category, difficulty }),
             ] as const)
           );
 
@@ -102,14 +101,17 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
       const { data, error } = await supabase
         .from('questions')
         .select('*')
-        .eq('validation_status', 'approved')
         .eq('category', selectedCategory)
         .eq('difficulty_level', selectedDifficulty)
         .order('created_at', { ascending: false })
         .limit(8);
 
       if (error) throw error;
-      setSamples((data ?? []).map((row) => normalizeQuestion(row)));
+      setSamples(
+        (data ?? [])
+          .map((row) => normalizeQuestion(row))
+          .filter((question) => isGameReadyQuestionStatus(question.status))
+      );
     } finally {
       setIsLoadingSamples(false);
     }
@@ -162,7 +164,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
                 <section className="space-y-3">
                   <h3 className="font-black uppercase tracking-widest text-sm theme-text-muted">Summary</h3>
                   <div className="theme-soft-surface border rounded-2xl p-4">
-                    <p className="text-xs uppercase tracking-widest theme-text-muted mb-1">Approved Questions</p>
+                    <p className="text-xs uppercase tracking-widest theme-text-muted mb-1">Game-Ready Questions</p>
                     <p className="text-4xl font-black">{isLoadingSummary ? '...' : totalCount}</p>
                   </div>
                   <div className="space-y-2">
@@ -214,7 +216,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
                     <div className="theme-panel-strong border rounded-2xl p-4">
                       <p className="text-xs uppercase tracking-widest theme-text-muted mb-2">Manual Question Bank</p>
                       <p className="text-sm theme-text-secondary">
-                        Trivia questions now load only from Supabase. Add or approve questions there, then use this panel to verify counts and inspect samples.
+                        Trivia questions now load only from Supabase. Any status except pending, rejected, and flagged is considered game-ready.
                       </p>
                     </div>
                     {feedback && (
@@ -229,7 +231,7 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
                   <div>
                     <h3 className="font-black uppercase tracking-widest text-sm theme-text-muted mb-2">Sample Questions</h3>
                     <p className="theme-text-secondary text-sm">
-                      Showing up to 8 approved questions for {selectedCategory} ({selectedDifficulty})
+                      Showing up to 8 game-ready questions for {selectedCategory} ({selectedDifficulty})
                     </p>
                   </div>
                   {isLoadingSamples && <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />}
@@ -237,8 +239,8 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
 
                 <div className="space-y-4">
                   {samples.length === 0 && !isLoadingSamples ? (
-                    <div className="theme-soft-surface border rounded-2xl p-6 theme-text-muted">
-                      No approved sample questions found for this bucket.
+                      <div className="theme-soft-surface border rounded-2xl p-6 theme-text-muted">
+                      No game-ready sample questions found for this bucket.
                     </div>
                   ) : (
                     samples.map((question) => (
