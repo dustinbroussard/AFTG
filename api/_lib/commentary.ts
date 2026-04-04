@@ -167,16 +167,9 @@ const GEMINI_DEFAULT_MODEL = 'gemini-2.5-flash';
 const providerTestOverrides: Partial<Record<CommentaryProvider, ProviderGenerator>> = {};
 
 const FORBIDDEN_PHRASES = [
-  'okay, here',
   "let's think",
   'here’s my reasoning',
   "here's my reasoning",
-  "i'd go with",
-  'sure!',
-  'certainly!',
-  'the answer is',
-  'step-by-step',
-  'i can help with that',
   'as an ai',
   "i'm unable",
   'i cannot',
@@ -331,7 +324,7 @@ function getPlainTextRejectionReason(text: string, maxChars: number) {
   if (trimmed.length > maxChars) return 'response_too_long';
 
   const forbiddenPhrase = textContainsForbiddenPhrase(trimmed.slice(0, 80));
-  if (forbiddenPhrase && /^(okay|let's think|here(?:'|’)s my reasoning|here's my reasoning|i'd go with|sure|certainly|the answer is|step-by-step|i can help with that|as an ai|i'm unable|i cannot)/i.test(trimmed)) {
+  if (forbiddenPhrase && /^(let's think|here(?:'|’)s my reasoning|here's my reasoning|as an ai|i'm unable|i cannot)/i.test(trimmed)) {
     return `forbidden_phrase:${forbiddenPhrase}`;
   }
   if (/```/.test(trimmed)) return 'contains_code_fence';
@@ -952,11 +945,11 @@ export function validateHeckles(rawText: string | null): ValidationResult<string
   }
 
   for (const heckle of heckles) {
-    const textReason = getPlainTextRejectionReason(heckle, 160);
+    const textReason = getPlainTextRejectionReason(heckle, 280);
     if (textReason) return { ok: false, reason: `item_${textReason}`, meta };
     const words = wordCount(heckle);
-    if (words < 1 || words > 28) return { ok: false, reason: 'item_word_count_out_of_bounds', meta };
-    if (heckle.length > 160) return { ok: false, reason: 'item_char_limit_exceeded', meta };
+    if (words < 1 || words > 56) return { ok: false, reason: 'item_word_count_out_of_bounds', meta };
+    if (heckle.length > 280) return { ok: false, reason: 'item_char_limit_exceeded', meta };
   }
 
   const trimmedHeckles = heckles.slice(0, MAX_HECKLES);
@@ -989,10 +982,10 @@ export function validateTrashTalk(rawText: string | null): ValidationResult<stri
     normalizedLength: text.length,
     itemCount: text ? 1 : 0,
   });
-  const textReason = getPlainTextRejectionReason(text, 180);
+  const textReason = getPlainTextRejectionReason(text, 260);
   if (textReason) return { ok: false, reason: textReason, meta };
-  if (text.split('\n').length > 2) return { ok: false, reason: 'too_many_lines', meta };
-  if (wordCount(text) < 3 || wordCount(text) > 32) return { ok: false, reason: 'word_count_out_of_bounds', meta };
+  if (text.split('\n').length > 3) return { ok: false, reason: 'too_many_lines', meta };
+  if (wordCount(text) < 3 || wordCount(text) > 48) return { ok: false, reason: 'word_count_out_of_bounds', meta };
 
   return { ok: true, value: text, meta };
 }
@@ -1019,12 +1012,12 @@ export function validateEndgameRoast(rawText: string | null): ValidationResult<E
     return { ok: false, reason: 'missing_required_fields', meta };
   }
 
-  const loserReason = getPlainTextRejectionReason(loserRoast, 220);
+  const loserReason = getPlainTextRejectionReason(loserRoast, 280);
   if (loserReason) return { ok: false, reason: `loserRoast_${loserReason}`, meta };
-  const winnerReason = getPlainTextRejectionReason(winnerCompliment, 220);
+  const winnerReason = getPlainTextRejectionReason(winnerCompliment, 280);
   if (winnerReason) return { ok: false, reason: `winnerCompliment_${winnerReason}`, meta };
 
-  if (wordCount(loserRoast) > 32 || wordCount(winnerCompliment) > 32) {
+  if (wordCount(loserRoast) > 48 || wordCount(winnerCompliment) > 48) {
     return { ok: false, reason: 'field_word_count_out_of_bounds', meta };
   }
 

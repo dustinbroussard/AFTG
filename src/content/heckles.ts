@@ -73,11 +73,14 @@ Tone:
 Rules:
 - Return only the final player-facing heckle text
 - One short line is best
-- Under 22 words
+- Prefer 8-24 words
+- Hard cap: 2 sentences, 56 words, 280 characters
 - No JSON
 - No markdown
+- No HTML or XML tags
 - No labels
 - No explanations
+- No reasoning or refusal language like "let's think", "here's my reasoning", "as an AI", "I'm unable", or "I cannot"
 - Do not mention prompts, rules, or formatting
 - Use a concrete detail when possible
 - Do not sound like trash talk

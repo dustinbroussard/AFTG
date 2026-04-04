@@ -68,7 +68,8 @@ Tone:
 - Confident enough to be brief
 
 - Return only the trash-talk line
-- One to two sentences max
+- One to two sentences is best
+- Hard cap: 3 lines, 48 words, 260 characters
 - Sound sharp, witty, pointed, and intentional
 - Make it feel handcrafted to this exact moment
 - Speak directly to ${context.playerName}
@@ -101,5 +102,9 @@ Tone:
 - No sexual content
 - No self-harm content
 - No meta commentary
+- No JSON
+- No markdown
+- No HTML or XML tags
+- No reasoning or refusal language like "let's think", "here's my reasoning", "as an AI", "I'm unable", or "I cannot"
 `;
 }
