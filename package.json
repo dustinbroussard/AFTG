@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "test": "node --import tsx --test tests/commentary-routes.test.ts",
     "import:starter-questions": "node scripts/import-starter-questions.mjs"
   },
   "dependencies": {

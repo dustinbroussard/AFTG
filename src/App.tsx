@@ -58,6 +58,7 @@ import { notifySafe, requestNotificationPermissionSafe } from './services/notify
 import { ensurePlayerProfile, loadMatchupHistory, MAX_NICKNAME_LENGTH, recordCompletedGame, recordQuestionStats, removePlayerAvatar, removeRecentPlayer, sanitizeNicknameInput, savePlayerAvatar, savePlayerNickname, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers, updateRecentPlayer } from './services/playerProfiles';
 import { isGamesUpdatedAtSchemaError, isSupabaseRlsInsertError } from './services/supabaseUtils';
 import { isUuid } from './services/supabaseUtils';
+import { evaluateHeckleEligibility, getOpponentTrophyGain } from './services/commentaryTriggers';
 
 // Hooks
 import { useAuth } from './hooks/useAuth';
@@ -394,6 +395,7 @@ export default function App() {
   const heckleTimer = useRef<number | null>(null);
   const prolongedWaitTimerRef = useRef<number | null>(null);
   const heckleCooldownRetryTimerRef = useRef<number | null>(null);
+  const heckleVisibilityGraceTimerRef = useRef<number | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
   const hasWarnedBehindRef = useRef(false);
   const hasTriggeredMatchLossRef = useRef(false);
@@ -1048,6 +1050,11 @@ export default function App() {
       heckleCooldownRetryTimerRef.current = null;
     }
 
+    if (heckleVisibilityGraceTimerRef.current) {
+      window.clearTimeout(heckleVisibilityGraceTimerRef.current);
+      heckleVisibilityGraceTimerRef.current = null;
+    }
+
     setActiveHeckle((current) => (current === null ? current : null));
     setShowHeckle((current) => (current ? false : current));
     setHeckleQueue((current) => (current.length === 0 ? current : []));
@@ -1425,30 +1432,16 @@ export default function App() {
     isWaitingForOpponent && visibleWaitingForOpponentUi && heckleWaitStateFields.gameId && heckleWaitStateFields.userId
       ? `${heckleWaitStateFields.gameId}:${heckleWaitStateFields.gameStatus}:${heckleWaitStateFields.effectiveCurrentTurnOwner}:${heckleWaitStateFields.userId}`
       : null;
-  const heckleEligibility = (() => {
-    if (!settings.commentaryEnabled) {
-      return { allowed: false, reason: 'commentary_disabled' };
-    }
-    if (isSolo) {
-      return { allowed: false, reason: 'solo_mode' };
-    }
-    if (!game || !user) {
-      return { allowed: false, reason: 'missing_game_or_user' };
-    }
-    if (game.status !== 'active') {
-      return { allowed: false, reason: `game_status_${game.status}` };
-    }
-    if (players.length < 2) {
-      return { allowed: false, reason: 'not_multiplayer' };
-    }
-    if (currentPlayerCanAct) {
-      return { allowed: false, reason: 'current_player_can_act' };
-    }
-    if (!currentPlayer || !opponentPlayer) {
-      return { allowed: false, reason: 'missing_player_context' };
-    }
-    return { allowed: true, reason: 'eligible_waiting_state' };
-  })();
+  const heckleEligibility = evaluateHeckleEligibility({
+    commentaryEnabled: settings.commentaryEnabled,
+    isSolo,
+    hasGame: !!game && !!user,
+    gameStatus: game?.status ?? null,
+    playersCount: players.length,
+    currentPlayerCanAct,
+    hasCurrentPlayer: !!currentPlayer,
+    hasOpponentPlayer: !!opponentPlayer,
+  });
   const shouldShowOpponentHeckles = heckleEligibility.allowed && visibleWaitingForOpponentUi;
   const waitingForPlayerName = (() => {
     if (isTurnHandoffPending) {
@@ -1737,16 +1730,30 @@ export default function App() {
       waitingStateEnteredAtRef.current = heckleWaitStateKey ? Date.now() : null;
     }
 
-    if (shouldShowOpponentHeckles) return;
-    heckleRequestIdRef.current += 1;
-    heckleRequestInFlightRef.current = null;
-    heckleRequestAbortRef.current?.abort();
-    heckleRequestAbortRef.current = null;
-    if (heckleCooldownRetryTimerRef.current) {
-      window.clearTimeout(heckleCooldownRetryTimerRef.current);
-      heckleCooldownRetryTimerRef.current = null;
+    if (shouldShowOpponentHeckles) {
+      if (heckleVisibilityGraceTimerRef.current) {
+        window.clearTimeout(heckleVisibilityGraceTimerRef.current);
+        heckleVisibilityGraceTimerRef.current = null;
+      }
+      return;
     }
-    clearHeckles();
+
+    if (heckleVisibilityGraceTimerRef.current) {
+      window.clearTimeout(heckleVisibilityGraceTimerRef.current);
+    }
+
+    heckleVisibilityGraceTimerRef.current = window.setTimeout(() => {
+      heckleVisibilityGraceTimerRef.current = null;
+      heckleRequestIdRef.current += 1;
+      heckleRequestInFlightRef.current = null;
+      heckleRequestAbortRef.current?.abort();
+      heckleRequestAbortRef.current = null;
+      if (heckleCooldownRetryTimerRef.current) {
+        window.clearTimeout(heckleCooldownRetryTimerRef.current);
+        heckleCooldownRetryTimerRef.current = null;
+      }
+      clearHeckles();
+    }, 1500);
   }, [heckleWaitStateKey, shouldShowOpponentHeckles, visibleWaitingForOpponentUi]);
 
   useEffect(() => {
@@ -2014,6 +2021,10 @@ export default function App() {
       if (heckleCooldownRetryTimerRef.current) {
         window.clearTimeout(heckleCooldownRetryTimerRef.current);
         heckleCooldownRetryTimerRef.current = null;
+      }
+      if (heckleVisibilityGraceTimerRef.current) {
+        window.clearTimeout(heckleVisibilityGraceTimerRef.current);
+        heckleVisibilityGraceTimerRef.current = null;
       }
       trashTalkAbortRef.current?.abort();
       trashTalkAbortRef.current = null;
@@ -2821,10 +2832,19 @@ export default function App() {
     const previousOpponent = previousPlayers.find((player) => player.uid === opponent?.uid);
 
     if (opponent && previousOpponent) {
-      const previousCompleted = new Set(previousOpponent.completedCategories || []);
-      const gainedCategory = (opponent.completedCategories || []).find((category) => !previousCompleted.has(category));
+      const gainedCategory = getOpponentTrophyGain(previousOpponent, opponent);
       const opponentScoreIncreased = (opponent.score || 0) > (previousOpponent.score || 0);
-      if (opponentScoreIncreased) {
+      if (gainedCategory) {
+        console.info('[trash-talk] Opponent trophy event detected', {
+          gameId: game.id,
+          userId: user.id,
+          opponentId: opponent.uid,
+          gainedCategory,
+          previousTrophies: previousOpponent.completedCategories?.length ?? 0,
+          nextTrophies: opponent.completedCategories?.length ?? 0,
+        });
+      }
+      if (opponentScoreIncreased && !gainedCategory) {
         const latestOpponentQuestionHistory = getRecentQuestionHistoryForPlayer(game, questions, opponent.uid);
         const latestOpponentQuestion = latestOpponentQuestionHistory[0];
         void triggerTrashTalk('OPPONENT_CORRECT', {
@@ -2838,6 +2858,24 @@ export default function App() {
           outcomeSummary: latestOpponentQuestion
             ? `${opponent.name} just answered a ${latestOpponentQuestion.category} question correctly with "${latestOpponentQuestion.correctAnswer}".`
             : `${opponent.name} just answered correctly and kept control.`,
+          recentQuestionHistory: latestOpponentQuestionHistory,
+        });
+      }
+
+      if (gainedCategory) {
+        const latestOpponentQuestionHistory = getRecentQuestionHistoryForPlayer(game, questions, opponent.uid);
+        const latestOpponentQuestion = latestOpponentQuestionHistory[0];
+        void triggerTrashTalk('OPPONENT_CORRECT', {
+          playerName: currentPlayer?.name || playerProfile?.nickname || user.email || 'Player',
+          opponentName: opponent.name,
+          playerScore: currentPlayer?.score ?? 0,
+          opponentScore: opponent.score ?? 0,
+          playerTrophies: currentPlayer?.completedCategories?.length ?? 0,
+          opponentTrophies: opponent.completedCategories?.length ?? 0,
+          latestCategory: gainedCategory,
+          outcomeSummary: latestOpponentQuestion
+            ? `${opponent.name} just collected the ${gainedCategory} trophy after answering "${latestOpponentQuestion.correctAnswer}" correctly.`
+            : `${opponent.name} just collected the ${gainedCategory} trophy.`,
           recentQuestionHistory: latestOpponentQuestionHistory,
         });
       }

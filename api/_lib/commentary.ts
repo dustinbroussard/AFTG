@@ -36,9 +36,56 @@ interface GenerationConfig<T> {
   fallbackMode: 'empty' | 'safe';
 }
 
+export interface ProviderAttemptDiagnostic {
+  provider: CommentaryProvider;
+  model: string | null;
+  attempted: boolean;
+  durationMs: number;
+  rawText: string | null;
+  rawPreview: string | null;
+  normalizedResponse: unknown;
+  parser: string;
+  parsed: boolean;
+  normalizedLength: number | null;
+  itemCount: number | null;
+  validationOk: boolean;
+  validationReason: string | null;
+  error: string | null;
+}
+
+export interface CommentaryGenerationDebug {
+  geminiAttempted: boolean;
+  geminiProducedRenderableText: boolean;
+  openrouterAttempted: boolean;
+  openrouterProducedRenderableText: boolean;
+  finalReason: string;
+  providerDiagnostics: ProviderAttemptDiagnostic[];
+}
+
+export type CommentaryGenerationResult<T> =
+  | {
+      ok: true;
+      source: CommentaryProvider | 'local_fallback';
+      value: T;
+      debug: CommentaryGenerationDebug;
+    }
+  | {
+      ok: false;
+      error: string;
+      debug: CommentaryGenerationDebug;
+    };
+
+type ProviderGenerator = (
+  prompt: string,
+  systemInstruction: string,
+  temperature: number,
+  maxTokens: number
+) => Promise<ProviderTextResponse>;
+
 const OPENROUTER_DEFAULT_MODEL = process.env.OPENROUTER_MODEL || 'openrouter/free';
 export const SHORT_FORM_COMMENTARY_TIMEOUT_MS = Number(process.env.AI_SHORT_FORM_TIMEOUT_MS || 10000);
 const GEMINI_DEFAULT_MODEL = 'gemini-2.5-flash';
+const providerTestOverrides: Partial<Record<CommentaryProvider, ProviderGenerator>> = {};
 
 const FORBIDDEN_PHRASES = [
   'okay, here',
@@ -62,6 +109,36 @@ function now() {
 
 function getProviderModel(provider: CommentaryProvider) {
   return provider === 'openrouter' ? OPENROUTER_DEFAULT_MODEL : GEMINI_DEFAULT_MODEL;
+}
+
+function getProviderGenerator(provider: CommentaryProvider): ProviderGenerator {
+  if (providerTestOverrides[provider]) {
+    return providerTestOverrides[provider] as ProviderGenerator;
+  }
+
+  return provider === 'openrouter'
+    ? generateOpenRouterText
+    : (prompt, systemInstruction, temperature, maxTokens) =>
+        generateGeminiTextResponse(prompt, {
+          systemInstruction,
+          temperature,
+          maxOutputTokens: maxTokens,
+          timeoutMs: SHORT_FORM_COMMENTARY_TIMEOUT_MS,
+        });
+}
+
+export function setCommentaryProviderOverride(provider: CommentaryProvider, generator: ProviderGenerator | null) {
+  if (!generator) {
+    delete providerTestOverrides[provider];
+    return;
+  }
+
+  providerTestOverrides[provider] = generator;
+}
+
+export function resetCommentaryProviderOverrides() {
+  delete providerTestOverrides.gemini;
+  delete providerTestOverrides.openrouter;
 }
 
 function getProviderOrder(): CommentaryProvider[] {
@@ -327,7 +404,7 @@ function summarizeNormalizedResponse(task: GenerationConfig<unknown>['task'], ra
 async function tryProvider<T>(
   provider: CommentaryProvider,
   config: GenerationConfig<T>
-): Promise<ValidationResult<T>> {
+): Promise<{ validation: ValidationResult<T>; diagnostic: ProviderAttemptDiagnostic }> {
   const startedAt = now();
   console.info('[commentary/ai] attempt', {
     task: config.task,
@@ -337,15 +414,12 @@ async function tryProvider<T>(
   });
 
   try {
-    const providerResponse =
-      provider === 'openrouter'
-        ? await generateOpenRouterText(config.prompt, config.systemInstruction, config.temperature, config.maxTokens)
-        : await generateGeminiTextResponse(config.prompt, {
-            systemInstruction: config.systemInstruction,
-            temperature: config.temperature,
-            maxOutputTokens: config.maxTokens,
-            timeoutMs: SHORT_FORM_COMMENTARY_TIMEOUT_MS,
-          });
+    const providerResponse = await getProviderGenerator(provider)(
+      config.prompt,
+      config.systemInstruction,
+      config.temperature,
+      config.maxTokens
+    );
 
     if (providerResponse.durationMs > SHORT_FORM_COMMENTARY_TIMEOUT_MS) {
       console.warn('[commentary/ai] rejected', {
@@ -357,7 +431,26 @@ async function tryProvider<T>(
         rawResponseLength: providerResponse.text?.length ?? 0,
         reason: 'slow_response',
       });
-      return { ok: false, reason: 'slow_response', meta: buildMeta(providerResponse.text, 'none') };
+      const validation = { ok: false, reason: 'slow_response', meta: buildMeta(providerResponse.text, 'none') } as ValidationResult<T>;
+      return {
+        validation,
+        diagnostic: {
+          provider,
+          model: providerResponse.model,
+          attempted: true,
+          durationMs: providerResponse.durationMs,
+          rawText: providerResponse.text,
+          rawPreview: summarizeRawText(providerResponse.text),
+          normalizedResponse: summarizeNormalizedResponse(config.task, providerResponse.text),
+          parser: validation.meta.parser,
+          parsed: validation.meta.parsed,
+          normalizedLength: validation.meta.normalizedLength ?? null,
+          itemCount: validation.meta.itemCount ?? null,
+          validationOk: false,
+          validationReason: 'slow_response',
+          error: null,
+        },
+      };
     }
 
     const validation = config.validate(providerResponse.text);
@@ -379,30 +472,92 @@ async function tryProvider<T>(
       validation: validation.ok ? 'pass' : 'fail',
       rejectionReason: validationReason,
     });
-    return validation;
+    return {
+      validation,
+      diagnostic: {
+        provider,
+        model: providerResponse.model,
+        attempted: true,
+        durationMs: providerResponse.durationMs,
+        rawText: providerResponse.text,
+        rawPreview: summarizeRawText(providerResponse.text),
+        normalizedResponse: summarizeNormalizedResponse(config.task, providerResponse.text),
+        parser: validation.meta.parser,
+        parsed: validation.meta.parsed,
+        normalizedLength: validation.meta.normalizedLength ?? null,
+        itemCount: validation.meta.itemCount ?? null,
+        validationOk: validation.ok,
+        validationReason,
+        error: null,
+      },
+    };
   } catch (error) {
+    const errorReason = isAbortTimeoutError(error) ? 'timeout' : summarizeError(error);
     console.warn('[commentary/ai] provider_failed', {
       task: config.task,
       provider,
       model: getProviderModel(provider),
       durationMs: now() - startedAt,
-      reason: isAbortTimeoutError(error) ? 'timeout' : summarizeError(error),
+      reason: errorReason,
     });
     return {
-      ok: false,
-      reason: isAbortTimeoutError(error) ? 'timeout' : summarizeError(error),
-      meta: buildMeta(null, 'none'),
+      validation: {
+        ok: false,
+        reason: errorReason,
+        meta: buildMeta(null, 'none'),
+      },
+      diagnostic: {
+        provider,
+        model: getProviderModel(provider),
+        attempted: true,
+        durationMs: now() - startedAt,
+        rawText: null,
+        rawPreview: null,
+        normalizedResponse: null,
+        parser: 'none',
+        parsed: false,
+        normalizedLength: null,
+        itemCount: null,
+        validationOk: false,
+        validationReason: errorReason,
+        error: errorReason,
+      },
     };
   }
 }
 
-export async function generateWithFallback<T>(config: GenerationConfig<T>) {
-  const providers = getProviderOrder();
+function buildGenerationDebug(
+  providerDiagnostics: ProviderAttemptDiagnostic[],
+  finalReason: string
+): CommentaryGenerationDebug {
+  const gemini = providerDiagnostics.find((diagnostic) => diagnostic.provider === 'gemini');
+  const openrouter = providerDiagnostics.find((diagnostic) => diagnostic.provider === 'openrouter');
 
-  const attemptReasons: Array<{ provider: CommentaryProvider; reason: string }> = [];
+  return {
+    geminiAttempted: !!gemini?.attempted,
+    geminiProducedRenderableText: !!gemini?.validationOk,
+    openrouterAttempted: !!openrouter?.attempted,
+    openrouterProducedRenderableText: !!openrouter?.validationOk,
+    finalReason,
+    providerDiagnostics,
+  };
+}
+
+export async function generateWithDiagnostics<T>(config: GenerationConfig<T>): Promise<CommentaryGenerationResult<T>> {
+  const providers = getProviderOrder();
+  if (providers.length === 0) {
+    return {
+      ok: false,
+      error: 'no_configured_providers',
+      debug: buildGenerationDebug([], 'no_configured_providers'),
+    };
+  }
+
+  const providerDiagnostics: ProviderAttemptDiagnostic[] = [];
   for (const [index, provider] of providers.entries()) {
-    const result = await tryProvider(provider, config);
-    if (result.ok) {
+    const { validation, diagnostic } = await tryProvider(provider, config);
+    providerDiagnostics.push(diagnostic);
+    if (validation.ok) {
       console.info('[commentary/ai] success', {
         task: config.task,
         provider,
@@ -412,25 +567,50 @@ export async function generateWithFallback<T>(config: GenerationConfig<T>) {
         usedLocalFallback: false,
         finalResultEmptyByDesign: false,
       });
-      return result.value;
+      return {
+        ok: true,
+        source: provider,
+        value: validation.value,
+        debug: buildGenerationDebug(
+          providerDiagnostics,
+          index > 0 ? `provider_success_after_fallback:${provider}` : `provider_success:${provider}`
+        ),
+      };
     }
+  }
 
-    if (!result.ok) {
-      const failureReason = (result as { ok: false; reason: string }).reason;
-      attemptReasons.push({
-        provider,
-        reason: failureReason,
-      });
-    }
+  if (config.fallbackMode === 'safe') {
+    return {
+      ok: true,
+      source: 'local_fallback',
+      value: config.localFallback(),
+      debug: buildGenerationDebug(providerDiagnostics, 'local_fallback_after_provider_failures'),
+    };
   }
 
   console.warn('[commentary/ai] local_fallback', {
     task: config.task,
     attemptedProviders: providers,
-    attemptReasons,
-    usedLocalFallback: config.fallbackMode === 'safe',
-    finalResultEmptyByDesign: config.fallbackMode === 'empty',
+    attemptReasons: providerDiagnostics.map((diagnostic) => ({
+      provider: diagnostic.provider,
+      reason: diagnostic.validationReason ?? diagnostic.error ?? 'unknown',
+    })),
+    usedLocalFallback: false,
+    finalResultEmptyByDesign: true,
   });
+
+  return {
+    ok: false,
+    error: 'all_providers_failed',
+    debug: buildGenerationDebug(providerDiagnostics, 'all_providers_failed'),
+  };
+}
+
+export async function generateWithFallback<T>(config: GenerationConfig<T>) {
+  const result = await generateWithDiagnostics(config);
+  if (result.ok) {
+    return result.value;
+  }
 
   return config.localFallback();
 }

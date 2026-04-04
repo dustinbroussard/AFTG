@@ -15,6 +15,31 @@ interface AiJsonResponse<T> {
   rawBody: string;
 }
 
+interface CommentaryDebugPayload {
+  finalReason?: string;
+}
+
+interface HeckleApiPayload {
+  source?: 'gemini' | 'openrouter';
+  heckle?: string | null;
+  heckles?: string[];
+  commentary?: unknown;
+  lines?: unknown;
+  message?: unknown;
+  error?: string;
+  debug?: CommentaryDebugPayload;
+}
+
+interface TrashTalkApiPayload {
+  source?: 'gemini' | 'openrouter';
+  trashTalk?: string | null;
+  commentary?: unknown;
+  lines?: unknown;
+  message?: unknown;
+  error?: string;
+  debug?: CommentaryDebugPayload;
+}
+
 const DEFAULT_HECKLE_TIMEOUT_MS = 6500;
 const DEFAULT_TRASH_TALK_TIMEOUT_MS = 5000;
 const DEFAULT_ENDGAME_ROAST_TIMEOUT_MS = 7000;
@@ -60,7 +85,7 @@ function createAbortSignal(options: AiRequestOptions) {
   };
 }
 
-async function postAiJson<T>(endpoint: string, context: T, options: AiRequestOptions) {
+async function postAiJson<TResponse, TRequest>(endpoint: string, context: TRequest, options: AiRequestOptions) {
   const { signal, cleanup } = createAbortSignal(options);
 
   try {
@@ -75,7 +100,7 @@ async function postAiJson<T>(endpoint: string, context: T, options: AiRequestOpt
 
     const rawBody = await response.text();
     const data = rawBody ? JSON.parse(rawBody) : {};
-    return { response, data, rawBody } as AiJsonResponse<any>;
+    return { response, data, rawBody } as AiJsonResponse<TResponse>;
   } finally {
     cleanup();
   }
@@ -90,7 +115,7 @@ async function requestHecklesFromApi(context: HeckleGenerationContext, options: 
     waitingReason: context.waitingReason,
   });
 
-  const { response, data, rawBody } = await postAiJson('/api/generate-heckles', context, {
+  const { response, data, rawBody } = await postAiJson<HeckleApiPayload, HeckleGenerationContext>('/api/generate-heckles', context, {
     ...options,
     timeoutMs: options.timeoutMs ?? DEFAULT_HECKLE_TIMEOUT_MS,
   });
@@ -115,6 +140,10 @@ async function requestHecklesFromApi(context: HeckleGenerationContext, options: 
     throw new Error(data.error || `Heckle generation failed with status ${response.status}`);
   }
 
+  if (!normalizedHeckles.length) {
+    throw new Error(data?.error || data?.debug?.finalReason || 'empty_renderable_heckle_payload');
+  }
+
   return data;
 }
 
@@ -126,7 +155,7 @@ async function requestTrashTalkFromApi(context: TrashTalkGenerationContext, opti
     opponentName: context.opponentName,
   });
 
-  const { response, data, rawBody } = await postAiJson('/api/generate-trash-talk', context, {
+  const { response, data, rawBody } = await postAiJson<TrashTalkApiPayload, TrashTalkGenerationContext>('/api/generate-trash-talk', context, {
     ...options,
     timeoutMs: options.timeoutMs ?? DEFAULT_TRASH_TALK_TIMEOUT_MS,
   });
@@ -150,6 +179,10 @@ async function requestTrashTalkFromApi(context: TrashTalkGenerationContext, opti
     throw new Error(data.error || `Trash-talk generation failed with status ${response.status}`);
   }
 
+  if (!normalizedTrashTalk) {
+    throw new Error(data?.error || data?.debug?.finalReason || 'empty_renderable_trash_talk_payload');
+  }
+
   return data;
 }
 
@@ -162,7 +195,7 @@ async function requestEndgameRoastFromApi(context: EndgameRoastGenerationContext
     loserTrophies: context.loserTrophies,
   });
 
-  const { response, data } = await postAiJson('/api/generate-endgame-roast', context, {
+  const { response, data } = await postAiJson<any, EndgameRoastGenerationContext>('/api/generate-endgame-roast', context, {
     ...options,
     timeoutMs: options.timeoutMs ?? DEFAULT_ENDGAME_ROAST_TIMEOUT_MS,
   });
@@ -203,6 +236,9 @@ export async function generateHeckles(context: HeckleGenerationContext, options:
     if (isAbortError(error)) {
       return [];
     }
+    console.warn('[heckles/client] Treating response as provider failure; no commentary will render', {
+      error,
+    });
     if (typeof process === 'undefined' || process.env.NODE_ENV !== 'production') {
       console.warn('[heckles] Generation failed:', error);
     }
@@ -234,6 +270,9 @@ export async function generateTrashTalk(
     if (isAbortError(error)) {
       return null;
     }
+    console.warn('[trash-talk/client] Treating response as provider failure; no trash talk will render', {
+      error,
+    });
     if (typeof process === 'undefined' || process.env.NODE_ENV !== 'production') {
       console.warn('[trash-talk] Generation failed:', error);
     }
