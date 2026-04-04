@@ -45,10 +45,16 @@ as $$
       and sq.question_id is null
   ),
   deduped_questions as (
-    select distinct on (eq.question_hash)
+    select distinct on (eq.category, coalesce(eq.question_hash, eq.id::text))
       eq.*
     from eligible_questions eq
-    order by eq.question_hash, eq.fairness_score desc, eq.used_count asc, eq.created_at asc, random()
+    order by
+      eq.category,
+      coalesce(eq.question_hash, eq.id::text),
+      eq.fairness_score desc,
+      eq.used_count asc,
+      eq.created_at asc,
+      random()
   ),
   ranked_questions as (
     select

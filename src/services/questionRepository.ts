@@ -289,6 +289,24 @@ async function fetchQuestionsViaRpc({
   );
 }
 
+function shouldFallbackFromRpcResult({
+  categories,
+  count,
+  questions,
+}: {
+  categories: string[];
+  count: number;
+  questions: TriviaQuestion[];
+}) {
+  const requestedPerCategory = Math.max(0, count);
+  if (requestedPerCategory === 0 || categories.length === 0) {
+    return false;
+  }
+
+  const expectedTotal = categories.length * requestedPerCategory;
+  return questions.length < expectedTotal;
+}
+
 async function loadSeenQuestionIdsForUser(userId: string): Promise<Set<string>> {
   const cached = seenQuestionIdsCache.get(userId);
   if (cached) {
@@ -377,7 +395,18 @@ export async function getQuestionsForSession({
   });
 
   if (rpcQuestions) {
-    return rpcQuestions;
+    if (!shouldFallbackFromRpcResult({ categories: uniqueCategories, count, questions: rpcQuestions })) {
+      return rpcQuestions;
+    }
+
+    console.warn(
+      `[questionRepository] RPC ${SESSION_QUESTIONS_RPC} returned fewer questions than requested; falling back to client-side selection.`,
+      {
+        requestedCategories: uniqueCategories,
+        requestedPerCategory: count,
+        returnedCount: rpcQuestions.length,
+      }
+    );
   }
 
   const seenQuestionIds = await loadSeenQuestionIds(normalizedUserIds);
