@@ -294,6 +294,19 @@ function summarizeError(error: unknown) {
   return String(error);
 }
 
+function summarizeRawText(rawText: string | null, limit = 280) {
+  if (typeof rawText !== 'string') {
+    return null;
+  }
+
+  const normalized = normalizeWhitespace(rawText);
+  if (!normalized) {
+    return '';
+  }
+
+  return normalized.length > limit ? `${normalized.slice(0, limit)}...` : normalized;
+}
+
 async function tryProvider<T>(
   provider: CommentaryProvider,
   config: GenerationConfig<T>
@@ -339,6 +352,7 @@ async function tryProvider<T>(
       durationMs: providerResponse.durationMs,
       rawResponsePresent: typeof providerResponse.text === 'string' && providerResponse.text.trim().length > 0,
       rawResponseLength: providerResponse.text?.length ?? 0,
+      rawResponsePreview: summarizeRawText(providerResponse.text),
       parsingSucceeded: validation.meta.parsed,
       parser: validation.meta.parser,
       normalizedLength: validation.meta.normalizedLength ?? null,
