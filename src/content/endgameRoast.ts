@@ -28,6 +28,13 @@ export function getFallbackEndgameMessage(context: Pick<EndgameRoastGenerationCo
   return `${context.winnerName} took all ${TOTAL_TROPHIES_IN_MATCH} trophies and left you with the postgame debris.`;
 }
 
+export function getFallbackEndgameRoast(context: Pick<EndgameRoastGenerationContext, 'winnerName' | 'loserName'>): EndgameRoastResult {
+  return {
+    loserRoast: `${context.loserName}, the scoreboard closed the argument a while ago. You were just there for the paperwork.`,
+    winnerCompliment: `${context.winnerName}, annoyingly solid work. Try not to make dominance look that routine next time.`,
+  };
+}
+
 export function buildEndgameRoastPrompt(context: EndgameRoastGenerationContext) {
   return `You write the final post-game sendoff for a multiplayer trivia match. Speak as a smug, witty, slightly mean game show host delivering one last verdict.
 The comedy should feel earned by the match details: smart, memorable, and specific enough that the players could not swap names and reuse it.

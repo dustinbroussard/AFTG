@@ -43,14 +43,14 @@ import {
   type RecentAiQuestionContext,
   type HeckleTriggerReason,
 } from './content/heckles';
-import { getFallbackEndgameMessage, type EndgameRoastResult } from './content/endgameRoast';
+import { getFallbackEndgameMessage, getFallbackEndgameRoast, type EndgameRoastResult } from './content/endgameRoast';
 import { TrashTalkEvent, type TrashTalkGenerationContext } from './content/trashTalk';
 import { publicAsset } from './assets';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogOut, RefreshCcw, ArrowLeft, Volume2, VolumeX, Send, Loader2, X, Sun, Moon, SlidersHorizontal, Mail, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DEFAULT_USER_SETTINGS, getLocalSettings, loadUserSettings, mergeSettings, saveLocalSettings, saveUserSettings } from './services/userSettings';
-import { generateEndgameRoast, generateHeckles, generateTrashTalk } from './services/gemini';
+import { generateHeckles, generateTrashTalk } from './services/gemini';
 import { notifySafe, requestNotificationPermissionSafe } from './services/notify';
 import { ensurePlayerProfile, loadMatchupHistory, MAX_NICKNAME_LENGTH, recordCompletedGame, recordQuestionStats, removePlayerAvatar, removeRecentPlayer, sanitizeNicknameInput, savePlayerAvatar, savePlayerNickname, subscribePlayerProfile, subscribeRecentCompletedGames, subscribeRecentPlayers, updateRecentPlayer } from './services/playerProfiles';
 import { isGamesUpdatedAtSchemaError, isSupabaseRlsInsertError } from './services/supabaseUtils';
@@ -64,6 +64,7 @@ import { useQuestions } from './hooks/useQuestions';
 import { useSound } from './hooks/useSound';
 
 const QUESTION_TIME_LIMIT_SECONDS = 30;
+const AI_COMMENTARY_API_ENABLED = false;
 const INITIAL_QUESTIONS_PER_CATEGORY = 6;
 const REFILL_QUESTIONS_PER_CATEGORY = 4;
 const QUESTION_POOL_LOW_WATERMARK = 2;
@@ -1013,6 +1014,11 @@ export default function App() {
   };
 
   const triggerHeckle = async (reason: HeckleTriggerReason) => {
+    if (!AI_COMMENTARY_API_ENABLED) {
+      console.info('[heckles] AI commentary API disabled; event ignored', { reason });
+      return;
+    }
+
     if (!settings.commentaryEnabled || isSolo || !currentPlayer || !opponentPlayer) {
       return;
     }
@@ -1109,6 +1115,18 @@ export default function App() {
   };
 
   const triggerTrashTalk = async (event: TrashTalkEvent, contextOverrides: Partial<TrashTalkGenerationContext> = {}) => {
+    if (!AI_COMMENTARY_API_ENABLED) {
+      console.info('[trash-talk] AI commentary API disabled; event ignored', {
+        event,
+        contextOverrides,
+      });
+      if (event === 'MATCH_LOSS' && lostAudioRef.current) {
+        lostAudioRef.current.currentTime = 0;
+        void tryPlay(lostAudioRef, true);
+      }
+      return;
+    }
+
     if (!settings.commentaryEnabled) {
       console.info('[trash-talk] Trigger blocked: commentary disabled', {
         event,
@@ -2145,89 +2163,25 @@ export default function App() {
       return;
     }
 
-    const winnerRecentQuestionHistory = getRecentQuestionHistoryForPlayer(game, questions, winner.uid);
-    const loserRecentQuestionHistory = getRecentQuestionHistoryForPlayer(game, questions, loser.uid);
-    const requestKey = `${game.id}:${winner.uid}:${loser.uid}:${winnerRecentQuestionHistory.length}:${loserRecentQuestionHistory.length}`;
-
+    const requestKey = `${game.id}:${winner.uid}:${loser.uid}:fallback`;
     if (endgameRoastRequestKeyRef.current === requestKey) {
-      console.info('[endgame-roast] Duplicate request skipped', {
-        gameId: game.id,
-        requestKey,
-      });
       return;
     }
 
     endgameRoastRequestKeyRef.current = requestKey;
     endgameRoastAbortRef.current?.abort();
-    const requestController = new AbortController();
-    endgameRoastAbortRef.current = requestController;
-    setIsGeneratingEndgameRoast(true);
-    setEndgameRoast(null);
-
-    const requestPayload = {
+    endgameRoastAbortRef.current = null;
+    setIsGeneratingEndgameRoast(false);
+    setEndgameRoast(getFallbackEndgameRoast({
       winnerName: winner.name || 'Winner',
       loserName: loser.name || 'Loser',
-      winnerScore: winner.score,
-      loserScore: loser.score,
-      winnerTrophies: winner.completedCategories?.length ?? 0,
-      loserTrophies: loser.completedCategories?.length ?? 0,
-      winnerRecentQuestionHistory,
-      loserRecentQuestionHistory,
-      isSolo,
-    };
-
-    console.info('[endgame-roast] Request starting', {
+    }));
+    console.info('[endgame-roast] Using local fallback copy; AI commentary API disabled', {
       gameId: game.id,
       requestKey,
-      payloadSummary: {
-        winnerName: requestPayload.winnerName,
-        loserName: requestPayload.loserName,
-        winnerScore: requestPayload.winnerScore,
-        loserScore: requestPayload.loserScore,
-        winnerTrophies: requestPayload.winnerTrophies,
-        loserTrophies: requestPayload.loserTrophies,
-        winnerRecentQuestionHistoryCount: requestPayload.winnerRecentQuestionHistory.length,
-        loserRecentQuestionHistoryCount: requestPayload.loserRecentQuestionHistory.length,
-      },
+      winnerName: winner.name || 'Winner',
+      loserName: loser.name || 'Loser',
     });
-
-    generateEndgameRoast(requestPayload, {
-      signal: requestController.signal,
-      timeoutMs: 7000,
-    })
-      .then((generatedRoast) => {
-        if (endgameRoastRequestKeyRef.current !== requestKey) {
-          console.info('[endgame-roast] Response discarded: stale request', {
-            gameId: game.id,
-            requestKey,
-          });
-          return;
-        }
-
-        console.info('[endgame-roast] Response received', {
-          gameId: game.id,
-          requestKey,
-          hasRoast: !!generatedRoast,
-          hasWinnerCompliment: !!generatedRoast?.winnerCompliment,
-          hasLoserRoast: !!generatedRoast?.loserRoast,
-        });
-        setEndgameRoast(generatedRoast);
-      })
-      .catch((error) => {
-        console.error('[endgame-roast] Request failed', {
-          gameId: game.id,
-          requestKey,
-          error,
-        });
-      })
-      .finally(() => {
-        if (endgameRoastAbortRef.current === requestController) {
-          endgameRoastAbortRef.current = null;
-        }
-        if (endgameRoastRequestKeyRef.current === requestKey) {
-          setIsGeneratingEndgameRoast(false);
-        }
-      });
   }, [game, isSolo, players, questions]);
 
   useEffect(() => {
