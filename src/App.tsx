@@ -183,7 +183,6 @@ function getUsedQuestionIds(activeGame: GameState | null) {
   return new Set<string>([
     ...Object.keys(activeGame.answers || {}),
     ...(activeGame.currentQuestionId ? [activeGame.currentQuestionId] : []),
-    ...(activeGame.questionIds ?? []),
   ]);
 }
 
