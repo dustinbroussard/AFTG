@@ -4102,7 +4102,7 @@ export default function App() {
                 aria-live="polite"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-medium text-cyan-950 dark:text-cyan-100">Tap to enable sound.</p>
+                  <p className="text-sm font-medium text-zinc-900 dark:text-cyan-100">Tap to enable sound.</p>
                   <button
                     type="button"
                     onClick={() => void handleEnableSound()}

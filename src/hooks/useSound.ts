@@ -132,14 +132,7 @@ export function useSound(settings: UserSettings) {
       return true;
     }
 
-    let played = false;
-
-    played = await tryPlay(themeAudioRef);
-
-    if (!played && welcomeAudioRef.current) {
-      played = await tryPlay(welcomeAudioRef, true);
-    }
-
+    const played = await tryPlay(themeAudioRef);
     setAudioNeedsInteraction(!played);
     return played;
   }, [resolveSettings, syncAudioState, tryPlay]);
