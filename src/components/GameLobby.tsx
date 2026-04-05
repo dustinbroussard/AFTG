@@ -709,7 +709,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                             <h5 className="text-xs font-black uppercase tracking-widest">Game Invites</h5>
                           </div>
                           {inviteCount > 0 && (
-                            <span className="text-[0.625rem] font-black uppercase tracking-widest text-pink-300">
+                            <span className="text-[0.625rem] font-black uppercase tracking-widest text-pink-600 dark:text-pink-300">
                               {inviteCount} Pending
                             </span>
                           )}
@@ -718,7 +718,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                         {incomingInvitesStatus === 'loading' ? (
                           <p className="text-sm theme-text-muted">Loading invites...</p>
                         ) : incomingInvitesStatus === 'error' ? (
-                          <p className="text-sm text-rose-300">{incomingInvitesError || 'Failed to load invites.'}</p>
+                          <p className="text-sm text-rose-600 dark:text-rose-300">{incomingInvitesError || 'Failed to load invites.'}</p>
                         ) : (
                           <div className="space-y-3">
                             {incomingInvites.map((invite) => (
@@ -740,7 +740,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onAcceptInvite(invite, effectiveAvatar)}
-                                    className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors"
+                                    className="p-2 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 transition-colors"
                                     aria-label={`Accept invite from ${invite.fromNickname}`}
                                   >
                                     <Check className="w-4 h-4" />
@@ -748,7 +748,7 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onDeclineInvite(invite)}
-                                    className="p-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 transition-colors"
+                                    className="p-2 rounded-xl bg-rose-500/10 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300 hover:bg-rose-500/20 dark:hover:bg-rose-500/30 transition-colors"
                                     aria-label={`Decline invite from ${invite.fromNickname}`}
                                   >
                                     <X className="w-4 h-4" />

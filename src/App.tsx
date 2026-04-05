@@ -3851,7 +3851,7 @@ export default function App() {
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-2xl border border-rose-500/40 bg-rose-950/40 text-rose-100 text-sm font-bold text-center shadow-inner"
+                      className="p-4 rounded-2xl border border-rose-500/40 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-100 text-sm font-bold text-center shadow-inner"
                     >
                       {error}
                     </motion.div>
@@ -3865,7 +3865,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => void handleEnableSound()}
-                  className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100"
+                  className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-900 dark:text-cyan-100"
                 >
                   Tap to enable sound
                 </button>
@@ -3935,7 +3935,7 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-2xl border border-rose-500/40 bg-rose-950/40 text-rose-100 text-sm font-bold text-center shadow-inner"
+              className="p-4 rounded-2xl border border-rose-500/40 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-100 text-sm font-bold text-center shadow-inner"
             >
               {error}
             </motion.div>
@@ -4061,11 +4061,11 @@ export default function App() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 shadow-[0_8px_20px_rgba(245,158,11,0.12)]"
+                className="mb-6 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 p-4 shadow-[0_8px_20px_rgba(245,158,11,0.12)]"
                 role="status"
                 aria-live="polite"
               >
-                <p className="mb-1 text-xs font-black uppercase tracking-[0.22em] text-amber-400">
+                <p className="mb-1 text-xs font-black uppercase tracking-[0.22em] text-amber-700 dark:text-amber-400">
                   Offline mode
                 </p>
                 <p className="text-sm theme-text-secondary">
@@ -4080,10 +4080,10 @@ export default function App() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="mb-6 p-4 bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
+                className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-500/30 rounded-xl flex items-center justify-between shadow-[0_8px_20px_rgba(244,63,94,0.15)]"
                 role="alert"
               >
-                <span className="text-rose-400 text-sm font-medium">{error}</span>
+                <span className="text-rose-800 dark:text-rose-400 text-sm font-medium">{error}</span>
                 <button type="button" onClick={() => setError(null)} className="p-1 hover:bg-rose-500/20 rounded-lg transition-colors text-rose-400" aria-label="Dismiss error message">
                   <X className="w-4 h-4" />
                 </button>
@@ -4100,7 +4100,7 @@ export default function App() {
                 role="status"
                 aria-live="polite"
               >
-                <p className="text-sm font-medium text-cyan-100">{resumeBanner}</p>
+                <p className="text-sm font-medium text-cyan-900 dark:text-cyan-100">{resumeBanner}</p>
               </motion.div>
             )}
           </AnimatePresence>
