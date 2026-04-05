@@ -161,9 +161,9 @@ type ProviderGenerator = (
   maxTokens: number
 ) => Promise<ProviderTextResponse>;
 
-const OPENROUTER_DEFAULT_MODEL = process.env.OPENROUTER_MODEL || 'openrouter/free';
-export const SHORT_FORM_COMMENTARY_TIMEOUT_MS = Number(process.env.AI_SHORT_FORM_TIMEOUT_MS || 10000);
-const GEMINI_DEFAULT_MODEL = 'gemini-2.5-flash';
+const OPENROUTER_DEFAULT_MODEL = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.1-8b-instruct';
+export const SHORT_FORM_COMMENTARY_TIMEOUT_MS = Number(process.env.AI_SHORT_FORM_TIMEOUT_MS || 5500);
+const GEMINI_DEFAULT_MODEL = 'gemini-1.5-flash';
 const providerTestOverrides: Partial<Record<CommentaryProvider, ProviderGenerator>> = {};
 
 const FORBIDDEN_PHRASES = [
