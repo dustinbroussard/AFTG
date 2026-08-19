@@ -26,7 +26,7 @@ import {
   subscribeToIncomingInvites,
 } from './services/inviteService';
 import { ChatMessage, GameAnswer, GameInvite, GameState, MatchupSummary, Player, PlayerProfile, RecentCompletedGame, RecentPlayer, RoastState, TriviaQuestion, UserSettings, getExplanationText, getPlayableCategories, getWrongAnswerQuip } from './types';
-import { dedupeQuestionsByIdentity, getQuestionFingerprint, getQuestionsForSession, markQuestionSeen } from './services/questionRepository';
+import { dedupeQuestionsByIdentity, getQuestionFingerprint, getQuestionsForSession } from './services/questionRepository';
 import { GameLobby } from './components/GameLobby';
 import { Wheel } from './components/Wheel';
 import { QuestionCard } from './components/QuestionCard';
@@ -286,7 +286,7 @@ export default function App() {
   } = useGameStore(user);
   const {
     questions, setQuestions, currentQuestion, setCurrentQuestion,
-    isFetchingQuestions, setIsFetchingQuestions, fetchQuestions, markSeen, activeQuestionIdRef
+    isFetchingQuestions, setIsFetchingQuestions, fetchQuestions, activeQuestionIdRef
   } = useQuestions(user, game?.id);
 
   if (import.meta.env.DEV) {
@@ -946,6 +946,51 @@ export default function App() {
     }
   }, [setQuestions]);
 
+  // Proactively top up the question pool when available questions per category
+  // drops to the low-watermark. This fires in the background so the next spin
+  // already has fresh questions ready without a loading screen.
+  useEffect(() => {
+    if (!game || game.status !== 'active' || questions.length === 0) {
+      return;
+    }
+
+    const usedQuestionIds = getUsedQuestionIds(game);
+    const usedQuestionFingerprints = getUsedQuestionFingerprints(questions, usedQuestionIds);
+
+    const availableByCategory = new Map<string, number>();
+    for (const q of questions) {
+      if (q.category && isQuestionAvailableForGame(q, usedQuestionIds, usedQuestionFingerprints)) {
+        availableByCategory.set(q.category, (availableByCategory.get(q.category) ?? 0) + 1);
+      }
+    }
+
+    const categoriesNeedingTopUp: string[] = [];
+    availableByCategory.forEach((count, category) => {
+      if (count <= QUESTION_POOL_LOW_WATERMARK && !questionPoolTopUpCategoriesRef.current.has(category)) {
+        categoriesNeedingTopUp.push(category);
+      }
+    });
+
+    if (categoriesNeedingTopUp.length === 0) {
+      return;
+    }
+
+    console.info('[questionPoolPrefetch] Proactive top-up triggered', {
+      gameId: game.id,
+      categories: categoriesNeedingTopUp,
+      availableByCategory: Object.fromEntries(availableByCategory),
+    });
+
+    void topUpQuestionPoolForCategories({
+      gameId: game.id,
+      playerIds: game.playerIds.length > 0 ? game.playerIds : [user!.id],
+      categories: categoriesNeedingTopUp,
+      excludeQuestionIds: existingQuestionIds,
+    }).catch((err) => {
+      console.error(`[questionPoolPrefetch] Failed for game ${game.id}:`, err);
+    });
+  }, [game, game?.id, game?.questionIds, game?.answers, game?.currentQuestionId, questions, existingQuestionIds, topUpQuestionPoolForCategories, user]);
+
   const syncGameQuestionIds = async (gameId: string, questionIds: string[]) => {
     try {
       await updateGame(gameId, { question_ids: questionIds });
@@ -959,6 +1004,9 @@ export default function App() {
       await setActiveGameQuestionService(gameId, category, questionId, questionIndex, startedAt);
     } catch (err) {
       console.error(`[setActiveGameQuestion] Failed for game ${gameId}:`, err);
+      // The reveal flow must stop here. Showing a question that was not reserved
+      // for both players would allow it to reappear in a later match.
+      throw err;
     }
   };
 
@@ -1417,12 +1465,6 @@ export default function App() {
     setQuestionClockNow(Date.now());
   }, [currentQuestion?.id]);
 
-  useEffect(() => {
-    if (!currentQuestion || !user?.id) return;
-
-    markSeen(currentQuestion.id);
-  }, [currentQuestion?.id, user?.id, game?.id]);
-
   const isTurnHandoffPending =
     !!pendingTurnHandoff &&
     pendingTurnHandoff.gameId === game?.id &&
@@ -1533,22 +1575,35 @@ export default function App() {
     setSelectedCategory(category);
     setRevealedCategory(category);
     setCurrentQuestion(null);
-    setQuestions((current) => current.map((entry) => (
-      entry.id === question.id ? { ...entry, used: true } : entry
-    )));
 
     categoryRevealTimeoutRef.current = window.setTimeout(() => {
-      setRevealedCategory(null);
-      const questionStartedAt = Date.now();
-      restoredQuestionStartedAtRef.current = questionStartedAt;
-      setCurrentQuestion(question);
-      setQuestionClockNow(questionStartedAt);
       categoryRevealTimeoutRef.current = null;
-      if (game?.id) {
-        void setActiveGameQuestion(game.id, category, question.id, questionIndex, questionStartedAt).catch((err) => {
-          console.error(err);
-        });
-      }
+      void (async () => {
+        const questionStartedAt = Date.now();
+
+        try {
+          if (!game?.id) {
+            throw new Error('The match is no longer available.');
+          }
+
+          // Do not expose the question until Supabase has recorded it as seen for
+          // both players. This prevents repeats in a rematch even after a refresh.
+          await setActiveGameQuestion(game.id, category, question.id, questionIndex, questionStartedAt);
+
+          restoredQuestionStartedAtRef.current = questionStartedAt;
+          setQuestions((current) => current.map((entry) => (
+            entry.id === question.id ? { ...entry, used: true } : entry
+          )));
+          setQuestionClockNow(questionStartedAt);
+          setCurrentQuestion(question);
+          setRevealedCategory(null);
+        } catch (err) {
+          console.error('[question-selection] Failed to reserve question before reveal', err);
+          setRevealedCategory(null);
+          setSelectedCategory(null);
+          setError('Could not reserve a fresh question. Please spin again.');
+        }
+      })();
     }, 1100);
   };
 
@@ -2953,6 +3008,9 @@ export default function App() {
       showCategoryReveal(resolvedCategory, q, questionIndex >= 0 ? questionIndex : 0);
 
       if ((available.length - 1) <= QUESTION_POOL_LOW_WATERMARK) {
+        // Keep a small, fresh reserve ready while the current turn continues.
+        // `existingQuestionIds` prevents this request from reusing anything that
+        // is already part of the match's pool.
         void topUpQuestionPoolForCategories({
           gameId: game.id,
           playerIds: game.playerIds.length > 0 ? game.playerIds : [user!.id],
@@ -3008,7 +3066,7 @@ export default function App() {
               console.error(`[onSpinComplete] Failed for game ${game.id}:`, err);
             });
         } else {
-          setError("Failed to load questions. Please try again.");
+          setError(`No fresh ${resolvedCategory} questions remain for this match.`);
         }
         setIsFetchingQuestions(false);
         setLoadingStep('idle');

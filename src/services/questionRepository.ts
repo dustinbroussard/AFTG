@@ -356,7 +356,7 @@ async function loadSeenQuestionIds(userIds: string[]): Promise<Set<string>> {
   return merged;
 }
 
-function selectUnseenQuestions(
+export function selectUnseenQuestions(
   questions: TriviaQuestion[],
   seenQuestionIds: Set<string>,
   count: number,
@@ -371,19 +371,10 @@ function selectUnseenQuestions(
   }
 
   const unseen = questions.filter((question) => !seenQuestionIds.has(question.id));
-  const seen = questions.filter((question) => seenQuestionIds.has(question.id));
-  
-  if (unseen.length >= count) {
-    console.info(
-      `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} unseen_found=${unseen.length} selected_count=${count} seen_excluded=true available_candidates=${questions.length}`
-    );
-    return unseen.slice(0, count);
-  }
-
   console.info(
-    `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} unseen_found=${unseen.length}. Falling back to ${count - unseen.length} seen questions. available_candidates=${questions.length}`
+    `[seenQuestions] table=${SEEN_QUESTIONS_TABLE} user_id=${userId ?? 'anonymous'} category=${category} unseen_found=${unseen.length} selected_count=${Math.min(unseen.length, count)} seen_excluded=true available_candidates=${questions.length}`
   );
-  return [...unseen, ...seen].slice(0, count);
+  return unseen.slice(0, count);
 }
 
 export async function getQuestionsForSession({
@@ -404,18 +395,9 @@ export async function getQuestionsForSession({
   });
 
   if (rpcQuestions) {
-    if (!shouldFallbackFromRpcResult({ categories: uniqueCategories, count, questions: rpcQuestions })) {
-      return rpcQuestions;
-    }
-
-    console.warn(
-      `[questionRepository] RPC ${SESSION_QUESTIONS_RPC} returned fewer questions than requested; falling back to client-side selection.`,
-      {
-        requestedCategories: uniqueCategories,
-        requestedPerCategory: count,
-        returnedCount: rpcQuestions.length,
-      }
-    );
+    // A short result means the players have exhausted the eligible bank for at least one
+    // category. Never fill the gap with a question either player has already seen.
+    return rpcQuestions;
   }
 
   const seenQuestionIds = await loadSeenQuestionIds(normalizedUserIds);

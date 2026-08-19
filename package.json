@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test": "node --import tsx --test tests/commentary-routes.test.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
     "import:starter-questions": "node scripts/import-starter-questions.mjs"
   },
   "dependencies": {
@@ -28,7 +28,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
-    "supabase": "^2.84.10",
+    "supabase": "^2.115.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

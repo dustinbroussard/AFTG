@@ -936,6 +936,22 @@ export async function setActiveGameQuestion(
   questionIndex: number,
   startedAt: number
 ) {
+  // This is intentionally server-side: a shown question must become unavailable to
+  // every participant before either player can see it or a rematch can select it.
+  const { error: markSeenError } = await supabase.rpc('mark_game_question_seen', {
+    p_game_id: gameId,
+    p_question_id: questionId,
+  });
+
+  if (markSeenError) {
+    logSupabaseError('rpc:mark_game_question_seen', 'rpc', markSeenError, {
+      gameId,
+      questionId,
+      purpose: 'excludeQuestionForAllGamePlayers',
+    });
+    throw markSeenError;
+  }
+
   const game = await fetchGameRow(gameId);
   if (!game) {
     return;
