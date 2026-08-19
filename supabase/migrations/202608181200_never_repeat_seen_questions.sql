@@ -1,5 +1,6 @@
 -- A question shown in a multiplayer game is considered seen by every player.
 -- New sessions must only select questions outside the combined seen history.
+-- Design: Per-player persistence + per-game exclusion.
 
 create or replace function public.mark_game_question_seen(
   p_game_id uuid,
@@ -73,23 +74,14 @@ as $$
       and not (q.id = any(coalesce(p_exclude_question_ids, '{}'::uuid[])))
       and sq.question_id is null
   ),
-  deduped_questions as (
-    select distinct on (eq.category, coalesce(eq.question_hash, eq.id::text))
-      eq.*
-    from eligible_questions eq
-    order by
-      eq.category,
-      coalesce(eq.question_hash, eq.id::text),
-      random()
-  ),
   ranked_questions as (
     select
-      dq.id,
+      eq.id,
       row_number() over (
-        partition by dq.category
+        partition by eq.category
         order by random()
       ) as selection_rank
-    from deduped_questions dq
+    from eligible_questions eq
   )
   select q.*
   from ranked_questions rq
