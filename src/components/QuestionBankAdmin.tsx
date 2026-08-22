@@ -14,6 +14,20 @@ interface QuestionBankAdminProps {
 type CountsByCategory = Record<string, number>;
 type CountsByDifficulty = Record<string, Record<string, number>>;
 
+interface FlaggedQuestion {
+  question_id: string;
+  question_text: string;
+  category: string;
+  difficulty: string;
+  validation_status: string;
+  flag_count: number;
+  reasons: string[] | null;
+  first_flagged_at: string;
+  last_flagged_at: string;
+}
+
+const RESTORE_STATUSES = ['approved', 'pending', 'rejected'] as const;
+
 function normalizeQuestion(row: any): TriviaQuestion {
   const metadata = row.metadata ?? {};
 
@@ -57,8 +71,11 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
   const [countsByCategory, setCountsByCategory] = useState<CountsByCategory>({});
   const [countsByDifficulty, setCountsByDifficulty] = useState<CountsByDifficulty>({});
   const [samples, setSamples] = useState<TriviaQuestion[]>([]);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<FlaggedQuestion[]>([]);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
   const [isLoadingSamples, setIsLoadingSamples] = useState(false);
+  const [isLoadingFlagged, setIsLoadingFlagged] = useState(false);
+  const [isRestoringId, setIsRestoringId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const loadSummary = async () => {
@@ -117,12 +134,49 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
     }
   };
 
+  const loadFlagged = async () => {
+    setIsLoadingFlagged(true);
+    try {
+      const { data, error } = await supabase.rpc('list_flagged_questions');
+      if (error) throw error;
+      setFlaggedQuestions((data ?? []) as FlaggedQuestion[]);
+    } finally {
+      setIsLoadingFlagged(false);
+    }
+  };
+
+  const restoreFlagged = async (questionId: string, restoreStatus: typeof RESTORE_STATUSES[number]) => {
+    setIsRestoringId(questionId);
+    try {
+      const { error } = await supabase.rpc('clear_question_flag', {
+        p_question_id: questionId,
+        p_restore_status: restoreStatus,
+      });
+      if (error) throw error;
+      setFeedback(`Question restored as '${restoreStatus}'.`);
+      await loadFlagged();
+    } catch (err) {
+      console.error('[questionBankAdmin] Failed to restore flagged question:', err);
+      setFeedback('Failed to restore flagged question.');
+    } finally {
+      setIsRestoringId(null);
+    }
+  };
+
   useEffect(() => {
     if (!isOpen) return;
     setFeedback(null);
     loadSummary().catch((err) => {
       console.error('[questionBankAdmin] Failed to load summary:', err);
       setFeedback('Failed to load question bank summary.');
+    });
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    loadFlagged().catch((err) => {
+      console.error('[questionBankAdmin] Failed to load flagged questions:', err);
+      setFeedback('Failed to load flagged questions.');
     });
   }, [isOpen]);
 
@@ -227,6 +281,57 @@ export const QuestionBankAdmin: React.FC<QuestionBankAdminProps> = ({ isOpen, on
               </div>
 
               <div className="p-6 overflow-y-auto space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-black uppercase tracking-widest text-sm theme-text-muted mb-2">Flagged Questions</h3>
+                    <p className="theme-text-secondary text-sm">
+                      Questions flagged by players for review. Restoring re-adds them to the game.
+                    </p>
+                  </div>
+                  {isLoadingFlagged && <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />}
+                </div>
+
+                <div className="space-y-4">
+                  {flaggedQuestions.length === 0 && !isLoadingFlagged ? (
+                    <div className="theme-soft-surface border rounded-2xl p-6 theme-text-muted">
+                      No flagged questions pending review.
+                    </div>
+                  ) : (
+                    flaggedQuestions.map((flagged) => (
+                      <div key={flagged.question_id} className="theme-soft-surface border rounded-2xl p-5 space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="font-black text-lg">{flagged.question_text}</p>
+                            <p className="text-sm theme-text-muted">
+                              {flagged.category} · {flagged.difficulty} · {flagged.flag_count} flag{flagged.flag_count === 1 ? '' : 's'} · status {flagged.validation_status}
+                            </p>
+                          </div>
+                        </div>
+                        {flagged.reasons && flagged.reasons.length > 0 && (
+                          <ul className="space-y-1">
+                            {flagged.reasons.map((reason, index) => (
+                              <li key={index} className="text-sm theme-text-secondary">• {reason}</li>
+                            ))}
+                          </ul>
+                        )}
+                        <div className="flex flex-wrap gap-2">
+                          {RESTORE_STATUSES.map((restoreStatus) => (
+                            <button
+                              key={restoreStatus}
+                              type="button"
+                              disabled={isRestoringId === flagged.question_id}
+                              onClick={() => restoreFlagged(flagged.question_id, restoreStatus)}
+                              className="theme-input border rounded-xl px-3 py-2 text-sm disabled:opacity-50"
+                            >
+                              {isRestoringId === flagged.question_id ? 'Restoring…' : `Restore: ${restoreStatus}`}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-black uppercase tracking-widest text-sm theme-text-muted mb-2">Sample Questions</h3>
